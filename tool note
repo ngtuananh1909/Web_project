@@ -1,0 +1,57 @@
+1. Công Cụ Phát Triển Phần Mềm
+
+    IDE (Môi trường phát triển tích hợp): Visual Studio Code, IntelliJ IDEA, PyCharm, Eclipse
+    Trình quản lý mã nguồn: Git (GitHub, GitLab, Bitbucket)
+    Frameworks và Thư viện:
+        Web: React, Vue.js, Angular, Django, Flask, Express.js
+        Phân tích dữ liệu và Machine Learning: TensorFlow, PyTorch, scikit-learn, Pandas, NumPy
+
+2. Công Cụ Thiết Kế
+
+    Thiết kế giao diện và trải nghiệm người dùng (UI/UX): Figma, Adobe XD, Sketch
+    Thiết kế đồ họa: Adobe Illustrator, Photoshop, GIMP
+
+3. Công Cụ Quản Lý Dự Án
+
+    Quản lý dự án: Trello, Asana, Jira, Monday.com
+    Lên kế hoạch và theo dõi: GanttProject, Microsoft Project
+
+4. Công Cụ Kiểm Thử
+
+    Kiểm thử phần mềm: Selenium, Jest, Mocha, Postman (cho kiểm thử API)
+    Kiểm thử bảo mật: OWASP ZAP, Burp Suite
+
+5. Công Cụ Phát Triển Phần Cứng (nếu cần)
+
+    Mạch điện tử và lập trình vi điều khiển: Arduino IDE, PlatformIO
+    Thiết kế PCB: KiCad, Eagle
+    Mô phỏng và thiết kế 3D: SolidWorks, Fusion 360, TinkerCAD
+
+6. Công Cụ Tích Hợp Liên Tục và Triển Khai Liên Tục (CI/CD)
+
+    CI/CD: Jenkins, Travis CI, CircleCI, GitHub Actions
+
+7. Công Cụ Phân Tích và Theo Dõi
+
+    Phân tích dữ liệu: Google Analytics, Mixpanel
+    Theo dõi hiệu suất: New Relic, Datadog
+
+8. Công Cụ Tối Ưu Hóa và SEO
+
+    Tối ưu hóa hiệu suất: GTmetrix, Google PageSpeed Insights
+    SEO: Yoast SEO, SEMrush, Moz
+
+9. Công Cụ Tạo Tài Liệu
+
+    Tài liệu kỹ thuật: Microsoft Word, Google Docs, LaTeX
+    Trình bày: Microsoft PowerPoint, Google Slides, Prezi
+
+10. Công Cụ Giao Tiếp và Hợp Tác
+
+    Nhắn tin và họp trực tuyến: Slack, Microsoft Teams, Zoom, Google Meet
+    Chia sẻ tài liệu: Google Drive, Dropbox, OneDrive
+
+11. Công Cụ Thí Nghiệm và Đo Lường (nếu cần)
+
+    Thiết bị đo lường: Multimeter, Oscilloscope
+    Công cụ mô phỏng: MATLAB, Simulink

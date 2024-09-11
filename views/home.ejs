@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pro</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="shortcut icon" href="#" />
+    <style>
+      /*susss*/
+      .sticky-header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .product-card {
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        height: 450px;
+        /* Hoặc bất kỳ chiều cao cố định nào bạn muốn */
+      }
+
+      .product-card img {
+        height: 200px;
+        /* Hoặc chiều cao cố định bạn muốn cho hình ảnh */
+        object-fit: cover;
+        width: 100%;
+      }
+
+      .card-body {
+        flex: 1;
+      }
+
+      .product-card:hover {
+        transform: translateY(-5px) scale(1.01);
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-primary,
+      .btn-danger,
+      .btn-success {
+        height: 60px;
+        width: 100%;
+        border-radius: 15px;
+        transition: transform 0.3s ease;
+      }
+
+      .btn-primary:hover,
+      .btn-danger:hover,
+      .btn-success:hover {
+        transform: translateY(-3px);
+      }
+
+      .avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .mt-3 {
+        gap: 10px;
+        border-radius: 30px;
+        height: 60%;
+      }
+
+      .carousel-item img {
+        max-width: 100%;
+        max-height: 500px;
+      }
+
+      .user-balance {
+        cursor: copy;
+      }
+
+      body {
+        background-color: #eeee;
+      }
+
+      .d-flex {
+        display: flex;
+        gap: 10px; /* Khoảng cách giữa các nút */
+      }
+      .btn {
+        margin-right: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="container-fluid bg-light py-3">
+        <div
+          class="container d-flex justify-content-between align-items-center"
+        >
+          <h1 class="h4 mb-0">
+            <a href="/" class="text-decoration-none text-dark">E-Shop</a>
+          </h1>
+          <nav class="nav">
+            <ul class="nav">
+              <li class="nav-item">
+                <a class="nav-link active" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="/scoreboard">BXH</a>
+              </li>
+              <% if (!user) { %>
+              <li class="nav-item">
+                <a class="nav-link" href="/login">Đăng nhập</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/register">Đăng ký</a>
+              </li>
+              <% } else { %>
+              <li class="nav-item">
+                <a class="nav-link" href="/cart">Giỏ hàng</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/product/add">Tạo sản phẩm</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle d-flex align-items-center"
+                  id="userDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <% if (user.avatar) { %>
+                  <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
+                  <% } else { %>
+                  <img src="./img/def.jpg" class="avatar me-2" alt="" />
+                  <% } %>
+                </a>
+                <ul
+                  class="dropdown-menu dropdown-menu-end"
+                  aria-labelledby="userDropdown"
+                >
+                  <li>
+                    <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
+                  </li>
+                  <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
+                  <li>
+                    <a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+                  <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                </ul>
+              </li>              
+              <% } %>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container my-5">
+        <div id="carouselExampleControls" class="carousel slide">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <a href="/scoreboard"
+                ><img
+                  class="d-block w-100"
+                  src="/uploads/aL4RptWAMs.png"
+                  alt="First slide"
+              /></a>
+            </div>
+            <div class="carousel-item">
+              <img
+                class="d-block w-100"
+                src="/uploads/1721373600326_def.jpg"
+                alt="Second slide"
+              />
+            </div>
+            <div class="carousel-item">
+              <img
+                class="d-block w-100"
+                src="/uploads/1721373497780_Tuan Anh.jpg"
+                alt="Third slide"
+              />
+            </div>
+            <div class="carousel-item">
+              <img
+                class="d-block w-100"
+                src="/uploads/1721358772822_TrungKienSleep.jpg"
+                alt="Fourth slide"
+              />
+            </div>
+          </div>
+          <a
+            class="carousel-control-prev"
+            href="#carouselExampleControls"
+            role="button"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </a>
+          <a
+            class="carousel-control-next"
+            href="#carouselExampleControls"
+            role="button"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </a>
+        </div>
+        <div class="row mt-5">
+          <div class="col">
+            <h2 class="section-title text-center">Sản phẩm nổi bật</h2>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card mb-3">
+                  <img src="" class="card-img-top" alt="Sản phẩm" />
+                  <div class="card-body">
+                    <h3 class="card-title">Tên sản phẩm</h3>
+                    <p class="card-text">Mô tả ngắn về sản phẩm.</p>
+                    <p class="card-text">Giá: 1,000,000 VND</p>
+                    <a href="/hotproduct" class="btn btn-primary">Danh sách</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card mb-3">
+                  <img src="" class="card-img-top" alt="Khuyến mãi" />
+                  <div class="card-body">
+                    <h3 class="card-title">Tên chương trình khuyến mãi</h3>
+                    <p class="card-text">Chi tiết chương trình khuyến mãi.</p>
+                    <p class="card-text">Giảm giá: 20%</p>
+                    <a href="/salelist" class="btn btn-danger">Xem chi tiết</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col">
+            <h2 class="section-title text-center">Danh mục sản phẩm</h2>
+
+            <div
+              id="carouselExampleIndicators"
+              class="carousel slide"
+              data-ride="carousel"
+            >
+              <ol class="carousel-indicators">
+                <li
+                  data-target="#carouselExampleIndicators"
+                  data-slide-to="0"
+                  class="active"
+                ></li>
+                <li
+                  data-target="#carouselExampleIndicators"
+                  data-slide-to="1"
+                ></li>
+                <li
+                  data-target="#carouselExampleIndicators"
+                  data-slide-to="2"
+                ></li>
+              </ol>
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img class="d-block w-100" src="..." alt="First slide" />
+                </div>
+                <div class="carousel-item">
+                  <img class="d-block w-100" src="..." alt="Second slide" />
+                </div>
+                <div class="carousel-item">
+                  <img class="d-block w-100" src="..." alt="Third slide" />
+                </div>
+              </div>
+              <a
+                class="carousel-control-prev"
+                href="#carouselExampleIndicators"
+                role="button"
+                data-slide="prev"
+              >
+                <span
+                  class="carousel-control-prev-icon"
+                  aria-hidden="true"
+                ></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a
+                class="carousel-control-next"
+                href="#carouselExampleIndicators"
+                role="button"
+                data-slide="next"
+              >
+                <span
+                  class="carousel-control-next-icon"
+                  aria-hidden="true"
+                ></span>
+                <span class="sr-only">Next</span>
+              </a>
+            </div>
+            <div class="row row-cols-1 row-cols-md-5 g-4">
+              <% products.forEach(product=> { %>
+              <div class="col">
+                <div class="card product-card">
+                  <a href="/product/<%= product.id %>">
+                    <img
+                      src="/uploads/<%= product.image %>"
+                      class="card-img-top"
+                      alt=""
+                    />
+                  </a>
+                  <div class="card-body">
+                    <h4 class="card-title"><%= product.name %></h4>
+                    <% if (product.sale) { %>
+                    <span class="badge bg-danger ms-2"
+                      >-<%= product.saleval %>%</span
+                    >
+                    <p class="card-text">
+                      Giá: <del> <%= product.price %> </del>
+                      <%= (product.price - (product.price * product.saleval /
+                      100)).toFixed(2)%> VNĐ
+                    </p>
+                    <% } else { %>
+                    <p class="card-text">Giá: <%= product.price %> VNĐ</p>
+                    <% } %>
+                  </div>
+                  <div
+                    class="d-flex mt-3"
+                    style="padding-left: 10px; padding-right: 10px"
+                  >
+                    <a
+                      href="/product/<%= product.id %>"
+                      class="btn btn-success rounded"
+                      >Thông tin sản phẩm</a
+                    >
+                    <button
+                      type="button"
+                      class="btn btn-primary rounded addToCartBtn"
+                      data-product-id="<%= product.id %>"
+                    >
+                      Thêm vào giỏ
+                    </button>
+                  </div>
+                  <div style="padding-left: 10px; padding-bottom: 10px">
+                    <p class="card-text" style="margin-bottom: 3px">
+                      Creator: <%= product.creator %>
+                    </p>
+                    <p class="card-text" style="margin-top: 3px">
+                      Ngày tạo: <%= product.formatted_date %>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <% }); %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-light py-4 mt-5">
+      <div class="container">
+        <div class="text-center text-muted">&copy; 2024 E-Shop</div>
+        <div class="text-center mt-3">
+          <a href="#" class="text-decoration-none text-dark mx-2"
+            >Chính sách bảo mật</a
+          >
+          <a href="#" class="text-decoration-none text-dark mx-2"
+            >Điều khoản sử dụng</a
+          >
+        </div>
+      </div>
+    </footer>
+
+    <div
+      class="modal fade"
+      id="addToCartModal"
+      tabindex="-1"
+      aria-labelledby="addToCartModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addToCartModalLabel">
+              Xác nhận thêm vào giỏ hàng
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            Bạn có chắc chắn muốn thêm sản phẩm này vào giỏ hàng?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary confirmAddToCartBtn">
+              Thêm vào giỏ
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $(".addToCartBtn").click(function () {
+          const productId = $(this).data("product-id");
+          $("#addToCartModal").modal("show");
+          $(".confirmAddToCartBtn")
+            .off("click")
+            .on("click", function () {
+              $.ajax({
+                url: "/auth/add-to-cart",
+                type: "POST",
+                data: { productId: productId },
+                success: function (response) {
+                  $("#addToCartModal").modal("hide");
+                  alert("Sản phẩm đã được thêm vào giỏ hàng!");
+                },
+                error: function (xhr, status, error) {
+                  $("#addToCartModal").modal("hide");
+                  alert(xhr.responseText);
+                },
+              });
+            });
+        });
+      });
+    </script>
+  </body>
+</html>

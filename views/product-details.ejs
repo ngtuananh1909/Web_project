@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title><%= product.name %> - Product Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1110px;
+            width: 100%;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .image-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            max-height: 600px;
+        }
+
+        .details-container {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            width: 57%;
+            margin-top: 112px;
+            
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        strong {
+            font-weight: bold;
+        }
+
+        .buy-now,
+        .add-to-cart {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .buy-now {
+            background-color: #48bb78;
+        }
+
+        .buy-now:hover {
+            background-color: #38a169;
+        }
+
+        .add-to-cart {
+            background-color: #4299e1;
+        }
+
+        .add-to-cart:hover {
+            background-color: #3182ce;
+        }
+
+        .related-products {
+            margin-top: 40px;
+            max-width: 1110px;
+            width: 100%;
+        }
+
+        .related-products h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .product-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 200px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .product-card .info {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .product-card .info h3 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2d3748;
+            margin: 10px 0;
+        }
+
+        .product-card .info p {
+            color: #718096;
+            margin: 10px 0;
+        }
+
+        .product-card .info a {
+            display: block;
+            padding: 10px 20px;
+            background-color: #4299e1;
+            color: #ffffff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .product-card .info a:hover {
+            background-color: #3182ce;
+        }
+        .header-container{
+            max-width: 1902px;
+            width: 667%;
+            left: 0;
+            position: fixed;
+
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="bg-light py-3 header-container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h4 mb-0">
+                    <a href="/" style="margin-left: 300px;" class="text-decoration-none text-dark">E-Shop</a>
+                </h1>
+                <nav class="nav">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/">Home</a>
+                        </li>
+                        <% if (!user) { %>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/login">Đăng nhập</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/register">Đăng ký</a>
+                            </li>
+                            <% } else { %>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/cart">Giỏ hàng</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/product/add">Tạo sản phẩm</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="/"
+                                        id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="<%= user.avatar %>" alt="Avatar" class="avatar me-2">
+                                        <span>
+                                            <%= user.username %>
+                                        </span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                        <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                                    </ul>
+                                </li>
+                                <% } %>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <h1>Product Details</h1>
+    <div class="container">
+        <div class="image-container">
+            <% if (product.image) { %>
+                <img src="/uploads/<%= product.image %>" alt="<%= product.name %> Image">
+            <% } %>
+        </div>
+        <div class="details-container">
+            <h2><%= product.name %></h2>
+            <p><strong>Description:</strong> <%= product.description %></p>
+            <% if (product.sale) { %>
+                <p><strong>Price:</strong> <%= product.price - (product.price * product.saleval / 100) %> VNĐ</p>
+            <% } else { %>
+                <p><strong>Price:</strong> <%= product.price %> VNĐ</p>
+            <% } %>            
+            <p><strong>Quantity:</strong> <%= product.quantity %></p>
+            <% if (product.sale) { %>
+                <p class="sale"><strong>Sale:</strong> <%= product.saleval %>%</p>
+            <% } %>
+            <a href="" class="buy-now">Buy Now</a>
+            <a href="" class="add-to-cart">Add to Cart</a>
+            <a href="/">Back to Products</a>
+        </div>
+    </div>
+
+    <main style="width: 58%;">
+            <div class="row mt-5">
+                <div class="col">
+                    <h2 class="section-title text-center">Sản phẩm gợi ý</h2>
+                    <div class="row row-cols-1 row-cols-md-5 g-4" style="gap: 50px;width: 1000px;height: auto;background: color;">
+                        <% products.forEach(producte=> { %>
+                            <div class="col">
+                                <div class="card product-card">
+                                    <a href="/product/<%= producte.id %>">
+                                        <img src="/uploads/<%= producte.image %>" class="card-img-top"
+                                            alt="<%= product.name %>">
+                                    </a>
+                                    <div class="card-body">
+                                        <h4 class="card-title">
+                                            <%= producte.name %>
+                                        </h4>
+                                        <% if (producte.sale) { %>
+                                            <span class="badge bg-danger ms-2">-<%= producte.saleval %>%</span>
+                                            <p class="card-text">Giá: <del>
+                                                    <%= producte.price %>
+                                                </del>
+                                                <%= (producte.price - (producte.price * producte.saleval / 100)).toFixed(2)
+                                                    %>
+                                                    VND
+                                            </p>
+                                            <% } else { %>
+                                                <p class="card-text">Giá: <%= producte.price %> VND</p>
+                                                <% } %>
+                                    </div>
+                                    <p>Creator: <%= producte.creator %>
+                                    </p>
+                                </div>
+                            </div>
+                            <% }); %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

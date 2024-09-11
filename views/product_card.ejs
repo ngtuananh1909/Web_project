@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Card</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100">
+    <div class="max-w-sm mx-auto mt-10">
+      <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+        <img
+          class="w-full h-96 object-cover object-center"
+          src="./img/nguoinigga.png"
+          alt="Product Image"
+        />
+        <div class="p-4">
+          <h2 class="text-gray-900 text-2xl font-bold">Quan Minh</h2>
+          <p class="mt-2 text-gray-600">Người nhờn</p>
+          <div class="flex items-center mt-4 space-x-4">
+            <span class="text-gray-900 font-bold text-xl">1.0 VNĐ</span>
+          </div>
+          <div class="flex items-center mt-4 space-x-4">
+            <a
+              href="/product/:id"
+              class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 flex-1 text-center"
+              >Thông tin sản phẩm</a
+            >
+            <button
+              class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex-1"
+            >
+              Thêm vào giỏ
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
