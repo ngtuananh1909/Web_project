@@ -23,10 +23,6 @@
       overflow-y: auto;
     }
     
-    .d-flex {
-      display: flex;
-      gap: 10px; /* Khoảng cách giữa các nút */
-    }
 
     .btn {
       margin-right: 20px;
@@ -42,77 +38,88 @@
     body {
       background-color: #eeee;
     }
-    .header-custom {
-        margin-left: -16.5px; /* Điều chỉnh giá trị này để di chuyển thanh header sang bên trái */
-      }
+    .nav-link {
+        position: relative; /* Để sử dụng absolute positioning cho underline */
+        display: inline-block;
+        padding-bottom: 5px; /* Khoảng cách giữa text và underline */
+    }
+
+    .nav-link::after {
+        content: ""; /* Nội dung rỗng để tạo thanh nhỏ */
+        position: absolute;
+        left: 16%;
+        bottom: 0;
+        width: 70%;
+        height: 2px; /* Độ dày của thanh nhỏ */
+        background-color: #0056ea; /* Màu của thanh nhỏ */
+        transform: scaleX(0); /* Ẩn thanh nhỏ ban đầu */
+        transform-origin: bottom right; /* Vị trí bắt đầu hiệu ứng */
+        align-items: center;
+        transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp cho thanh nhỏ */
+    }
+
+    .nav-link.home:hover::after,
+    .nav-link.bxh:hover::after,
+    .nav-link.giohang:hover::after,
+    .nav-link.taosanpham:hover::after,
+    .nav-link.login:hover::after,
+    .nav-link.dangky:hover::after {
+        transform: scaleX(1); /* Hiện thanh nhỏ khi hover */
+        transform-origin: bottom left; /* Vị trí kết thúc hiệu ứng */
+    }
   </style>
 
   <body>
-    <header class="header-custom">
-      <div class="container-fluid bg-light py-3">
-        <div class="container d-flex justify-content-between align-items-center">
-          <h1 class="h4 mb-0">
-            <a href="/" class="text-decoration-none text-dark">E-Shop</a>
-          </h1>
-          <nav class="nav">
-            <ul class="nav">
-              <li class="nav-item">
-                <a class="nav-link active" href="/">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" href="/scoreboard">BXH</a>
-              </li>
-              <% if (!user) { %>
-              <li class="nav-item">
-                <a class="nav-link" href="/login">Đăng nhập</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/register">Đăng ký</a>
-              </li>
-              <% } else { %>
-              <li class="nav-item">
-                <a class="nav-link" href="/cart">Giỏ hàng</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/product/add">Tạo sản phẩm</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle d-flex align-items-center"
-                  id="userDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <% if (user.avatar) { %>
-                  <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
-                  <% } else { %>
-                  <img src="./img/def.jpg" class="avatar me-2" alt="" />
-                  <% } %>
-                </a>
-                <ul
-                  class="dropdown-menu dropdown-menu-end"
-                  aria-labelledby="userDropdown"
-                >
-                  <li>
-                    <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
-                  </li>
-                  <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                  <li>
-                    <a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a>
-                  </li>
-                  <li>
-                    <hr class="dropdown-divider" />
-                  </li>
-                  <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
-                </ul>
-              </li>              
-              <% } %>
-            </ul>
-          </nav>
-        </div>
+    <header>
+      <div class="bg-light py-3 header-container">
+          <div class="container d-flex justify-content-between align-items-center">
+              <h1 class="h4 mb-0">
+                  <a href="/" class="text-decoration-none text-dark" style="margin-left: -7px;"><strong>E-Shop</strong></a>
+              </h1>
+              <nav class="nav">
+                  <ul class="nav">
+                      <li class="nav-item">
+                          <a class="nav-link home" href="/">Home</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link bxh" href="/scoreboard">BXH</a>
+                      </li>
+                      <% if (!user) { %>
+                          <li class="nav-item">
+                              <a class="nav-link" href="/login">Đăng nhập</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link" href="/register">Đăng ký</a>
+                          </li>
+                          <% } else { %>
+                              <li class="nav-item">
+                                  <a class="nav-link giohang" href="/cart">Giỏ hàng</a>
+                              </li>
+                              <li class="nav-item">
+                                  <a class="nav-link taosanpham" href="/product/add">Tạo sản phẩm</a>
+                              </li>
+                              <li class="nav-item dropdown" style="margin-right:9px;">
+                                  <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  <% if (user.avatar) { %>
+                                      <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
+                                  <% } else { %>
+                                      <img src="./img/def.jpg" class="avatar me-2" alt="" />
+                                  <% } %>
+                                  </a>
+                                  <ul class="dropdown-menu dropdown-menu-end" >
+                                      <li><a class="dropdown-item" href="/user/<%= user.id %>">Profile</a></li>
+                                      <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
+                                      <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                                      <li><hr class="dropdown-divider" /></li>
+                                      <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                                  </ul>
+                              </li>
+                          <% } %>
+                  </ul>
+              </nav>
+          </div>
       </div>
-    </header>
+  </header>
     
 
     <section class="h-100">

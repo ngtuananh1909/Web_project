@@ -9,105 +9,142 @@
       rel="stylesheet"
     />
     <title>List of sale product</title>
+    <style>
+      .sticky-header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: #ffffff;
+      }
+
+      .product-card {
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        width: 100%; /* Sửa chiều rộng thành 100% */
+        max-width: 270px; /* Thiết lập chiều rộng tối đa */
+      }
+
+      .product-card img {
+        max-height: 200px;
+        object-fit: cover;
+        width: 100%;
+      }
+
+      .product-card:hover {
+        transform: translateY(-5px) scale(1.01);
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-primary,
+      .btn-danger,
+      .btn-success {
+        height: 50%;
+        width: 100%;
+        border-radius: 15px;
+        transition: transform 0.3s ease;
+      }
+
+      .btn-primary:hover,
+      .btn-danger:hover,
+      .btn-success:hover {
+        transform: translateY(-3px);
+      }
+
+      .nav-link {
+        position: relative;
+        display: inline-block;
+        padding-bottom: 5px;
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        left: 16%;
+        bottom: 0;
+        width: 70%;
+        height: 2px;
+        background-color: #0056ea;
+        transform: scaleX(0);
+        transform-origin: bottom right;
+        align-items: center;
+        transition: transform 0.3s ease;
+      }
+
+      .nav-link.home:hover::after,
+      .nav-link.bxh:hover::after,
+      .nav-link.giohang:hover::after,
+      .nav-link.taosanpham:hover::after,
+      .nav-link.login:hover::after,
+      .nav-link.dangky:hover::after {
+        transform: scaleX(1); /* Hiện thanh nhỏ khi hover */
+        transform-origin: bottom left; /* Vị trí kết thúc hiệu ứng */
+      }
+
+      .avatar {
+        width: 30px; /* Kích thước của avatar */
+        height: 30px; /* Kích thước của avatar */
+        border-radius: 50%; /* Để ảnh avatar thành hình tròn */
+        object-fit: cover;
+      }
+
+      /* Đặt màu nền cho phần sản phẩm là màu xám */
+      /* Thiết lập khoảng cách giữa các thẻ sản phẩm */
+      .row {
+        gap: 0px; /* Khoảng cách giữa các thẻ sản phẩm */
+      }
+
+      /* Center card content */
+      .card-body {
+        text-align: center;
+      }
+    </style>
   </head>
-  <style>
-    .sticky-header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      /* Ensure it's above other content */
-      background-color: #ffffff;
-      /* Adjust background color as needed */
-    }
-
-    .product-card {
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.3s ease;
-    }
-
-    .product-card img {
-      max-height: 200px;
-      object-fit: cover;
-      width: 100%;
-    }
-
-    .product-card:hover {
-      transform: translateY(-5px) scale(1.01);
-      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-primary,
-    .btn-danger,
-    .btn-success {
-      height: 50%;
-      width: 100%;
-      border-radius: 15px;
-      transition: transform 0.3s ease;
-    }
-
-    .btn-primary:hover,
-    .btn-danger:hover,
-    .btn-success:hover {
-      transform: translateY(-3px);
-    }
-  </style>
-
   <body>
     <header class="sticky-header">
-      <div class="container-fluid bg-light py-3">
-        <div
-          class="container d-flex justify-content-between align-items-center"
-        >
+      <div class="bg-light py-3 header-container">
+        <div class="container d-flex justify-content-between align-items-center">
           <h1 class="h4 mb-0">
-            <a href="/" class="text-decoration-none text-dark">E-Shop</a>
+            <a href="/" class="text-decoration-none text-dark" style="margin-left: -6px;"><strong>E-Shop</strong></a>
           </h1>
           <nav class="nav">
             <ul class="nav">
               <li class="nav-item">
-                <a class="nav-link active" href="/">Home</a>
+                <a class="nav-link home" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link bxh" href="/">BXH</a>
               </li>
               <% if (!user) { %>
-              <li class="nav-item">
-                <a class="nav-link" href="/login">Đăng nhập</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/register">Đăng ký</a>
-              </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/login">Đăng nhập</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/register">Đăng ký</a>
+                </li>
               <% } else { %>
-              <li class="nav-item">
-                <a class="nav-link" href="/cart">Giỏ hàng</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/product/add">Tạo sản phẩm</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle d-flex align-items-center"
-                  href="#"
-                  id="userDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <% if (user.avatar) { %>
-                  <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
-                  <% } else { %>
-                  <img src="./img/def.jpg" class="avatar me-2" alt="" />
-                  <% } %>
-                  <span> <%= user.name %> </span>
-                </a>
-                <ul
-                  class="dropdown-menu dropdown-menu-end"
-                  aria-labelledby="userDropdown"
-                >
-                  <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                  <li>
-                    <hr class="dropdown-divider" />
-                  </li>
-                  <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
-                </ul>
-              </li>
+                <li class="nav-item">
+                  <a class="nav-link giohang" href="/cart">Giỏ hàng</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link taosanpham" href="/product/add">Tạo sản phẩm</a>
+                </li>
+                <li class="nav-item dropdown" style="margin-right:8px;">
+                  <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <% if (user.avatar) { %>
+                      <img src="<%= user.avatar %>" class="avatar me-2" alt="User Avatar" />
+                    <% } else { %>
+                      <img src="./img/def.jpg" class="avatar me-2" alt="Default Avatar" />
+                    <% } %>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="/user/<%= user.id %>">Profile</a></li>
+                    <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
+                    <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                  </ul>
+                </li>
               <% } %>
             </ul>
           </nav>
@@ -115,10 +152,12 @@
       </div>
     </header>
     <section>
-      <div class="container py-5">
-        <h4 class="mt-4 mb-5"><strong>Sale Products</strong></h4>
+      <div class="container py-5" >
+        <center>
+        <h1 class="mt-4 mb-5"><strong>Sale Products</strong></h1>
+        </center>
         <div class="row row-cols-1 row-cols-md-5 g-4">
-          <% products.forEach(product=> { %>
+          <% products.forEach(product => { %>
           <div class="col">
             <div class="card product-card">
               <a href="/product/<%= product.id %>">
@@ -130,26 +169,29 @@
               </a>
               <div class="card-body">
                 <h3 class="card-title"><%= product.name %></h3>
-                <span class="badge bg-danger ms-2"
-                  >-<%= product.saleval %>%</span
-                >
+                <span class="badge bg-danger ms-2">
+                  -<%= product.saleval %>% 
+                </span>
                 <p class="card-text">
-                  Giá: <del> <%= product.price %> </del>
-                  <%= (product.price - (product.price * product.saleval /
-                  100)).toFixed(2) %> VND
+                  Giá: <del><%= product.price %></del>
+                  <%= (product.price - (product.price * product.saleval / 100)).toFixed(2) %> VND
                 </p>
-                <div class="d-flex mt-3">
+                <p>Creator: <%= product.creator %></p>
+                <p class="card-text" style="margin-top: 3px">
+                  Ngày tạo: <%= product.formatted_date %>
+                </p>
+                <div class="d-flex justify-content-center mt-3">
                   <a
                     href="/product/<%= product.id %>"
-                    class="btn btn-success rounded"
-                    >Thông tin sản phẩm</a
+                    class="btn btn-success rounded me-2"
                   >
+                    Thông tin sản phẩm
+                  </a>
                   <button type="button" class="btn btn-primary rounded">
                     Thêm vào giỏ
                   </button>
                 </div>
               </div>
-              <p>Creator: <%= product.creator %></p>
             </div>
           </div>
           <% }); %>

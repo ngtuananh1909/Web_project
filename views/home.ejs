@@ -67,7 +67,7 @@
       }
 
       .mt-3 {
-        gap: 10px;
+        gap: 5px;
         border-radius: 30px;
         height: 60%;
       }
@@ -85,46 +85,88 @@
         background-color: #eeee;
       }
 
-      .d-flex {
-        display: flex;
-        gap: 10px; /* Khoảng cách giữa các nút */
-      }
       .btn {
         margin-right: 20px;
       }
+
+      .price {
+        margin-top: 50px;
+      }
+
+      .center-text {
+        display: flex;
+        justify-content: center; /* Căn giữa theo chiều ngang */
+        align-items: center; /* Căn giữa theo chiều dọc */
+      }
+
+      .nav-link {
+            position: relative; /* Để sử dụng absolute positioning cho underline */
+            display: inline-block;
+            padding-bottom: 5px; /* Khoảng cách giữa text và underline */
+        }
+
+        .nav-link::after {
+            content: ""; /* Nội dung rỗng để tạo thanh nhỏ */
+            position: absolute;
+            left: 16%;
+            bottom: 0;
+            width: 70%;
+            height: 2px; /* Độ dày của thanh nhỏ */
+            background-color: #0056ea; /* Màu của thanh nhỏ */
+            transform: scaleX(0); /* Ẩn thanh nhỏ ban đầu */
+            transform-origin: bottom right; /* Vị trí bắt đầu hiệu ứng */
+            align-items: center;
+            transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp cho thanh nhỏ */
+        }
+
+        .nav-link.home:hover::after,
+        .nav-link.bxh:hover::after,
+        .nav-link.giohang:hover::after,
+        .nav-link.taosanpham:hover::after,
+        .nav-link.login:hover::after,
+        .nav-link.dangky:hover::after {
+            transform: scaleX(1); /* Hiện thanh nhỏ khi hover */
+            transform-origin: bottom left; /* Vị trí kết thúc hiệu ứng */
+        }
+
+        .home-icon {
+            width: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
+            height: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
+        }
+
     </style>
   </head>
 
   <body>
     <header>
       <div class="container-fluid bg-light py-3">
-        <div
-          class="container d-flex justify-content-between align-items-center"
-        >
+        <div class="container d-flex justify-content-between align-items-center">
           <h1 class="h4 mb-0">
-            <a href="/" class="text-decoration-none text-dark">E-Shop</a>
+            <a href="/" class="text-decoration-none text-dark"><strong>E-Shop</strong></a>
           </h1>
           <nav class="nav">
             <ul class="nav">
               <li class="nav-item">
-                <a class="nav-link active" href="/">Home</a>
+                <a class="nav-link home" href="/">
+                  <img src="/img/home.jpg" alt="" class="home-icon">
+                </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="/scoreboard">BXH</a>
+                <a class="nav-link bxh" href="/scoreboard">BXH</a>
               </li>
               <% if (!user) { %>
               <li class="nav-item">
-                <a class="nav-link" href="/login">Đăng nhập</a>
+                <a class="nav-link login" href="/login">Đăng nhập</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/register">Đăng ký</a>
+                <a class="nav-link dangky" href="/register">Đăng ký</a>
               </li>
               <% } else { %>
               <li class="nav-item">
-                <a class="nav-link" href="/cart">Giỏ hàng</a>
+                <a class="nav-link giohang" href="/cart">Giỏ hàng</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/product/add">Tạo sản phẩm</a>
+                <a class="nav-link taosanpham" href="/product/add">Tạo sản phẩm</a>
               </li>
               <li class="nav-item dropdown">
                 <a
@@ -156,13 +198,14 @@
                   </li>
                   <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
                 </ul>
-              </li>              
+              </li>
               <% } %>
             </ul>
           </nav>
         </div>
       </div>
     </header>
+    
 
     <main>
       <div class="container my-5">
@@ -228,7 +271,7 @@
                     <h3 class="card-title">Tên sản phẩm</h3>
                     <p class="card-text">Mô tả ngắn về sản phẩm.</p>
                     <p class="card-text">Giá: 1,000,000 VND</p>
-                    <a href="/hotproduct" class="btn btn-primary">Danh sách</a>
+                    <a href="/hotproduct" class="btn btn-primary center-text" >Danh sách</a>
                   </div>
                 </div>
               </div>
@@ -239,7 +282,7 @@
                     <h3 class="card-title">Tên chương trình khuyến mãi</h3>
                     <p class="card-text">Chi tiết chương trình khuyến mãi.</p>
                     <p class="card-text">Giảm giá: 20%</p>
-                    <a href="/salelist" class="btn btn-danger">Xem chi tiết</a>
+                    <a href="/salelist" class="btn btn-danger center-text">Xem chi tiết</a>
                   </div>
                 </div>
               </div>
@@ -250,7 +293,6 @@
         <div class="row mt-5">
           <div class="col">
             <h2 class="section-title text-center">Danh mục sản phẩm</h2>
-
             <div
               id="carouselExampleIndicators"
               class="carousel slide"
@@ -271,17 +313,6 @@
                   data-slide-to="2"
                 ></li>
               </ol>
-              <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <img class="d-block w-100" src="..." alt="First slide" />
-                </div>
-                <div class="carousel-item">
-                  <img class="d-block w-100" src="..." alt="Second slide" />
-                </div>
-                <div class="carousel-item">
-                  <img class="d-block w-100" src="..." alt="Third slide" />
-                </div>
-              </div>
               <a
                 class="carousel-control-prev"
                 href="#carouselExampleIndicators"
@@ -319,44 +350,80 @@
                     />
                   </a>
                   <div class="card-body">
-                    <h4 class="card-title"><%= product.name %></h4>
+                    <h4 class="card-title"><center><%= product.name %></center></h4>
                     <% if (product.sale) { %>
-                    <span class="badge bg-danger ms-2"
-                      >-<%= product.saleval %>%</span
-                    >
-                    <p class="card-text">
-                      Giá: <del> <%= product.price %> </del>
-                      <%= (product.price - (product.price * product.saleval /
-                      100)).toFixed(2)%> VNĐ
-                    </p>
+                      <center><span class="badge bg-danger ms-2" style="margin-bottom: 10px;" >-<%= product.saleval %>%</span></center>
+                      <p class="card-text" style="margin-bottom:4px ;">
+                        Giá:<del> <%= product.price %> </del>
+                        <%= (product.price - (product.price * product.saleval /
+                        100)).toFixed(2)%> VNĐ
+                      </p>
+                      <div style="padding-left: 1px; padding-bottom: 10px">
+                        <div class ="creator-day" style ="margin-top: -0px;">
+                            <p class="card-text" style="margin-bottom: 3px">
+                              Creator: <%= product.creator %>
+                            </p>
+                            <p class="card-text" style="margin-top: 3px">
+                              Ngày tạo: <%= product.formatted_date %>
+                            </p>
+                        </div>
+                      <div class="d-flex mt-3" style="">
+                        <a
+                          href="/product/<%= product.id %>"
+                          class="btn btn-success rounded">
+                          <div>
+                            Thông tin
+                          </div>
+                          <div>
+                            sản phẩm
+                          </div>
+                        </a>
+                        <a style="margin-left: -20px;">
+                          <button
+                          type="button"
+                          class="btn btn-primary rounded addToCartBtn"
+                          data-product-id="<%= product.id %>"
+                          >
+                            Thêm vào giỏ
+                          </button>
+                        </a>
+                      </div>
                     <% } else { %>
-                    <p class="card-text">Giá: <%= product.price %> VNĐ</p>
+                      <div style="margin-top: 40px;">
+                          <p class="card-text">Giá: <%= product.price %> VNĐ</p>
+                      </div>
+                      <div style="padding-left: -10px; padding-bottom: 10px">
+                        <div class ="creator-day" style ="margin-top:1px;">
+                            <p class="card-text" style="margin-bottom: -2px">
+                              Creator: <%= product.creator %>
+                            </p>
+                            <p class="card-text" style="margin-top: 3px">
+                              Ngày tạo: <%= product.formatted_date %>
+                            </p>
+                        </div>
+                        <div class="d-flex mt-3" style="">
+                          <a
+                          href="/product/<%= product.id %>"
+                          class="btn btn-success rounded">
+                            <div>
+                              Thông tin
+                            </div>
+                            <div>
+                              sản phẩm
+                            </div>
+                          </a>
+                          <a style="margin-left: -20px;">
+                            <button
+                            type="button"
+                            class="btn btn-primary rounded addToCartBtn"
+                            data-product-id="<%= product.id %>"
+                            >
+                              Thêm vào giỏ
+                            </button>
+                          </a>
+                      </div>
                     <% } %>
                   </div>
-                  <div
-                    class="d-flex mt-3"
-                    style="padding-left: 10px; padding-right: 10px"
-                  >
-                    <a
-                      href="/product/<%= product.id %>"
-                      class="btn btn-success rounded"
-                      >Thông tin sản phẩm</a
-                    >
-                    <button
-                      type="button"
-                      class="btn btn-primary rounded addToCartBtn"
-                      data-product-id="<%= product.id %>"
-                    >
-                      Thêm vào giỏ
-                    </button>
-                  </div>
-                  <div style="padding-left: 10px; padding-bottom: 10px">
-                    <p class="card-text" style="margin-bottom: 3px">
-                      Creator: <%= product.creator %>
-                    </p>
-                    <p class="card-text" style="margin-top: 3px">
-                      Ngày tạo: <%= product.formatted_date %>
-                    </p>
                   </div>
                 </div>
               </div>
@@ -415,30 +482,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script>
-      $(document).ready(function () {
-        $(".addToCartBtn").click(function () {
-          const productId = $(this).data("product-id");
-          $("#addToCartModal").modal("show");
-          $(".confirmAddToCartBtn")
-            .off("click")
-            .on("click", function () {
-              $.ajax({
-                url: "/auth/add-to-cart",
-                type: "POST",
-                data: { productId: productId },
-                success: function (response) {
-                  $("#addToCartModal").modal("hide");
-                  alert("Sản phẩm đã được thêm vào giỏ hàng!");
-                },
-                error: function (xhr, status, error) {
-                  $("#addToCartModal").modal("hide");
-                  alert(xhr.responseText);
-                },
-              });
-            });
-        });
-      });
-    </script>
+    
   </body>
 </html>
