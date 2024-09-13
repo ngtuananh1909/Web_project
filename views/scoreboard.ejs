@@ -130,10 +130,6 @@
 
       /* Định dạng cho các phần tử flexbox với khoảng cách giữa các nút */
 
-      .btn {
-          margin-right: 20px;
-      }
-
     .nav-link {
           position: relative; /* Để sử dụng absolute positioning cho underline */
           display: inline-block;
@@ -180,84 +176,102 @@
         width: 30px;
         height: 30px;
       }
+
+      .the-link {
+          position: relative; /* Để sử dụng absolute positioning cho underline */
+          display: inline-block;
+          padding-bottom: 2px;
+      }
+
+      .the-link::after {
+          content: ""; /* Nội dung rỗng để tạo thanh nhỏ */
+          position: absolute;
+          left: 14%;
+          bottom: 0;
+          width: 80%;
+          height: 2px; /* Độ dày của thanh nhỏ */
+          background-color: #0056ea; /* Màu của thanh nhỏ */
+          transform-origin: bottom right; /* Vị trí bắt đầu hiệu ứng */
+          align-items: center;
+          transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp cho thanh nhỏ */
+      }
     </style>
   </head>
 
   <body>
     <header>
-      <header>
-        <div class="container-fluid bg-light py-3">
-          <div class="container d-flex justify-content-between align-items-center">
-            <h1 class="h4 mb-0">
-              <a href="/" class="text-decoration-none text-dark"><strong>E-Shop</strong></a>
-            </h1>
-            <nav class="nav">
-              <ul class="nav">
-                <li class="nav-item">
-                  <a class="nav-link home" href="/">
-                    <img src="/img/home.jpg" alt="" class="home-icon">
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link bxh" href="/scoreboard">
-                    <img src="/img/bxh.jpg" alt="" class="bxh-icon">
-                  </a>
-                </li>
-                <% if (!user) { %>
-                <li class="nav-item">
-                  <a class="nav-link login" href="/login">Đăng nhập</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link dangky" href="/register">Đăng ký</a>
-                </li>
-                <% } else { %>
-                <li class="nav-item">
-                  <a class="nav-link giohang" href="/cart">
-                      <img src="/img/cart.jpg" alt="" class="cart-icon">                  
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link taosanpham" href="/product/add">
-                    <img src="/img/add.jpg" alt="" class="add-icon">
-                  </a>
-                </li>
-                <li class="nav-item dropdown">
-                  <a
-                    class="nav-link dropdown-toggle d-flex align-items-center"
-                    id="userDropdown"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    <% if (user.avatar) { %>
-                    <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
-                    <% } else { %>
-                    <img src="./img/def.jpg" class="avatar me-2" alt="" />
-                    <% } %>
-                  </a>
-                  <ul
-                    class="dropdown-menu dropdown-menu-end"
-                    aria-labelledby="userDropdown"
-                  >
-                    <li>
-                      <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
-                    </li>
-                    <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                    <li>
-                      <a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a>
-                    </li>
-                    <li>
-                      <hr class="dropdown-divider" />
-                    </li>
-                    <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
-                  </ul>
-                </li>
-                <% } %>
-              </ul>
-            </nav>
-          </div>
+      <div class="container-fluid bg-light py-3">
+        <div class="container d-flex justify-content-between align-items-center">
+          <h1 class="h4 mb-0">
+            <a href="/" class="text-decoration-none text-dark "><strong>E-Shop</strong></a>
+          </h1>
+          <nav class="nav">
+            <ul class="nav">
+              <li class="nav-item">
+                <a class="the-link home" href="/" style="margin-top: 9px;">
+                    <img src="/img/home.jpg" alt="" class="home-icon"></img>
+                </a>
+            </li>
+              <li class="nav-item">
+                <a class="nav-link bxh" href="/scoreboard">
+                  <img src="/img/bxh.jpg" alt="" class="bxh-icon">
+                </a>
+              </li>
+              <% if (!user) { %>
+              <li class="nav-item">
+                <a class="nav-link login" href="/login">Đăng nhập</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link dangky" href="/register">Đăng ký</a>
+              </li>
+              <% } else { %>
+              <li class="nav-item">
+                <a class="nav-link giohang" href="/cart">
+                    <img src="/img/cart.jpg" alt="" class="cart-icon">                  
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link taosanpham" href="/product/add">
+                  <img src="/img/add.jpg" alt="" class="add-icon">
+                </a>
+              </li>
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle d-flex align-items-center"
+                  id="userDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <% if (user.avatar) { %>
+                  <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
+                  <% } else { %>
+                  <img src="./img/def.jpg" class="avatar me-2" alt="" />
+                  <% } %>
+                </a>
+                <ul
+                  class="dropdown-menu dropdown-menu-end"
+                  aria-labelledby="userDropdown"
+                >
+                  <li>
+                    <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
+                  </li>
+                  <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
+                  <li>
+                    <a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+                  <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                </ul>
+              </li>
+              <% } %>
+            </ul>
+          </nav>
         </div>
-      </header>
+      </div>
+    </header>
     <center>
     <h1 class="center-title">LIST TOP PRODUCT</h1>
     </center>

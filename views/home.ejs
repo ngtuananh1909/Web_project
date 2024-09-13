@@ -99,53 +99,74 @@
         align-items: center; /* Căn giữa theo chiều dọc */
       }
 
-      .nav-link {
-            position: relative; /* Để sử dụng absolute positioning cho underline */
-            display: inline-block;
-            padding-bottom: 5px; /* Khoảng cách giữa text và underline */
-        }
+    .nav-link {
+          position: relative; /* Để sử dụng absolute positioning cho underline */
+          display: inline-block;
+          padding-bottom: 5px; /* Khoảng cách giữa text và underline */
+      }
 
-        .nav-link::after {
-            content: ""; /* Nội dung rỗng để tạo thanh nhỏ */
-            position: absolute;
-            left: 16%;
-            bottom: 0;
-            width: 70%;
-            height: 2px; /* Độ dày của thanh nhỏ */
-            background-color: #0056ea; /* Màu của thanh nhỏ */
-            transform: scaleX(0); /* Ẩn thanh nhỏ ban đầu */
-            transform-origin: bottom right; /* Vị trí bắt đầu hiệu ứng */
-            align-items: center;
-            transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp cho thanh nhỏ */
-        }
+      .nav-link::after {
+          content: ""; /* Nội dung rỗng để tạo thanh nhỏ */
+          position: absolute;
+          left: 16%;
+          bottom: 0;
+          width: 70%;
+          height: 2px; /* Độ dày của thanh nhỏ */
+          background-color: #00ea4a; /* Màu của thanh nhỏ */
+          transform: scaleX(0); /* Ẩn thanh nhỏ ban đầu */
+          transform-origin: bottom right; /* Vị trí bắt đầu hiệu ứng */
+          align-items: center;
+          transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp cho thanh nhỏ */
+      }
 
-        .nav-link.home:hover::after,
-        .nav-link.bxh:hover::after,
-        .nav-link.giohang:hover::after,
-        .nav-link.taosanpham:hover::after,
-        .nav-link.login:hover::after,
-        .nav-link.dangky:hover::after {
-            transform: scaleX(1); /* Hiện thanh nhỏ khi hover */
-            transform-origin: bottom left; /* Vị trí kết thúc hiệu ứng */
-        }
+      .nav-link.home:hover::after,
+      .nav-link.bxh:hover::after,
+      .nav-link.giohang:hover::after,
+      .nav-link.taosanpham:hover::after,
+      .nav-link.login:hover::after,
+      .nav-link.dangky:hover::after {
+          transform: scaleX(1); /* Hiện thanh nhỏ khi hover */
+          transform-origin: bottom left; /* Vị trí kết thúc hiệu ứng */
+      }
 
-        .home-icon {
-            width: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
-            height: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
-        }
-        .bxh-icon{
-          width: 27px; /* Thay đổi kích thước của hình ảnh nếu cần */
-          height: 27px;
-        }
-        .cart-icon{
-          width: 23px;
-          height: 23px;
-        }
+      .home-icon {
+          width: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
+          height: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
+      }
+      .bxh-icon{
+        width: 27px; /* Thay đổi kích thước của hình ảnh nếu cần */
+        height: 27px;
+      }
+      .cart-icon{
+        width: 23px;
+        height: 23px;
+      }
 
-        .add-icon{
-          width: 30px;
-          height: 30px;
-        }
+      .add-icon{
+        width: 30px;
+        height: 30px;
+      }
+
+      .the-link {
+          position: relative; /* Để sử dụng absolute positioning cho underline */
+          display: inline-block;
+          padding-bottom: 2px;
+      }
+
+      .the-link::after {
+          content: ""; /* Nội dung rỗng để tạo thanh nhỏ */
+          position: absolute;
+          left: 14%;
+          bottom: 0;
+          width: 80%;
+          height: 2px; /* Độ dày của thanh nhỏ */
+          background-color: #0056ea; /* Màu của thanh nhỏ */
+          transform-origin: bottom right; /* Vị trí bắt đầu hiệu ứng */
+          align-items: center;
+          transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp cho thanh nhỏ */
+      }
+
+
 
     </style>
   </head>
@@ -155,15 +176,15 @@
       <div class="container-fluid bg-light py-3">
         <div class="container d-flex justify-content-between align-items-center">
           <h1 class="h4 mb-0">
-            <a href="/" class="text-decoration-none text-dark"><strong>E-Shop</strong></a>
+            <a href="/" class="text-decoration-none text-dark "><strong>E-Shop</strong></a>
           </h1>
           <nav class="nav">
             <ul class="nav">
               <li class="nav-item">
-                <a class="nav-link home" href="/">
-                  <img src="/img/home.jpg" alt="" class="home-icon">
+                <a class="the-link home" href="/" style="margin-top: 9px;">
+                    <img src="/img/home.jpg" alt="" class="home-icon"></img>
                 </a>
-              </li>
+            </li>
               <li class="nav-item">
                 <a class="nav-link bxh" href="/scoreboard">
                   <img src="/img/bxh.jpg" alt="" class="bxh-icon">
@@ -341,7 +362,7 @@
                               Ngày tạo: <%= product.formatted_date %>
                             </p>
                         </div>
-                      <div class="d-flex mt-3" style="">
+                      <div class="d-flex mt-3">
                         <a
                           href="/product/<%= product.id %>"
                           class="btn btn-success rounded">
@@ -375,7 +396,7 @@
                               Ngày tạo: <%= product.formatted_date %>
                             </p>
                         </div>
-                        <div class="d-flex mt-3" style="">
+                        <div class="d-flex mt-3">
                           <a
                           href="/product/<%= product.id %>"
                           class="btn btn-success rounded">
