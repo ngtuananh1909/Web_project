@@ -29,6 +29,7 @@
         .product-card {
             position: relative;
             overflow: hidden;
+            width: 250px;
             transition: transform 0.3s ease;
         }
 
@@ -38,7 +39,7 @@
         }
 
         .scrollable-card-body {
-            height: 400px;
+            height: 700px;
             overflow-y: auto;
         }
 
@@ -77,12 +78,30 @@
             transform-origin: bottom left; /* Vị trí kết thúc hiệu ứng */
         }
 
+        .home-icon {
+            width: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
+            height: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
+        }
+        .bxh-icon{
+          width: 27px; /* Thay đổi kích thước của hình ảnh nếu cần */
+          height: 27px;
+        }
+        .cart-icon{
+          width: 23px;
+          height: 23px;
+        }
+
+        .add-icon{
+          width: 30px;
+          height: 30px;
+        }
+
     </style>
 </head>
 
 <body>
     <header>
-        <div class="container-fluid bg-light py-3">
+        <div class="container-fluid bg-light py-3" style="margin-left: 0px;">
           <div class="container d-flex justify-content-between align-items-center">
             <h1 class="h4 mb-0">
               <a href="/" class="text-decoration-none text-dark"><strong>E-Shop</strong></a>
@@ -90,10 +109,14 @@
             <nav class="nav">
               <ul class="nav">
                 <li class="nav-item">
-                  <a class="nav-link home" href="/">Home</a>
+                  <a class="nav-link home" href="/">
+                    <img src="/img/home.jpg" alt="" class="home-icon">
+                  </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link bxh" href="/scoreboard">BXH</a>
+                  <a class="nav-link bxh" href="/scoreboard">
+                    <img src="/img/bxh.jpg" alt="" class="bxh-icon">
+                  </a>
                 </li>
                 <% if (!user) { %>
                 <li class="nav-item">
@@ -104,10 +127,14 @@
                 </li>
                 <% } else { %>
                 <li class="nav-item">
-                  <a class="nav-link giohang" href="/cart">Giỏ hàng</a>
+                  <a class="nav-link giohang" href="/cart">
+                      <img src="/img/cart.jpg" alt="" class="cart-icon">                  
+                  </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link taosanpham" href="/product/add">Tạo sản phẩm</a>
+                  <a class="nav-link taosanpham" href="/product/add">
+                    <img src="/img/add.jpg" alt="" class="add-icon">
+                  </a>
                 </li>
                 <li class="nav-item dropdown">
                   <a
@@ -272,40 +299,32 @@
                                 <div class="card mb-4 mb-md-0">
                                     <div class="card-body scrollable-card-body">
                                         <p class="mb-4"><span class="text-primary font-italic me-1">My Product</span> List of my products</p>
-                                        <div class="row row-cols-1 row-cols-md-5 g-4" style="gap: 30px;">
-                                            <% products.forEach(product=> { %>
-                                                <div class="col" style="width: 250px;height: 50%;">
+                                        <div class="row row-cols-1 row-cols-md-5 g-4" style="display: flex; flex-wrap: wrap; gap: 100px;">
+                                            <% products.forEach(product => { %>
+                                                <div class="col" style="flex: 0 0 20%; max-width: 20%;">
                                                     <div class="card product-card">
                                                         <a href="/product/<%= product.id %>">
-                                                            <img src="/uploads/<%= product.image %>" class="card-img-top"
-                                                                alt="<%= product.name %>" style="height: 200px;">
-            
+                                                            <img src="/uploads/<%= product.image %>" class="card-img-top" alt="" />
                                                         </a>
                                                         <div class="card-body">
-                                                            <h4 class="card-title">
-                                                                <%= product.name %>
-                                                            </h4>
+                                                            <h4 class="card-title text-center"><%= product.name %></h4>
                                                             <% if (product.sale) { %>
-                                                                <span class="badge bg-danger ms-2">-<%= product.saleval %>%</span>
-                                                                <p class="card-text">Giá: <del>
-                                                                        <%= product.price %>
-                                                                    </del>
-                                                                    <%= (product.price - (product.price * product.saleval / 100)).toFixed(2)
-                                                                        %>
-                                                                        VND
+                                                                <center><span class="badge bg-danger ms-2" style="margin-bottom: 10px;">-<%= product.saleval %>%</span></center>
+                                                                <p class="card-text" style="margin-bottom:4px;">
+                                                                    Giá: <del><%= product.price %> VNĐ</del>
+                                                                    <%= (product.price - (product.price * product.saleval / 100)).toFixed(2) %> VNĐ
                                                                 </p>
-                                                                <% } else { %>
-                                                                    <p class="card-text">Giá: <%= product.price %> VND</p>
-                                                                    <% } %>
-                                                                    
+                                                            <% } else { %>
+                                                                <p class="card-text">Giá: <%= product.price %> VNĐ</p>
+                                                            <% } %>
+                                                            <p class="card-text">Creator: <%= product.creator %></p>
+                                                            <p class="card-text">Ngày tạo: <%= product.created_at %></p>
                                                         </div>
-                                                        <p>Creator: <%= product.creator %>
-                                                        </p>
                                                     </div>
                                                 </div>
-                                                <% }); %>
+                                            <% }); %>
                                         </div>
-                                    </div>
+                                        
                                 </div>
                             </div>
                             <div id="boughtProduct" class="hidden">

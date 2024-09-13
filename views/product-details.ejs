@@ -367,13 +367,33 @@
                 overflow-wrap: break-word;
                 font-size: 20px;
             }
+            
+            .home-icon {
+                width: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
+                height: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
+            }
+            .bxh-icon{
+            width: 27px; /* Thay đổi kích thước của hình ảnh nếu cần */
+            height: 27px;
+            }
+            .cart-icon{
+            width: 23px;
+            height: 23px;
+            }
 
+            .add-icon{
+            width: 30px;
+            height: 30px;
+            }
+            .m1{
+                font-size: 50px;
+            }
         </style>
     </head>
 
     <body>
         <header>
-            <div class="bg-light py-3 header-container">
+            <div class="bg-light py-3 header-container" style="margin-left: -4px;">
                 <div class="container d-flex justify-content-between align-items-center">
                     <h1 class="h4 mb-0">
                         <a href="/" class="text-decoration-none text-dark" style="margin-left: -50px;"><strong>E-Shop</strong></a>
@@ -381,24 +401,32 @@
                     <nav class="nav">
                         <ul class="nav">
                             <li class="nav-item">
-                                <a class="nav-link home" href="/">Home</a>
+                                <a class="nav-link home" href="/">
+                                    <img src="/img/home.jpg" alt="" class="home-icon"></img>
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link bxh" href="/">BXH</a>
+                                <a class="nav-link bxh" href="/">
+                                    <img src="/img/bxh.jpg" alt="" class="bxh-icon">
+                                </a>
                             </li>
                             <% if (!user) { %>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/login">Đăng nhập</a>
+                                    <a class="nav-link login" href="/login">Đăng nhập</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/register">Đăng ký</a>
+                                    <a class="nav-link dangky" href="/register">Đăng ký</a>
                                 </li>
                                 <% } else { %>
                                     <li class="nav-item">
-                                        <a class="nav-link giohang" href="/cart">Giỏ hàng</a>
+                                        <a class="nav-link giohang" href="/cart">
+                                            <img src="/img/cart.jpg" alt="" class="cart-icon">
+                                        </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link taosanpham" href="/product/add">Tạo sản phẩm</a>
+                                        <a class="nav-link taosanpham" href="/product/add">
+                                            <img src="/img/add.jpg" alt="" class="add-icon">
+                                        </a>
                                     </li>
                                     <li class="nav-item dropdown" style="margin-right:-53px;">
                                         <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -422,7 +450,7 @@
                 </div>
             </div>
         </header>
-        <h1><center>Product Details</center></h1>
+        <m1 style="font-size: 50px;"><strong><center>Product Details</center></strong></m1>
         <div class="container">
             <div class="image-container">
                 <% if (product.image) { %>
@@ -432,12 +460,18 @@
             <div class="card-body info">
                 <div class="details-container">
                     <h2><center><%= product.name %></center></h2>
-                    <p><strong>Description:</strong> <%= product.description %></p></div>
                     <% if (product.sale) { %>
-                        <p><strong>Price:</strong> <%= product.price - (product.price * product.saleval / 100) %> VNĐ</p>
+                        <p class="card-text" style="margin-bottom:4px ;">
+                            <span class="badge bg-danger ms-2" style="margin-bottom: 10px;" >-<%= product.saleval %>%</span>
+                            <br>
+                            <strong>Price:</strong><del> <%= product.price %> </del>
+                            <%= (product.price - (product.price * product.saleval /
+                            100)).toFixed(2)%> VNĐ
+                          </p>
                     <% } else { %>
                         <p><strong>Price:</strong> <%= product.price %> VNĐ</p>
                     <% } %>            
+                    <p><strong>Description:</strong> <%= product.description %></p></div>
                     <p><strong>Quantity:</strong> <%= product.quantity %></p>
                     <% if (product.sale) { %>
                         <p class="sale"><strong>Sale:</strong> <%= product.saleval %>%</p>
@@ -445,7 +479,7 @@
                     <div class="tuan_anh">
                         <a href="" class="buy-now">Buy Now</a>
                         <a href="" class="add-to-cart">Add to Cart</a>
-                        <div style="margin-left: 10px;"><a href="/scoreboard">Bestsellers</a></div>
+                        <div style="margin-left: 20px;"><a href="/scoreboard">Bestsellers</a></div>
                     </div>
                     
                 </div>
@@ -455,7 +489,7 @@
                 <div class="row mt-5">
                     <div class="col">
                         <h2 class="section-title text-center">Sản phẩm gợi ý</h2>
-                        <div class="row row-cols-1 row-cols-md-5 g-4" style="margin-left:-30px; gap: 50px;">
+                        <div class="row row-cols-1 row-cols-md-5 g-4" style="margin-left:-10px; gap: 50px;">
                             <% products.forEach(product=> { %>
                                 <div class="col">
                                     <div class="card product-card" >

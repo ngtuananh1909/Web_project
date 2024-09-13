@@ -133,6 +133,19 @@
             width: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
             height: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
         }
+        .bxh-icon{
+          width: 27px; /* Thay đổi kích thước của hình ảnh nếu cần */
+          height: 27px;
+        }
+        .cart-icon{
+          width: 23px;
+          height: 23px;
+        }
+
+        .add-icon{
+          width: 30px;
+          height: 30px;
+        }
 
     </style>
   </head>
@@ -152,7 +165,9 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link bxh" href="/scoreboard">BXH</a>
+                <a class="nav-link bxh" href="/scoreboard">
+                  <img src="/img/bxh.jpg" alt="" class="bxh-icon">
+                </a>
               </li>
               <% if (!user) { %>
               <li class="nav-item">
@@ -163,10 +178,14 @@
               </li>
               <% } else { %>
               <li class="nav-item">
-                <a class="nav-link giohang" href="/cart">Giỏ hàng</a>
+                <a class="nav-link giohang" href="/cart">
+                    <img src="/img/cart.jpg" alt="" class="cart-icon">                  
+                </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link taosanpham" href="/product/add">Tạo sản phẩm</a>
+                <a class="nav-link taosanpham" href="/product/add">
+                  <img src="/img/add.jpg" alt="" class="add-icon">
+                </a>
               </li>
               <li class="nav-item dropdown">
                 <a
@@ -293,51 +312,6 @@
         <div class="row mt-5">
           <div class="col">
             <h2 class="section-title text-center">Danh mục sản phẩm</h2>
-            <div
-              id="carouselExampleIndicators"
-              class="carousel slide"
-              data-ride="carousel"
-            >
-              <ol class="carousel-indicators">
-                <li
-                  data-target="#carouselExampleIndicators"
-                  data-slide-to="0"
-                  class="active"
-                ></li>
-                <li
-                  data-target="#carouselExampleIndicators"
-                  data-slide-to="1"
-                ></li>
-                <li
-                  data-target="#carouselExampleIndicators"
-                  data-slide-to="2"
-                ></li>
-              </ol>
-              <a
-                class="carousel-control-prev"
-                href="#carouselExampleIndicators"
-                role="button"
-                data-slide="prev"
-              >
-                <span
-                  class="carousel-control-prev-icon"
-                  aria-hidden="true"
-                ></span>
-                <span class="sr-only">Previous</span>
-              </a>
-              <a
-                class="carousel-control-next"
-                href="#carouselExampleIndicators"
-                role="button"
-                data-slide="next"
-              >
-                <span
-                  class="carousel-control-next-icon"
-                  aria-hidden="true"
-                ></span>
-                <span class="sr-only">Next</span>
-              </a>
-            </div>
             <div class="row row-cols-1 row-cols-md-5 g-4">
               <% products.forEach(product=> { %>
               <div class="col">

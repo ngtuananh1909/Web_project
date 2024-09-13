@@ -21,6 +21,7 @@
     .product-card {
       position: relative;
       overflow: hidden;
+      width: 300px;
       transition: transform 0.3s ease;
     }
 
@@ -29,6 +30,12 @@
       object-fit: cover;
       width: 100%;
     }
+    .avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
 
     .product-card:hover {
       transform: translateY(-5px) scale(1.01);
@@ -49,43 +56,100 @@
     .btn-success:hover {
       transform: translateY(-3px);
     }
+
+    .nav-link {
+            position: relative; /* Để sử dụng absolute positioning cho underline */
+            display: inline-block;
+            padding-bottom: 5px; /* Khoảng cách giữa text và underline */
+        }
+
+        .nav-link::after {
+            content: ""; /* Nội dung rỗng để tạo thanh nhỏ */
+            position: absolute;
+            left: 16%;
+            bottom: 0;
+            width: 70%;
+            height: 2px; /* Độ dày của thanh nhỏ */
+            background-color: #0056ea; /* Màu của thanh nhỏ */
+            transform: scaleX(0); /* Ẩn thanh nhỏ ban đầu */
+            transform-origin: bottom right; /* Vị trí bắt đầu hiệu ứng */
+            align-items: center;
+            transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp cho thanh nhỏ */
+        }
+
+        .nav-link.home:hover::after,
+        .nav-link.bxh:hover::after,
+        .nav-link.giohang:hover::after,
+        .nav-link.taosanpham:hover::after,
+        .nav-link.login:hover::after,
+        .nav-link.dangky:hover::after {
+            transform: scaleX(1); /* Hiện thanh nhỏ khi hover */
+            transform-origin: bottom left; /* Vị trí kết thúc hiệu ứng */
+        }
+
+        .home-icon {
+            width: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
+            height: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
+        }
+        .bxh-icon{
+          width: 27px; /* Thay đổi kích thước của hình ảnh nếu cần */
+          height: 27px;
+        }
+        .cart-icon{
+          width: 23px;
+          height: 23px;
+        }
+
+        .add-icon{
+          width: 30px;
+          height: 30px;
+        }
+        .mt-3{
+          width: 150px;
+          height: 120px;
+        }
   </style>
 
   <body>
-    <header class="sticky-header">
+    <header>
       <div class="container-fluid bg-light py-3">
-        <div
-          class="container d-flex justify-content-between align-items-center"
-        >
+        <div class="container d-flex justify-content-between align-items-center">
           <h1 class="h4 mb-0">
-            <a href="#" class="text-decoration-none text-dark">E-Shop</a>
+            <a href="/" class="text-decoration-none text-dark"><strong>E-Shop</strong></a>
           </h1>
           <nav class="nav">
             <ul class="nav">
               <li class="nav-item">
-                <a class="nav-link active" href="/scoreboard">BXH</a>
+                <a class="nav-link home" href="/">
+                  <img src="/img/home.jpg" alt="" class="home-icon">
+                </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="/">Home</a>
+                <a class="nav-link bxh" href="/scoreboard">
+                  <img src="/img/bxh.jpg" alt="" class="bxh-icon">
+                </a>
               </li>
               <% if (!user) { %>
               <li class="nav-item">
-                <a class="nav-link" href="/login">Đăng nhập</a>
+                <a class="nav-link login" href="/login">Đăng nhập</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/register">Đăng ký</a>
+                <a class="nav-link dangky" href="/register">Đăng ký</a>
               </li>
               <% } else { %>
               <li class="nav-item">
-                <a class="nav-link" href="/cart">Giỏ hàng</a>
+                <a class="nav-link giohang" href="/cart">
+                    <img src="/img/cart.jpg" alt="" class="cart-icon">                  
+                </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/product/add">Tạo sản phẩm</a>
+                <a class="nav-link taosanpham" href="/product/add">
+                  <img src="/img/add.jpg" alt="" class="add-icon">
+                </a>
               </li>
               <li class="nav-item dropdown">
                 <a
                   class="nav-link dropdown-toggle d-flex align-items-center"
-                  href="#"
                   id="userDropdown"
                   role="button"
                   data-bs-toggle="dropdown"
@@ -96,22 +160,17 @@
                   <% } else { %>
                   <img src="./img/def.jpg" class="avatar me-2" alt="" />
                   <% } %>
-                  <span> <%= user.name %> </span>
                 </a>
                 <ul
                   class="dropdown-menu dropdown-menu-end"
                   aria-labelledby="userDropdown"
                 >
                   <li>
-                    <a class="dropdown-item" href="/user/<%= user.id %>"
-                      >Profile</a
-                    >
+                    <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
                   </li>
                   <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
                   <li>
-                    <a class="dropdown-item"
-                      >Balanced : <%= user.balance %> VNĐ</a
-                    >
+                    <a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a>
                   </li>
                   <li>
                     <hr class="dropdown-divider" />
@@ -126,63 +185,56 @@
       </div>
     </header>
     <section style="background-color: #eee">
-      <div class="container py-5">
-        <h4 class="mt-4 mb-5"><strong>Bestsellers</strong></h4>
-
+      <div class="container py-5" >
         <div class="col">
-          <h2 class="section-title text-center">Danh mục sản phẩm</h2>
-          <div class="row row-cols-1 row-cols-md-5 g-4">
-            <% products.forEach(product=> { %>
-            <div class="col">
-              <div class="card product-card">
-                <a href="/product/<%= product.id %>">
-                  <img
-                    src="/uploads/<%= product.image %>"
-                    class="card-img-top"
-                    alt="<%= product.name %>"
-                  />
-                </a>
-                <div class="card-body">
-                  <h4 class="card-title"><%= product.name %></h4>
-                  <% if (product.sale) { %>
-                  <span class="badge bg-danger ms-2"
-                    >-<%= product.saleval %>%</span
-                  >
-                  <p class="card-text">
-                    Giá: <del> <%= product.price %> </del>
-                    <%= (product.price - (product.price * product.saleval /
-                    100)).toFixed(2)%> VNĐ
-                  </p>
-                  <% } else { %>
-                  <p class="card-text">Giá: <%= product.price %> VND</p>
-                  <% } %>
-                  <div class="d-flex mt-3">
-                    <a
-                      href="/product/<%= product.id %>"
-                      class="btn btn-success rounded"
-                      >Thông tin sản phẩm</a
-                    >
-                    <button
-                      type="button"
-                      class="btn btn-primary rounded addToCartBtn"
-                      data-product-id="<%= product.id %>"
-                    >
-                      Thêm vào giỏ
-                    </button>
-                  </div>
+          <h2 class="section-title text-center" style="margin-bottom:40px ;"><strong>Danh mục sản phẩm</strong></h2>
+          <div class="row row-cols-1 row-cols-md-5 g-4" style="display: flex; flex-wrap: wrap; gap: 50px;">
+            <% products.forEach(product => { %>
+                <div class="col" style="flex: 0 0 20%; max-width: 20%;">
+                    <div class="card product-card">
+                        <a href="/product/<%= product.id %>">
+                            <img src="/uploads/<%= product.image %>" class="card-img-top" alt="" />
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title text-center"><%= product.name %></h4>
+                            <% if (product.sale) { %>
+                                <center><span class="badge bg-danger ms-2" style="margin-bottom: 10px;">-<%= product.saleval %>%</span></center>
+                                <p class="card-text" style="margin-bottom:4px;">
+                                    Giá: <del><%= product.price %> VNĐ</del>
+                                    <%= (product.price - (product.price * product.saleval / 100)).toFixed(2) %> VNĐ
+                                </p>
+                                
+                            <% } else { %>
+                                <p class="card-text">Giá: <%= product.price %> VNĐ</p>
+                            <% } %>
+                            <p class="card-text">Creator: <%= product.creator %></p>
+                            <p class="card-text">Ngày tạo: <%= product.created_at %></p>
+                            <div class="d-flex mt-3" style="gap: 20px; width: 250px;">
+                              <a
+                              href="/product/<%= product.id %>"
+                              class="btn btn-success rounded">
+                                <div>
+                                  Thông tin
+                                </div>
+                                <div>
+                                  sản phẩm
+                                </div>
+                              </a>
+                              <a style="width: 300px;">
+                                <button
+                                type="button"
+                                class="btn btn-primary rounded addToCartBtn"
+                                data-product-id="<%= product.id %>"
+                                >
+                                  Thêm vào giỏ
+                                </button>
+                              </a>
+                          </div>
+                        </div>
+                    </div>
                 </div>
-                <div style="padding-left: 10px; padding-bottom: 10px">
-                  <p class="card-text" style="margin-bottom: 3px">
-                    Creator: <%= product.creator %>
-                  </p>
-                  <p class="card-text" style="margin-top: 3px">
-                    Ngày tạo: <%= product.formatted_date %>
-                  </p>
-                </div>
-              </div>
-            </div>
             <% }); %>
-          </div>
+        </div>
         </div>
       </div>
     </section>
