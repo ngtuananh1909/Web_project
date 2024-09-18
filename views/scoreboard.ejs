@@ -228,22 +228,92 @@
         .dropdown-menu:hover {
           display: block;
         }
+        
+
+        /* Chế độ sáng (mặc định) */
+      body {
+        background-color: #F5EFFF;
+        color: #000;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      /* Chế độ tối */
+      body.dark-mode {
+        background-color: #1b1b1b;
+        color: #f1f1f1;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .dark-mode .navbar, .dark-mode .card {
+        background-color: #333333;
+        color: #f1f1f1;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .dark-mode .btn-primary {
+        background-color: #2897f8;
+        border-color: #666;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .dark-mode a{
+        color: #ffffff;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .mode-button{
+        height: 30px;
+        width: 30px;
+      }
+
+      .dark-mode .header-design  {
+        background-color: #666666fd; /* Màu nền tối cho header */
+        color: white;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .text-decoration-none{
+        color: black;
+      }
+      .dark-mode .dropdown-menu{
+        background-color: #0c0c0c;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .dropdown-item{
+        color: rgb(0, 0, 0);
+        text-decoration: none;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .dropdown-menu{
+        color: white;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .header-design{
+        background-color: #e2e2e2;
+      }
+      .top{
+        color: #000;
+      }
+      .dark-mode .top{
+        color: white;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
 
       </style>
     </head>
 
     <body>
-      <header>
-        <div class="container-fluid bg-light py-3">
-          <div class="container d-flex justify-content-between align-items-center">
+      <header class="header-design">
+        <div class="container-fluid py-3" >
+          <div class="container d-flex justify-content-between align-items-center" style="margin-left: 476px;">
             <h1 class="h4 mb-0">
-              <a href="/" class="text-decoration-none text-dark "><strong>E-Shop</strong></a>
+              <a href="/" class="text-decoration-none" style="margin-left: -197px;"><strong>E-Shop</strong></a>
             </h1>
             <nav class="nav">
               <ul class="nav">
                 <li class="nav-item">
                   <a class="nav-link home" href="/">
-                      <img src="/img/home.jpg" alt="" class="home-icon"></img>
+                      <img src="/img/home.png" alt="" class="home-icon"></img>
                   </a>
               </li>
                 <li class="nav-item">
@@ -258,6 +328,9 @@
                 <li class="nav-item">
                   <a class="nav-link dangky" href="/register">Đăng ký</a>
                 </li>
+                <button id="toggle-dark-mode" style="margin-left: 150px;">
+                  <img src="img/mode.png" alt="" class="mode-button"></img>
+                </button>
                 <% } else { %>
                 <li class="nav-item">
                   <a class="nav-link giohang" href="/cart">
@@ -287,6 +360,9 @@
                     <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
                   </ul>
                 </li>
+                <button id="toggle-dark-mode" style="margin-left: 150px;">
+                  <img src="img/mode.png" alt="" class="mode-button"></img>
+                </button>
                 <% } %>
               </ul>
             </nav>
@@ -294,7 +370,7 @@
         </div>
       </header>
       <center>
-      <h1 class="center-title">LIST TOP PRODUCT</h1>
+      <h1 class="center-title top">LIST TOP PRODUCT</h1>
       </center>
       <div class="top-list mt-4" >
         <div class="row">
@@ -351,4 +427,23 @@
         </div>
       </div>    
     </body>
+    <script>
+      const toggleButton = document.getElementById('toggle-dark-mode');
+      const body = document.body;
+    
+      // Kiểm tra nếu chế độ tối đã được kích hoạt trước đó
+      if (localStorage.getItem('darkMode') === 'enabled') {
+        body.classList.add('dark-mode');
+      }
+    
+      toggleButton.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        if (body.classList.contains('dark-mode')) {
+          localStorage.setItem('darkMode', 'enabled');
+
+        } else {
+          localStorage.setItem('darkMode', 'disabled');
+        }
+      });
+    </script>
   </html>
