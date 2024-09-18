@@ -82,8 +82,13 @@
       }
 
       body {
-        background-color: #eeee;
+          background-image: url('');
+          background-color: #F5EFFF;
+          background-size: cover; /* Đảm bảo ảnh bao phủ toàn bộ trang */
+          background-position: center; /* Đặt vị trí ảnh ở trung tâm */
+          background-repeat: no-repeat; /* Không lặp lại ảnh */
       }
+
 
       .btn {
         margin-right: 20px;
@@ -166,14 +171,31 @@
           transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp cho thanh nhỏ */
       }
 
+      /* Ẩn menu mặc định */
+      .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%; /* Đặt menu xuất hiện ngay dưới avatar */
+        left: 0;
+        z-index: 1000;
+      }
+
+      /* Hiển thị menu khi di chuột vào avatar */
+      .nav-link.dropdown-toggle:hover + .dropdown-menu,
+      .dropdown-menu:hover {
+        display: block;
+      }
+      .header-design{
+        background-color: #CDC1FF;
+      }
 
 
     </style>
   </head>
 
   <body>
-    <header>
-      <div class="container-fluid bg-light py-3">
+    <header class="header-design">
+      <div class="container-fluid py-3" >
         <div class="container d-flex justify-content-between align-items-center">
           <h1 class="h4 mb-0">
             <a href="/" class="text-decoration-none text-dark "><strong>E-Shop</strong></a>
@@ -209,44 +231,30 @@
                 </a>
               </li>
               <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle d-flex align-items-center"
-                  id="userDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
+                <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                   <% if (user.avatar) { %>
                   <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
                   <% } else { %>
                   <img src="./img/def.jpg" class="avatar me-2" alt="" />
                   <% } %>
                 </a>
-                <ul
-                  class="dropdown-menu dropdown-menu-end"
-                  aria-labelledby="userDropdown"
-                >
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                   <li>
                     <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
                   </li>
                   <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                  <li>
-                    <a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a>
-                  </li>
-                  <li>
-                    <hr class="dropdown-divider" />
-                  </li>
+                  <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                  <li><hr class="dropdown-divider" /></li>
                   <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
                 </ul>
               </li>
+              
               <% } %>
             </ul>
           </nav>
         </div>
       </div>
     </header>
-    
-
     <main>
       <div class="container my-5">
         <div id="carouselExampleControls" class="carousel slide">
@@ -427,21 +435,22 @@
           </div>
         </div>
       </div>
+      <footer class="bg-light py-4 mt-5">
+        <div class="container">
+          <div class="text-center text-muted">&copy; 2024 E-Shop</div>
+          <div class="text-center mt-3">
+            <a href="#" class="text-decoration-none text-dark mx-2"
+              >Chính sách bảo mật</a
+            >
+            <a href="#" class="text-decoration-none text-dark mx-2"
+              >Điều khoản sử dụng</a
+            >
+          </div>
+        </div>
+      </footer>
     </main>
 
-    <footer class="bg-light py-4 mt-5">
-      <div class="container">
-        <div class="text-center text-muted">&copy; 2024 E-Shop</div>
-        <div class="text-center mt-3">
-          <a href="#" class="text-decoration-none text-dark mx-2"
-            >Chính sách bảo mật</a
-          >
-          <a href="#" class="text-decoration-none text-dark mx-2"
-            >Điều khoản sử dụng</a
-          >
-        </div>
-      </div>
-    </footer>
+    
 
     <div
       class="modal fade"
@@ -453,7 +462,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="addToCartModalLabel">
+            <h5 class="modal-title" id="addToCartModalLabel">1`
               Xác nhận thêm vào giỏ hàng
             </h5>
             <button
@@ -477,6 +486,22 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+    <script>
+      window.onload = function () {
+        const img = document.querySelector('body');
+        const colorThief = new ColorThief();
+        const imgElement = new Image();
+        imgElement.src = img.style.backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/i, "$1");
+        
+        imgElement.onload = function() {
+          const dominantColor = colorThief.getColor(imgElement);
+          document.querySelector('header').style.backgroundColor = `rgb(${dominantColor})`;
+        };
+      };
+    </script>
+
     
   </body>
 </html>

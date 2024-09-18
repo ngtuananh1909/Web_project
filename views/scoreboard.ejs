@@ -213,6 +213,22 @@
             color: red;
             
         }
+
+              /* Ẩn menu mặc định */
+        .dropdown-menu {
+          display: none;
+          position: absolute;
+          top: 100%; /* Đặt menu xuất hiện ngay dưới avatar */
+          left: 0;
+          z-index: 1000;
+        }
+
+        /* Hiển thị menu khi di chuột vào avatar */
+        .nav-link.dropdown-toggle:hover + .dropdown-menu,
+        .dropdown-menu:hover {
+          display: block;
+        }
+
       </style>
     </head>
 
@@ -254,33 +270,20 @@
                   </a>
                 </li>
                 <li class="nav-item dropdown">
-                  <a
-                    class="nav-link dropdown-toggle d-flex align-items-center"
-                    id="userDropdown"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
+                  <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                     <% if (user.avatar) { %>
                     <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
                     <% } else { %>
                     <img src="./img/def.jpg" class="avatar me-2" alt="" />
                     <% } %>
                   </a>
-                  <ul
-                    class="dropdown-menu dropdown-menu-end"
-                    aria-labelledby="userDropdown"
-                  >
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                     <li>
                       <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
                     </li>
                     <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                    <li>
-                      <a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a>
-                    </li>
-                    <li>
-                      <hr class="dropdown-divider" />
-                    </li>
+                    <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                    <li><hr class="dropdown-divider" /></li>
                     <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
                   </ul>
                 </li>
@@ -344,7 +347,6 @@
               >
             </div>
           </div>
-          
           <% }); %>
         </div>
       </div>    

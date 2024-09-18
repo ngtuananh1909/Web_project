@@ -388,6 +388,21 @@
             .m1{
                 font-size: 50px;
             }
+                  /* Ẩn menu mặc định */
+            .dropdown-menu {
+                display: none;
+                position: absolute;
+                top: 100%; /* Đặt menu xuất hiện ngay dưới avatar */
+                left: 0;
+                z-index: 1000;
+            }
+
+            /* Hiển thị menu khi di chuột vào avatar */
+            .nav-link.dropdown-toggle:hover + .dropdown-menu,
+            .dropdown-menu:hover {
+                display: block;
+            }
+
         </style>
     </head>
 
@@ -428,22 +443,24 @@
                                             <img src="/img/add.jpg" alt="" class="add-icon">
                                         </a>
                                     </li>
-                                    <li class="nav-item dropdown" style="margin-right:-53px;">
-                                        <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <% if (user.avatar) { %>
-                                            <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
-                                        <% } else { %>
-                                            <img src="./img/def.jpg" class="avatar me-2" alt="" />
-                                        <% } %>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
+                                          <% if (user.avatar) { %>
+                                          <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
+                                          <% } else { %>
+                                          <img src="./img/def.jpg" class="avatar me-2" alt="" />
+                                          <% } %>
                                         </a>
-                                        <ul class="dropdown-menu dropdown-menu-end" >
-                                            <li><a class="dropdown-item" href="/user/<%= user.id %>">Profile</a></li>
-                                            <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                                            <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
-                                            <li><hr class="dropdown-divider" /></li>
-                                            <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                          <li>
+                                            <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
+                                          </li>
+                                          <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
+                                          <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                                          <li><hr class="dropdown-divider" /></li>
+                                          <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
                                         </ul>
-                                    </li>
+                                      </li>
                                 <% } %>
                         </ul>
                     </nav>
@@ -473,15 +490,11 @@
                     <% } %>            
                     <p><strong>Description:</strong> <%= product.description %></p></div>
                     <p><strong>Quantity:</strong> <%= product.quantity %></p>
-                    <% if (product.sale) { %>
-                        <p class="sale"><strong>Sale:</strong> <%= product.saleval %>%</p>
-                    <% } %>
                     <div class="tuan_anh">
                         <a href="" class="buy-now">Buy Now</a>
                         <a href="" class="add-to-cart">Add to Cart</a>
                         <div style="margin-left: 20px;"><a href="/scoreboard">Bestsellers</a></div>
                     </div>
-                    
                 </div>
             </div>
         </div>
