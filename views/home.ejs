@@ -20,13 +20,29 @@
       }
 
       .product-card {
-        position: relative;
-        overflow: hidden;
-        transition: transform 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        height: 450px;
-        /* Hoặc bất kỳ chiều cao cố định nào bạn muốn */
+          background-color: #ffffff;
+          border-radius: 8px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          width: 250px;
+          height: 500px;
+          transition: transform 0.5s, box-shadow 0.5s;
+          margin-bottom: 20px;
+      }
+
+      .dark-mode .product-card {
+          background-color: #ffffff;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          border-radius: 8px;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          width: 250px;
+          height: 500px;
+          transition: transform 0.5s, box-shadow 0.5s;
+          margin-bottom: 20px;
       }
 
       .product-card img {
@@ -36,13 +52,9 @@
         width: 100%;
       }
 
-      .card-body {
-        flex: 1;
-      }
-
       .product-card:hover {
         transform: translateY(-5px) scale(1.01);
-        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 10px 20px rgba(255, 255, 255, 0.1);
       }
 
       .btn-primary,
@@ -51,7 +63,7 @@
         height: 60px;
         width: 100%;
         border-radius: 15px;
-        transition: transform 0.3s ease;
+        transition: transform 0.5s ease;
       }
 
       .btn-primary:hover,
@@ -198,20 +210,18 @@
       body.dark-mode {
         background-color: #1b1b1b;
         color: #f1f1f1;
-        transition: background-color 0.3s ease, color 0.3s ease;
       }
 
       .dark-mode .navbar, .dark-mode .card {
         background-color: #333333;
         color: #f1f1f1;
-        transition: background-color 0.3s ease, color 0.3s ease;
       }
 
       .dark-mode .btn-primary {
         background-color: #2897f8;
         border-color: #666;
-        transition: background-color 0.3s ease, color 0.3s ease;
       }
+
 
       .dark-mode a{
         color: #ffffff;
@@ -243,7 +253,13 @@
       }
       .dropdown-menu{
         color: white;
-        transition: background-color 0.3s ease, color 0.3s ease;
+        transition: background-color 0.5s ease, color 0.5s ease;
+      }
+      #toggle-dark-mode {
+        border: none; /* Loại bỏ khung viền */
+        outline: none; /* Loại bỏ viền khi nhấn vào nút */
+        background: none; /* Loại bỏ màu nền mặc định */
+        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
       }
 
 

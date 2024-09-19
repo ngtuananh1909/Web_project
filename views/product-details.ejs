@@ -41,7 +41,7 @@
             }
             .dark-mode .container-anh{
                 max-width: 1200px;
-                background: #000000;
+                background: #00000041;
                 color: white;
                 padding: 0.2px;
                 display: flex;
@@ -140,9 +140,10 @@
                 flex-direction: column;
                 width: 250px;
                 height: 500px;
-                transition: transform 0.3s, box-shadow 0.3s;
+                transition: transform 0.5s, box-shadow 0.5s;
                 margin-bottom: 20px;
             }
+            
 
             .product-card:hover {
                 transform: translateY(-5px) scale(1.01);
@@ -194,7 +195,7 @@
             }
 
             .product-card .info p {
-                color: #718096;
+                color: #8fe998;
                 margin: 10px 0;
             }
 
@@ -216,7 +217,9 @@
                 font-size: 15.5px;
             }
             .tuan_anh{
-                margin-top:250px ;
+                margin-top:0px ;
+                height: 100px;
+                width: 470px;
             }
 
             .mt-3{
@@ -235,7 +238,6 @@
                 top: 0; /* Giữ header ở vị trí đầu trang */
                 z-index: 1000; /* Đảm bảo header có z-index cao để không bị che */
             }
-            
 
         
             .image-container img {
@@ -273,7 +275,7 @@
             }
 
             body.dark-mode .product-card {
-                background-color: #2d3748;
+                background-color: #1e1e1e;
                 color: #f7fafc;
             }
 
@@ -347,6 +349,7 @@
                 max-width: 700px; /* Chiều rộng tối đa để không bị tràn */
                 overflow-wrap: break-word;
                 font-size: 20px;
+                color: black;
             }
             
             .home-icon {
@@ -410,9 +413,8 @@
             }
 
             .dark-mode .navbar, .dark-mode .card {
-                background-color: #333333;
+                background-color: #000000;
                 color: #f1f1f1;
-                transition: background-color 0.3s ease, color 0.3s ease;
             }
 
             .dark-mode .btn-primary {
@@ -453,6 +455,25 @@
                 color: white;
                 transition: background-color 0.3s ease, color 0.3s ease;
             }
+
+            .dark-mode .product_name{
+                color: white;
+            }
+            #toggle-dark-mode {
+                border: none; /* Loại bỏ khung viền */
+                outline: none; /* Loại bỏ viền khi nhấn vào nút */
+                background: none; /* Loại bỏ màu nền mặc định */
+                cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
+            }
+            .square-box {
+                width: 600px;  /* Chiều rộng của ô vuông */
+                height: 600px; /* Chiều cao của ô vuông */
+                background-color: rgb(34, 34, 34); /* Màu nền của ô vuông */
+                border: 2px solid rgb(255, 255, 255); /* Viền của ô vuông */
+                margin-top: 20px; /* Khoảng cách giữa ô vuông và nội dung trên */
+                margin-left: 300px;
+            }
+
 
         </style>
     </head>
@@ -515,7 +536,7 @@
                       </ul>
                     </li>
                     <button id="toggle-dark-mode" style="margin-left: 150px;">
-                      <img src="img/mode.png" alt="" class="mode-button"></img>
+                        <img src="img/mode.png" alt="" class="mode-button"></img>
                     </button>
                     <% } %>
                   </ul>
@@ -524,7 +545,7 @@
             </div>
           </header>
         <m1 style="font-size: 50px;"><strong><center>Product Details</center></strong></m1>
-        <div class="container-anh" style="width:1000px ;height: auto;">
+        <div class="container-anh" >
             <div class="image-container">
                 <% if (product.image) { %>
                     <img src="/uploads/<%= product.image %>" alt="<%= product.name %> Image">
@@ -532,20 +553,18 @@
             </div>
             <div class="card-body info">
                 <div class="details-container">
-                    <h2><center><%= product.name %></center></h2>
+                    <h2 class ="product_name"><%= product.name %></h2>
                     <% if (product.sale) { %>
-                        <p class="card-text" style="margin-bottom:4px ;">
+                        <p class="card-text product_name" style="margin-bottom:4px ;">
                             <span class="badge bg-danger ms-2" style="margin-bottom: 10px;" >-<%= product.saleval %>%</span>
                             <br>
                             <strong>Price:</strong><del> <%= product.price %> </del>
                             <%= (product.price - (product.price * product.saleval /
-                            100)).toFixed(2)%> VNĐ
+                            100))%> VNĐ
                           </p>
                     <% } else { %>
-                        <p><strong>Price:</strong> <%= product.price %> VNĐ</p>
+                        <p class="product_name"><strong>Price:</strong> <%= product.price %> VNĐ</p>
                     <% } %>            
-                    <p><strong>Description:</strong> <%= product.description %></p></div>
-                    <p><strong>Quantity:</strong> <%= product.quantity %></p>
                     <div class="tuan_anh">
                         <a href="" class="buy-now">Buy Now</a>
                         <a href="" class="add-to-cart">Add to Cart</a>
@@ -554,14 +573,20 @@
                 </div>
             </div>
         </div>
-        <main style="width: 58%;">
+        <main style="width: 100%; gap: 50px;">
                 <div class="row mt-5">
+                    <div class="col" style="margin-left: -200px;">
+                        <h2 class="section-title text-center product_name">Product details</h2>
+
+                        <div class="square-box"></div>
+                    </div>
+                    
                     <div class="col">
-                        <h2 class="section-title text-center">Sản phẩm gợi ý</h2>
-                        <div class="row row-cols-1 row-cols-md-5 g-4" style="margin-left:-10px; gap: 50px;">
+                        <h2 class="section-title text-center product_name" style="margin-left:-100px">Sản phẩm gợi ý</h2>
+                        <div class="row row-cols-1 row-cols-md-5 g-4 " style="margin-left:-000px; gap: 50px;height: auto;width: auto;">
                             <% products.forEach(product=> { %>
                                 <div class="col">
-                                    <div class="card product-card" >
+                                    <div class="card product-card " >
                                       <a href="/product/<%= product.id %>">
                                         <img
                                           src="/uploads/<%= product.image %>"
@@ -569,21 +594,21 @@
                                           alt=""
                                         />
                                       </a>
-                                      <div class="card-body">
+                                      <div class="card-body ">
                                         <h4 class="card-title"><center><%= product.name %></center></h4>
                                         <% if (product.sale) { %>
                                           <center><span class="badge bg-danger ms-2" style="margin-bottom: 5px;" >-<%= product.saleval %>%</span></center>
-                                          <p class="card-text" style="margin-bottom:4px ;">
+                                          <p class="card-text product_name" style="margin-bottom:4px ;">
                                             Giá:<del> <%= product.price %> </del>
                                             <%= (product.price - (product.price * product.saleval /
                                             100)).toFixed(2)%> VNĐ
                                           </p>
                                           <div style="padding-left: 1px; padding-bottom: 10px">
-                                            <div class ="creator-day" style ="margin-top: -0px;">
-                                                <p class="card-text" style="margin-bottom: 3px">
+                                            <div class ="creator-day " style ="margin-top: -0px;">
+                                                <p class="card-text product_name" style="margin-bottom: 3px">
                                                   Creator: <%= product.creator %>
                                                 </p>
-                                                <p class="card-text" style="margin-top: 0px">
+                                                <p class="card-text product_name" style="margin-top: 0px">
                                                     Ngày tạo: <%= product.formatted_date %>
                                                 </p>
                                             </div>
@@ -600,14 +625,14 @@
                                             </div>                                            
                                         <% } else { %>
                                           <div style="margin-top: 40px;">
-                                              <p class="card-text">Giá: <%= product.price %> VNĐ</p>
+                                              <p class="card-text product_name">Giá: <%= product.price %> VNĐ</p>
                                           </div>
                                           <div style="padding-left: -10px; padding-bottom: 10px">
                                             <div class ="creator-day" style ="margin-top:1px;">
-                                                <p class="card-text" style="margin-bottom: -2px">
+                                                <p class="card-text product_name" style="margin-bottom: -2px">
                                                   Creator: <%= product.creator %>
                                                 </p>
-                                                <p class="card-text" style="margin-top: 3px">
+                                                <p class="card-text product_name" style="margin-top: 3px">
                                                   Ngày tạo: <%= product.formatted_date %>
                                                 </p>
                                             </div>
