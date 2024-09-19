@@ -19,7 +19,7 @@
     }
 
     .scrollable-card-body {
-      height: 400px;
+      height: 600px;
       overflow-y: auto;
     }
     
@@ -85,22 +85,120 @@
       width: 30px;
       height: 30px;
     }
+    .header-design{
+        position: sticky;
+        background-color: #e2e2e2;
+        top: 0px; 
+        z-index: 1000;
+      }
+      .main-content {
+        padding-top: 60px; /* Đảm bảo nội dung không bị che bởi header (thay đổi kích thước này nếu cần) */
+      }
+
+
+      /* Chế độ sáng (mặc định) */
+      body {
+        background-color: #F5EFFF;
+        color: #000;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      /* Chế độ tối */
+      body.dark-mode {
+        background-color: #1b1b1b;
+        color: #f1f1f1;
+      }
+
+      .dark-mode .navbar, .dark-mode .card {
+        background-color: #333333;
+        color: #f1f1f1;
+      }
+
+      .dark-mode .btn-primary {
+        background-color: #2897f8;
+        border-color: #666;
+      }
+
+
+      .dark-mode a{
+        color: #ffffff;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .mode-button{
+        height: 30px;
+        width: 30px;
+        cursor: pointer;
+      }
+
+      .dark-mode .header-design  {
+        background-color: #666666fd; /* Màu nền tối cho header */
+        color: white;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .text-decoration-none{
+        color: black;
+      }
+      .dark-mode .dropdown-menu{
+        background-color: #0c0c0c;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .form-control{
+        background-color: rgb(219, 255, 213);
+      }
+
+      .dark-mode .form-control{
+        background-color: rgba(185, 186, 186, 0.253);
+      }
+      .pay-code {
+        position: fixed; /* Giữ cho div luôn cố định trên màn hình */
+        bottom: 50px; /* Căn chỉnh vị trí từ đáy màn hình */
+        right: 640px; /* Căn chỉnh vị trí từ phải màn hình */
+        background-color: #f1f1f1; /* Màu nền của div */
+        padding: 10px; /* Khoảng cách bên trong div */
+        border: 1px solid #ccc; /* Đường viền của div */
+        z-index: 1000; /* Giúp div xuất hiện trên các thành phần khác */
+        height: auto;
+        width: auto;
+      }
+      .dark-mode .pay-code {
+        position: fixed; /* Giữ cho div luôn cố định trên màn hình */
+        bottom: 50px; /* Căn chỉnh vị trí từ đáy màn hình */
+        right: 640px; /* Căn chỉnh vị trí từ phải màn hình */
+        background-color: #2e2e2e; /* Màu nền của div */
+        padding: 10px; /* Khoảng cách bên trong div */
+        border: 1px solid #ccc; /* Đường viền của div */
+        z-index: 1000; /* Giúp div xuất hiện trên các thành phần khác */
+        height: auto;
+        width: auto;
+      }
+      .delete-icon{
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+      }
+      #toggle-dark-mode {
+        border: none; /* Loại bỏ khung viền */
+        outline: none; /* Loại bỏ viền khi nhấn vào nút */
+        background: none; /* Loại bỏ màu nền mặc định */
+        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
+      }
   </style>
 
   <body>
-    <header>
-      <div class="container-fluid bg-light py-3" style="margin-left: -8px;">
-        <div class="container d-flex justify-content-between align-items-center">
+    <header class="header-design" >
+      <div class="container-fluid py-3" >
+        <div class="container d-flex justify-content-between align-items-center" style="margin-left: 476px;">
           <h1 class="h4 mb-0">
-            <a href="/" class="text-decoration-none text-dark" style="margin-left: -1px;"><strong>E-Shop</strong></a>
+            <a href="/" class="text-decoration-none" style="margin-left: -197px;"><strong>E-Shop</strong></a>
           </h1>
           <nav class="nav">
             <ul class="nav">
               <li class="nav-item">
                 <a class="nav-link home" href="/">
-                  <img src="/img/home.jpg" alt="" class="home-icon">
+                    <img src="/img/home.png" alt="" class="home-icon"></img>
                 </a>
-              </li>
+            </li>
               <li class="nav-item">
                 <a class="nav-link bxh" href="/scoreboard">
                   <img src="/img/bxh.jpg" alt="" class="bxh-icon">
@@ -113,8 +211,11 @@
               <li class="nav-item">
                 <a class="nav-link dangky" href="/register">Đăng ký</a>
               </li>
+              <button id="toggle-dark-mode" style="margin-left: 150px;">
+                <img src="img/mode.png" alt="" class="mode-button"></img>
+              </button>
               <% } else { %>
-              <li class="nav-item" >
+              <li class="nav-item">
                 <a class="nav-link giohang" href="/cart">
                     <img src="/img/cart.jpg" alt="" class="cart-icon">                  
                 </a>
@@ -124,37 +225,27 @@
                   <img src="/img/add.jpg" alt="" class="add-icon">
                 </a>
               </li>
-              <li class="nav-item dropdown" style="">
-                <a
-                  class="nav-link dropdown-toggle d-flex align-items-center"
-                  id="userDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                   <% if (user.avatar) { %>
                   <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
                   <% } else { %>
                   <img src="./img/def.jpg" class="avatar me-2" alt="" />
                   <% } %>
                 </a>
-                <ul
-                  class="dropdown-menu dropdown-menu-end"
-                  aria-labelledby="userDropdown"
-                >
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                   <li>
                     <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
                   </li>
                   <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                  <li>
-                    <a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a>
-                  </li>
-                  <li>
-                    <hr class="dropdown-divider" />
-                  </li>
+                  <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                  <li><hr class="dropdown-divider" /></li>
                   <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
                 </ul>
               </li>
+              <button id="toggle-dark-mode" style="margin-left: 150px;">
+                <img src="img/mode.png" alt="" class="mode-button"></img>
+              </button>
               <% } %>
             </ul>
           </nav>
@@ -168,14 +259,9 @@
         <div class="row d-flex justify-content-center align-items-center h-100">
           <div class="col-10">
             <div class="d-flex justify-content-between align-items-center mb-4">
-              <h3 class="fw-normal mb-0">Shopping Cart</h3>
+                <h1 class="fw-normal mb-0"><strong>Shopping Cart</strong></h1>
+              </center>
               <div>
-                <p class="mb-0">
-                  <span class="text-muted">Sort by:</span>
-                  <a href="#!" class="text-body"
-                    >idk man <i class="fas fa-angle-down mt-1"></i
-                  ></a>
-                </p>
               </div>
             </div>
             <div class="card-body scrollable-card-body">
@@ -183,9 +269,7 @@
               <% products.forEach(product => { %>
               <div class="card rounded-3 mb-4">
                 <div class="card-body p-4">
-                  <div
-                    class="row d-flex justify-content-between align-items-center"
-                  >
+                  <div class="row d-flex justify-content-between align-items-center">
                     <div class="col-md-2 col-lg-2 col-xl-2">
                       <img
                         src="/uploads/<%= product.image %>"
@@ -205,7 +289,7 @@
                       >
                         <i class="fas fa-minus"></i>
                       </button>
-
+                
                       <input
                         id="quantity_<%= product.id %>"
                         min="0"
@@ -214,7 +298,7 @@
                         type="number"
                         class="form-control form-control-sm"
                       />
-
+                
                       <button
                         data-mdb-button-init
                         data-mdb-ripple-init
@@ -230,58 +314,82 @@
                       </h5>
                     </div>
                     <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                      <a
-                        href="/cart/remove/<%= product.id %>"
-                        class="text-danger"
-                        ><i class="fas fa-trash fa-lg"></i
-                      ></a>
+                      <!-- Biểu tượng thùng rác -->
+                      <a href="/cart/remove/<%= product.id %>" class="text-danger">
+                        <img src="img/delete.png" alt="" class="delete-icon"></img>
+                      </a>
                     </div>
                   </div>
-                </div>
+                </div>                
               </div>
               <% }); %> 
               <% } else { %>
               <div class="alert alert-info" role="alert">No items in cart.</div>
               <% } %>
             </div>
-            <div class="card mb-4">
-              <div class="card-body p-4 d-flex flex-row">
-                <div data-mdb-input-init class="form-outline flex-fill">
-                  <input
-                    type="text"
-                    id="discountCode"
-                    class="form-control form-control-lg"
-                  />
-                  <label class="form-label" for="discountCode"
-                    >Discount code</label
+            <div class="pay-code">
+              <div class="card mb-4">
+                <label class="form-label" for="discountCode" style="margin-bottom: -20px; margin-left: 20px;">Discount code:</label>
+                <div class="card-body p-4 d-flex flex-row">
+                  <div data-mdb-input-init class="form-outline flex-fill">
+                    <input
+                      type="text"
+                      id="discountCode"
+                      class="form-control form-control-lg"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    data-mdb-button-init
+                    data-mdb-ripple-init
+                    class="btn btn-outline-warning btn-lg ms-3"
                   >
+                    Apply
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  data-mdb-button-init
-                  data-mdb-ripple-init
-                  class="btn btn-outline-warning btn-lg ms-3"
-                >
-                  Apply
-                </button>
               </div>
-            </div>
-
-            <div class="card">
-              <div class="card-body">
-                <button
-                  type="button"
-                  data-mdb-button-init
-                  data-mdb-ripple-init
-                  class="btn btn-warning btn-block btn-lg"
-                >
-                  Proceed to Pay
-                </button>
+              <div class="card">
+                <div class="card-body" style="margin-left: 457px;">
+                  <!-- Thêm dòng Total ở đây -->
+                  <div class="total" style="margin-bottom: -30px; margin-left: -450px; font-size: 20px;">
+                    <strong>Total:</strong> $123.45 <!-- Thay thế bằng số tiền thực tế -->
+                  </div>
+                  
+                  <button
+                    type="button"
+                    data-mdb-button-init
+                    data-mdb-ripple-init
+                    class="btn btn-warning btn-block btn-lg"
+                  >
+                    Proceed to Pay
+                  </button>
+                </div>
               </div>
+              
             </div>
+            
           </div>
         </div>
       </div>
     </section>
   </body>
+  <script>
+    const toggleButton = document.getElementById('toggle-dark-mode');
+    const body = document.body;
+  
+    // Kiểm tra nếu chế độ tối đã được kích hoạt trước đó
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      body.classList.add('dark-mode');
+    }
+  
+    toggleButton.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      if (body.classList.contains('dark-mode')) {
+        localStorage.setItem('darkMode', 'enabled');
+
+      } else {
+        localStorage.setItem('darkMode', 'disabled');
+      }
+    });
+  </script>
 </html>

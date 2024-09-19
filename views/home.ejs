@@ -9,6 +9,7 @@
       rel="stylesheet"
     />
     <link rel="shortcut icon" href="#" />
+
     <style>
       /*susss*/
       .sticky-header {
@@ -19,13 +20,29 @@
       }
 
       .product-card {
-        position: relative;
-        overflow: hidden;
-        transition: transform 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        height: 450px;
-        /* Hoặc bất kỳ chiều cao cố định nào bạn muốn */
+          background-color: #ffffff;
+          border-radius: 8px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          width: 250px;
+          height: 500px;
+          transition: transform 0.5s, box-shadow 0.5s;
+          margin-bottom: 20px;
+      }
+
+      .dark-mode .product-card {
+          background-color: #ffffff;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          border-radius: 8px;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          width: 250px;
+          height: 500px;
+          transition: transform 0.5s, box-shadow 0.5s;
+          margin-bottom: 20px;
       }
 
       .product-card img {
@@ -35,13 +52,9 @@
         width: 100%;
       }
 
-      .card-body {
-        flex: 1;
-      }
-
       .product-card:hover {
         transform: translateY(-5px) scale(1.01);
-        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 10px 20px rgba(255, 255, 255, 0.1);
       }
 
       .btn-primary,
@@ -50,13 +63,16 @@
         height: 60px;
         width: 100%;
         border-radius: 15px;
-        transition: transform 0.3s ease;
+        transition: transform 0.5s ease;
       }
 
       .btn-primary:hover,
       .btn-danger:hover,
       .btn-success:hover {
         transform: translateY(-3px);
+      }
+      .btn {
+        margin-right: 20px;
       }
 
       .avatar {
@@ -81,14 +97,6 @@
         cursor: copy;
       }
 
-      body {
-        background-color: #eeee;
-      }
-
-      .btn {
-        margin-right: 20px;
-      }
-
       .price {
         margin-top: 50px;
       }
@@ -99,11 +107,11 @@
         align-items: center; /* Căn giữa theo chiều dọc */
       }
 
-    .nav-link {
-          position: relative; /* Để sử dụng absolute positioning cho underline */
-          display: inline-block;
-          padding-bottom: 5px; /* Khoảng cách giữa text và underline */
-      }
+      .nav-link {
+            position: relative; /* Để sử dụng absolute positioning cho underline */
+            display: inline-block;
+            padding-bottom: 5px; /* Khoảng cách giữa text và underline */
+        }
 
       .nav-link::after {
           content: ""; /* Nội dung rỗng để tạo thanh nhỏ */
@@ -166,23 +174,110 @@
           transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp cho thanh nhỏ */
       }
 
+      /* Ẩn menu mặc định */
+      .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%; /* Đặt menu xuất hiện ngay dưới avatar */
+        left: 0;
+        z-index: 1000;
+      }
+
+      /* Hiển thị menu khi di chuột vào avatar */
+      .nav-link.dropdown-toggle:hover + .dropdown-menu,
+      .dropdown-menu:hover {
+        display: block;
+      }
+      .header-design{
+        position: sticky;
+        background-color: #e2e2e2;
+        top: 0px; 
+        z-index: 1000;
+      }
+      .main-content {
+        padding-top: 60px; /* Đảm bảo nội dung không bị che bởi header (thay đổi kích thước này nếu cần) */
+      }
+
+
+      /* Chế độ sáng (mặc định) */
+      body {
+        background-color: #F5EFFF;
+        color: #000;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      /* Chế độ tối */
+      body.dark-mode {
+        background-color: #1b1b1b;
+        color: #f1f1f1;
+      }
+
+      .dark-mode .navbar, .dark-mode .card {
+        background-color: #333333;
+        color: #f1f1f1;
+      }
+
+      .dark-mode .btn-primary {
+        background-color: #2897f8;
+        border-color: #666;
+      }
+
+
+      .dark-mode a{
+        color: #ffffff;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .mode-button{
+        height: 30px;
+        width: 30px;
+      }
+
+      .dark-mode .header-design  {
+        background-color: #666666fd; /* Màu nền tối cho header */
+        color: white;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .text-decoration-none{
+        color: black;
+      }
+      .dark-mode .dropdown-menu{
+        background-color: #0c0c0c;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .dropdown-item{
+        color: rgb(0, 0, 0);
+        text-decoration: none;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .dropdown-menu{
+        color: white;
+        transition: background-color 0.5s ease, color 0.5s ease;
+      }
+      #toggle-dark-mode {
+        border: none; /* Loại bỏ khung viền */
+        outline: none; /* Loại bỏ viền khi nhấn vào nút */
+        background: none; /* Loại bỏ màu nền mặc định */
+        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
+      }
 
 
     </style>
   </head>
 
   <body>
-    <header>
-      <div class="container-fluid bg-light py-3">
-        <div class="container d-flex justify-content-between align-items-center">
+    <header class="header-design" >
+      <div class="container-fluid py-3" >
+        <div class="container d-flex justify-content-between align-items-center" style="margin-left: 476px;">
           <h1 class="h4 mb-0">
-            <a href="/" class="text-decoration-none text-dark "><strong>E-Shop</strong></a>
+            <a href="/" class="text-decoration-none" style="margin-left: -197px;"><strong>E-Shop</strong></a>
           </h1>
           <nav class="nav">
             <ul class="nav">
               <li class="nav-item">
                 <a class="nav-link home" href="/">
-                    <img src="/img/home.jpg" alt="" class="home-icon"></img>
+                    <img src="/img/home.png" alt="" class="home-icon"></img>
                 </a>
             </li>
               <li class="nav-item">
@@ -197,6 +292,9 @@
               <li class="nav-item">
                 <a class="nav-link dangky" href="/register">Đăng ký</a>
               </li>
+              <button id="toggle-dark-mode" style="margin-left: 150px;">
+                <img src="img/mode.png" alt="" class="mode-button"></img>
+              </button>
               <% } else { %>
               <li class="nav-item">
                 <a class="nav-link giohang" href="/cart">
@@ -209,44 +307,32 @@
                 </a>
               </li>
               <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle d-flex align-items-center"
-                  id="userDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
+                <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                   <% if (user.avatar) { %>
                   <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
                   <% } else { %>
                   <img src="./img/def.jpg" class="avatar me-2" alt="" />
                   <% } %>
                 </a>
-                <ul
-                  class="dropdown-menu dropdown-menu-end"
-                  aria-labelledby="userDropdown"
-                >
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                   <li>
                     <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
                   </li>
                   <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                  <li>
-                    <a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a>
-                  </li>
-                  <li>
-                    <hr class="dropdown-divider" />
-                  </li>
+                  <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                  <li><hr class="dropdown-divider" /></li>
                   <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
                 </ul>
               </li>
+              <button id="toggle-dark-mode" style="margin-left: 150px;">
+                <img src="img/mode.png" alt="" class="mode-button"></img>
+              </button>
               <% } %>
             </ul>
           </nav>
         </div>
       </div>
     </header>
-    
-
     <main>
       <div class="container my-5">
         <div id="carouselExampleControls" class="carousel slide">
@@ -427,21 +513,22 @@
           </div>
         </div>
       </div>
+      <footer class="bg-light py-4 mt-5">
+        <div class="container">
+          <div class="text-center text-muted">&copy; 2024 E-Shop</div>
+          <div class="text-center mt-3">
+            <a href="#" class="text-decoration-none text-dark mx-2"
+              >Chính sách bảo mật</a
+            >
+            <a href="#" class="text-decoration-none text-dark mx-2"
+              >Điều khoản sử dụng</a
+            >
+          </div>
+        </div>
+      </footer>
     </main>
 
-    <footer class="bg-light py-4 mt-5">
-      <div class="container">
-        <div class="text-center text-muted">&copy; 2024 E-Shop</div>
-        <div class="text-center mt-3">
-          <a href="#" class="text-decoration-none text-dark mx-2"
-            >Chính sách bảo mật</a
-          >
-          <a href="#" class="text-decoration-none text-dark mx-2"
-            >Điều khoản sử dụng</a
-          >
-        </div>
-      </div>
-    </footer>
+    
 
     <div
       class="modal fade"
@@ -453,7 +540,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="addToCartModalLabel">
+            <h5 class="modal-title" id="addToCartModalLabel">1`
               Xác nhận thêm vào giỏ hàng
             </h5>
             <button
@@ -477,6 +564,42 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+    <script>
+      window.onload = function () {
+        const img = document.querySelector('body');
+        const colorThief = new ColorThief();
+        const imgElement = new Image();
+        imgElement.src = img.style.backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/i, "$1");
+        
+        imgElement.onload = function() {
+          const dominantColor = colorThief.getColor(imgElement);
+          document.querySelector('header').style.backgroundColor = `rgb(${dominantColor})`;
+        };
+      };
+    </script>
+    <script>
+      const toggleButton = document.getElementById('toggle-dark-mode');
+      const body = document.body;
+    
+      // Kiểm tra nếu chế độ tối đã được kích hoạt trước đó
+      if (localStorage.getItem('darkMode') === 'enabled') {
+        body.classList.add('dark-mode');
+      }
+    
+      toggleButton.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        if (body.classList.contains('dark-mode')) {
+          localStorage.setItem('darkMode', 'enabled');
+
+        } else {
+          localStorage.setItem('darkMode', 'disabled');
+        }
+      });
+    </script>
+        
+
     
   </body>
 </html>
