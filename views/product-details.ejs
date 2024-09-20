@@ -243,6 +243,9 @@
             .image-container img {
                 border: 2px solid #f7fafc;
             }
+            .dark-mode .image-container img {
+                border: 2px solid #000000;
+            }
 
             h1, h2, p {
                 color: #2d3748;
@@ -466,12 +469,31 @@
                 cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
             }
             .square-box {
-                width: 600px;  /* Chiều rộng của ô vuông */
-                height: 600px; /* Chiều cao của ô vuông */
-                background-color: rgb(34, 34, 34); /* Màu nền của ô vuông */
+                width: 650px;  /* Chiều rộng của ô vuông */
+                height: 650px; /* Chiều cao của ô vuông */
+                background-color: rgb(255, 255, 255); /* Màu nền của ô vuông */
                 border: 2px solid rgb(255, 255, 255); /* Viền của ô vuông */
                 margin-top: 20px; /* Khoảng cách giữa ô vuông và nội dung trên */
                 margin-left: 300px;
+            }
+
+            .dark-mode .square-box {
+                width: 600px;  /* Chiều rộng của ô vuông */
+                height: 600px; /* Chiều cao của ô vuông */
+                background-color: rgb(0, 0, 0); /* Màu nền của ô vuông */
+                border: 2px solid rgb(41, 41, 41); /* Viền của ô vuông */
+                margin-top: 20px; /* Khoảng cách giữa ô vuông và nội dung trên */
+                margin-left: 300px;
+            }
+            .description {
+                word-wrap: break-word; /* Tự động xuống dòng khi hết chiều rộng */
+                white-space: normal; /* Cho phép xuống dòng */
+            }
+            .thong-tin{
+                color: black;
+            }
+            .dark-mode .thong-tin{
+                color: white;
             }
 
 
@@ -565,6 +587,7 @@
                     <% } else { %>
                         <p class="product_name"><strong>Price:</strong> <%= product.price %> VNĐ</p>
                     <% } %>            
+                    <p class="thong-tin"><strong>Quantity:</strong> <%= product.quantity %></p>
                     <div class="tuan_anh">
                         <a href="" class="buy-now">Buy Now</a>
                         <a href="" class="add-to-cart">Add to Cart</a>
@@ -576,9 +599,10 @@
         <main style="width: 100%; gap: 50px;">
                 <div class="row mt-5">
                     <div class="col" style="margin-left: -200px;">
-                        <h2 class="section-title text-center product_name">Product details</h2>
-
-                        <div class="square-box"></div>
+                        <h2 class="section-title text-center product_name" style="margin-left: -120px;">Thông tin sản phẩm:</h2>
+                        <div class="square-box description" style="font-size: 20px; color: white;">
+                            <p class="thong-tin"> <%= product.description %></p>
+                        </div>
                     </div>
                     
                     <div class="col">
