@@ -153,24 +153,24 @@
       .pay-code {
         position: fixed; /* Giữ cho div luôn cố định trên màn hình */
         bottom: 0px; /* Căn chỉnh vị trí từ đáy màn hình */
-        right: 640px; /* Căn chỉnh vị trí từ phải màn hình */
+        right: 420px; /* Căn chỉnh vị trí từ phải màn hình */
         background-color: #f1f1f1; /* Màu nền của div */
         padding: 10px; /* Khoảng cách bên trong div */
         border: 1px solid #ccc; /* Đường viền của div */
         z-index: 1000; /* Giúp div xuất hiện trên các thành phần khác */
         height: auto;
-        width: auto;
+        width: 1080px;
       }
       .dark-mode .pay-code {
         position: fixed; /* Giữ cho div luôn cố định trên màn hình */
-        bottom: 50px; /* Căn chỉnh vị trí từ đáy màn hình */
-        right: 640px; /* Căn chỉnh vị trí từ phải màn hình */
+        bottom: 0px; /* Căn chỉnh vị trí từ đáy màn hình */
+        right: 420px; /* Căn chỉnh vị trí từ phải màn hình */
         background-color: #2e2e2e; /* Màu nền của div */
         padding: 10px; /* Khoảng cách bên trong div */
         border: 1px solid #ccc; /* Đường viền của div */
         z-index: 1000; /* Giúp div xuất hiện trên các thành phần khác */
         height: auto;
-        width: auto;
+        width: 1080px;
       }
       .delete-icon{
         width: 25px;
@@ -182,6 +182,9 @@
         outline: none; /* Loại bỏ viền khi nhấn vào nút */
         background: none; /* Loại bỏ màu nền mặc định */
         cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
+      }
+      .discode{
+
       }
   </style>
 
@@ -332,12 +335,14 @@
             
               <form action="/checkout" method="POST">
                 <div class="pay-code">
-                  <div class="card mb-4">
-                    <label class="form-label" for="discountCode" style="margin-bottom: -20px; margin-left: 20px;">Discount code:</label>
+                  <div class="card mb-4 discode" >
+                    <label class="form-label" for="discountCode" style="margin-left: 10px; margin-top: 7px;">Discount code:</label>
+                    <input type="text" id="discountCode" class="form-control" style="margin-left: 130px;margin-top: -35px; height: auto; width: 400px;" placeholder="Enter your discount code">
                   </div>
+                
                   <div class="card">
-                    <div class="card-body" style="margin-left: 457px;">
-                      <div class="total" style="margin-bottom: -30px; margin-left: -450px; font-size: 20px;">
+                    <div class="card-body" style="margin-left: 838px;">
+                      <div class="total" style="margin-bottom: -40px; margin-left: -840px; font-size: 20px;">
                         <strong>Total:</strong> <!-- Thay thế bằng số tiền thực tế -->
                       </div>
               
