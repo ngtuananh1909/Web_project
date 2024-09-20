@@ -85,15 +85,15 @@
       width: 30px;
       height: 30px;
     }
-    .header-design{
+    .header-design {
         position: sticky;
         background-color: #e2e2e2;
-        top: 0px; 
+        top: 0; 
         z-index: 1000;
-      }
-      .main-content {
+    }
+    .main-content {
         padding-top: 60px; /* Đảm bảo nội dung không bị che bởi header (thay đổi kích thước này nếu cần) */
-      }
+    }
 
 
       /* Chế độ sáng (mặc định) */
@@ -145,28 +145,33 @@
       }
       .form-control{
         background-color: rgb(219, 255, 213);
+        color: #000;
       }
 
       .dark-mode .form-control{
         background-color: rgba(185, 186, 186, 0.253);
+        color: white;
       }
       .pay-code {
-        position: fixed; /* Giữ cho div luôn cố định trên màn hình */
-        bottom: 0px; /* Căn chỉnh vị trí từ đáy màn hình */
-        right: 420px; /* Căn chỉnh vị trí từ phải màn hình */
-        background-color: #f1f1f1; /* Màu nền của div */
-        padding: 10px; /* Khoảng cách bên trong div */
-        border: 1px solid #ccc; /* Đường viền của div */
-        z-index: 1000; /* Giúp div xuất hiện trên các thành phần khác */
-        height: auto;
-        width: 1080px;
+          position: fixed; /* Giữ cho div luôn cố định trên màn hình */
+          bottom: 10px; /* Căn chỉnh vị trí từ đáy màn hình */
+          left: 50%; /* Căn chỉnh từ trái màn hình */
+          transform: translateX(-50%); /* Đẩy div sang trái một nửa chiều rộng của nó để nó nằm giữa */
+          background-color: #f1f1f1; /* Màu nền của div */
+          padding: 10px; /* Khoảng cách bên trong div */
+          border: 1px solid #ccc; /* Đường viền của div */
+          z-index: 1000; /* Giúp div xuất hiện trên các thành phần khác */
+          height: auto;
+          width: 1080px; /* Hoặc có thể thay đổi thành % để nó linh hoạt hơn */
       }
+
       .dark-mode .pay-code {
         position: fixed; /* Giữ cho div luôn cố định trên màn hình */
-        bottom: 0px; /* Căn chỉnh vị trí từ đáy màn hình */
-        right: 420px; /* Căn chỉnh vị trí từ phải màn hình */
+        bottom: 10px; /* Căn chỉnh vị trí từ đáy màn hình */
+        left: 50%;
         background-color: #2e2e2e; /* Màu nền của div */
         padding: 10px; /* Khoảng cách bên trong div */
+        transform: translateX(-50%); /* Đẩy div sang trái một nửa chiều rộng của nó để nó nằm giữa */
         border: 1px solid #ccc; /* Đường viền của div */
         z-index: 1000; /* Giúp div xuất hiện trên các thành phần khác */
         height: auto;
@@ -184,8 +189,10 @@
         cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
       }
       .discode{
-
+        height: auto;
+        width: 130px;
       }
+            
   </style>
 
   <body>
@@ -337,7 +344,7 @@
                 <div class="pay-code">
                   <div class="card mb-4 discode" >
                     <label class="form-label" for="discountCode" style="margin-left: 10px; margin-top: 7px;">Discount code:</label>
-                    <input type="text" id="discountCode" class="form-control" style="margin-left: 130px;margin-top: -35px; height: auto; width: 400px;" placeholder="Enter your discount code">
+                    <input type="text" id="discountCode" class="form-control card-input" style="margin-left: 140px;margin-top: -38px; height: auto; width: 400px;" placeholder="Enter your discount code">
                   </div>
                 
                   <div class="card">
