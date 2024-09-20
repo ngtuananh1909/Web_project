@@ -19,7 +19,8 @@
     "nodemon": "^3.1.4",
     "path": "^0.12.7",
     "php-cgi": "^0.2.0",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "web3": "^4.13.0"
   },
   "name": "gay",
   "version": "1.0.0",
@@ -30,5 +31,8 @@
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "hardhat": "^2.3.3"
+  }
 }

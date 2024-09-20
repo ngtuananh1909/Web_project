@@ -17,5 +17,5 @@ router.post('/auth/UserUpdate', authMiddleware, homeController.UserUpdate);
 router.post('/auth/register', homeController.register);
 router.post('/auth/login', homeController.login);
 router.post('/auth/add-to-cart', homeController.AddToCart);
-
+router.delete('/cart/remove/:id', homeController.RemoveFromCart);
 module.exports = router;

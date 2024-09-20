@@ -152,7 +152,7 @@
       }
       .pay-code {
         position: fixed; /* Giữ cho div luôn cố định trên màn hình */
-        bottom: 50px; /* Căn chỉnh vị trí từ đáy màn hình */
+        bottom: 0px; /* Căn chỉnh vị trí từ đáy màn hình */
         right: 640px; /* Căn chỉnh vị trí từ phải màn hình */
         background-color: #f1f1f1; /* Màu nền của div */
         padding: 10px; /* Khoảng cách bên trong div */
@@ -264,7 +264,6 @@
               <div>
               </div>
             </div>
-            <div class="card-body scrollable-card-body">
               <% if (products.length > 0) { %> 
               <% products.forEach(product => { %>
               <div class="card rounded-3 mb-4">
@@ -292,12 +291,14 @@
                 
                       <input
                         id="quantity_<%= product.id %>"
-                        min="0"
+                        min="1"
                         name="quantity"
                         value="<%= product.quantity %>"
                         type="number"
-                        class="form-control form-control-sm"
+                        class="form-control form-control-sm quantity"
+                        data-price="<%= product.price %>"
                       />
+
                 
                       <button
                         data-mdb-button-init
@@ -315,9 +316,11 @@
                     </div>
                     <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                       <!-- Biểu tượng thùng rác -->
-                      <a href="/cart/remove/<%= product.id %>" class="text-danger">
-                        <img src="img/delete.png" alt="" class="delete-icon"></img>
-                      </a>
+                      <form action="/cart/remove/<%= product.id %>" method="POST" style="display:inline;">
+                        <button type="submit" class="text-danger" style="background: none; border: none; padding: 0;">
+                          <img src="img/delete.png" alt="" class="delete-icon"></img>
+                        </button>
+                      </form>
                     </div>
                   </div>
                 </div>                
@@ -326,53 +329,56 @@
               <% } else { %>
               <div class="alert alert-info" role="alert">No items in cart.</div>
               <% } %>
-            </div>
-            <div class="pay-code">
-              <div class="card mb-4">
-                <label class="form-label" for="discountCode" style="margin-bottom: -20px; margin-left: 20px;">Discount code:</label>
-                <div class="card-body p-4 d-flex flex-row">
-                  <div data-mdb-input-init class="form-outline flex-fill">
-                    <input
-                      type="text"
-                      id="discountCode"
-                      class="form-control form-control-lg"
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    data-mdb-button-init
-                    data-mdb-ripple-init
-                    class="btn btn-outline-warning btn-lg ms-3"
-                  >
-                    Apply
-                  </button>
-                </div>
-              </div>
-              <div class="card">
-                <div class="card-body" style="margin-left: 457px;">
-                  <!-- Thêm dòng Total ở đây -->
-                  <div class="total" style="margin-bottom: -30px; margin-left: -450px; font-size: 20px;">
-                    <strong>Total:</strong> $123.45 <!-- Thay thế bằng số tiền thực tế -->
-                  </div>
-                  
-                  <button
-                    type="button"
-                    data-mdb-button-init
-                    data-mdb-ripple-init
-                    class="btn btn-warning btn-block btn-lg"
-                  >
-                    Proceed to Pay
-                  </button>
-                </div>
-              </div>
-              
-            </div>
             
-          </div>
+              <form action="/checkout" method="POST">
+                <div class="pay-code">
+                  <div class="card mb-4">
+                    <label class="form-label" for="discountCode" style="margin-bottom: -20px; margin-left: 20px;">Discount code:</label>
+                  </div>
+                  <div class="card">
+                    <div class="card-body" style="margin-left: 457px;">
+                      <div class="total" style="margin-bottom: -30px; margin-left: -450px; font-size: 20px;">
+                        <strong>Total:</strong> <!-- Thay thế bằng số tiền thực tế -->
+                      </div>
+              
+                      <button type="submit" class="btn btn-warning btn-block btn-lg">
+                        Proceed to Pay
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            
+
         </div>
       </div>
     </section>
   </body>
+  
+
+  <script>
+    function calculateTotal() {
+      let total = 0;
+      const quantities = document.querySelectorAll('.quantity'); // Lấy tất cả input số lượng
+  
+      quantities.forEach(quantity => {
+        const price = quantity.getAttribute('data-price'); // Lấy giá sản phẩm từ thuộc tính data-price
+        total += quantity.value * price; 
+      });
+  
+      // Cập nhật giá trị hiển thị của Total
+      document.querySelector('.total strong').innerText = `Total: ${total} VNĐ`;
+    }
+  
+    document.querySelectorAll('.quantity').forEach(input => {
+      input.addEventListener('change', calculateTotal); 
+    });
+  
+    // Tính tổng lần đầu khi trang được tải
+    calculateTotal();
+  </script>
+  
+  
   <script>
     const toggleButton = document.getElementById('toggle-dark-mode');
     const body = document.body;

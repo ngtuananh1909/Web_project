@@ -89,27 +89,20 @@ exports.cartDisplay = (req, res) => {
     
     const userId = req.session.user.id;
 
-    db.query('SELECT product_id FROM user_cart WHERE user_id = ?', [userId], (err, result) => {
-        if (err) {
-            console.log("error: ", err);
-            return res.status(500).json({ error: 'Server error' });
-        }
+    // Sử dụng JOIN để kết hợp bảng user_cart và products
+    db.query(`
+        SELECT p.* 
+        FROM user_cart uc 
+        JOIN products p ON uc.product_id = p.id 
+        WHERE uc.user_id = ?`, [userId], (err, result) => {
+            if (err) {
+                console.log("error: ", err);
+                return res.status(500).json({ error: 'Server error' });
+            }
 
-        if (result.length > 0) {
-            const productIds = result.map(item => item.product_id);
-
-            db.query('SELECT * FROM products WHERE id IN (?)', [productIds], (errs, resp) => {
-                if (errs) {
-                    console.log("error: ", errs);
-                    return res.status(500).json({ error: 'Server error' });
-                }
-
-                res.render('cart', {user:req.session.user, products: resp });
-            });
-        } else {
-            res.render('cart', {user:req.session.user, products: [] });
-        }
-    });
+            // Kiểm tra xem có sản phẩm nào không
+            res.render('cart', { user: req.session.user, products: result });
+        });
 };
 
 exports.SettingDisplay = (req, res) => {
@@ -331,6 +324,33 @@ exports.AddToCart = async (req, res) => {
     }
 };
 
+exports.RemoveFromCart = (req, res) => {
+    const productId = req.params.id;
+    const userId = req.session.user.id;
+
+    // Kiểm tra xem sản phẩm có tồn tại trong giỏ hàng không
+    db.query('SELECT * FROM user_cart WHERE product_id = ? AND user_id = ?', [productId, userId], (err, result) => {
+        if (err) {
+            console.error("Error retrieving product from cart: ", err);
+            return res.status(500).json({ error: 'Server error while checking product in cart' });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Product not found in cart' });
+        }
+
+        // Nếu sản phẩm tồn tại, thực hiện xóa
+        db.query('DELETE FROM user_cart WHERE product_id = ? AND user_id = ?', [productId, userId], (err) => {
+            if (err) {
+                console.error("Error removing product from cart: ", err);
+                return res.status(500).json({ error: 'Server error while removing product from cart' });
+            }
+            res.status(200).json({ message: 'Product removed from cart' });
+        });
+    });
+};
+
+
 
 exports.ProfileDisplay = (req, res) => {
     if (!req.session || !req.session.user) {
@@ -371,4 +391,23 @@ exports.ScoreboardDisplay = (req, res) => {
         });
         res.render('scoreboard', { user:req.session.user ,products: result });
     });
+};
+
+exports.Payment = async(req, res) => {
+    const totalAmount = req.body.total;
+
+    client.createTransaction({
+    currency1: 'USD',
+    currency2: 'BTC', // hoặc ETH, LTC, etc.
+    amount: totalAmount,
+    buyer_email: req.user.email, // Email của người dùng
+  }, (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Thanh toán thất bại');
+    }
+
+    // Redirect tới trang thanh toán của CoinPayments
+    res.redirect(result.checkout_url);
+  });
 };

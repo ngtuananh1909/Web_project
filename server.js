@@ -10,6 +10,7 @@ const homeRouter = require('./routes/home.router.js');
 const productRouter = require('./routes/product.router.js');
 const fs = require('fs');
 
+
 dotenv.config();
 const app = express();
 
@@ -21,7 +22,7 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            imgSrc: ["'self'", "http://localhost:3000"],
+            imgSrc: ["'self'", "http://localhost:3000", "data:"],
             scriptSrc: ["'self'", "'unsafe-inline'"],
             styleSrc: ["'self'", "'unsafe-inline'"]
         }
