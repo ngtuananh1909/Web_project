@@ -54,7 +54,6 @@
     .btn-primary, .btn-danger, .btn-success {
       height: 60px;
       width: 100%;
-      border-radius: 15px;
       transition: transform 0.3s ease;
     }
 
@@ -70,15 +69,11 @@
     }
 
     .container {
-      max-width: 1200px;
-      background: #fff;
-      padding: 0.2px;
       display: flex;
-      gap: 10px;
     }
 
     .preview {
-      width: 300px;
+      width: 400px;
     }
 
     #preview-name, #preview-description {
@@ -107,8 +102,10 @@
     
     .history-group .form-control{
       width: 400px;
-      height: 400px;
+      height: 630px;
       color: #ffffff;
+      margin-bottom: 80px;
+      border: 2px solid #7b7b7b;
     }
     .nav-link {
         position: relative; /* Để sử dụng absolute positioning cho underline */
@@ -320,7 +317,7 @@
       </div>
     </header>
     <div class="container table"  style="margin-top: 60px;">
-      <div class="preview">
+      <div class="preview" >
         <!-- Thêm vào phần preview -->
         <div class="cropper-container" style="display: none;">
           <h2>Crop Image</h2>
@@ -329,9 +326,8 @@
           </div>
           <button id="crop-button" class="btn btn-primary">Crop and Save</button>
         </div>
-
         <h2 class="alpha">Product Preview</h2>
-        <div class="card product-card">
+        <div class="card product-card" style="border: 2px solid #7b7b7b;">
           <img id="preview-image" class="card-img-top" src="" alt="Product Image">
           <div class="card-body info">
             <h3 id="preview-name" class="card-title alpha">Name</h3>
@@ -343,28 +339,27 @@
         </div>
       </div>
       <div class="form-container">
-        <h1>Add New Product</h1>
+        <h1 style="margin-left: 110px;">Add New Product</h1>
         <form id="product-form" action="/product/auth/add" method="POST" enctype="multipart/form-data">
           <div class="form-group">
             <label for="name alpha">Product Name:</label>
-            <input type="text" id="name" name="name" class="form-control" required>
+            <input type="text" id="name" name="name" class="form-control" style="border: 2px solid #7b7b7b;" required>
           </div>
 
           <div class="form-group">
             <label for="description">Mô tả:</label>
             <div id="editor" style="height: 200px;"></div>
-            <input type="hidden" id="description" name="description">
+            <input type="hidden" id="description" name="description" style="border: 2px solid #7b7b7b;">
           </div>
-          
 
           <div class="form-group alpha">
             <label for="price">Price:</label>
-            <input type="number" id="price" name="price" class="form-control" step="100" required min="100">
+            <input type="number" id="price" name="price" class="form-control" step="100" style="border: 2px solid #7b7b7b;" required min="100">
           </div>
 
           <div class="form-group alpha">
             <label for="quantity">Quantity:</label>
-            <input type="number" id="quantity" name="quantity" class="form-control" required min="1">
+            <input type="number" id="quantity" name="quantity" class="form-control" style="border: 2px solid #7b7b7b;" required min="1">
           </div>
 
           <div class="form-group alpha">
@@ -387,7 +382,7 @@
       </div>
 
       
-      <div class="form-container">
+      <div class="form-container" style="margin-left: 10px;">
         <h1>History</h1>
           <div class="history-group">
               <name="history" class="form-control" rows="4" required></textarea>
