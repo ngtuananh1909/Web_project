@@ -25,6 +25,15 @@
       flex-direction: column;
       height: 450px;
     }
+    .dark-mode .product-card {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      height: 450px;
+      color: white;
+    }
 
     .product-card img {
       height: 200px;
@@ -78,6 +87,13 @@
       max-width: 1000px; /* Chiều rộng tối đa để không bị tràn */
       overflow-wrap: break-word;
     }
+    .dark-mode .card-body.info {
+      width: 100%;
+      max-width: 1000px; /* Chiều rộng tối đa để không bị tràn */
+      overflow-wrap: break-word;
+      color: white;
+      background-color: rgb(48, 48, 48);
+    }
     
 
     body {
@@ -87,6 +103,7 @@
     .history-group .form-control{
       width: 400px;
       height: 400px;
+      color: #666;
     }
     .nav-link {
         position: relative; /* Để sử dụng absolute positioning cho underline */
@@ -138,23 +155,112 @@
     .card-body {
         flex: 1;
       }
+    /* Chế độ sáng (mặc định) */
+    body {
+        background-color: #F5EFFF;
+        color: #000;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      /* Chế độ tối */
+      body.dark-mode {
+        background-color: #1b1b1b;
+        color: #f1f1f1;
+      }
+
+      .dark-mode .navbar, .dark-mode .card {
+        background-color: #333333;
+        color: #f1f1f1;
+      }
+
+      .dark-mode .btn-primary {
+        background-color: #2897f8;
+        border-color: #666;
+      }
+
+
+      .dark-mode a{
+        color: #ffffff;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .mode-button{
+        height: 30px;
+        width: 30px;
+      }
+
+      .dark-mode .header-design  {
+        background-color: #666666fd; /* Màu nền tối cho header */
+        color: white;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .text-decoration-none{
+        color: black;
+      }
+      .dark-mode .dropdown-menu{
+        background-color: #0c0c0c;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .dropdown-item{
+        color: rgb(0, 0, 0);
+        text-decoration: none;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .dropdown-menu{
+        color: white;
+        transition: background-color 0.5s ease, color 0.5s ease;
+      }
+      #toggle-dark-mode {
+        border: none; /* Loại bỏ khung viền */
+        outline: none; /* Loại bỏ viền khi nhấn vào nút */
+        background: none; /* Loại bỏ màu nền mặc định */
+        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
+      }
+      .header-design{
+        position: sticky;
+        background-color: #e2e2e2;
+        top: 0px; 
+        z-index: 1000;
+      }
+      .alpha{
+        color: #000;
+      }
+      .dark-mode .alpha{
+        color: white;
+      }
+      .table{
+        background-color: white;
+      }
+      .dark-mode .table{
+        background-color: rgb(49, 49, 49);
+        color: white;
+      }
+      .form-group{
+        color: #000;
+        background-color: white;
+      }
+      .dark-mode .form-group{
+        color: #ffffff;
+        background-color: rgb(48, 48, 48);
+      }
 
   </style>
 </head>
   <body>
-    <header>
-      <div class="container-fluid bg-light py-3" style="margin-left: 40px;" >
-        <div class="container d-flex justify-content-between align-items-center">
+    <header class="header-design" >
+      <div class="container-fluid py-3" >
+        <div class=" d-flex justify-content-between align-items-center" style="margin-right: 110px;">
           <h1 class="h4 mb-0">
-            <a href="/" class="text-decoration-none text-dark" style="margin-left: -97px;"><strong>E-Shop</strong></a>
+            <a href="/" class="text-decoration-none" style="margin-left: 293px;" ><strong>E-Shop</strong></a>
           </h1>
           <nav class="nav">
             <ul class="nav">
               <li class="nav-item">
                 <a class="nav-link home" href="/">
-                  <img src="/img/home.jpg" alt="" class="home-icon">
+                    <img src="/img/home.png" alt="" class="home-icon"></img>
                 </a>
-              </li>
+            </li>
               <li class="nav-item">
                 <a class="nav-link bxh" href="/scoreboard">
                   <img src="/img/bxh.jpg" alt="" class="bxh-icon">
@@ -167,6 +273,9 @@
               <li class="nav-item">
                 <a class="nav-link dangky" href="/register">Đăng ký</a>
               </li>
+              <button id="toggle-dark-mode" style="margin-left: 150px;">
+                <img src="img/mode.png" alt="" class="mode-button"></img>
+              </button>
               <% } else { %>
               <li class="nav-item">
                 <a class="nav-link giohang" href="/cart">
@@ -178,44 +287,34 @@
                   <img src="/img/add.jpg" alt="" class="add-icon">
                 </a>
               </li>
-              <li class="nav-item dropdown" >
-                <a
-                  class="nav-link dropdown-toggle d-flex align-items-center"
-                  id="userDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                   <% if (user.avatar) { %>
                   <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
                   <% } else { %>
                   <img src="./img/def.jpg" class="avatar me-2" alt="" />
                   <% } %>
                 </a>
-                <ul
-                  class="dropdown-menu dropdown-menu-end"
-                  aria-labelledby="userDropdown"
-                >
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                   <li>
                     <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
                   </li>
                   <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                  <li>
-                    <a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a>
-                  </li>
-                  <li>
-                    <hr class="dropdown-divider" />
-                  </li>
+                  <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                  <li><hr class="dropdown-divider" /></li>
                   <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
                 </ul>
               </li>
+              <button id="toggle-dark-mode" style="margin-left: 150px;">
+                <img src="img/mode.png" alt="" class="mode-button"></img>
+              </button>
               <% } %>
             </ul>
           </nav>
         </div>
       </div>
     </header>
-    <div class="container">
+    <div class="container table"  style="margin-top: 60px;">
       <div class="preview">
         <!-- Thêm vào phần preview -->
         <div class="cropper-container" style="display: none;">
@@ -226,15 +325,15 @@
           <button id="crop-button" class="btn btn-primary">Crop and Save</button>
         </div>
 
-        <h2>Product Preview</h2>
+        <h2 class="alpha">Product Preview</h2>
         <div class="card product-card">
           <img id="preview-image" class="card-img-top" src="" alt="Product Image">
           <div class="card-body info">
-            <h3 id="preview-name" class="card-title">Name</h3>
-            <p id="preview-description" class="card-text">Description</p>
-            <p id="preview-price" class="card-text">Price: 0 VND</p>
-            <p id="preview-quantity" class="card-text">Quantity: 0</p>
-            <p id="preview-sale" class="card-text" style="display:none;">Sale Value: 0%</p>
+            <h3 id="preview-name" class="card-title alpha">Name</h3>
+            <p id="preview-description" class="card-text alpha">Description</p>
+            <p id="preview-price" class="card-text alpha">Price: 0 VND</p>
+            <p id="preview-quantity" class="card-text alpha">Quantity: 0</p>
+            <p id="preview-sale" class="card-text alpha" style="display:none;">Sale Value: 0%</p>
           </div>
         </div>
       </div>
@@ -242,36 +341,36 @@
         <h1>Add New Product</h1>
         <form id="product-form" action="/product/auth/add" method="POST" enctype="multipart/form-data">
           <div class="form-group">
-            <label for="name">Product Name:</label>
+            <label for="name alpha">Product Name:</label>
             <input type="text" id="name" name="name" class="form-control" required>
           </div>
 
           <div class="form-group">
-            <label for="description">Description:</label>
+            <label for="description alpha">Description:</label>
             <textarea id="description" name="description" class="form-control" rows="4" required></textarea>
           </div>
 
-          <div class="form-group">
+          <div class="form-group alpha">
             <label for="price">Price:</label>
             <input type="number" id="price" name="price" class="form-control" step="100" required min="100">
           </div>
 
-          <div class="form-group">
+          <div class="form-group alpha">
             <label for="quantity">Quantity:</label>
             <input type="number" id="quantity" name="quantity" class="form-control" required min="1">
           </div>
 
-          <div class="form-group">
+          <div class="form-group alpha">
             <label for="image">Select image:</label>
             <input type="file" id="image" name="image" class="form-control-file" accept="image/*" required>
           </div>
 
-          <div class="form-check">
+          <div class="form-check alpha" style="margin-left: 20px;">
             <input type="checkbox" id="sale" name="sale" class="form-check-input">
             <label class="form-check-label" for="sale">Sale:</label>
           </div>
 
-          <div class="form-group" id="sale-value-container" style="display: none;">
+          <div class="form-group alpha" id="sale-value-container" style="display: none;">
             <label for="saleval">Sale Value (%):</label>
             <input type="number" id="saleval" name="saleval" class="form-control" min="1" max="99" step="1">
           </div>
@@ -336,6 +435,25 @@
             previewImage.src = event.target.result;
           };
           reader.readAsDataURL(file);
+        }
+      });
+    </script>
+    <script>
+      const toggleButton = document.getElementById('toggle-dark-mode');
+      const body = document.body;
+    
+      // Kiểm tra nếu chế độ tối đã được kích hoạt trước đó
+      if (localStorage.getItem('darkMode') === 'enabled') {
+        body.classList.add('dark-mode');
+      }
+    
+      toggleButton.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        if (body.classList.contains('dark-mode')) {
+          localStorage.setItem('darkMode', 'enabled');
+
+        } else {
+          localStorage.setItem('darkMode', 'disabled');
         }
       });
     </script>
