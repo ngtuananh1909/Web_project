@@ -308,7 +308,6 @@ exports.AddToCart = async (req, res) => {
                 return res.status(400).send('Sản phẩm đã có trong giỏ hàng của bạn');
             }
 
-            // Thêm sản phẩm vào giỏ hàng
             db.query('INSERT INTO user_cart SET ?', { user_id: userId, product_id: productId }, (err) => {
                 if (err) {
                     console.log('Error adding to cart:', err);
@@ -325,10 +324,16 @@ exports.AddToCart = async (req, res) => {
 };
 
 exports.RemoveFromCart = (req, res) => {
+    if (!req.session.user) {
+        return res.render('login', {
+            message: 'You have to login/register to view your cart',
+            redirect: true
+        });
+    }
+
     const productId = req.params.id;
     const userId = req.session.user.id;
 
-    // Kiểm tra xem sản phẩm có tồn tại trong giỏ hàng không
     db.query('SELECT * FROM user_cart WHERE product_id = ? AND user_id = ?', [productId, userId], (err, result) => {
         if (err) {
             console.error("Error retrieving product from cart: ", err);
@@ -339,18 +344,15 @@ exports.RemoveFromCart = (req, res) => {
             return res.status(404).json({ error: 'Product not found in cart' });
         }
 
-        // Nếu sản phẩm tồn tại, thực hiện xóa
         db.query('DELETE FROM user_cart WHERE product_id = ? AND user_id = ?', [productId, userId], (err) => {
             if (err) {
                 console.error("Error removing product from cart: ", err);
                 return res.status(500).json({ error: 'Server error while removing product from cart' });
             }
-            res.status(200).json({ message: 'Product removed from cart' });
+            res.status(200).json({ message: 'Product removed from cart successfully' });
         });
     });
 };
-
-
 
 exports.ProfileDisplay = (req, res) => {
     if (!req.session || !req.session.user) {
@@ -398,16 +400,15 @@ exports.Payment = async(req, res) => {
 
     client.createTransaction({
     currency1: 'USD',
-    currency2: 'BTC', // hoặc ETH, LTC, etc.
+    currency2: 'BTC', 
     amount: totalAmount,
-    buyer_email: req.user.email, // Email của người dùng
+    buyer_email: req.user.email,
   }, (err, result) => {
     if (err) {
       console.error(err);
       return res.status(500).send('Thanh toán thất bại');
     }
 
-    // Redirect tới trang thanh toán của CoinPayments
     res.redirect(result.checkout_url);
   });
 };

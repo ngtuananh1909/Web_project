@@ -325,13 +325,14 @@
                       </h5>
                     </div>
                     <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                      <!-- Biểu tượng thùng rác -->
-                      <form action="/cart/remove/<%= product.id %>" method="POST" style="display:inline;">
-                        <button type="submit" class="text-danger" style="background: none; border: none; padding: 0;">
-                          <img src="img/delete.png" alt="" class="delete-icon"></img>
-                        </button>
-                      </form>
-                    </div>
+                      <button
+                        class="text-danger"
+                        style="background: none; border: none; padding: 0;"
+                        onclick="removeFromCart('<%= product.id %>')"
+                      >
+                        <img src="img/delete.png" alt="" class="delete-icon" />
+                      </button>
+                    </div>                    
                   </div>
                 </div>                
               </div>
@@ -413,5 +414,31 @@
         localStorage.setItem('darkMode', 'disabled');
       }
     });
+  </script>
+  <script>
+      function removeFromCart(productId) {
+      fetch(`/cart/remove/${productId}`, {
+          method: 'DELETE',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          credentials: 'include' // Gửi cookie session
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.error) {
+              alert(data.error);
+          } else {
+              alert(data.message);
+              // Cập nhật giỏ hàng trên UI nếu cần
+              // Ví dụ: có thể xóa sản phẩm khỏi danh sách giỏ hàng
+              location.reload(); // Tải lại trang
+          }
+      })
+      .catch(error => {
+          console.error('Error:', error);
+      });
+  }
+
   </script>
 </html>
