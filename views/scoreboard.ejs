@@ -391,10 +391,9 @@
                 <% } %>
               <% if (index === 2) { %> 
                 <img src="/img/top 3.png" alt="" class="medal-overlay" style="height: 100px; width: 60px;">
-                <% } %>
-              <% if (index >= 3) { %>
+                <% } else { %>
                 <li class="num" style="height: 100px; width: 60px;">
-                  <a><strong><%= index+1%></strong></a>
+                  <a><p><%= index + 1 %></p></a>
                 </li>
               <% } %>
               <a href="/product/<%= product.id %>">
