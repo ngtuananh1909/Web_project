@@ -54,7 +54,6 @@
     .btn-primary, .btn-danger, .btn-success {
       height: 60px;
       width: 100%;
-      border-radius: 15px;
       transition: transform 0.3s ease;
     }
 
@@ -69,16 +68,12 @@
       object-fit: cover;
     }
 
-    .container {
-      max-width: 1200px;
-      background: #fff;
-      padding: 0.2px;
+    .custom {
       display: flex;
-      gap: 10px;
     }
 
     .preview {
-      width: 300px;
+      width: 400px;
     }
 
     #preview-name, #preview-description {
@@ -105,10 +100,19 @@
       background-color: #eeeeee54;
     }
     
-    .history-group .form-control{
+    .history-group {
       width: 400px;
-      height: 400px;
-      color: #666;
+      height: 630px;
+      color: #ffffff;
+      margin-bottom: 80px;
+      border: 2px solid #7b7b7b;
+    }
+    .form-control{
+      width: 300px;
+      height: 50px;
+      color: #ffffff;
+      margin-bottom: 80px;
+      border: 2px solid #7b7b7b;
     }
     .nav-link {
         position: relative; /* Để sử dụng absolute positioning cho underline */
@@ -249,6 +253,17 @@
         color: #ffffff;
         background-color: rgb(48, 48, 48);
       }
+      .button-input{
+        background-color: #d0f9bc;
+      }
+      .dark-mode .button-input{
+        background-color: #676767;
+      }
+
+      #editor {
+        height: auto; /* Thay đổi chiều cao */
+        width: 70%; /* Thay đổi chiều rộng */
+    }
 
   </style>
 </head>
@@ -319,8 +334,8 @@
         </div>
       </div>
     </header>
-    <div class="container table"  style="margin-top: 60px;">
-      <div class="preview">
+    <div class="custom table" style="margin-top: 60px;">
+      <div class="preview" style="margin-left: 10px;">
         <!-- Thêm vào phần preview -->
         <div class="cropper-container" style="display: none;">
           <h2>Crop Image</h2>
@@ -329,9 +344,8 @@
           </div>
           <button id="crop-button" class="btn btn-primary">Crop and Save</button>
         </div>
-
         <h2 class="alpha">Product Preview</h2>
-        <div class="card product-card">
+        <div class="card product-card" style="width: 650px; border: 2px solid #7b7b7b;">
           <img id="preview-image" class="card-img-top" src="" alt="Product Image">
           <div class="card-body info">
             <h3 id="preview-name" class="card-title alpha">Name</h3>
@@ -342,29 +356,28 @@
           </div>
         </div>
       </div>
-      <div class="form-container">
-        <h1>Add New Product</h1>
+      <div class="form-container" style="margin-left: 50px;">
+        <h1 style="margin-left: 350px;">Add New Product</h1>
         <form id="product-form" action="/product/auth/add" method="POST" enctype="multipart/form-data">
           <div class="form-group">
             <label for="name alpha">Product Name:</label>
-            <input type="text" id="name" name="name" class="form-control" required>
+            <input type="text" id="name" name="name" class="form-control button-input" style="border: 2px solid #7b7b7b; margin-left: 400px;" required placeholder="Enter your product name">
           </div>
 
           <div class="form-group">
             <label for="description">Mô tả:</label>
-            <div id="editor" style="height: 200px;"></div>
-            <input type="hidden" id="description" name="description">
+            <div id="editor" style="margin-left: 220px;"></div>
+            <input type="hidden" id="description" name="description" class="button-input" style="border: 2px solid #7b7b7b;">
           </div>
-          
 
           <div class="form-group alpha">
             <label for="price">Price:</label>
-            <input type="number" id="price" name="price" class="form-control" step="100" required min="100">
+            <input type="number" id="price" name="price" class="form-control button-input" step="100" style="border: 2px solid #7b7b7b;" required min="100" placeholder="Enter Price">
           </div>
 
           <div class="form-group alpha">
             <label for="quantity">Quantity:</label>
-            <input type="number" id="quantity" name="quantity" class="form-control" required min="1">
+            <input type="number" id="quantity" name="quantity" class="form-control button-input" style="border: 2px solid #7b7b7b;" required min="1" placeholder="Enter quantity">
           </div>
 
           <div class="form-group alpha">
@@ -372,7 +385,7 @@
             <input type="file" id="image" name="image" class="form-control-file" accept="image/*" required>
           </div>
 
-          <div class="form-check alpha" style="margin-left: 20px;">
+          <div class="form-check alpha" style="margin-left: 20px; width: 100px; background-color: transparent;">
             <input type="checkbox" id="sale" name="sale" class="form-check-input">
             <label class="form-check-label" for="sale">Sale:</label>
           </div>
@@ -382,15 +395,15 @@
             <input type="number" id="saleval" name="saleval" class="form-control" min="1" max="99" step="1">
           </div>
 
-          <button type="submit" class="btn btn-success">Add Product</button>
+          <button type="submit" class="btn btn-success " style="background-color: rgb(37, 255, 37);">Add Product</button>
         </form>
       </div>
 
       
-      <div class="form-container">
+      <div class="form-container " style="margin-left: 50px;">
         <h1>History</h1>
-          <div class="history-group">
-              <name="history" class="form-control" rows="4" required></textarea>
+          <div class="history-group ">
+              <name="history" class="form-control button-input" rows="4" required></textarea>
           </div>
       </div>
 
