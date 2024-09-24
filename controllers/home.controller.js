@@ -4,7 +4,9 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 const { IdGenerator } = require('../event_function/function');
+const {calculateUserSimilarity, getTopRecommendedProducts, findSimilarProducts} = require('../event_function/Filtering')
 const { promisify } = require('util');
+const {findChatById} = require('../event_function/chat')
 const util = require('util');
 const query = util.promisify(db.query).bind(db);
 
@@ -19,6 +21,8 @@ exports.registerDisplay = (req, res) => {
 };
 
 exports.home = (req, res) => {
+    const userId = req.session.user ? req.session.user.id : null;
+
     db.query('SELECT * FROM products', (err, results) => {
         if (err) {
             console.error('Error fetching products:', err);
@@ -36,7 +40,41 @@ exports.home = (req, res) => {
             };
         });
 
-        res.render('home', { user: req.session.user, products: formattedProducts }); 
+        if (userId) {
+            db.query('SELECT * FROM ratings WHERE user_id = ?', [userId], async (err, userRatings) => {
+                if (err) {
+                    console.error('Error fetching user ratings:', err);
+                    return res.render('home', { user: req.session.user, products: formattedProducts, recommendations: [] });
+                }
+        
+                db.query('SELECT * FROM ratings', async (err, allRatings) => {
+                    if (err) {
+                        console.error('Error fetching all ratings:', err);
+                        return res.render('home', { user: req.session.user, products: formattedProducts, recommendations: [] });
+                    }
+        
+                    const userSimilarities = calculateUserSimilarity(userRatings, allRatings);
+                    const collaborativeRecommendations = getTopRecommendedProducts(userId, userSimilarities, allRatings);
+        
+                    const favoriteProductIds = userRatings.map(r => r.product_id);
+                    const contentRecommendations = await findSimilarProducts(favoriteProductIds);
+        
+                    const allRecommendations = [...collaborativeRecommendations, ...contentRecommendations];
+        
+                    const uniqueRecommendations = Array.from(new Set(allRecommendations.map(a => a.productId)))
+                        .map(id => allRecommendations.find(a => a.productId === id));
+        
+                    res.render('home', {
+                        user: req.session.user,
+                        products: formattedProducts,
+                        recommendations: uniqueRecommendations
+                    });
+                });
+            });
+        } else {
+            res.render('home', { user: req.session.user, products: formattedProducts, recommendations: [] });
+        }
+        
     });
 };
 
@@ -409,3 +447,54 @@ exports.Payment = async(req, res) => {
     res.redirect(result.checkout_url);
   });
 };
+
+exports.addRating = (req, res) => {
+    const { product_id, score } = req.body;
+    const userId = req.session.user ? req.session.user.id : null;
+
+    if (!userId) {
+        return res.json({ success: false, message: 'Bạn cần đăng nhập để đánh giá sản phẩm.' });
+    }
+
+    const sql = 'INSERT INTO ratings (user_id, product_id, score, created_at) VALUES (?, ?, ?, NOW())';
+    db.query(sql, [userId, product_id, score], (err) => {
+        if (err) {
+            console.error('Error adding rating:', err);
+            return res.json({ success: false, message: 'Có lỗi xảy ra khi thêm đánh giá.' });
+        }
+
+        res.json({ success: true });
+    });
+};
+
+exports.MessageDisplay = async (req, res) => {
+    const chatId = req.params.id; // ID cuộc trò chuyện
+    const user = req.session.user; // Thông tin người dùng
+
+    if (!user) {
+        return res.redirect('/login');
+    }
+
+    try {
+        const chat = await findChatById(chatId); // Lấy thông tin cuộc trò chuyện
+        if (!chat) {
+            return res.render('message', { user, chat: null, message: 'Cuộc trò chuyện không tìm thấy' });
+        }
+        res.render('message', { user, chat });
+    } catch (error) {
+        console.error('Error fetching chat:', error);
+        res.render('message', { user, chat: null, message: 'Lỗi khi lấy cuộc trò chuyện' });
+    }
+};
+
+exports.SendMessage = (req, res) => {
+    const { text, chatId } = req.body;
+
+    const sql = 'INSERT INTO messages (chat_id, sender_id, text) VALUES (?, ?, ?)';
+    db.query(sql, [chatId, req.session.user.id, text], (err, result) => {
+        if (err) {
+            return res.json({ success: false, error: err.message });
+        }
+        res.json({ success: true });
+    });
+}

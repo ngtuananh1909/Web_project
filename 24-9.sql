@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3001
--- Generation Time: Jul 26, 2024 at 01:49 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Máy chủ: 127.0.0.1:3001
+-- Thời gian đã tạo: Th9 24, 2024 lúc 12:37 AM
+-- Phiên bản máy phục vụ: 10.4.32-MariaDB
+-- Phiên bản PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `product_db`
+-- Cơ sở dữ liệu: `product_db`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `products`
+-- Cấu trúc bảng cho bảng `products`
 --
 
 CREATE TABLE `products` (
@@ -43,7 +43,7 @@ CREATE TABLE `products` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `products`
+-- Đang đổ dữ liệu cho bảng `products`
 --
 
 INSERT INTO `products` (`id`, `name`, `description`, `price`, `quantity`, `image`, `creator`, `creator_id`, `sale`, `saleval`, `sold`, `created_at`) VALUES
@@ -58,7 +58,21 @@ INSERT INTO `products` (`id`, `name`, `description`, `price`, `quantity`, `image
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Cấu trúc bảng cho bảng `ratings`
+--
+
+CREATE TABLE `ratings` (
+  `id` int(11) NOT NULL,
+  `user_id` varchar(20) NOT NULL,
+  `product_id` varchar(50) NOT NULL,
+  `rating` int(11) NOT NULL CHECK (`rating` >= 1 and `rating` <= 5),
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `users`
 --
 
 CREATE TABLE `users` (
@@ -75,12 +89,12 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `users`
+-- Đang đổ dữ liệu cho bảng `users`
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `avatar`, `balance`, `reputation`, `story`, `phone`, `friends`) VALUES
 ('EUbXBmJABE', 'Tuan Anh', 'tes2t@gmail.com', '$2a$10$nibHRtShxVl66IOxRnpZ/u4bMCg3biLd8IiVdyFWy6IrRa4dy6ciu', NULL, NULL, NULL, NULL, '', 0),
-('aL4RptWAMs', 'Quan Minh', 'test@gmail.com', '$2a$10$PHbJd0tH0TYyUV937w6cC.NKOn/PHLxFR76C9rF0uRAc/cqpXQiOm', 0x75706c6f6164732f614c3452707457414d732e706e67, NULL, NULL, NULL, '', 0),
+('aL4RptWAMs', 'Quan Minh noob', 'test@gmail.com', '$2a$10$PHbJd0tH0TYyUV937w6cC.NKOn/PHLxFR76C9rF0uRAc/cqpXQiOm', 0x75706c6f6164732f614c3452707457414d732e706e67, 0, NULL, NULL, '', 0),
 ('MucJ31Cuch', 'Trung Kien', 'test2@gmail.com', '$2a$10$uRRigeffK8h0H4iUPhfmdOpHLh82FemMkwswUxSqts6rUT3vsiPBC', 0x75706c6f6164732f4d75634a3331437563682e6a7067, 0, 0, NULL, '', 0),
 ('AFbzX92VFg', 'Giang Trung Kien', 'test3@gmail.com', '$2a$10$XivEbLRNIw3VxtiQSwOzWuazuFqBoZxOKh7MWwco5s8FaX7Dwaley', NULL, 0, 0, NULL, '', 0),
 ('WEsUEBHmJv', 'Trung Kien', 'test4@gmail.com', '$2a$10$kKeYCR6EI1la0g9RpHRv6OMsVEUwiVIuH7Hf5f4vEywN04YJuTiSS', NULL, 0, 0, NULL, '', 0),
@@ -90,7 +104,7 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `avatar`, `balance`, `re
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_cart`
+-- Cấu trúc bảng cho bảng `user_cart`
 --
 
 CREATE TABLE `user_cart` (
@@ -99,29 +113,43 @@ CREATE TABLE `user_cart` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `user_cart`
+-- Đang đổ dữ liệu cho bảng `user_cart`
 --
 
 INSERT INTO `user_cart` (`user_id`, `product_id`) VALUES
-('aL4RptWAMs', 'BoonQ5K4vkWuEjNQ3gNjNzmPUcB1EWyl3JdVyOMkQktxzJC9wq'),
-('aL4RptWAMs', 'kJy4WQaUD1oezriugFq9thwSuc0FV1UEkV7D9zpCc55Irb2eUm'),
-('aL4RptWAMs', 'Xg32XkFR7EpGlQoPZIw2Et9UKsicJKA30kem86ausAkDwQ3iRo');
+('aL4RptWAMs', 'BoonQ5K4vkWuEjNQ3gNjNzmPUcB1EWyl3JdVyOMkQktxzJC9wq');
 
 --
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `products`
+-- Chỉ mục cho bảng `products`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `user_cart`
+-- Chỉ mục cho bảng `ratings`
+--
+ALTER TABLE `ratings`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `user_cart`
 --
 ALTER TABLE `user_cart`
   ADD PRIMARY KEY (`user_id`,`product_id`);
+
+--
+-- AUTO_INCREMENT cho các bảng đã đổ
+--
+
+--
+-- AUTO_INCREMENT cho bảng `ratings`
+--
+ALTER TABLE `ratings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
