@@ -255,9 +255,11 @@
       }
       .button-input{
         background-color: #d0f9bc;
+        color: #000;
       }
       .dark-mode .button-input{
         background-color: #676767;
+        color: white;
       }
 
       #editor {
@@ -359,29 +361,27 @@
       <div class="form-container" style="margin-left: 50px;">
         <h1 style="margin-left: 350px;">Add New Product</h1>
         <form id="product-form" action="/product/auth/add" method="POST" enctype="multipart/form-data">
-          <div class="form-group" style="margin-left: 200px;">
+          <div class="form-group" style="margin-left: 200px; margin-top: 30px;">
             <input type="text" id="name" name="name" class="form-control button-input" style="border: 2px solid #7b7b7b; margin-left: 4px; margin-top: -10px;" required placeholder="Product name">
           </div>
 
           <div class="form-group">
-            <div id="editor" style="margin-left: 190px;"></div>
+            <div id="editor" style="margin-left: 190px; margin-top: 100px;"></div>
             <input type="hidden" id="description" name="description" class="button-input" style="border: 2px solid #7b7b7b;">
           </div>
 
-          <div class="form-group alpha">
-            <label for="price">Price:</label>
+          <div class="form-group alpha " style="margin-left: 550px; margin-top: -480px;">
             <input type="number" id="price" name="price" class="form-control button-input" step="100" style="border: 2px solid #7b7b7b;" required min="100" placeholder="Enter Price">
           </div>
 
-          <div class="form-group alpha">
-            <label for="quantity">Quantity:</label>
+          <div class="form-group alpha" style="margin-left: 552px; margin-top: -67px;">
             <input type="number" id="quantity" name="quantity" class="form-control button-input" style="border: 2px solid #7b7b7b;" required min="1" placeholder="Enter quantity">
           </div>
 
-          <div class="form-group alpha">
-            <label for="image">Select image:</label>
-            <input type="file" id="image" name="image" class="form-control-file" accept="image/*" required>
+          <div class="form-group alpha" style="margin-top: -147px; margin-left: 210px; width: 300px;">
+            <input type="file" id="image" name="image" class="form-control button-input " style="height: 50px;" accept="image/*" required>
           </div>
+          
 
           <div class="form-check alpha" style="margin-left: 20px; width: 100px; background-color: transparent;">
             <input type="checkbox" id="sale" name="sale" class="form-check-input">
@@ -393,7 +393,7 @@
             <input type="number" id="saleval" name="saleval" class="form-control" min="1" max="99" step="1">
           </div>
 
-          <button type="submit" class="btn btn-success " style="background-color: rgb(37, 255, 37);">Add Product</button>
+          <button type="submit" class="btn btn-success " style="background-color: rgb(37, 52, 255);">Add Product</button>
         </form>
       </div>
 
