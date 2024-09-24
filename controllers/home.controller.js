@@ -5,6 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const { IdGenerator } = require('../event_function/function');
 const { promisify } = require('util');
+const util = require('util');
+const query = util.promisify(db.query).bind(db);
 
 const unlinkAsync = promisify(fs.unlink);
 
@@ -293,30 +295,25 @@ exports.UserUpdate = async (req, res) => {
 exports.AddToCart = async (req, res) => {
     try {
         const { productId } = req.body;
+
+        // Kiểm tra xem người dùng đã đăng nhập chưa
         if (!req.session.user) {
             return res.status(401).send('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
         }
+
         const userId = req.session.user.id;
 
-        db.query('SELECT * FROM user_cart WHERE user_id = ? AND product_id = ?', [userId, productId], (error, results) => {
-            if (error) {
-                console.log('Error checking cart:', error);
-                return res.status(500).send('Đã xảy ra lỗi server');
-            }
+        // Kiểm tra sản phẩm đã có trong giỏ hàng chưa
+        const results = await query('SELECT * FROM user_cart WHERE user_id = ? AND product_id = ?', [userId, productId]);
 
-            if (results.length > 0) {
-                return res.status(400).send('Sản phẩm đã có trong giỏ hàng của bạn');
-            }
+        if (results.length > 0) {
+            return res.status(400).send('Sản phẩm đã có trong giỏ hàng của bạn');
+        }
 
-            db.query('INSERT INTO user_cart SET ?', { user_id: userId, product_id: productId }, (err) => {
-                if (err) {
-                    console.log('Error adding to cart:', err);
-                    return res.status(500).send('Đã xảy ra lỗi khi thêm vào giỏ hàng');
-                }
-
-                return res.status(200).send('Sản phẩm đã được thêm vào giỏ hàng');
-            });
-        });
+        // Thêm sản phẩm vào giỏ hàng
+        await query('INSERT INTO user_cart SET ?', { user_id: userId, product_id: productId });
+        return res.status(200).send('Sản phẩm đã được thêm vào giỏ hàng');
+        
     } catch (err) {
         console.log('Server error:', err);
         return res.status(500).send('Đã xảy ra lỗi server');

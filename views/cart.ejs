@@ -343,9 +343,13 @@
             
               <form action="/checkout" method="POST">
                 <div class="pay-code">
+<<<<<<< HEAD
+                  <div class="card mb-4">
+=======
                   <div class="card mb-4 discode" >
                     <label class="form-label" for="discountCode" style="margin-left: 10px; margin-top: 7px;">Discount code:</label>
 
+>>>>>>> 938531ff43a1c22dd9f0a3024cb5b68fe159c271
                   </div>
                 
                   <div class="card" style="margin-top: -30px;">
@@ -369,70 +373,49 @@
 
   <script>
     function calculateTotal() {
-      let total = 0;
-      const quantities = document.querySelectorAll('.quantity'); // Lấy tất cả input số lượng
-  
-      quantities.forEach(quantity => {
-        const price = quantity.getAttribute('data-price'); // Lấy giá sản phẩm từ thuộc tính data-price
-        total += quantity.value * price; 
-      });
-  
-      // Cập nhật giá trị hiển thị của Total
-      document.querySelector('.total strong').innerText = `Total: ${total} VNĐ`;
+        let total = 0;
+        const quantities = document.querySelectorAll('.quantity'); 
+    
+        quantities.forEach(quantity => {
+            const price = quantity.getAttribute('data-price');
+            const qty = parseInt(quantity.value) || 0; // Đảm bảo là số nguyên
+            total += qty * price; 
+        });
+    
+        document.querySelector('.total strong').innerText = `Total: ${total} VNĐ`;
     }
   
     document.querySelectorAll('.quantity').forEach(input => {
-      input.addEventListener('change', calculateTotal); 
+        input.addEventListener('change', calculateTotal);
+        input.addEventListener('input', calculateTotal); // Cập nhật khi người dùng nhập
     });
   
     // Tính tổng lần đầu khi trang được tải
     calculateTotal();
   </script>
   
-  
   <script>
-    const toggleButton = document.getElementById('toggle-dark-mode');
-    const body = document.body;
-  
-    // Kiểm tra nếu chế độ tối đã được kích hoạt trước đó
-    if (localStorage.getItem('darkMode') === 'enabled') {
-      body.classList.add('dark-mode');
+    function removeFromCart(productId) {
+        fetch(`/cart/remove/${productId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error); // Thông báo lỗi
+            } else {
+                alert(data.message); // Thông báo thành công
+                location.reload(); // Tải lại trang
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     }
+  </script>
   
-    toggleButton.addEventListener('click', () => {
-      body.classList.toggle('dark-mode');
-      if (body.classList.contains('dark-mode')) {
-        localStorage.setItem('darkMode', 'enabled');
-
-      } else {
-        localStorage.setItem('darkMode', 'disabled');
-      }
-    });
-  </script>
-  <script>
-      function removeFromCart(productId) {
-      fetch(`/cart/remove/${productId}`, {
-          method: 'DELETE',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          credentials: 'include' // Gửi cookie session
-      })
-      .then(response => response.json())
-      .then(data => {
-          if (data.error) {
-              alert(data.error);
-          } else {
-              alert(data.message);
-              // Cập nhật giỏ hàng trên UI nếu cần
-              // Ví dụ: có thể xóa sản phẩm khỏi danh sách giỏ hàng
-              location.reload(); // Tải lại trang
-          }
-      })
-      .catch(error => {
-          console.error('Error:', error);
-      });
-  }
-
-  </script>
 </html>
