@@ -64,7 +64,7 @@
         }
 
         .card {
-            width: 100%;
+            width: 120%;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             overflow: hidden;
             border-radius: 10px;
@@ -82,7 +82,7 @@
             transition: transform 0.3s ease;
             display: flex;
             flex-direction: column;
-            height: 450px;
+            height: au;
             width: 330px;
             margin: 0 auto; /* Căn giữa thẻ product-card */
         }
@@ -412,7 +412,17 @@
               </a>
               <div class="card-body">
                 <h4 class="card-title"><%= product.name %></h4>
-                <p class="card-text">Giá: <%= product.saleval %> VND</p>
+                <% if (product.sale) { %>
+                    <span class="badge bg-danger ms-2" style="margin-bottom: 10px;">-<%= product.saleval %>%</span>
+                  <p class="card-text" style="margin-bottom: 4px;">
+                    Giá: <%= formatCurrency((product.price - (product.price * product.saleval / 100)).toFixed(0)) %> VNĐ
+                    <del> <%= formatCurrency(product.price) %> VNĐ</del>
+                  </p>
+                <% } else { %>
+                  <div style="margin-top: 40px;">
+                    <p class="card-text">Giá: <%= formatCurrency(product.price) %> VNĐ</p>
+                  </div>
+                <% } %>                
                 <p class="card-text">Ngày tạo: <%= product.formatted_date %></p>
                 <p class="card-text">Creator: <%= product.creator %></p>
                 <div class="d-flex">
