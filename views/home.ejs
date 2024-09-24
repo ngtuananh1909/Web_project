@@ -130,6 +130,7 @@
       .nav-link.bxh:hover::after,
       .nav-link.giohang:hover::after,
       .nav-link.taosanpham:hover::after,
+      .nav-link.nhantin:hover::after,
       .nav-link.login:hover::after,
       .nav-link.dangky:hover::after {
           transform: scaleX(1); /* Hiện thanh nhỏ khi hover */
@@ -302,6 +303,11 @@
               </li>
               <li class="nav-item">
                 <a class="nav-link taosanpham" href="/product/add">
+                  <img src="/img/add.jpg" alt="" class="add-icon">
+                </a>
+              </li>
+              <li class="nav-item"></li>
+                <a class="nav-link nhantin" href="/message/:id">
                   <img src="/img/add.jpg" alt="" class="add-icon">
                 </a>
               </li>
@@ -483,14 +489,17 @@
                         </div>
                         <div class="d-flex mt-3">
                           <a
-                          href="/product/<%= product.id %>"
-                          class="btn btn-success rounded">
-                            <div>
-                              Thông tin
-                            </div>
-                            <div>
-                              sản phẩm
-                            </div>
+                              href="/product/<%= product.id %>"
+                              class="btn btn-success rounded viewProductBtn"
+                              data-product-id="<%= product.id %>"
+                              data-product-score="5"  
+                          >
+                              <div>
+                                  Thông tin
+                              </div>
+                              <div>
+                                  sản phẩm
+                              </div>
                           </a>
                           <a style="margin-left: -20px;">
                             <button
@@ -626,5 +635,26 @@
 
     </script>
     
+    <script>
+      $(document).ready(function() {
+        $('.viewProductBtn').click(function(event) {
+            event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
+
+            const productId = $(this).data('product-id');
+            const score = $(this).data('product-score'); // Điểm số đánh giá
+
+            // Gửi yêu cầu thêm đánh giá
+            $.post('/add-rating', { product_id: productId, score: score }, function(response) {
+                if (response.success) {
+                    // Nếu thêm đánh giá thành công, chuyển đến trang chi tiết sản phẩm
+                    window.location.href = `/product/${productId}`;
+                } else {
+                    alert('Có lỗi xảy ra khi thêm đánh giá. Vui lòng thử lại.');
+                }
+            });
+        });
+    });
+  </script>
+
   </body>
 </html>
