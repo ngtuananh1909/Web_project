@@ -261,6 +261,12 @@
         background: none; /* Loại bỏ màu nền mặc định */
         cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
       }
+      .custom{
+        color: black;
+      }
+      .dark-mode .custom{
+        color: white;
+      }
 
 
     </style>
@@ -514,14 +520,12 @@
         </div>
         <footer class="py-4 mt-5">
           <div class="container">
-            <div class="text-center text-muted">&copy; 2024 E-Shop</div>
+            <div class="text-center custom">&copy; 2024 E-Shop</div>
             <div class="text-center mt-3">
-              <a href="#" class="text-decoration-none text-dark mx-2"
-                >Chính sách bảo mật</a
-              >
-              <a href="#" class="text-decoration-none text-dark mx-2"
-                >Điều khoản sử dụng</a
-              >
+              <a href="#" class="text-decoration-none mx-2 custom"
+                >Chính sách bảo mật</a>
+              <a href="#" class="text-decoration-none mx-2 custom"
+                >Điều khoản sử dụng</a>
             </div>
           </div>
         </footer>

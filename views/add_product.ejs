@@ -359,14 +359,12 @@
       <div class="form-container" style="margin-left: 50px;">
         <h1 style="margin-left: 350px;">Add New Product</h1>
         <form id="product-form" action="/product/auth/add" method="POST" enctype="multipart/form-data">
-          <div class="form-group">
-            <label for="name alpha">Product Name:</label>
-            <input type="text" id="name" name="name" class="form-control button-input" style="border: 2px solid #7b7b7b; margin-left: 400px;" required placeholder="Enter your product name">
+          <div class="form-group" style="margin-left: 200px;">
+            <input type="text" id="name" name="name" class="form-control button-input" style="border: 2px solid #7b7b7b; margin-left: 4px; margin-top: -10px;" required placeholder="Product name">
           </div>
 
           <div class="form-group">
-            <label for="description">Mô tả:</label>
-            <div id="editor" style="margin-left: 220px;"></div>
+            <div id="editor" style="margin-left: 190px;"></div>
             <input type="hidden" id="description" name="description" class="button-input" style="border: 2px solid #7b7b7b;">
           </div>
 
