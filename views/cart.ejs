@@ -11,6 +11,7 @@
     <title>Shopping Cart</title>
   </head>
   <style>
+
     .avatar {
       width: 30px;
       height: 30px;
@@ -196,8 +197,8 @@
   </style>
 
   <body>
-    <header class="header-design" >
-      <div class="container-fluid py-3" >
+    <header class="header-design" style="margin-top: -80px;margin-bottom: 10px; height: 70px;">
+      <div class="container-fluid py-3" style="margin-bottom: 100px; height: 60px;" >
         <div class="container d-flex justify-content-between align-items-center" style="margin-left: 476px;">
           <h1 class="h4 mb-0">
             <a href="/" class="text-decoration-none" style="margin-left: -197px;"><strong>E-Shop</strong></a>
@@ -254,7 +255,7 @@
                 </ul>
               </li>
               <button id="toggle-dark-mode" style="margin-left: 150px;">
-                <img src="img/mode.png" alt="" class="mode-button"></img>
+                  <img src="img/mode.png" alt="" class="mode-button"></img>
               </button>
               <% } %>
             </ul>
@@ -265,19 +266,18 @@
     
 
     <section class="h-100">
-      <div class="container h-100 py-5">
-        <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="container h-100 py-5" style="margin-top: 70px;margin-bottom: 200px; margin-left: 406px;">
           <div class="col-10">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="fw-normal mb-0"><strong>Shopping Cart</strong></h1>
               </center>
               <div>
               </div>
-            </div>
+            </div >
               <% if (products.length > 0) { %> 
               <% products.forEach(product => { %>
               <div class="card rounded-3 mb-4">
-                <div class="card-body p-4">
+                <div class="card-bo dy p-4">
                   <div class="row d-flex justify-content-between align-items-center">
                     <div class="col-md-2 col-lg-2 col-xl-2">
                       <img
@@ -343,13 +343,9 @@
             
               <form action="/checkout" method="POST">
                 <div class="pay-code">
-<<<<<<< HEAD
                   <div class="card mb-4">
-=======
                   <div class="card mb-4 discode" >
                     <label class="form-label" for="discountCode" style="margin-left: 10px; margin-top: 7px;">Discount code:</label>
-
->>>>>>> 938531ff43a1c22dd9f0a3024cb5b68fe159c271
                   </div>
                 
                   <div class="card" style="margin-top: -30px;">
@@ -365,7 +361,6 @@
                   </div>
                 </div>
               </form>
-        </div>
       </div>
     </section>
   </body>
@@ -416,6 +411,25 @@
             console.error('Error:', error);
         });
     }
+  </script>
+  <script>
+    const toggleButton = document.getElementById('toggle-dark-mode');
+    const body = document.body;
+  
+    // Kiểm tra nếu chế độ tối đã được kích hoạt trước đó
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      body.classList.add('dark-mode');
+    }
+  
+    toggleButton.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      if (body.classList.contains('dark-mode')) {
+        localStorage.setItem('darkMode', 'enabled');
+
+      } else {
+        localStorage.setItem('darkMode', 'disabled');
+      }
+    });
   </script>
   
 </html>
