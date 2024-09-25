@@ -208,28 +208,13 @@
       }
       .dark-mode .dropdown-menu{
         background-color: #0c0c0c;
-        transition: background-color 0.5s ease, color 0.5s ease;
+        transition: background-color 0.3s ease, color 0.3s ease;
       }
 
       .dropdown-item{
         color: rgb(0, 0, 0);
         text-decoration: none;
         transition: background-color 0.3s ease, color 0.3s ease;
-      }
-
-      /* Ẩn menu mặc định */
-      .dropdown-menu {
-        display: none;
-        position: absolute;
-        top: 100%; /* Đặt menu xuất hiện ngay dưới avatar */
-        left: 0;
-        z-index: 1000;
-      }
-
-      /* Hiển thị menu khi di chuột vào avatar */
-      .nav-link.dropdown-toggle:hover + .dropdown-menu,
-      .dropdown-menu:hover {
-        display: block;
       }
       .dropdown-menu{
         color: white;
@@ -269,7 +254,7 @@
         background-color: rgb(48, 48, 48);
       }
       .button-input{
-        background-color: #d0f9bc;
+        background-color: #f5fff0;
         color: #000;
       }
       .dark-mode .button-input{
@@ -279,7 +264,10 @@
 
       #editor {
         height: auto; /* Thay đổi chiều cao */
-        width: 70%; /* Thay đổi chiều rộng */
+        width: 670px; /* Thay đổi chiều rộng */
+      }
+      .button-submit{
+        background-color: #18682d;
       }
 
   </style>
@@ -287,9 +275,9 @@
   <body>
     <header class="header-design" >
       <div class="container-fluid py-3" >
-        <div class="container d-flex justify-content-between align-items-center" style="margin-left: 476px;">
+        <div class=" d-flex justify-content-between align-items-center" style="margin-right: 110px;">
           <h1 class="h4 mb-0">
-            <a href="/" class="text-decoration-none" style="margin-left: -197px;"><strong>E-Shop</strong></a>
+            <a href="/" class="text-decoration-none" style="margin-left: 293px;" ><strong>E-Shop</strong></a>
           </h1>
           <nav class="nav">
             <ul class="nav">
@@ -324,15 +312,10 @@
                   <img src="/img/add.jpg" alt="" class="add-icon">
                 </a>
               </li>
-              <li class="nav-item"></li>
-                <a class="nav-link nhantin" href="/message/:id">
-                  <img src="/img/mesage.png" alt="" class="add-icon">
-                </a>
-              </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                   <% if (user.avatar) { %>
-                  <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
+                  <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
                   <% } else { %>
                   <img src="./img/def.jpg" class="avatar me-2" alt="" />
                   <% } %>
@@ -385,12 +368,7 @@
             <input type="text" id="name" name="name" class="form-control button-input" style="border: 2px solid #7b7b7b; margin-left: 4px; margin-top: -10px;" required placeholder="Product name">
           </div>
 
-          <div class="form-group">
-            <div id="editor" style="margin-left: 195px; margin-bottom: 100px;"></div>
-            <input type="hidden" id="description" name="description" class="button-input" style="border: 2px solid #7b7b7b;">
-          </div>
-
-          <div class="form-group alpha " style="margin-left: 550px; margin-top: -480px;">
+          <div class="form-group " style="margin-left: 550px; margin-top: -147px;">
             <input type="number" id="price" name="price" class="form-control button-input" step="100" style="border: 2px solid #7b7b7b;" required min="100" placeholder="Enter Price">
           </div>
 
@@ -403,22 +381,33 @@
           </div>
           
 
-          <div class="form-check alpha" style="margin-left: 20px; width: 100px; background-color: transparent;">
-            <input type="checkbox" id="sale" name="sale" class="form-check-input">
-            <label class="form-check-label" for="sale">Sale:</label>
+          <div class="form-check alpha" style="margin-left: 277px; margin-top: -80px; width: 100px; background-color: transparent; display: flex; align-items: center;">
+            <input type="checkbox" id="sale" name="sale" class="form-check-input" style="height: 1px; width: 1px; margin-right: -50px;">
+            <label for="sale" style="position: relative; display: inline-block;justify-content: center; width: 60px; height: 40px;border-radius: 8px;color: #1e1b1b; background-color: lightgray; text-align: center; cursor: pointer;font-size: 25px;">
+                Sale
+                <input type="checkbox" style="opacity: 0; position: absolute; width: 0%; height: 0%; cursor: pointer;">
+            </label>
           </div>
+        
+        
 
-          <div class="form-group alpha" id="sale-value-container" style="display: none;">
-            <label for="saleval">Sale Value (%):</label>
-            <input type="number" id="saleval" name="saleval" class="form-control" min="1" max="99" step="1">
+          <div class="form-group" id="sale-value-container" style="display: none; margin-left: 286px; margin-top: -82px; height: 82px; width: 0px; background-color: transparent;">
+            <label for="saleval"></label>
+            <input type="number" id="saleval" name="saleval" class="form-control button-input" style="height: auto; width: 80px;" min="1" max="99" step="1" oninput="updateValueWithPercent()">
           </div>
+          
 
-          <button type="submit" class="btn btn-success button-input" style=" margin-top: 50px; margin-left: 200px;">Add Product</button>
+          <button type="submit" class="btn btn-success button-submit" style=" margin-top: -25px; margin-left: 510px; width: 350px; background-color: #247530;">Add Product</button>
+
+          <div class="form-group">
+            <div id="editor" style="margin-left: 195px; margin-bottom: 100px;"></div>
+            <input type="hidden" id="description" name="description" class="button-input" style="border: 2px solid #7b7b7b;">
+          </div>
         </form>
       </div>
 
       
-      <div class="form-container " style="margin-left: -10px;">
+      <div class="form-container " style="margin-left: 10px;">
         <h1>History</h1>
           <div class="history-group ">
               <name="history" class="form-control button-input" rows="4" required></textarea>
@@ -443,7 +432,7 @@
       const saleValueContainer = document.getElementById('sale-value-container');
       const saleValueInput = document.getElementById('saleval');
       const form = document.getElementById('product-form');
-    
+
       saleCheckbox.addEventListener('change', function () {
         if (this.checked) {
           saleValueContainer.style.display = 'block';
@@ -455,7 +444,7 @@
           previewSale.style.display = 'none';
         }
       });
-    
+
       form.addEventListener('input', function () {
         previewName.textContent = document.getElementById('name').value || 'Name';
         previewDescription.innerHTML = document.getElementById('description').value || 'Description';
@@ -466,7 +455,7 @@
           previewSale.textContent = 'Sale Value: ' + (saleValueInput.value || 0) + '%';
         }
       });
-    
+
       form.addEventListener('change', function (e) {
         if (e.target.id === 'image') {
           const file = e.target.files[0];
@@ -477,7 +466,8 @@
           reader.readAsDataURL(file);
         }
       });
-    </script>
+</script>
+
     <script>
       const toggleButton = document.getElementById('toggle-dark-mode');
       const body = document.body;
