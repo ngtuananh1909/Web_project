@@ -208,28 +208,13 @@
       }
       .dark-mode .dropdown-menu{
         background-color: #0c0c0c;
-        transition: background-color 0.5s ease, color 0.5s ease;
+        transition: background-color 0.3s ease, color 0.3s ease;
       }
 
       .dropdown-item{
         color: rgb(0, 0, 0);
         text-decoration: none;
         transition: background-color 0.3s ease, color 0.3s ease;
-      }
-
-      /* Ẩn menu mặc định */
-      .dropdown-menu {
-        display: none;
-        position: absolute;
-        top: 100%; /* Đặt menu xuất hiện ngay dưới avatar */
-        left: 0;
-        z-index: 1000;
-      }
-
-      /* Hiển thị menu khi di chuột vào avatar */
-      .nav-link.dropdown-toggle:hover + .dropdown-menu,
-      .dropdown-menu:hover {
-        display: block;
       }
       .dropdown-menu{
         color: white;
@@ -269,7 +254,7 @@
         background-color: rgb(48, 48, 48);
       }
       .button-input{
-        background-color: #d0f9bc;
+        background-color: #f5fff0;
         color: #000;
       }
       .dark-mode .button-input{
@@ -279,7 +264,10 @@
 
       #editor {
         height: auto; /* Thay đổi chiều cao */
-        width: 70%; /* Thay đổi chiều rộng */
+        width: 670px; /* Thay đổi chiều rộng */
+      }
+      .button-submit{
+        background-color: #18682d;
       }
 
   </style>
@@ -287,9 +275,9 @@
   <body>
     <header class="header-design" >
       <div class="container-fluid py-3" >
-        <div class="container d-flex justify-content-between align-items-center" style="margin-left: 476px;">
+        <div class=" d-flex justify-content-between align-items-center" style="margin-right: 110px;">
           <h1 class="h4 mb-0">
-            <a href="/" class="text-decoration-none" style="margin-left: -197px;"><strong>E-Shop</strong></a>
+            <a href="/" class="text-decoration-none" style="margin-left: 293px;" ><strong>E-Shop</strong></a>
           </h1>
           <nav class="nav">
             <ul class="nav">
@@ -327,7 +315,7 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                   <% if (user.avatar) { %>
-                  <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
+                  <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
                   <% } else { %>
                   <img src="./img/def.jpg" class="avatar me-2" alt="" />
                   <% } %>
@@ -374,46 +362,52 @@
         </div>
       </div>
       <div class="form-container" style="margin-left: 75px;">
-        <h1 style="margin-left: 370px;">Add New Product</h1>
+        <h1 style="margin-left: 350px;">Add New Product</h1>
         <form id="product-form" action="/product/auth/add" method="POST" enctype="multipart/form-data">
           <div class="form-group" style="margin-left: 200px; margin-top: 30px;">
-            <input type="text" id="product-name" name="name" class="form-control button-input" style="border: 2px solid #7b7b7b; margin-left: 4px; margin-top: -10px;" required placeholder="Product name">
+            <input type="text" id="name" name="name" class="form-control button-input" style="border: 2px solid #7b7b7b; margin-left: 4px; margin-top: -10px;" required placeholder="Product name">
           </div>
 
-          <div class="form-group alpha " style="margin-left: 550px; margin-top: -147px;">
-            <input type="number" id="product-price" name="price" class="form-control button-input" step="100" style="border: 2px solid #7b7b7b;" required min="100" placeholder="Enter Price">
+          <div class="form-group " style="margin-left: 550px; margin-top: -147px;">
+            <input type="number" id="price" name="price" class="form-control button-input" step="100" style="border: 2px solid #7b7b7b;" required min="100" placeholder="Enter Price">
           </div>
 
-          <div class="form-group alpha" style="margin-left: 552px; margin-top: -80px;">
-            <input type="number" id="product-quantity" name="quantity" class="form-control button-input" style="border: 2px solid #7b7b7b;" required min="1" placeholder="Enter quantity">
+          <div class="form-group alpha" style="margin-left: 552px; margin-top: -67px;">
+            <input type="number" id="quantity" name="quantity" class="form-control button-input" style="border: 2px solid #7b7b7b;" required min="1" placeholder="Enter quantity">
           </div>
 
           <div class="form-group alpha" style="margin-top: -147px; margin-left: 206px; width: 300px;">
-            <input type="file" id="product-image" name="image" class="form-control button-input " style="height: 50px;" accept="image/*" required>
+            <input type="file" id="image" name="image" class="form-control button-input " style="height: 50px;" accept="image/*" required>
           </div>
           
 
-          <div class="form-check alpha " style="margin-left: 207px; background-color: transparent; margin-top: -80px;">
-            <button id="sale-button" class="btn btn-primary button-input" type="button" style="width: 70px; height: auto;">Sale</button>
+          <div class="form-check alpha" style="margin-left: 277px; margin-top: -80px; width: 100px; background-color: transparent; display: flex; align-items: center;">
+            <input type="checkbox" id="sale" name="sale" class="form-check-input" style="height: 1px; width: 1px; margin-right: -50px;">
+            <label for="sale" style="position: relative; display: inline-block;justify-content: center; width: 60px; height: 40px;border-radius: 8px;color: #1e1b1b; background-color: lightgray; text-align: center; cursor: pointer;font-size: 25px;">
+                Sale
+                <input type="checkbox" style="opacity: 0; position: absolute; width: 0%; height: 0%; cursor: pointer;">
+            </label>
           </div>
-          
-          <div class="form-group alpha" id="sale-value-container" style="display: none; margin-left: 300px; margin-top: -60px;">
-            <input type="number" id="saleval" name="saleval" class="form-control" style="width: auto; height: auto;" min="1" max="99" step="1">
+        
+        
+
+          <div class="form-group" id="sale-value-container" style="display: none; margin-left: 286px; margin-top: -82px; height: 82px; width: 0px; background-color: transparent;">
+            <label for="saleval"></label>
+            <input type="number" id="saleval" name="saleval" class="form-control button-input" style="height: auto; width: 80px;" min="1" max="99" step="1" oninput="updateValueWithPercent()">
           </div>
           
 
-          <button type="submit" class="btn btn-success button-input" style=" margin-top: 50px; margin-left: 558px;margin-top: -60px; height: 60px; width: 300px;">Add Product</button>
+          <button type="submit" class="btn btn-success button-submit" style=" margin-top: -25px; margin-left: 510px; width: 350px; background-color: #247530;">Add Product</button>
 
-          <div class="form-group" style="margin-top: 70px;">
-            <div id="editor" style="margin-left: 195px; margin-bottom: 100px; "></div>
-            <input type="hidden" id="product-description" name="description" class="button-input" style="border: 2px solid #7b7b7b;" >
+          <div class="form-group">
+            <div id="editor" style="margin-left: 195px; margin-bottom: 100px;"></div>
+            <input type="hidden" id="description" name="description" class="button-input" style="border: 2px solid #7b7b7b;">
           </div>
         </form>
-        
       </div>
 
       
-      <div class="form-container " style="margin-left: -10px;">
+      <div class="form-container " style="margin-left: 10px;">
         <h1>History</h1>
           <div class="history-group ">
               <name="history" class="form-control button-input" rows="4" required></textarea>
@@ -428,60 +422,52 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
     <script>
-      document.getElementById("sale-button").addEventListener("click", function() {
-        var saleValueContainer = document.getElementById("sale-value-container");
-        
-        // Toggle the visibility of the sale value input
-        if (saleValueContainer.style.display === "none") {
-          saleValueContainer.style.display = "block";
+      const previewName = document.getElementById('preview-name');
+      const previewDescription = document.getElementById('preview-description');
+      const previewPrice = document.getElementById('preview-price');
+      const previewQuantity = document.getElementById('preview-quantity');
+      const previewSale = document.getElementById('preview-sale');
+      const previewImage = document.getElementById('preview-image');
+      const saleCheckbox = document.getElementById('sale');
+      const saleValueContainer = document.getElementById('sale-value-container');
+      const saleValueInput = document.getElementById('saleval');
+      const form = document.getElementById('product-form');
+
+      saleCheckbox.addEventListener('change', function () {
+        if (this.checked) {
+          saleValueContainer.style.display = 'block';
+          saleValueInput.required = true;
+          previewSale.style.display = 'block';
         } else {
-          saleValueContainer.style.display = "none";
+          saleValueContainer.style.display = 'none';
+          saleValueInput.required = false;
+          previewSale.style.display = 'none';
         }
       });
 
-      document.addEventListener('DOMContentLoaded', function () {
-        const nameInput = document.getElementById('product-name'); // ID của trường nhập tên sản phẩm
-        const descriptionInput = document.getElementById('product-description'); // ID của trường nhập mô tả
-        const priceInput = document.getElementById('product-price'); // ID của trường nhập giá
-        const quantityInput = document.getElementById('product-quantity'); // ID của trường nhập số lượng
-        const imageInput = document.getElementById('product-image'); // ID của trường nhập hình ảnh
-    
-        // Cập nhật preview khi người dùng nhập thông tin
-        nameInput.addEventListener('input', function () {
-          document.getElementById('preview-name').textContent = nameInput.value || 'Name';
-        });
-    
-        // Cập nhật mô tả
-        descriptionInput.addEventListener('input', function () {
-            const description = descriptionInput.innerText; // Lấy nội dung mô tả từ trình soạn thảo
-            hiddenDescriptionInput.value = description; // Cập nhật trường ẩn
-            document.getElementById('preview-description').textContent = description || 'Description';
-        });
-    
-        priceInput.addEventListener('input', function () {
-          document.getElementById('preview-price').textContent = 'Price: ' + (priceInput.value || '0') + ' VND';
-        });
-    
-        quantityInput.addEventListener('input', function () {
-          document.getElementById('preview-quantity').textContent = 'Quantity: ' + (quantityInput.value || '0');
-        });
-    
-        imageInput.addEventListener('change', function () {
-          const file = imageInput.files[0];
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            document.getElementById('preview-image').src = e.target.result;
-          };
-          if (file) {
-            reader.readAsDataURL(file);
-          }
-        });
+      form.addEventListener('input', function () {
+        previewName.textContent = document.getElementById('name').value || 'Name';
+        previewDescription.innerHTML = document.getElementById('description').value || 'Description';
+        previewPrice.textContent = 'Price: ' + (document.getElementById('price').value || 0) + ' VND';
+        previewQuantity.textContent = 'Quantity: ' + (document.getElementById('quantity').value || 0);
+        
+        if (saleCheckbox.checked) {
+          previewSale.textContent = 'Sale Value: ' + (saleValueInput.value || 0) + '%';
+        }
       });
-    </script>
-    
-    
 
-    </script>
+      form.addEventListener('change', function (e) {
+        if (e.target.id === 'image') {
+          const file = e.target.files[0];
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            previewImage.src = event.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+</script>
+
     <script>
       const toggleButton = document.getElementById('toggle-dark-mode');
       const body = document.body;
