@@ -374,22 +374,17 @@
         </div>
       </div>
       <div class="form-container" style="margin-left: 75px;">
-        <h1 style="margin-left: 350px;">Add New Product</h1>
+        <h1 style="margin-left: 370px;">Add New Product</h1>
         <form id="product-form" action="/product/auth/add" method="POST" enctype="multipart/form-data">
           <div class="form-group" style="margin-left: 200px; margin-top: 30px;">
             <input type="text" id="name" name="name" class="form-control button-input" style="border: 2px solid #7b7b7b; margin-left: 4px; margin-top: -10px;" required placeholder="Product name">
           </div>
 
-          <div class="form-group">
-            <div id="editor" style="margin-left: 195px; margin-bottom: 100px;"></div>
-            <input type="hidden" id="description" name="description" class="button-input" style="border: 2px solid #7b7b7b;">
-          </div>
-
-          <div class="form-group alpha " style="margin-left: 550px; margin-top: -480px;">
+          <div class="form-group alpha " style="margin-left: 550px; margin-top: -147px;">
             <input type="number" id="price" name="price" class="form-control button-input" step="100" style="border: 2px solid #7b7b7b;" required min="100" placeholder="Enter Price">
           </div>
 
-          <div class="form-group alpha" style="margin-left: 552px; margin-top: -67px;">
+          <div class="form-group alpha" style="margin-left: 552px; margin-top: -80px;">
             <input type="number" id="quantity" name="quantity" class="form-control button-input" style="border: 2px solid #7b7b7b;" required min="1" placeholder="Enter quantity">
           </div>
 
@@ -398,18 +393,21 @@
           </div>
           
 
-          <div class="form-check alpha" style="margin-left: 20px; width: 100px; background-color: transparent;">
-            <input type="checkbox" id="sale" name="sale" class="form-check-input">
-            <label class="form-check-label" for="sale">Sale:</label>
+          <div class="form-check alpha " style="margin-left: 207px; background-color: transparent; margin-top: -80px;">
+            <button id="sale-button" class="btn btn-primary button-input" type="button" style="width: 70px; height: auto;">Sale</button>
           </div>
-
-          <div class="form-group alpha" id="sale-value-container" style="display: none;">
-            <label for="saleval">Sale Value (%):</label>
-            <input type="number" id="saleval" name="saleval" class="form-control" min="1" max="99" step="1">
+          
+          <div class="form-group alpha" id="sale-value-container" style="display: none; margin-left: 300px; margin-top: -60px;">
+            <input type="number" id="saleval" name="saleval" class="form-control" style="width: 100px; height: auto;" min="1" max="99" step="1">
           </div>
+          
 
           <button type="submit" class="btn btn-success button-input" style=" margin-top: 50px; margin-left: 200px;">Add Product</button>
         </form>
+        <div class="form-group" style="margin-top: 70px;">
+          <div id="editor" style="margin-left: 195px; margin-bottom: 100px; "></div>
+          <input type="hidden" id="description" name="description" class="button-input" style="border: 2px solid #7b7b7b;" >
+        </div>
       </div>
 
       
@@ -427,51 +425,32 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
+    
     <script>
+      // Lấy các phần tử từ DOM
+      const nameInput = document.getElementById('name');
+      const descriptionInput = document.getElementById('description');
+      const priceInput = document.getElementById('price');
+    
       const previewName = document.getElementById('preview-name');
       const previewDescription = document.getElementById('preview-description');
       const previewPrice = document.getElementById('preview-price');
-      const previewQuantity = document.getElementById('preview-quantity');
-      const previewSale = document.getElementById('preview-sale');
-      const previewImage = document.getElementById('preview-image');
-      const saleCheckbox = document.getElementById('sale');
-      const saleValueContainer = document.getElementById('sale-value-container');
-      const saleValueInput = document.getElementById('saleval');
-      const form = document.getElementById('product-form');
     
-      saleCheckbox.addEventListener('change', function () {
-        if (this.checked) {
-          saleValueContainer.style.display = 'block';
-          saleValueInput.required = true;
-          previewSale.style.display = 'block';
-        } else {
-          saleValueContainer.style.display = 'none';
-          saleValueInput.required = false;
-          previewSale.style.display = 'none';
-        }
-      });
+      // Hàm để cập nhật nội dung preview khi người dùng nhập dữ liệu
+      function updatePreview() {
+        previewName.textContent = nameInput.value || 'Name'; // Cập nhật tên sản phẩm
+        previewDescription.textContent = descriptionInput.value || 'Description'; // Cập nhật mô tả sản phẩm
+        previewPrice.textContent = priceInput.value ? `${priceInput.value} VND` : '0 VND'; // Cập nhật giá sản phẩm
+      }
     
-      form.addEventListener('input', function () {
-        previewName.textContent = document.getElementById('name').value || 'Name';
-        previewDescription.innerHTML = document.getElementById('description').value || 'Description';
-        previewPrice.textContent = 'Price: ' + (document.getElementById('price').value || 0) + ' VND';
-        previewQuantity.textContent = 'Quantity: ' + (document.getElementById('quantity').value || 0);
-        
-        if (saleCheckbox.checked) {
-          previewSale.textContent = 'Sale Value: ' + (saleValueInput.value || 0) + '%';
-        }
-      });
+      // Lắng nghe sự kiện nhập liệu trên các ô nhập
+      nameInput.addEventListener('input', updatePreview);
+      descriptionInput.addEventListener('input', updatePreview);
+      priceInput.addEventListener('input', updatePreview);
+    </script>
     
-      form.addEventListener('change', function (e) {
-        if (e.target.id === 'image') {
-          const file = e.target.files[0];
-          const reader = new FileReader();
-          reader.onload = function (event) {
-            previewImage.src = event.target.result;
-          };
-          reader.readAsDataURL(file);
-        }
-      });
+    
+
     </script>
     <script>
       const toggleButton = document.getElementById('toggle-dark-mode');
