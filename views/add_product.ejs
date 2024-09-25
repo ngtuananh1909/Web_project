@@ -210,6 +210,17 @@
         background-color: #0c0c0c;
         transition: background-color 0.3s ease, color 0.3s ease;
       }
+      .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%; /* Đặt menu xuất hiện ngay dưới avatar */
+        left: 0;
+        z-index: 1000;
+      }
+      .nav-link.dropdown-toggle:hover + .dropdown-menu,
+      .dropdown-menu:hover {
+        display: block;
+      }
 
       .dropdown-item{
         color: rgb(0, 0, 0);

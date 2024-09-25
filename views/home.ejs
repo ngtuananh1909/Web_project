@@ -276,6 +276,63 @@
         background-color: rgb(41, 41, 41);
         color: #ffffff;
       }
+      #chat-header {
+          height: 65px;
+          color: #000;
+          font-size: 30px;
+          border-radius: 8px;
+      }
+      .dark-mode #chat-body {
+          width: 500px; /* Chiều rộng */
+          height: 460px; /* Chiều cao */
+          background-color: rgb(50, 50, 50);
+          border-radius: 8px;
+          box-shadow: 0px 0px 10px rgba(253, 253, 253, 0.2);
+          position: fixed;
+          top: 48%;
+          left: 73%;
+          transform: scale(0); /* Đặt thu nhỏ ban đầu */
+          transition: transform 0.3s ease, bottom 0.3s ease; /* Hiệu ứng chuyển đổi */
+          overflow: hidden;
+          z-index: 1001; /* Đảm bảo ô chat nằm trên các phần tử khác */
+          display: none; /* Ẩn ô chat ban đầu */
+          color: white;
+      }
+      #chat-body {
+          width: 500px; /* Chiều rộng */
+          height: 460px; /* Chiều cao */
+          background-color: white;
+          border-radius: 8px;
+          box-shadow: 0px 0px 10px rgba(120, 119, 119, 0.2);
+          position: fixed;
+          top: 48%;
+          left: 73%;
+          transform: scale(0); /* Đặt thu nhỏ ban đầu */
+          transition: transform 0.3s ease, bottom 0.3s ease; /* Hiệu ứng chuyển đổi */
+          overflow: hidden;
+          z-index: 1001; /* Đảm bảo ô chat nằm trên các phần tử khác */
+          display: none; /* Ẩn ô chat ban đầu */
+      }
+
+      #chat-body.active {
+          display: block; /* Hiện ô chat */
+          transform: scale(1); /* Phóng to */
+          bottom: 10px; /* Điều chỉnh vị trí khi phóng to */
+      }
+
+      #close-chat{
+        font-size: 30px;
+      }
+      .message {
+          background-color: #f1f1f1; /* Màu nền của tin nhắn */
+          border-radius: 5px; /* Bo góc */
+          padding: 5px; /* Khoảng cách bên trong */
+          margin: 5px 0; /* Khoảng cách giữa các ô tin nhắn */
+      }
+
+
+
+
 
 
     </style>
@@ -542,20 +599,10 @@
         </footer>
       </div>
       
-      <div style="position: fixed; bottom: 0; right: 0; width: 300px; z-index: 1000; border: 1px solid #ccc; background-color: white; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
-        <div id="chat-header" style="background-color: #007bff; color: white; padding: 10px; cursor: pointer;">
-          Chat
-        </div>
-        <div id="chat-body" style="display: none; padding: 10px;">
-          <ul id="messages"></ul>
-          <span id="notifyUser"></span>
-          <form id="form" action="" onsubmit="return submitfunction();">
-            <input type="hidden" id="user" value="" />
-            <input id="m" autocomplete="off" onkeyup="notifyTyping();" placeholder="Type your message here.." style="width: 100%; padding: 5px;" />
-            <input type="submit" id="button" value="Send" style="width: 100%; margin-top: 5px;" />
-          </form>
-        </div>
-      </div>
+      
+    
+    
+    
 
     </main>
     <div
@@ -623,6 +670,32 @@
           localStorage.setItem('darkMode', 'disabled');
         }
       });
+      document.getElementById('chat-header').onclick = function() {
+          const chatBody = document.getElementById('chat-body');
+          const chatHeader = document.getElementById('chat-header');
+
+          chatHeader.style.display = 'none'; // Ẩn nút Chat
+          chatBody.style.display = 'block'; // Hiện ô chat
+
+          setTimeout(() => {
+              chatBody.classList.add('active'); // Hiện ô chat với hiệu ứng phóng to
+          }, 10); // Đảm bảo transition diễn ra
+      }
+
+      // Đóng ô chat
+      document.getElementById('close-chat').onclick = function() {
+          const chatBody = document.getElementById('chat-body');
+          const chatHeader = document.getElementById('chat-header');
+
+          chatBody.classList.remove('active'); // Thu nhỏ ô chat
+          setTimeout(() => {
+              chatBody.style.display = 'none'; // Ẩn ô chat
+              chatHeader.style.display = 'block'; // Hiện lại nút Chat
+          }, 300); // Thời gian thu nhỏ
+      }
+
+
+
     </script>
         
     <script>
@@ -670,6 +743,7 @@
         });
     });
   </script>
+  
 
   </body>
 </html>
