@@ -40,7 +40,10 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 };
-
+app.locals.formatCurrency = function(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  };
+  
 app.use(cors(corsOptions));
 
 app.use(bodyParser.json());

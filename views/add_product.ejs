@@ -53,7 +53,7 @@
 
     .btn-primary, .btn-danger, .btn-success {
       height: 60px;
-      width: 100%;
+      width: 70%;
       transition: transform 0.3s ease;
     }
 
@@ -208,13 +208,28 @@
       }
       .dark-mode .dropdown-menu{
         background-color: #0c0c0c;
-        transition: background-color 0.3s ease, color 0.3s ease;
+        transition: background-color 0.5s ease, color 0.5s ease;
       }
 
       .dropdown-item{
         color: rgb(0, 0, 0);
         text-decoration: none;
         transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      /* Ẩn menu mặc định */
+      .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%; /* Đặt menu xuất hiện ngay dưới avatar */
+        left: 0;
+        z-index: 1000;
+      }
+
+      /* Hiển thị menu khi di chuột vào avatar */
+      .nav-link.dropdown-toggle:hover + .dropdown-menu,
+      .dropdown-menu:hover {
+        display: block;
       }
       .dropdown-menu{
         color: white;
@@ -255,24 +270,26 @@
       }
       .button-input{
         background-color: #d0f9bc;
+        color: #000;
       }
       .dark-mode .button-input{
         background-color: #676767;
+        color: white;
       }
 
       #editor {
         height: auto; /* Thay đổi chiều cao */
         width: 70%; /* Thay đổi chiều rộng */
-    }
+      }
 
   </style>
 </head>
   <body>
     <header class="header-design" >
       <div class="container-fluid py-3" >
-        <div class=" d-flex justify-content-between align-items-center" style="margin-right: 110px;">
+        <div class="container d-flex justify-content-between align-items-center" style="margin-left: 476px;">
           <h1 class="h4 mb-0">
-            <a href="/" class="text-decoration-none" style="margin-left: 293px;" ><strong>E-Shop</strong></a>
+            <a href="/" class="text-decoration-none" style="margin-left: -197px;"><strong>E-Shop</strong></a>
           </h1>
           <nav class="nav">
             <ul class="nav">
@@ -307,10 +324,15 @@
                   <img src="/img/add.jpg" alt="" class="add-icon">
                 </a>
               </li>
+              <li class="nav-item"></li>
+                <a class="nav-link nhantin" href="/message/:id">
+                  <img src="/img/mesage.png" alt="" class="add-icon">
+                </a>
+              </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                   <% if (user.avatar) { %>
-                  <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
+                  <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
                   <% } else { %>
                   <img src="./img/def.jpg" class="avatar me-2" alt="" />
                   <% } %>
@@ -334,7 +356,7 @@
         </div>
       </div>
     </header>
-    <div class="custom table" style="margin-top: 60px;">
+    <div class="custom table">
       <div class="preview" style="margin-left: 10px;">
         <!-- Thêm vào phần preview -->
         <div class="cropper-container" style="display: none;">
@@ -356,34 +378,30 @@
           </div>
         </div>
       </div>
-      <div class="form-container" style="margin-left: 50px;">
+      <div class="form-container" style="margin-left: 75px;">
         <h1 style="margin-left: 350px;">Add New Product</h1>
         <form id="product-form" action="/product/auth/add" method="POST" enctype="multipart/form-data">
-          <div class="form-group">
-            <label for="name alpha">Product Name:</label>
-            <input type="text" id="name" name="name" class="form-control button-input" style="border: 2px solid #7b7b7b; margin-left: 400px;" required placeholder="Enter your product name">
+          <div class="form-group" style="margin-left: 200px; margin-top: 30px;">
+            <input type="text" id="name" name="name" class="form-control button-input" style="border: 2px solid #7b7b7b; margin-left: 4px; margin-top: -10px;" required placeholder="Product name">
           </div>
 
           <div class="form-group">
-            <label for="description">Mô tả:</label>
-            <div id="editor" style="margin-left: 220px;"></div>
+            <div id="editor" style="margin-left: 195px; margin-bottom: 100px;"></div>
             <input type="hidden" id="description" name="description" class="button-input" style="border: 2px solid #7b7b7b;">
           </div>
 
-          <div class="form-group alpha">
-            <label for="price">Price:</label>
+          <div class="form-group alpha " style="margin-left: 550px; margin-top: -480px;">
             <input type="number" id="price" name="price" class="form-control button-input" step="100" style="border: 2px solid #7b7b7b;" required min="100" placeholder="Enter Price">
           </div>
 
-          <div class="form-group alpha">
-            <label for="quantity">Quantity:</label>
+          <div class="form-group alpha" style="margin-left: 552px; margin-top: -67px;">
             <input type="number" id="quantity" name="quantity" class="form-control button-input" style="border: 2px solid #7b7b7b;" required min="1" placeholder="Enter quantity">
           </div>
 
-          <div class="form-group alpha">
-            <label for="image">Select image:</label>
-            <input type="file" id="image" name="image" class="form-control-file" accept="image/*" required>
+          <div class="form-group alpha" style="margin-top: -147px; margin-left: 206px; width: 300px;">
+            <input type="file" id="image" name="image" class="form-control button-input " style="height: 50px;" accept="image/*" required>
           </div>
+          
 
           <div class="form-check alpha" style="margin-left: 20px; width: 100px; background-color: transparent;">
             <input type="checkbox" id="sale" name="sale" class="form-check-input">
@@ -395,12 +413,12 @@
             <input type="number" id="saleval" name="saleval" class="form-control" min="1" max="99" step="1">
           </div>
 
-          <button type="submit" class="btn btn-success " style="background-color: rgb(37, 255, 37);">Add Product</button>
+          <button type="submit" class="btn btn-success button-input" style=" margin-top: 50px; margin-left: 200px;">Add Product</button>
         </form>
       </div>
 
       
-      <div class="form-container " style="margin-left: 50px;">
+      <div class="form-container " style="margin-left: -10px;">
         <h1>History</h1>
           <div class="history-group ">
               <name="history" class="form-control button-input" rows="4" required></textarea>
