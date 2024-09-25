@@ -278,6 +278,7 @@
       }
 
 
+      
     </style>
   </head>
 
@@ -455,8 +456,8 @@
                     <% if (product.sale) { %>
                       <center><span class="badge bg-danger ms-2" style="margin-bottom: 10px;" >-<%= product.saleval %>%</span></center>
                       <p class="card-text" style="margin-bottom:4px ;">
-                        Giá: <%= formatCurrency((product.price - (product.price * product.saleval / 100)).toFixed(0)) %> VNĐ
-                        <del> <%= product.price %> </del>
+                        Giá: <%= formatCurrency((product.price - (product.price * product.saleval / 100).toFixed(0))) %> VNĐ
+                        <del> <%= formatCurrency(product.price) %> </del>
                       </p>
                       <div style="padding-left: 1px; padding-bottom: 10px">
                         <div class ="creator-day" style ="margin-top: -0px;">
@@ -547,20 +548,21 @@
         </footer>
       </div>
       
-      <div style="position: fixed; bottom: 0; right: 0; width: 300px; z-index: 1000; border: 1px solid #ccc; background-color: white; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
-        <div id="chat-header" style="background-color: #007bff; color: white; padding: 10px; cursor: pointer;">
-          Chat với chúng tôi
+      <div id="chat-header" style="position: fixed; bottom: 0; right: 0; width: 150px; z-index: 1000; border: 1px solid #ccc; background-color: white; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
+        <div id="chat-tab" style="background-color: #007bff; color: white; padding: 10px; cursor: pointer;">
+            Chat
         </div>
         <div id="chat-body" style="display: none; padding: 10px;">
-          <ul id="messages"></ul>
-          <span id="notifyUser"></span>
-          <form id="form" action="" onsubmit="return submitfunction();">
-            <input type="hidden" id="user" value="" />
-            <input id="m" autocomplete="off" onkeyup="notifyTyping();" placeholder="Type your message here.." style="width: 100%; padding: 5px;" />
-            <input type="submit" id="button" value="Send" style="width: 100%; margin-top: 5px;" />
-          </form>
+            <ul id="messages" style="list-style-type: none; margin: 0; padding: 0;"></ul>
+            <span id="notifyUser" style="display: block;   margin-bottom: 10px;"></span>
+            <form id="form" action="" onsubmit="return submitfunction();" style="margin-top: 10px;">
+                <input type="hidden" id="user" value="" />
+                <input id="m" autocomplete="off" onkeyup="notifyTyping();" placeholder="Type your message here.." style="width: 100%; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" />
+                <input type="submit" id="button" value="Send" style="width: 100%; margin-top: 5px; padding: 5px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;" />
+            </form>
         </div>
-      </div>
+    </div>
+    
 
     </main>
     <div
@@ -598,83 +600,47 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
     <script>
-      window.onload = function () {
-        const img = document.querySelector('body');
-        const colorThief = new ColorThief();
-        const imgElement = new Image();
-        imgElement.src = img.style.backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/i, "$1");
-        
-        imgElement.onload = function() {
-          const dominantColor = colorThief.getColor(imgElement);
-          document.querySelector('header').style.backgroundColor = `rgb(${dominantColor})`;
-        };
+      const formatCurrency = (price) => {
+        return parseInt(price).toLocaleString('vi-VN') + ' VNĐ';
       };
-    </script>
-    <script>
-      const toggleButton = document.getElementById('toggle-dark-mode');
-      const body = document.body;
-    
-      // Kiểm tra nếu chế độ tối đã được kích hoạt trước đó
-      if (localStorage.getItem('darkMode') === 'enabled') {
-        body.classList.add('dark-mode');
+
+      document.getElementById('chat-tab').addEventListener('click', function() {
+      var chatHeader = document.getElementById('chat-header');
+      var chatBody = document.getElementById('chat-body');
+
+      if (chatBody.style.display === 'none') {
+          chatBody.style.display = 'block';
+          chatHeader.style.width = '450px'; 
+          chatHeader.style.height = '450px'; 
+      } else {
+          chatHeader.style.width = '150px'; 
+          chatHeader.style.height = '50px'; // Quay lại chiều cao ban đầu
+          setTimeout(function() {
+              chatBody.style.display = 'none'; // Ẩn chat body sau khi animation
+          }, 300); // Thời gian tương ứng với thời gian animation
       }
-    
-      toggleButton.addEventListener('click', () => {
-        body.classList.toggle('dark-mode');
-        if (body.classList.contains('dark-mode')) {
-          localStorage.setItem('darkMode', 'enabled');
-
-        } else {
-          localStorage.setItem('darkMode', 'disabled');
-        }
-      });
-    </script>
-        
-    <script>
-      $(document).on('click', '.addToCartBtn', function() {
-        const productId = $(this).data('product-id');
-        $('#addToCartModal').data('product-id', productId).modal('show');
-    });
+  });
 
 
-    $('.confirmAddToCartBtn').on('click', function() {
-        const productId = $('#addToCartModal').data('product-id');
-        $.ajax({
-            type: 'POST',
-            url: '/auth/add-to-cart',
-            data: { productId: productId },
-            success: function(response) {
-                alert('Sản phẩm đã được thêm vào giỏ hàng!');
-                $('#addToCartModal').modal('hide');
-            },
-            error: function() {
-                alert('Đã có lỗi xảy ra, vui lòng thử lại!');
-            }
-        });
-    });
+    function notifyTyping() {
+      document.getElementById('notifyUser').innerText = "Đang nhập...";
+    }
 
+    function submitfunction() {
+      var message = document.getElementById('m').value;
+      var messagesList = document.getElementById('messages');
+      var newMessage = document.createElement('li');
+      newMessage.textContent = message;
+      messagesList.appendChild(newMessage);
+      document.getElementById('m').value = "";
+      return false;
+    }
     </script>
     
-    <script>
-      $(document).ready(function() {
-        $('.viewProductBtn').click(function(event) {
-            event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
-
-            const productId = $(this).data('product-id');
-            const score = $(this).data('product-score'); // Điểm số đánh giá
-
-            // Gửi yêu cầu thêm đánh giá
-            $.post('/add-rating', { product_id: productId, score: score }, function(response) {
-                if (response.success) {
-                    // Nếu thêm đánh giá thành công, chuyển đến trang chi tiết sản phẩm
-                    window.location.href = `/product/${productId}`;
-                } else {
-                    alert('Có lỗi xảy ra khi thêm đánh giá. Vui lòng thử lại.');
-                }
-            });
-        });
-    });
-  </script>
-
+    <script src="/darkmode.js"></script>    
+    <script src="/addtocart.js"></script>
+    <script src="/addratings.js"></script>    
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
   </body>
 </html>

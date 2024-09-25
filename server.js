@@ -9,10 +9,8 @@ const cors = require('cors');
 const homeRouter = require('./routes/home.router.js');
 const productRouter = require('./routes/product.router.js');
 const fs = require('fs');
-
 dotenv.config();
 const app = express();
-
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
@@ -53,10 +51,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'))); 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.static('event_function'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
 
 app.use(session({
     secret: 'uit2027goo',

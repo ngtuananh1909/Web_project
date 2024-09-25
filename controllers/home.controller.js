@@ -6,7 +6,6 @@ const path = require('path');
 const { IdGenerator } = require('../event_function/function');
 const {calculateUserSimilarity, getTopRecommendedProducts, findSimilarProducts} = require('../event_function/Filtering')
 const { promisify } = require('util');
-const {findChatById} = require('../event_function/chat')
 const util = require('util');
 const query = util.promisify(db.query).bind(db);
 const unlinkAsync = promisify(fs.unlink);
@@ -23,7 +22,6 @@ exports.home = async (req, res) => {
     const userId = req.session.user ? req.session.user.id : null;
 
     try {
-        // Lấy danh sách sản phẩm
         const products = await new Promise((resolve, reject) => {
             db.query('SELECT * FROM products', (err, results) => {
                 if (err) return reject(err);
@@ -41,7 +39,6 @@ exports.home = async (req, res) => {
         }));
 
         if (userId) {
-            const chat = await findChatById(userId); 
 
             const userRatings = await new Promise((resolve, reject) => {
                 db.query('SELECT * FROM ratings WHERE user_id = ?', [userId], (err, results) => {
@@ -72,15 +69,14 @@ exports.home = async (req, res) => {
                 user: req.session.user,
                 products: formattedProducts,
                 recommendations: uniqueRecommendations,
-                chat 
             });
         }
 
-        res.render('home', { user: req.session.user, products: formattedProducts, recommendations: [], chat: null });
+        res.render('home', { user: req.session.user, products: formattedProducts, recommendations: [] });
 
     } catch (error) {
         console.error('Error:', error);
-        res.render('home', { user: req.session.user, products: [], recommendations: [], chat: null });
+        res.render('home', { user: req.session.user, products: [], recommendations: [] });
     }
 };
 
@@ -145,8 +141,6 @@ exports.cartDisplay = (req, res) => {
                 console.log("error: ", err);
                 return res.status(500).json({ error: 'Server error' });
             }
-
-            // Kiểm tra xem có sản phẩm nào không
             res.render('cart', { user: req.session.user, products: result });
         });
 };
@@ -184,9 +178,6 @@ exports.register = async (req, res) => {
                 }
 
                 try {
-                    const chatId = await IdGenerator(); 
-                    await db.query('INSERT INTO chats SET ?', { id: chatId, user_id: UserId});
-
                     if (req.session) {
                         req.session.user = {
                             id: UserId,
