@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1:3001
--- Thời gian đã tạo: Th9 24, 2024 lúc 12:37 AM
+-- Thời gian đã tạo: Th9 25, 2024 lúc 06:49 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -58,20 +58,6 @@ INSERT INTO `products` (`id`, `name`, `description`, `price`, `quantity`, `image
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `ratings`
---
-
-CREATE TABLE `ratings` (
-  `id` int(11) NOT NULL,
-  `user_id` varchar(20) NOT NULL,
-  `product_id` varchar(50) NOT NULL,
-  `rating` int(11) NOT NULL CHECK (`rating` >= 1 and `rating` <= 5),
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Cấu trúc bảng cho bảng `users`
 --
 
@@ -99,7 +85,8 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `avatar`, `balance`, `re
 ('AFbzX92VFg', 'Giang Trung Kien', 'test3@gmail.com', '$2a$10$XivEbLRNIw3VxtiQSwOzWuazuFqBoZxOKh7MWwco5s8FaX7Dwaley', NULL, 0, 0, NULL, '', 0),
 ('WEsUEBHmJv', 'Trung Kien', 'test4@gmail.com', '$2a$10$kKeYCR6EI1la0g9RpHRv6OMsVEUwiVIuH7Hf5f4vEywN04YJuTiSS', NULL, 0, 0, NULL, '', 0),
 ('iiU3QGItfH', 'Trung Kien2', 'test5@gmail.com', '$2a$10$AVoeJpiGjKVpcymva3bDGeXl6r9XApD.jvV304LNbO0p2Em31Q9Ue', NULL, 0, 0, NULL, '', 0),
-('YfvViHLuSg', 'Minh Quan', 'tests@gmail.com', '$2a$10$Qbieq3M325I1EXvjsEcRcuwpJBe/P/xr5wkArhByJK7p7DJRMPZqS', 0x75706c6f6164732f5966765669484c7553672e6a7067, 0, 0, NULL, '', 0);
+('YfvViHLuSg', 'Minh Quan', 'tests@gmail.com', '$2a$10$Qbieq3M325I1EXvjsEcRcuwpJBe/P/xr5wkArhByJK7p7DJRMPZqS', 0x75706c6f6164732f5966765669484c7553672e6a7067, 0, 0, NULL, '', 0),
+('TfF2cAin7Z', 'Mink Quan', 'testq@gmail.com', '$2a$10$gPKL5h8vVDEoF.ytexJ5rOiV.QqaV2cVPTr/0WGhkugutM5kXNHgO', NULL, 0, 0, NULL, '', 0);
 
 -- --------------------------------------------------------
 
@@ -130,26 +117,10 @@ ALTER TABLE `products`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `ratings`
---
-ALTER TABLE `ratings`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Chỉ mục cho bảng `user_cart`
 --
 ALTER TABLE `user_cart`
   ADD PRIMARY KEY (`user_id`,`product_id`);
-
---
--- AUTO_INCREMENT cho các bảng đã đổ
---
-
---
--- AUTO_INCREMENT cho bảng `ratings`
---
-ALTER TABLE `ratings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
