@@ -322,10 +322,10 @@
                 </a>
               </li>
               <li class="nav-item"></li>
-                <a class="nav-link nhantin" href="/message/:id">
-                  <img src="/img/mesage.png" alt="" class="add-icon">
-                </a>
-              </li>
+                  <a class="nav-link nhantin" href="#">
+                    <img src="/img/add.jpg" alt="" class="add-icon">
+                  </a>
+                </li>>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                   <% if (user.avatar) { %>
@@ -547,6 +547,21 @@
         </footer>
       </div>
       
+      <div style="position: fixed; bottom: 0; right: 0; width: 300px; z-index: 1000; border: 1px solid #ccc; background-color: white; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
+        <div id="chat-header" style="background-color: #007bff; color: white; padding: 10px; cursor: pointer;">
+          Chat với chúng tôi
+        </div>
+        <div id="chat-body" style="display: none; padding: 10px;">
+          <ul id="messages"></ul>
+          <span id="notifyUser"></span>
+          <form id="form" action="" onsubmit="return submitfunction();">
+            <input type="hidden" id="user" value="" />
+            <input id="m" autocomplete="off" onkeyup="notifyTyping();" placeholder="Type your message here.." style="width: 100%; padding: 5px;" />
+            <input type="submit" id="button" value="Send" style="width: 100%; margin-top: 5px;" />
+          </form>
+        </div>
+      </div>
+
     </main>
     <div
       class="modal fade"
@@ -616,7 +631,6 @@
     </script>
         
     <script>
-      // Thêm sự kiện click cho các nút "Thêm vào giỏ"
       $(document).on('click', '.addToCartBtn', function() {
         const productId = $(this).data('product-id');
         $('#addToCartModal').data('product-id', productId).modal('show');
@@ -625,18 +639,15 @@
 
     $('.confirmAddToCartBtn').on('click', function() {
         const productId = $('#addToCartModal').data('product-id');
-        // Gọi hàm thêm vào giỏ hàng (có thể là AJAX để gửi request đến server)
         $.ajax({
             type: 'POST',
             url: '/auth/add-to-cart',
             data: { productId: productId },
             success: function(response) {
-                // Xử lý thành công
                 alert('Sản phẩm đã được thêm vào giỏ hàng!');
                 $('#addToCartModal').modal('hide');
             },
             error: function() {
-                // Xử lý lỗi
                 alert('Đã có lỗi xảy ra, vui lòng thử lại!');
             }
         });

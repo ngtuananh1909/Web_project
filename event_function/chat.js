@@ -1,14 +1,18 @@
-const db = require('../connect/database')
+const db = require('../connect/database');
 
-const findChatById = (id) => {
+const findChatById = (chatId) => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT * FROM chats WHERE id = ?', [id], (err, results) => {
+        db.query('SELECT * FROM chats WHERE id = ?', [chatId], (err, results) => {
             if (err) {
+                console.error(`Error fetching chat with ID ${chatId}:`, err);
                 return reject(err);
             }
-            resolve(results[0]); // Trả về cuộc trò chuyện đầu tiên (nếu có)
+            if (results.length === 0) {
+                return resolve(null); 
+            }
+            resolve(results[0]); 
         });
     });
 };
 
-module.exports = {findChatById}
+module.exports = { findChatById };

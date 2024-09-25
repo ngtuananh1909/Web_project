@@ -10,9 +10,11 @@ const homeRouter = require('./routes/home.router.js');
 const productRouter = require('./routes/product.router.js');
 const fs = require('fs');
 
-
 dotenv.config();
 const app = express();
+
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
 app.use(fileUpload({
     createParentPath: true
@@ -75,6 +77,16 @@ app.use((req, res, next) => {
     res.setHeader('Content-Security-Policy', "img-src 'self' http://localhost:3000 data:;");
     next();
 });
+
+io.on('connection', function(socket){
+    socket.on('chatMessage', function(from, msg){
+      io.emit('chatMessage', from, msg);
+    });
+    socket.on('notifyUser', function(user){
+      io.emit('notifyUser', user);
+    });
+  });
+
 
 app.use('/', homeRouter);
 app.use('/product', productRouter);

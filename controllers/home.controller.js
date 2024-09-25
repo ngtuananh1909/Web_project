@@ -9,7 +9,6 @@ const { promisify } = require('util');
 const {findChatById} = require('../event_function/chat')
 const util = require('util');
 const query = util.promisify(db.query).bind(db);
-
 const unlinkAsync = promisify(fs.unlink);
 
 exports.loginDisplay = (req, res) => {
@@ -20,63 +19,71 @@ exports.registerDisplay = (req, res) => {
     res.render('register');
 };
 
-exports.home = (req, res) => {
+exports.home = async (req, res) => {
     const userId = req.session.user ? req.session.user.id : null;
 
-    db.query('SELECT * FROM products', (err, results) => {
-        if (err) {
-            console.error('Error fetching products:', err);
-            return res.render('home', { user: req.session.user, products: [] });
-        }
-
-        const formattedProducts = results.map(product => {
-            return {
-                ...product,
-                formatted_date: new Date(product.created_at).toLocaleDateString('vi-VN', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit'
-                })
-            };
+    try {
+        // Lấy danh sách sản phẩm
+        const products = await new Promise((resolve, reject) => {
+            db.query('SELECT * FROM products', (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
         });
 
+        const formattedProducts = products.map(product => ({
+            ...product,
+            formatted_date: new Date(product.created_at).toLocaleDateString('vi-VN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            })
+        }));
+
         if (userId) {
-            db.query('SELECT * FROM ratings WHERE user_id = ?', [userId], async (err, userRatings) => {
-                if (err) {
-                    console.error('Error fetching user ratings:', err);
-                    return res.render('home', { user: req.session.user, products: formattedProducts, recommendations: [] });
-                }
-        
-                db.query('SELECT * FROM ratings', async (err, allRatings) => {
-                    if (err) {
-                        console.error('Error fetching all ratings:', err);
-                        return res.render('home', { user: req.session.user, products: formattedProducts, recommendations: [] });
-                    }
-        
-                    const userSimilarities = calculateUserSimilarity(userRatings, allRatings);
-                    const collaborativeRecommendations = getTopRecommendedProducts(userId, userSimilarities, allRatings);
-        
-                    const favoriteProductIds = userRatings.map(r => r.product_id);
-                    const contentRecommendations = await findSimilarProducts(favoriteProductIds);
-        
-                    const allRecommendations = [...collaborativeRecommendations, ...contentRecommendations];
-        
-                    const uniqueRecommendations = Array.from(new Set(allRecommendations.map(a => a.productId)))
-                        .map(id => allRecommendations.find(a => a.productId === id));
-        
-                    res.render('home', {
-                        user: req.session.user,
-                        products: formattedProducts,
-                        recommendations: uniqueRecommendations
-                    });
+            const chat = await findChatById(userId); 
+
+            const userRatings = await new Promise((resolve, reject) => {
+                db.query('SELECT * FROM ratings WHERE user_id = ?', [userId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
                 });
             });
-        } else {
-            res.render('home', { user: req.session.user, products: formattedProducts, recommendations: [] });
+
+            const allRatings = await new Promise((resolve, reject) => {
+                db.query('SELECT * FROM ratings', (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
+
+            const userSimilarities = calculateUserSimilarity(userRatings, allRatings);
+            const collaborativeRecommendations = getTopRecommendedProducts(userId, userSimilarities, allRatings);
+
+            const favoriteProductIds = userRatings.map(r => r.product_id);
+
+            const contentRecommendations = await findSimilarProducts(favoriteProductIds);
+
+            const allRecommendations = [...collaborativeRecommendations, ...contentRecommendations];
+            const uniqueRecommendations = Array.from(new Set(allRecommendations.map(a => a.productId)))
+                .map(id => allRecommendations.find(a => a.productId === id));
+
+            return res.render('home', {
+                user: req.session.user,
+                products: formattedProducts,
+                recommendations: uniqueRecommendations,
+                chat 
+            });
         }
-        
-    });
+
+        res.render('home', { user: req.session.user, products: formattedProducts, recommendations: [], chat: null });
+
+    } catch (error) {
+        console.error('Error:', error);
+        res.render('home', { user: req.session.user, products: [], recommendations: [], chat: null });
+    }
 };
+
 
 exports.logout = (req, res) => {
     req.session.destroy(err => {
@@ -129,7 +136,6 @@ exports.cartDisplay = (req, res) => {
     
     const userId = req.session.user.id;
 
-    // Sử dụng JOIN để kết hợp bảng user_cart và products
     db.query(`
         SELECT p.* 
         FROM user_cart uc 
@@ -171,22 +177,31 @@ exports.register = async (req, res) => {
             const hashpassword = await bcrypt.hash(password, 10);
             const UserId = await IdGenerator();
 
-            db.query('INSERT INTO users SET ?', { id: UserId, name, email, password: hashpassword, balance: 0, reputation: 0 }, (err) => {
+            db.query('INSERT INTO users SET ?', { id: UserId, name, email, password: hashpassword, balance: 0, reputation: 0 }, async (err) => {
                 if (err) {
                     console.log(error);
                     return res.render('register', { message: 'Server error' });
                 }
-                if (req.session) {
-                    req.session.user = {
-                        id: UserId,
-                        name,
-                        email,
-                        password: hashpassword,
-                    };
-                    res.redirect('/');
-                } else {
-                    console.log('Session is not initialized.');
-                    res.render('login', { message: 'Session error' });
+
+                try {
+                    const chatId = await IdGenerator(); 
+                    await db.query('INSERT INTO chats SET ?', { id: chatId, user_id: UserId});
+
+                    if (req.session) {
+                        req.session.user = {
+                            id: UserId,
+                            name,
+                            email,
+                            password: hashpassword,
+                        };
+                        res.redirect('/');
+                    } else {
+                        console.log('Session is not initialized.');
+                        res.render('login', { message: 'Session error' });
+                    }
+                } catch (err) {
+                    console.log('Error creating chat for user:', err);
+                    res.render('register', { message: 'Error while creating chat' });
                 }
             });
         });
@@ -195,6 +210,7 @@ exports.register = async (req, res) => {
         res.render('register', { message: 'Server error' });
     }
 };
+
 
 exports.login = async (req, res) => {
     const { email, password } = req.body;
@@ -334,21 +350,18 @@ exports.AddToCart = async (req, res) => {
     try {
         const { productId } = req.body;
 
-        // Kiểm tra xem người dùng đã đăng nhập chưa
         if (!req.session.user) {
             return res.status(401).send('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
         }
 
         const userId = req.session.user.id;
 
-        // Kiểm tra sản phẩm đã có trong giỏ hàng chưa
         const results = await query('SELECT * FROM user_cart WHERE user_id = ? AND product_id = ?', [userId, productId]);
 
         if (results.length > 0) {
             return res.status(400).send('Sản phẩm đã có trong giỏ hàng của bạn');
         }
 
-        // Thêm sản phẩm vào giỏ hàng
         await query('INSERT INTO user_cart SET ?', { user_id: userId, product_id: productId });
         return res.status(200).send('Sản phẩm đã được thêm vào giỏ hàng');
         
@@ -467,34 +480,3 @@ exports.addRating = (req, res) => {
     });
 };
 
-exports.MessageDisplay = async (req, res) => {
-    const chatId = req.params.id; // ID cuộc trò chuyện
-    const user = req.session.user; // Thông tin người dùng
-
-    if (!user) {
-        return res.redirect('/login');
-    }
-
-    try {
-        const chat = await findChatById(chatId); // Lấy thông tin cuộc trò chuyện
-        if (!chat) {
-            return res.render('message', { user, chat: null, message: 'Cuộc trò chuyện không tìm thấy' });
-        }
-        res.render('message', { user, chat });
-    } catch (error) {
-        console.error('Error fetching chat:', error);
-        res.render('message', { user, chat: null, message: 'Lỗi khi lấy cuộc trò chuyện' });
-    }
-};
-
-exports.SendMessage = (req, res) => {
-    const { text, chatId } = req.body;
-
-    const sql = 'INSERT INTO messages (chat_id, sender_id, text) VALUES (?, ?, ?)';
-    db.query(sql, [chatId, req.session.user.id, text], (err, result) => {
-        if (err) {
-            return res.json({ success: false, error: err.message });
-        }
-        res.json({ success: true });
-    });
-}
