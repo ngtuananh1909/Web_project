@@ -8,9 +8,9 @@ const findChatById = (chatId) => {
                 return reject(err);
             }
             if (results.length === 0) {
-                return resolve(null); // Không tìm thấy cuộc trò chuyện
+                return resolve(null); 
             }
-            resolve(results[0]); // Trả về cuộc trò chuyện đầu tiên tìm thấy
+            resolve(results[0]); 
         });
     });
 };

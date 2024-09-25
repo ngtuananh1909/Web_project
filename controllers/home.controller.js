@@ -9,7 +9,6 @@ const { promisify } = require('util');
 const {findChatById} = require('../event_function/chat')
 const util = require('util');
 const query = util.promisify(db.query).bind(db);
-
 const unlinkAsync = promisify(fs.unlink);
 
 exports.loginDisplay = (req, res) => {
@@ -351,21 +350,18 @@ exports.AddToCart = async (req, res) => {
     try {
         const { productId } = req.body;
 
-        // Kiểm tra xem người dùng đã đăng nhập chưa
         if (!req.session.user) {
             return res.status(401).send('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
         }
 
         const userId = req.session.user.id;
 
-        // Kiểm tra sản phẩm đã có trong giỏ hàng chưa
         const results = await query('SELECT * FROM user_cart WHERE user_id = ? AND product_id = ?', [userId, productId]);
 
         if (results.length > 0) {
             return res.status(400).send('Sản phẩm đã có trong giỏ hàng của bạn');
         }
 
-        // Thêm sản phẩm vào giỏ hàng
         await query('INSERT INTO user_cart SET ?', { user_id: userId, product_id: productId });
         return res.status(200).send('Sản phẩm đã được thêm vào giỏ hàng');
         
@@ -483,57 +479,4 @@ exports.addRating = (req, res) => {
         res.json({ success: true });
     });
 };
-
-exports.MessageDisplay = async (req, res) => {
-    const chatId = req.params.id; 
-    const user = req.session.user;
-
-    if (!user) {
-        return res.redirect('/login');
-    }
-
-    try {
-        const chat = await findChatById(chatId); 
-        if (!chat) {
-            return res.render('message', { user, chat: null, message: 'Cuộc trò chuyện không tìm thấy' });
-        }
-        res.render('message', { user, chat });
-    } catch (error) {
-        console.error('Error fetching chat:', error);
-        res.render('message', { user, chat: null, message: 'Lỗi khi lấy cuộc trò chuyện' });
-    }
-};
-
-exports.SendMessage = (req, res) => {
-    if (!req.session.user) {
-        return res.render('login', {
-            message: 'You have to login/register to view your message',
-            redirect: true
-        });
-    }
-
-    const { text, chatId } = req.body;
-
-    // Kiểm tra dữ liệu đầu vào
-    if (!text || !chatId) {
-        return res.status(400).json({ success: false, error: 'Text and Chat ID are required' });
-    }
-
-    const sql = 'INSERT INTO messages (chat_id, sender_id, text) VALUES (?, ?, ?)';
-    db.query(sql, [chatId, req.session.user.id, text], (err, result) => {
-        if (err) {
-            return res.status(500).json({ success: false, error: err.message });
-        }
-        
-        const newMessage = {
-            id: result.insertId,
-            chatId: chatId,
-            senderId: req.session.user.id,
-            text: text,
-            timestamp: new Date() 
-        };
-    
-        res.json({ success: true, message: newMessage });
-    });
-}
 
