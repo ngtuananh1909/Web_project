@@ -377,19 +377,19 @@
         <h1 style="margin-left: 370px;">Add New Product</h1>
         <form id="product-form" action="/product/auth/add" method="POST" enctype="multipart/form-data">
           <div class="form-group" style="margin-left: 200px; margin-top: 30px;">
-            <input type="text" id="name" name="name" class="form-control button-input" style="border: 2px solid #7b7b7b; margin-left: 4px; margin-top: -10px;" required placeholder="Product name">
+            <input type="text" id="product-name" name="name" class="form-control button-input" style="border: 2px solid #7b7b7b; margin-left: 4px; margin-top: -10px;" required placeholder="Product name">
           </div>
 
           <div class="form-group alpha " style="margin-left: 550px; margin-top: -147px;">
-            <input type="number" id="price" name="price" class="form-control button-input" step="100" style="border: 2px solid #7b7b7b;" required min="100" placeholder="Enter Price">
+            <input type="number" id="product-price" name="price" class="form-control button-input" step="100" style="border: 2px solid #7b7b7b;" required min="100" placeholder="Enter Price">
           </div>
 
           <div class="form-group alpha" style="margin-left: 552px; margin-top: -80px;">
-            <input type="number" id="quantity" name="quantity" class="form-control button-input" style="border: 2px solid #7b7b7b;" required min="1" placeholder="Enter quantity">
+            <input type="number" id="product-quantity" name="quantity" class="form-control button-input" style="border: 2px solid #7b7b7b;" required min="1" placeholder="Enter quantity">
           </div>
 
           <div class="form-group alpha" style="margin-top: -147px; margin-left: 206px; width: 300px;">
-            <input type="file" id="image" name="image" class="form-control button-input " style="height: 50px;" accept="image/*" required>
+            <input type="file" id="product-image" name="image" class="form-control button-input " style="height: 50px;" accept="image/*" required>
           </div>
           
 
@@ -398,16 +398,18 @@
           </div>
           
           <div class="form-group alpha" id="sale-value-container" style="display: none; margin-left: 300px; margin-top: -60px;">
-            <input type="number" id="saleval" name="saleval" class="form-control" style="width: 100px; height: auto;" min="1" max="99" step="1">
+            <input type="number" id="saleval" name="saleval" class="form-control" style="width: auto; height: auto;" min="1" max="99" step="1">
           </div>
           
 
-          <button type="submit" class="btn btn-success button-input" style=" margin-top: 50px; margin-left: 200px;">Add Product</button>
+          <button type="submit" class="btn btn-success button-input" style=" margin-top: 50px; margin-left: 558px;margin-top: -60px; height: 60px; width: 300px;">Add Product</button>
+
+          <div class="form-group" style="margin-top: 70px;">
+            <div id="editor" style="margin-left: 195px; margin-bottom: 100px; "></div>
+            <input type="hidden" id="product-description" name="description" class="button-input" style="border: 2px solid #7b7b7b;" >
+          </div>
         </form>
-        <div class="form-group" style="margin-top: 70px;">
-          <div id="editor" style="margin-left: 195px; margin-bottom: 100px; "></div>
-          <input type="hidden" id="description" name="description" class="button-input" style="border: 2px solid #7b7b7b;" >
-        </div>
+        
       </div>
 
       
@@ -425,28 +427,56 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
-    
     <script>
-      // Lấy các phần tử từ DOM
-      const nameInput = document.getElementById('name');
-      const descriptionInput = document.getElementById('description');
-      const priceInput = document.getElementById('price');
+      document.getElementById("sale-button").addEventListener("click", function() {
+        var saleValueContainer = document.getElementById("sale-value-container");
+        
+        // Toggle the visibility of the sale value input
+        if (saleValueContainer.style.display === "none") {
+          saleValueContainer.style.display = "block";
+        } else {
+          saleValueContainer.style.display = "none";
+        }
+      });
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const nameInput = document.getElementById('product-name'); // ID của trường nhập tên sản phẩm
+        const descriptionInput = document.getElementById('product-description'); // ID của trường nhập mô tả
+        const priceInput = document.getElementById('product-price'); // ID của trường nhập giá
+        const quantityInput = document.getElementById('product-quantity'); // ID của trường nhập số lượng
+        const imageInput = document.getElementById('product-image'); // ID của trường nhập hình ảnh
     
-      const previewName = document.getElementById('preview-name');
-      const previewDescription = document.getElementById('preview-description');
-      const previewPrice = document.getElementById('preview-price');
+        // Cập nhật preview khi người dùng nhập thông tin
+        nameInput.addEventListener('input', function () {
+          document.getElementById('preview-name').textContent = nameInput.value || 'Name';
+        });
     
-      // Hàm để cập nhật nội dung preview khi người dùng nhập dữ liệu
-      function updatePreview() {
-        previewName.textContent = nameInput.value || 'Name'; // Cập nhật tên sản phẩm
-        previewDescription.textContent = descriptionInput.value || 'Description'; // Cập nhật mô tả sản phẩm
-        previewPrice.textContent = priceInput.value ? `${priceInput.value} VND` : '0 VND'; // Cập nhật giá sản phẩm
-      }
+        // Cập nhật mô tả
+        descriptionInput.addEventListener('input', function () {
+            const description = descriptionInput.innerText; // Lấy nội dung mô tả từ trình soạn thảo
+            hiddenDescriptionInput.value = description; // Cập nhật trường ẩn
+            document.getElementById('preview-description').textContent = description || 'Description';
+        });
     
-      // Lắng nghe sự kiện nhập liệu trên các ô nhập
-      nameInput.addEventListener('input', updatePreview);
-      descriptionInput.addEventListener('input', updatePreview);
-      priceInput.addEventListener('input', updatePreview);
+        priceInput.addEventListener('input', function () {
+          document.getElementById('preview-price').textContent = 'Price: ' + (priceInput.value || '0') + ' VND';
+        });
+    
+        quantityInput.addEventListener('input', function () {
+          document.getElementById('preview-quantity').textContent = 'Quantity: ' + (quantityInput.value || '0');
+        });
+    
+        imageInput.addEventListener('change', function () {
+          const file = imageInput.files[0];
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            document.getElementById('preview-image').src = e.target.result;
+          };
+          if (file) {
+            reader.readAsDataURL(file);
+          }
+        });
+      });
     </script>
     
     
