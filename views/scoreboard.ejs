@@ -311,6 +311,59 @@
         background: none; /* Loại bỏ màu nền mặc định */
         cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
       }
+      #chat-header {
+          height: 65px;
+          color: #000;
+          font-size: 30px;
+          border-radius: 100px;
+      }
+      .dark-mode #chat-body {
+          width: 500px; /* Chiều rộng */
+          height: 460px; /* Chiều cao */
+          background-color: rgb(50, 50, 50);
+          border-radius: 8px;
+          box-shadow: 0px 0px 10px rgba(253, 253, 253, 0.2);
+          position: fixed;
+          top: 48%;
+          left: 73%;
+          transform: scale(0); /* Đặt thu nhỏ ban đầu */
+          transition: transform 0.3s ease, bottom 0.3s ease; /* Hiệu ứng chuyển đổi */
+          overflow: hidden;
+          z-index: 1001; /* Đảm bảo ô chat nằm trên các phần tử khác */
+          display: none; /* Ẩn ô chat ban đầu */
+          color: white;
+      }
+      #chat-body {
+          width: 500px; /* Chiều rộng */
+          height: 460px; /* Chiều cao */
+          background-color: white;
+          border-radius: 8px;
+          box-shadow: 0px 0px 10px rgba(120, 119, 119, 0.2);
+          position: fixed;
+          top: 48%;
+          left: 73%;
+          transform: scale(0); /* Đặt thu nhỏ ban đầu */
+          transition: transform 0.3s ease, bottom 0.3s ease; /* Hiệu ứng chuyển đổi */
+          overflow: hidden;
+          z-index: 1001; /* Đảm bảo ô chat nằm trên các phần tử khác */
+          display: none; /* Ẩn ô chat ban đầu */
+      }
+
+      #chat-body.active {
+          display: block; /* Hiện ô chat */
+          transform: scale(1); /* Phóng to */
+          bottom: 10px; /* Điều chỉnh vị trí khi phóng to */
+      }
+
+      #close-chat{
+        font-size: 30px;
+      }
+      .message {
+          background-color: #f1f1f1; /* Màu nền của tin nhắn */
+          border-radius: 5px; /* Bo góc */
+          padding: 5px; /* Khoảng cách bên trong */
+          margin: 5px 0; /* Khoảng cách giữa các ô tin nhắn */
+      }
 
       </style>
     </head>
@@ -448,6 +501,30 @@
           <% }); %>
         </div>
       </div>    
+      <div style="position: fixed; bottom: 0; right: 0; width: 150px; z-index: 1000; background-color: transparent; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
+        <div id="chat-header" style="background-color: #007bff; color: white; padding: 10px; cursor: pointer; width: 70px; margin-left:78px ;">
+            <img src="/img/mesage.png" alt="" style="height: 30px; width: 30px; margin-left: 10px;" >
+        </div>
+        <div id="chat-body" style="display: none; padding: 10px;">
+          <div id="close-chat" style="cursor: pointer; color: red; margin-left: 460px; margin-top: -10px;">&times;</div> <!-- Nút đóng -->
+          <div style="position: absolute; top: 5px; left: 20px;font-size: 30px;">Chat</div>
+          
+          <div style="margin-top: 10px;"></div>
+          
+          <div style="display: flex;">
+            <div class="row" style="width: 220px; height: 440px; overflow-y: scroll;">
+              <% for (let i = 0; i < 5; i++) { %>
+                <div style="margin-left: 8px; width: 190px; height: 80px; background-color: #007bff; border: 1px solid #ccc; margin-top: 15px; display: block;"></div>
+              <% } %>
+              <div style="margin-bottom: 60px;"></div>
+            </div>
+            <div style="width: 270px; height: 400px; background-color: #ffffff; z-index: 1; margin-left: 20px;"></div>
+          
+          </div>
+          
+        </div>
+        
+      </div> 
     </body>
     <script>
       const toggleButton = document.getElementById('toggle-dark-mode');
@@ -467,5 +544,31 @@
           localStorage.setItem('darkMode', 'disabled');
         }
       });
+      document.getElementById('chat-header').onclick = function() {
+          const chatBody = document.getElementById('chat-body');
+          const chatHeader = document.getElementById('chat-header');
+
+          chatHeader.style.display = 'none'; // Ẩn nút Chat
+          chatBody.style.display = 'block'; // Hiện ô chat
+
+          setTimeout(() => {
+              chatBody.classList.add('active'); // Hiện ô chat với hiệu ứng phóng to
+          }, 10); // Đảm bảo transition diễn ra
+      }
+
+      // Đóng ô chat
+      document.getElementById('close-chat').onclick = function() {
+          const chatBody = document.getElementById('chat-body');
+          const chatHeader = document.getElementById('chat-header');
+
+          chatBody.classList.remove('active'); // Thu nhỏ ô chat
+          setTimeout(() => {
+              chatBody.style.display = 'none'; // Ẩn ô chat
+              chatHeader.style.display = 'block'; // Hiện lại nút Chat
+          }, 300); // Thời gian thu nhỏ
+      }
+
+
+
     </script>
   </html>
