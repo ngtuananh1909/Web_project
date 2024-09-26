@@ -295,6 +295,10 @@
         background-color: rgb(40, 40, 40);
         color: #ffffff;
       }
+      .button-select{
+        height: 60px;
+        width: 150px;
+      }
       
   </style>
   <body>
@@ -366,7 +370,7 @@
     </header>
 
     <div class="body">
-      <h1><strong>User Settings</strong></h1>
+      <h1 style="margin-left: 100px;"><strong>User Settings</strong></h1>
       <div class="setting">
             <div class="edit-name" style="margin-left: 400px;">
               <form
@@ -377,7 +381,7 @@
               style="width: 40%;"
               >
               <div class="form-group alpha">
-                <label class="alpha" for="name" style="margin-right: -90px;">Name:</label>
+                <label class="alpha" for="name" style="margin-right: -65px;">Name:</label>
                 <input
                   type="text"
                   id="name"
@@ -386,39 +390,30 @@
                   required
                   readonly
                 />
-                <button type="button" onclick="toggleEditMode('name')">Change Your name</button>
-              
+                <button class="button-select" type="button" onclick="toggleEditMode('name')">Change Your name</button>
               </div>
-              <div class="form-group">
-                <label for="password">Password</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value="********"
-                  readonly
-                />
-                <button type="button" onclick="togglePasswordCheck()">Edit</button>
-              </div>
-              <div class="form-group">
-                <label for="balance">Balance</label>
-                <input
-                  type="text"
-                  id="balance"
-                  name="balance"
-                  value="<%= user.balance %>"
-                  readonly
-                />
-              </div>
-              <div class="form-group">
-                <label for="reputation">Reputation</label>
-                <input
-                  type="text"
-                  id="reputation"
-                  name="reputation"
-                  value="<%= user.reputation %>"
-                  readonly
-                />
+              </form>
+            </div>
+              <div class="edit-name" style="margin-left: 400px;">
+                <div class="form-group">
+                  <form
+                  id="settingsForm"
+                  action="/auth/UserUpdate"
+                  method="POST"
+                  enctype="multipart/form-data"
+                  style="width: 40%;"
+                  >
+                  <label class="alpha" for="password" style="margin-right: -70px;">Password:</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value="********"
+                    readonly
+                    style="width: 59%;"
+                  />
+                  <button class="button-select" style="margin-left: 457px; margin-bottom: 60px;" type="button" onclick="togglePasswordCheck()">Change Password</button>
+                </div>
               </div>
               <div class="form-group password-check" id="passwordCheck">
                 <label for="password-confirm">Confirm Password</label>
