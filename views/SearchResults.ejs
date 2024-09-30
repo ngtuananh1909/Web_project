@@ -35,7 +35,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            width: 250px;
+            width: 270px;
             height: 500px;
             transition: transform 0.5s, box-shadow 0.5s;
             margin-bottom: 20px;
@@ -79,7 +79,6 @@
         }
   
         .mt-3 {
-          gap: 5px;
           border-radius: 30px;
           height: 60%;
         }
@@ -347,132 +346,151 @@
         .button-search:hover {
           background: linear-gradient(to right, #005bf9, #11cb11);
         }
+
+        .product-card {
+            margin-bottom: 10px; /* Để giảm khoảng cách dưới giữa các sản phẩm */
+        }
+
     </style>
     <body>
-        <header class="header-design">
-            <div class="container-fluid py-3">
-              <div class="container d-flex justify-content-between align-items-center" style="margin-left: 476px;">
-                <h1 class="h4 mb-0">
-                  <a href="/" class="text-decoration-none" style="margin-left: -197px;"><strong>E-Shop</strong></a>
-                </h1>
-                <!-- Thanh tìm kiếm -->
-                <form class="d-flex search" action="/search" method="GET" onsubmit="validateForm(event)" style="margin-right: 0px;">
-                  <input
-                      class="form-control me-2"
-                      type="search"
-                      placeholder="Tìm kiếm sản phẩm..."
-                      aria-label="Search"
-                      name="query"
-                  />
-                  <button class="button-search" type="submit">Tìm kiếm</button>
-              </form>
-                <nav class="nav">
-                  <ul class="nav">
-                    <li class="nav-item">
-                      <a class="nav-link home" href="/">
-                        <img src="/img/home.png" alt="" class="home-icon"></img>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link bxh" href="/scoreboard">
-                        <img src="/img/bxh.jpg" alt="" class="bxh-icon">
-                      </a>
-                    </li>
-                    <% if (!user) { %>
-                    <li class="nav-item">
-                      <a class="nav-link login" href="/login">Đăng nhập</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link dangky" href="/register">Đăng ký</a>
-                    </li>
-                    <button id="toggle-dark-mode" style="margin-left: 150px;">
-                      <img src="img/mode.png" alt="" class="mode-button"></img>
-                    </button>
-                    <% } else { %>
-                    <li class="nav-item">
-                      <a class="nav-link giohang" href="/cart">
-                        <img src="/img/cart.jpg" alt="" class="cart-icon">                  
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link taosanpham" href="/product/add">
-                        <img src="/img/add.jpg" alt="" class="add-icon">
-                      </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
-                        <% if (user.avatar) { %>
-                        <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
-                        <% } else { %>
-                        <img src="./img/def.jpg" class="avatar me-2" alt="" />
-                        <% } %>
-                      </a>
-                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li>
-                          <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
-                        </li>
-                        <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                        <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
-                        <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
-                      </ul>
-                    </li>
-                    <button id="toggle-dark-mode" style="margin-left: 150px;">
-                      <img src="img/mode.png" alt="" class="mode-button"></img>
-                    </button>
-                    <% } %>
-                  </ul>
-                </nav>
-              </div>
+      <header class="header-design">
+          <div class="container-fluid py-3">
+            <div class="container d-flex justify-content-between align-items-center" style="margin-left: 476px;">
+              <h1 class="h4 mb-0">
+                <a href="/" class="text-decoration-none" style="margin-left: -197px;"><strong>E-Shop</strong></a>
+              </h1>
+              <!-- Thanh tìm kiếm -->
+              <form class="d-flex search" action="/search" method="GET" onsubmit="validateForm(event)" style="margin-right: 0px;">
+                <input
+                    class="form-control me-2"
+                    type="search"
+                    placeholder="Tìm kiếm sản phẩm..."
+                    aria-label="Search"
+                    name="query"
+                />
+                <button class="button-search" type="submit">Tìm kiếm</button>
+            </form>
+              <nav class="nav">
+                <ul class="nav">
+                  <li class="nav-item">
+                    <a class="nav-link home" href="/">
+                      <img src="/img/home.png" alt="" class="home-icon"></img>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link bxh" href="/scoreboard">
+                      <img src="/img/bxh.jpg" alt="" class="bxh-icon">
+                    </a>
+                  </li>
+                  <% if (!user) { %>
+                  <li class="nav-item">
+                    <a class="nav-link login" href="/login">Đăng nhập</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link dangky" href="/register">Đăng ký</a>
+                  </li>
+                  <button id="toggle-dark-mode" style="margin-left: 150px;">
+                    <img src="img/mode.png" alt="" class="mode-button"></img>
+                  </button>
+                  <% } else { %>
+                  <li class="nav-item">
+                    <a class="nav-link giohang" href="/cart">
+                      <img src="/img/cart.jpg" alt="" class="cart-icon">                  
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link taosanpham" href="/product/add">
+                      <img src="/img/add.jpg" alt="" class="add-icon">
+                    </a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
+                      <% if (user.avatar) { %>
+                      <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
+                      <% } else { %>
+                      <img src="./img/def.jpg" class="avatar me-2" alt="" />
+                      <% } %>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                      <li>
+                        <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
+                      </li>
+                      <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
+                      <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                      <li><hr class="dropdown-divider" /></li>
+                      <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                    </ul>
+                  </li>
+                  <button id="toggle-dark-mode" style="margin-left: 150px;">
+                    <img src="img/mode.png" alt="" class="mode-button"></img>
+                  </button>
+                  <% } %>
+                </ul>
+              </nav>
             </div>
-          </header>
-        <h2 style="margin-left: 100px;">Kết quả tìm kiếm cho "<%= query %>"</h2>
+          </div>
+        </header>
+      <h2 style="margin-left: 100px;">Kết quả tìm kiếm cho "<%= query %>"</h2>
 
-        <% if (products.length > 0) { %>
-            <div class="row flex-row flex-nowrap overflow-auto">
-                <% products.forEach(product => { %>
-                    <div class="col-3">
-                        <div class="card product-card">
-                            <a href="/product/<%= product.id %>">
-                                <img src="/uploads/<%= product.image %>" class="card-img-top" alt="" />
-                            </a>
-                            <div class="card-body">
-                                <h4 class="card-title text-center"><%= product.name %></h4>
-                                <% if (product.sale) { %>
-                                    <center><span class="badge bg-danger ms-2" style="margin-bottom: 10px;">-<%= product.saleval %>%</span></center>
-                                    <p class="card-text" style="margin-bottom:4px;">
-                                        Giá: <%= formatCurrency((product.price - (product.price * product.saleval / 100).toFixed(0))) %> VNĐ
-                                        <del> <%= formatCurrency(product.price) %> </del>
-                                    </p>
-                                <% } else { %>
-                                    <div style="margin-top: 10px;">
-                                        <p class="card-text">Giá: <%= formatCurrency(product.price) %> VNĐ</p>
-                                    </div>
-                                <% } %>
+      <% if (products.length > 0) { %>
+        <div class="row flex-row flex-nowrap overflow-auto g-1 product-row">
+            <% products.forEach(product => { %>
+                <div class="col-3" style="margin-right: -200px;">
+                    <div class="card product-card">
+                        <a href="/product/<%= product.id %>">
+                            <img src="/uploads/<%= product.image %>" class="card-img-top" alt="" />
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title text-center"><%= product.name %></h4>
+                            <% if (product.sale) { %>
+                                <center><span class="badge bg-danger ms-2" style="margin-bottom: 10px;">-<%= product.saleval %>%</span></center>
+                                <p class="card-text" style="margin-bottom:4px;">
+                                    Giá: <%= formatCurrency((product.price - (product.price * product.saleval / 100).toFixed(0))) %> VNĐ
+                                    <del> <%= formatCurrency(product.price) %> </del>
+                                </p>
                                 <div style="padding-left: 1px; padding-bottom: 10px">
-                                    <div class="creator-day">
-                                        <p class="card-text">Creator: <%= product.creator %></p>
-                                        <p class="card-text">Ngày tạo: <%= product.formatted_date %></p>
-                                    </div>
-                                    <div class="d-flex mt-3 justify-content-between">
-                                        <a href="/product/<%= product.id %>" class="btn btn-success rounded">
-                                            Thông tin sản phẩm
-                                        </a>
-                                        <button type="button" class="btn btn-primary rounded addToCartBtn" data-product-id="<%= product.id %>">
-                                            Thêm vào giỏ
-                                        </button>
-                                    </div>
+                                  <div class="creator-day">
+                                      <p class="card-text">Creator: <%= product.creator %></p>
+                                      <p class="card-text" style="margin-top: -10px;">Ngày tạo: <%= product.formatted_date %></p>
+                                  </div>
+                                  <div class="d-flex mt-3 justify-content-between">
+                                      <a href="/product/<%= product.id %>" class="btn btn-success rounded">
+                                          Thông tin sản phẩm
+                                      </a>
+                                      <button type="button" class="btn btn-primary rounded addToCartBtn" data-product-id="<%= product.id %>">
+                                          Thêm vào giỏ
+                                      </button>
+                                  </div>
+                              </div>
+                            <% } else { %>
+                                <div style="margin-top: 40px;">
+                                    <p class="card-text">Giá: <%= formatCurrency(product.price) %> VNĐ</p>
                                 </div>
-                            </div>
+                                <div style="padding-left: 1px;">
+                                  <div class="creator-day">
+                                      <p class="card-text">Creator: <%= product.creator %></p>
+                                      <p class="card-text" style="margin-top: -10px;">Ngày tạo: <%= product.formatted_date %></p>
+                                  </div>
+                                  <div class="d-flex mt-3 justify-content-between">
+                                      <a href="/product/<%= product.id %>" class="btn btn-success rounded">
+                                          Thông tin sản phẩm
+                                      </a>
+                                      <button type="button" class="btn btn-primary rounded addToCartBtn" data-product-id="<%= product.id %>">
+                                          Thêm vào giỏ
+                                      </button>
+                                  </div>
+                              </div>
+                            <% } %>
+                            
                         </div>
                     </div>
-                <% }) %>
-            </div>
-        <% } else { %>
-            <p>Không tìm thấy sản phẩm nào phù hợp với từ khóa "<%= query %>"</p>
-        <% } %>
-        
-    </body>
+                </div>
+            <% }) %>
+        </div>
+    <% } else { %>
+        <p>Không tìm thấy sản phẩm nào phù hợp với từ khóa "<%= query %>"</p>
+    <% } %>
+  </body>
     <div style="position: fixed; bottom: 0; right: 0; width: 150px; z-index: 1000; background-color: transparent; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
         <div id="chat-header" style="background-color: #007bff; color: white; padding: 10px; cursor: pointer; width: 70px; margin-left:78px ;">
             <img src="/img/mesage.png" alt="" style="height: 30px; width: 30px; margin-left: 10px;" >
