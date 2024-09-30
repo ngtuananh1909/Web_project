@@ -8,11 +8,13 @@
       body {
         background-color: #f7fafc;
         font-family: Arial, sans-serif;
+        margin: 0;
+        height: 100vh;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 100vh;
-        margin: 0;
+        position: relative;
       }
 
       .dark-mode {
@@ -20,13 +22,34 @@
         color: #f7fafc;
       }
 
+      /* Container của bảng thông báo Welcome to E-shop */
+      .marquee-container {
+        width: 100%;
+        height: 100vh; /* Đổi từ 100% thành 100vh để chiếm toàn bộ chiều cao màn hình */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(to right, #32fe35, #c9ee22); /* Nền gradient */
+        color: #ffffff; /* Màu chữ trắng */
+        font-size: 40px;
+        font-weight: bold;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Thêm bóng cho bảng */
+        margin: 0; /* Bỏ margin */
+        padding: 0; /* Bỏ padding */
+      }
+
+
       .container {
         background-color: #ffffff;
         padding: 32px;
         border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         width: 100%;
         max-width: 400px;
+        height: auto;
+        position: absolute;
+        top: 20%;
+        right: 5%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Thêm bóng cho form */
       }
 
       h2 {
@@ -94,35 +117,79 @@
         color: #c53030;
         border-radius: 8px;
       }
+
+      .input-container {
+        position: relative;
+        margin-top: 20px;
+        width: 100%;
+      }
+
+      input[type="email"],
+      input[type="password"] {
+        width: 100%;
+        padding: 12px 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline: none;
+        background-color: transparent;
+      }
+
+      input[type="email"]:focus,
+      input[type="password"]:focus {
+        border-color: #007bff;
+      }
+
+      label {
+        position: absolute;
+        top: 34%;
+        left: 10px;
+        transform: translateY(-50%);
+        font-size: 16px;
+        color: #999;
+        transition: all 0.3s ease;
+        pointer-events: none;
+        background-color: white;
+        padding: 0 5px;
+      }
+
+      input[type="email"]:focus + label,
+      input[type="email"]:not(:placeholder-shown) + label,
+      input[type="password"]:focus + label,
+      input[type="password"]:not(:placeholder-shown) + label {
+        top: -7px;
+        left: 10px;
+        font-size: 14px;
+        color: #333;
+      }
     </style>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        if (localStorage.getItem("theme") === "dark") {
-          document.body.classList.add("dark-mode");
-        } else {
-          document.body.classList.remove("dark-mode");
-        }
-      });
-    </script>
   </head>
 
-  <body
-    class="<%= typeof darkMode !== 'undefined' && darkMode ? 'dark-mode' : '' %>"
-  >
+  <body>
+    <!-- Bảng thông báo Welcome to E-shop -->
+    <div class="marquee-container">
+      <div style="margin-left: -700px;">
+        Welcome to E-shop
+      </div>
+    </div>
+
+    <!-- Container chính chứa form login -->
     <div class="container">
-      <h2>Login</h2>
+      <h1 style="text-align: center; font-size: 50px; color: #333;">Login</h1>
       <form action="/auth/login" method="POST">
-        <div>
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" required />
+        <div class="input-container">
+          <input type="email" id="email" name="email" required placeholder="" />
+          <label for="email">Your email</label>
         </div>
-        <div>
+        <div class="input-container">
+          <input type="password" id="password" name="password" required placeholder=" " />
           <label for="password">Password</label>
-          <input type="password" id="password" name="password" required />
         </div>
         <button type="submit">Login</button>
       </form>
-      <p>Don't have an account? <a href="/register">Register</a></p>
+      <p style="color: #333; font-size: 18px;">
+        Don't have an account? <a href="/register">Register</a>
+      </p>
       <% if (typeof message !=='undefined' && message) { %>
       <div class="message"><%= message %></div>
       <% } %>
