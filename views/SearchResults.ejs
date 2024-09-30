@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <title>Kết quả tìm kiếm cho "<%= query %>"</title>
+</head>
+<style>
+    .sticky-header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+</style>
+<body>
+    <body>
+    <header class="header-design">
+        <div class="container-fluid py-3">
+        <div class="container d-flex justify-content-between align-items-center" style="margin-left: 476px;">
+            <h1 class="h4 mb-0">
+            <a href="/" class="text-decoration-none" style="margin-left: -197px;"><strong>E-Shop</strong></a>
+            </h1>
+            <!-- Thanh tìm kiếm -->
+            <form class="d-flex" action="/search" method="GET" style="margin-right: 50px;">
+            <input
+                class="form-control me-2"
+                type="search"
+                placeholder="Tìm kiếm sản phẩm..."
+                aria-label="Search"
+                name="query"
+            />
+            <button class="btn btn-outline-success" type="submit">Tìm kiếm</button>
+            </form>
+            <nav class="nav">
+            <ul class="nav">
+                <li class="nav-item">
+                <a class="nav-link home" href="/">
+                    <img src="/img/home.png" alt="" class="home-icon"></img>
+                </a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link bxh" href="/scoreboard">
+                    <img src="/img/bxh.jpg" alt="" class="bxh-icon">
+                </a>
+                </li>
+                <% if (!user) { %>
+                <li class="nav-item">
+                <a class="nav-link login" href="/login">Đăng nhập</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link dangky" href="/register">Đăng ký</a>
+                </li>
+                <button id="toggle-dark-mode" style="margin-left: 150px;">
+                <img src="img/mode.png" alt="" class="mode-button"></img>
+                </button>
+                <% } else { %>
+                <li class="nav-item">
+                <a class="nav-link giohang" href="/cart">
+                    <img src="/img/cart.jpg" alt="" class="cart-icon">                  
+                </a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link taosanpham" href="/product/add">
+                    <img src="/img/add.jpg" alt="" class="add-icon">
+                </a>
+                </li>
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
+                    <% if (user.avatar) { %>
+                    <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
+                    <% } else { %>
+                    <img src="./img/def.jpg" class="avatar me-2" alt="" />
+                    <% } %>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li>
+                    <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
+                    </li>
+                    <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
+                    <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                </ul>
+                </li>
+                <button id="toggle-dark-mode" style="margin-left: 150px;">
+                <img src="img/mode.png" alt="" class="mode-button"></img>
+                </button>
+                <% } %>
+            </ul>
+            </nav>
+        </div>
+        </div>
+    </header>
+    <h1>Kết quả tìm kiếm cho "<%= query %>"</h1>
+
+    <% if (products.length > 0) { %>
+        <ul>
+            <% products.forEach(product => { %>
+                <li>
+                    <img src="/uploads/<%= product.image %>" alt="<%= product.name %>">
+                    <h2><%= product.name %></h2>
+                    <p><%= product.description %></p>
+                    <p>Giá: <%= product.price %> VNĐ</p>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>Không tìm thấy sản phẩm nào phù hợp với từ khóa "<%= query %>"</p>
+    <% } %>
+</body>
+</html>

@@ -330,23 +330,35 @@
           margin: 5px 0; /* Khoảng cách giữa các ô tin nhắn */
       }
 
+      
     </style>
   </head>
 
   <body>
-    <header class="header-design" >
-      <div class="container-fluid py-3" >
+    <header class="header-design">
+      <div class="container-fluid py-3">
         <div class="container d-flex justify-content-between align-items-center" style="margin-left: 476px;">
           <h1 class="h4 mb-0">
             <a href="/" class="text-decoration-none" style="margin-left: -197px;"><strong>E-Shop</strong></a>
           </h1>
+          <!-- Thanh tìm kiếm -->
+          <form class="d-flex" action="/search" method="GET" style="margin-right: 50px;">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Tìm kiếm sản phẩm..."
+              aria-label="Search"
+              name="query"
+            />
+            <button class="btn btn-outline-success" type="submit">Tìm kiếm</button>
+          </form>
           <nav class="nav">
             <ul class="nav">
               <li class="nav-item">
                 <a class="nav-link home" href="/">
-                    <img src="/img/home.png" alt="" class="home-icon"></img>
+                  <img src="/img/home.png" alt="" class="home-icon"></img>
                 </a>
-            </li>
+              </li>
               <li class="nav-item">
                 <a class="nav-link bxh" href="/scoreboard">
                   <img src="/img/bxh.jpg" alt="" class="bxh-icon">
@@ -365,7 +377,7 @@
               <% } else { %>
               <li class="nav-item">
                 <a class="nav-link giohang" href="/cart">
-                    <img src="/img/cart.jpg" alt="" class="cart-icon">                  
+                  <img src="/img/cart.jpg" alt="" class="cart-icon">                  
                 </a>
               </li>
               <li class="nav-item">
@@ -400,6 +412,7 @@
         </div>
       </div>
     </header>
+    
     <main>
       <div class="container my-5">
         <div id="carouselExampleControls" class="carousel slide">
@@ -502,8 +515,8 @@
                     <% if (product.sale) { %>
                       <center><span class="badge bg-danger ms-2" style="margin-bottom: 10px;" >-<%= product.saleval %>%</span></center>
                       <p class="card-text" style="margin-bottom:4px ;">
-                        Giá: <%= formatCurrency((product.price - (product.price * product.saleval / 100)).toFixed(0)) %> VNĐ
-                        <del> <%= product.price %> </del>
+                        Giá: <%= formatCurrency((product.price - (product.price * product.saleval / 100).toFixed(0))) %> VNĐ
+                        <del> <%= formatCurrency(product.price) %> </del>
                       </p>
                       <div style="padding-left: 1px; padding-bottom: 10px">
                         <div class ="creator-day" style ="margin-top: -0px;">
@@ -653,111 +666,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
-    <script>
-      window.onload = function () {
-        const img = document.querySelector('body');
-        const colorThief = new ColorThief();
-        const imgElement = new Image();
-        imgElement.src = img.style.backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/i, "$1");
-        
-        imgElement.onload = function() {
-          const dominantColor = colorThief.getColor(imgElement);
-          document.querySelector('header').style.backgroundColor = `rgb(${dominantColor})`;
-        };
-      };
-    </script>
-    <script>
-      const toggleButton = document.getElementById('toggle-dark-mode');
-      const body = document.body;
     
-      // Kiểm tra nếu chế độ tối đã được kích hoạt trước đó
-      if (localStorage.getItem('darkMode') === 'enabled') {
-        body.classList.add('dark-mode');
-      }
-    
-      toggleButton.addEventListener('click', () => {
-        body.classList.toggle('dark-mode');
-        if (body.classList.contains('dark-mode')) {
-          localStorage.setItem('darkMode', 'enabled');
-
-        } else {
-          localStorage.setItem('darkMode', 'disabled');
-        }
-      });
-      document.getElementById('chat-header').onclick = function() {
-          const chatBody = document.getElementById('chat-body');
-          const chatHeader = document.getElementById('chat-header');
-
-          chatHeader.style.display = 'none'; // Ẩn nút Chat
-          chatBody.style.display = 'block'; // Hiện ô chat
-
-          setTimeout(() => {
-              chatBody.classList.add('active'); // Hiện ô chat với hiệu ứng phóng to
-          }, 10); // Đảm bảo transition diễn ra
-      }
-
-      // Đóng ô chat
-      document.getElementById('close-chat').onclick = function() {
-          const chatBody = document.getElementById('chat-body');
-          const chatHeader = document.getElementById('chat-header');
-
-          chatBody.classList.remove('active'); // Thu nhỏ ô chat
-          setTimeout(() => {
-              chatBody.style.display = 'none'; // Ẩn ô chat
-              chatHeader.style.display = 'block'; // Hiện lại nút Chat
-          }, 300); // Thời gian thu nhỏ
-      }
-
-
-
-    </script>
-        
-    <script>
-      $(document).on('click', '.addToCartBtn', function() {
-        const productId = $(this).data('product-id');
-        $('#addToCartModal').data('product-id', productId).modal('show');
-    });
-
-
-    $('.confirmAddToCartBtn').on('click', function() {
-        const productId = $('#addToCartModal').data('product-id');
-        $.ajax({
-            type: 'POST',
-            url: '/auth/add-to-cart',
-            data: { productId: productId },
-            success: function(response) {
-                alert('Sản phẩm đã được thêm vào giỏ hàng!');
-                $('#addToCartModal').modal('hide');
-            },
-            error: function() {
-                alert('Đã có lỗi xảy ra, vui lòng thử lại!');
-            }
-        });
-    });
-
-    </script>
-    
-    <script>
-      $(document).ready(function() {
-        $('.viewProductBtn').click(function(event) {
-            event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
-
-            const productId = $(this).data('product-id');
-            const score = $(this).data('product-score'); // Điểm số đánh giá
-
-            // Gửi yêu cầu thêm đánh giá
-            $.post('/add-rating', { product_id: productId, score: score }, function(response) {
-                if (response.success) {
-                    // Nếu thêm đánh giá thành công, chuyển đến trang chi tiết sản phẩm
-                    window.location.href = `/product/${productId}`;
-                } else {
-                    alert('Có lỗi xảy ra khi thêm đánh giá. Vui lòng thử lại.');
-                }
-            });
-        });
-    });
-  </script>
-  
-
-  </body>
+   </body>
 </html>

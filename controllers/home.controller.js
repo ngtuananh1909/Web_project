@@ -6,7 +6,6 @@ const path = require('path');
 const { IdGenerator } = require('../event_function/function');
 const {calculateUserSimilarity, getTopRecommendedProducts, findSimilarProducts} = require('../event_function/Filtering')
 const { promisify } = require('util');
-const {findChatById} = require('../event_function/chat')
 const util = require('util');
 const query = util.promisify(db.query).bind(db);
 
@@ -129,7 +128,6 @@ exports.cartDisplay = (req, res) => {
     
     const userId = req.session.user.id;
 
-    // Sử dụng JOIN để kết hợp bảng user_cart và products
     db.query(`
         SELECT p.* 
         FROM user_cart uc 
@@ -139,8 +137,6 @@ exports.cartDisplay = (req, res) => {
                 console.log("error: ", err);
                 return res.status(500).json({ error: 'Server error' });
             }
-
-            // Kiểm tra xem có sản phẩm nào không
             res.render('cart', { user: req.session.user, products: result });
         });
 };
@@ -468,15 +464,15 @@ exports.addRating = (req, res) => {
 };
 
 exports.MessageDisplay = async (req, res) => {
-    const chatId = req.params.id; // ID cuộc trò chuyện
-    const user = req.session.user; // Thông tin người dùng
+    const chatId = req.params.id;
+    const user = req.session.user; 
 
     if (!user) {
         return res.redirect('/login');
     }
 
     try {
-        const chat = await findChatById(chatId); // Lấy thông tin cuộc trò chuyện
+        const chat = await findChatById(chatId);
         if (!chat) {
             return res.render('message', { user, chat: null, message: 'Cuộc trò chuyện không tìm thấy' });
         }
@@ -498,3 +494,27 @@ exports.SendMessage = (req, res) => {
         res.json({ success: true });
     });
 }
+
+exports.SearchProducts = async (req, res) => {
+    const searchQuery = req.query.query;
+
+    try {
+        db.query('SELECT * FROM products WHERE name LIKE ? OR description LIKE ?', [`%${searchQuery}%`, `%${searchQuery}%`], (err, results) => {
+            if (err) {
+                console.error('Lỗi khi truy vấn cơ sở dữ liệu:', err);
+                return res.status(500).send('Đã xảy ra lỗi khi truy vấn cơ sở dữ liệu');
+            }
+
+            if (results.length === 0) {
+                return res.render('SearchResults', {products: [], query: searchQuery, user: req.session.user})
+            }
+            res.render('SearchResults', {products: results, query: searchQuery, user: req.session.user})
+        });
+    } catch (error) {
+        console.error('Lỗi khi tìm kiếm sản phẩm:', error);
+        res.status(500).send('Đã xảy ra lỗi khi tìm kiếm sản phẩm');
+    }
+};
+
+
+
