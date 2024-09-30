@@ -431,7 +431,6 @@
           </div>
         </header>
       <h2 style="margin-left: 100px;">Kết quả tìm kiếm cho "<%= query %>"</h2>
-
       <% if (products.length > 0) { %>
         <div class="row flex-row flex-nowrap overflow-auto g-1 product-row">
             <% products.forEach(product => { %>
@@ -490,6 +489,11 @@
     <% } else { %>
         <p>Không tìm thấy sản phẩm nào phù hợp với từ khóa "<%= query %>"</p>
     <% } %>
+    <h2 style="margin-left: 100px; margin-top: 40px;">Sản phẩm gợi ý</h2>
+    <div class="row flex-row flex-nowrap overflow-auto g-1 product-row">
+        <!-- Nội dung sản phẩm gợi ý sẽ được chèn vào đây -->
+    </div>
+
   </body>
     <div style="position: fixed; bottom: 0; right: 0; width: 150px; z-index: 1000; background-color: transparent; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
         <div id="chat-header" style="background-color: #007bff; color: white; padding: 10px; cursor: pointer; width: 70px; margin-left:78px ;">
