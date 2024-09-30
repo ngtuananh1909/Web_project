@@ -51,12 +51,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, 'public'))); 
+app.use(express.static('public')); 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static('event_function'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
 
 app.use(session({
     secret: 'uit2027goo',
@@ -90,6 +89,7 @@ io.on('connection', function(socket){
 
 app.use('/', homeRouter);
 app.use('/product', productRouter);
+app.get('/favicon.ico', (req, res) => res.status(204));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

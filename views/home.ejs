@@ -276,26 +276,89 @@
         background-color: rgb(41, 41, 41);
         color: #ffffff;
       }
+      #chat-header {
+          height: 65px;
+          color: #000;
+          font-size: 30px;
+          border-radius: 100px;
+      }
+      .dark-mode #chat-body {
+          width: 500px; /* Chiều rộng */
+          height: 460px; /* Chiều cao */
+          background-color: rgb(50, 50, 50);
+          border-radius: 8px;
+          box-shadow: 0px 0px 10px rgba(253, 253, 253, 0.2);
+          position: fixed;
+          top: 48%;
+          left: 73%;
+          transform: scale(0); /* Đặt thu nhỏ ban đầu */
+          transition: transform 0.3s ease, bottom 0.3s ease; /* Hiệu ứng chuyển đổi */
+          overflow: hidden;
+          z-index: 1001; /* Đảm bảo ô chat nằm trên các phần tử khác */
+          display: none; /* Ẩn ô chat ban đầu */
+          color: white;
+      }
+      #chat-body {
+          width: 500px; /* Chiều rộng */
+          height: 460px; /* Chiều cao */
+          background-color: white;
+          border-radius: 8px;
+          box-shadow: 0px 0px 10px rgba(120, 119, 119, 0.2);
+          position: fixed;
+          top: 48%;
+          left: 73%;
+          transform: scale(0); /* Đặt thu nhỏ ban đầu */
+          transition: transform 0.3s ease, bottom 0.3s ease; /* Hiệu ứng chuyển đổi */
+          overflow: hidden;
+          z-index: 1001; /* Đảm bảo ô chat nằm trên các phần tử khác */
+          display: none; /* Ẩn ô chat ban đầu */
+      }
 
+      #chat-body.active {
+          display: block; /* Hiện ô chat */
+          transform: scale(1); /* Phóng to */
+          bottom: 10px; /* Điều chỉnh vị trí khi phóng to */
+      }
+
+      #close-chat{
+        font-size: 30px;
+      }
+      .message {
+          background-color: #f1f1f1; /* Màu nền của tin nhắn */
+          border-radius: 5px; /* Bo góc */
+          padding: 5px; /* Khoảng cách bên trong */
+          margin: 5px 0; /* Khoảng cách giữa các ô tin nhắn */
+      }
 
       
     </style>
   </head>
 
   <body>
-    <header class="header-design" >
-      <div class="container-fluid py-3" >
+    <header class="header-design">
+      <div class="container-fluid py-3">
         <div class="container d-flex justify-content-between align-items-center" style="margin-left: 476px;">
           <h1 class="h4 mb-0">
             <a href="/" class="text-decoration-none" style="margin-left: -197px;"><strong>E-Shop</strong></a>
           </h1>
+          <!-- Thanh tìm kiếm -->
+          <form class="d-flex" action="/search" method="GET" style="margin-right: 50px;">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Tìm kiếm sản phẩm..."
+              aria-label="Search"
+              name="query"
+            />
+            <button class="btn btn-outline-success" type="submit">Tìm kiếm</button>
+          </form>
           <nav class="nav">
             <ul class="nav">
               <li class="nav-item">
                 <a class="nav-link home" href="/">
-                    <img src="/img/home.png" alt="" class="home-icon"></img>
+                  <img src="/img/home.png" alt="" class="home-icon"></img>
                 </a>
-            </li>
+              </li>
               <li class="nav-item">
                 <a class="nav-link bxh" href="/scoreboard">
                   <img src="/img/bxh.jpg" alt="" class="bxh-icon">
@@ -314,7 +377,7 @@
               <% } else { %>
               <li class="nav-item">
                 <a class="nav-link giohang" href="/cart">
-                    <img src="/img/cart.jpg" alt="" class="cart-icon">                  
+                  <img src="/img/cart.jpg" alt="" class="cart-icon">                  
                 </a>
               </li>
               <li class="nav-item">
@@ -322,11 +385,6 @@
                   <img src="/img/add.jpg" alt="" class="add-icon">
                 </a>
               </li>
-              <li class="nav-item"></li>
-                  <a class="nav-link nhantin" href="#">
-                    <img src="/img/add.jpg" alt="" class="add-icon">
-                  </a>
-                </li>>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                   <% if (user.avatar) { %>
@@ -354,6 +412,7 @@
         </div>
       </div>
     </header>
+    
     <main>
       <div class="container my-5">
         <div id="carouselExampleControls" class="carousel slide">
@@ -547,21 +606,6 @@
           </div>
         </footer>
       </div>
-      
-      <div id="chat-header" style="position: fixed; bottom: 0; right: 0; width: 150px; z-index: 1000; border: 1px solid #ccc; background-color: white; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
-        <div id="chat-tab" style="background-color: #007bff; color: white; padding: 10px; cursor: pointer;">
-            Chat
-        </div>
-        <div id="chat-body" style="display: none; padding: 10px;">
-            <ul id="messages" style="list-style-type: none; margin: 0; padding: 0;"></ul>
-            <span id="notifyUser" style="display: block;   margin-bottom: 10px;"></span>
-            <form id="form" action="" onsubmit="return submitfunction();" style="margin-top: 10px;">
-                <input type="hidden" id="user" value="" />
-                <input id="m" autocomplete="off" onkeyup="notifyTyping();" placeholder="Type your message here.." style="width: 100%; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" />
-                <input type="submit" id="button" value="Send" style="width: 100%; margin-top: 5px; padding: 5px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;" />
-            </form>
-        </div>
-    </div>
 
     </main>
     <div
@@ -594,52 +638,34 @@
         </div>
       </div>
     </div>
+    <div style="position: fixed; bottom: 0; right: 0; width: 150px; z-index: 1000; background-color: transparent; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
+      <div id="chat-header" style="background-color: #007bff; color: white; padding: 10px; cursor: pointer; width: 70px; margin-left:78px ;">
+          <img src="/img/mesage.png" alt="" style="height: 30px; width: 30px; margin-left: 10px;" >
+      </div>
+      <div id="chat-body" style="display: none; padding: 10px;">
+        <div id="close-chat" style="cursor: pointer; color: red; margin-left: 460px; margin-top: -10px;">&times;</div> <!-- Nút đóng -->
+        <div style="position: absolute; top: 5px; left: 20px;font-size: 30px;">Chat</div>
+        
+        <div style="margin-top: 10px;"></div>
+        
+        <div style="display: flex;">
+          <div class="row" style="width: 220px; height: 440px; overflow-y: scroll;">
+            <% for (let i = 0; i < 5; i++) { %>
+              <div style="margin-left: 8px; width: 190px; height: 80px; background-color: #007bff; border: 1px solid #ccc; margin-top: 15px; display: block;"></div>
+            <% } %>
+            <div style="margin-bottom: 60px;"></div>
+          </div>
+          <div style="width: 270px; height: 400px; background-color: #ffffff; z-index: 1; margin-left: 20px;"></div>
+        
+        </div>
+        
+      </div>
+      
+    </div>  
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
-    <script>
-      const formatCurrency = (price) => {
-        return parseInt(price).toLocaleString('vi-VN') + ' VNĐ';
-      };
-
-      document.getElementById('chat-tab').addEventListener('click', function() {
-      var chatHeader = document.getElementById('chat-header');
-      var chatBody = document.getElementById('chat-body');
-
-      if (chatBody.style.display === 'none') {
-          chatBody.style.display = 'block';
-          chatHeader.style.width = '450px'; 
-          chatHeader.style.height = '450px'; 
-      } else {
-          chatHeader.style.width = '150px'; 
-          chatHeader.style.height = '50px'; 
-          setTimeout(function() {
-              chatBody.style.display = 'none'; 
-          }, 300); 
-      }
-  });
-
-
-    function notifyTyping() {
-      document.getElementById('notifyUser').innerText = "Đang nhập...";
-    }
-
-    function submitfunction() {
-      var message = document.getElementById('m').value;
-      var messagesList = document.getElementById('messages');
-      var newMessage = document.createElement('li');
-      newMessage.textContent = message;
-      messagesList.appendChild(newMessage);
-      document.getElementById('m').value = "";
-      return false;
-    }
-    </script>
     
-    <script src="/darkmode.js"></script>    
-    <script src="/addtocart.js"></script>
-    <script src="/addratings.js"></script>    
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-  </body>
+   </body>
 </html>
