@@ -396,26 +396,33 @@
               <div class="alert alert-info" role="alert">No items in cart.</div>
               <% } %>
             
-              <form action="/checkout" method="POST">
-                <div class="pay-code">
-                  <div class="card mb-4">
-                  <div class="card mb-4 discode" >
-                    <label class="form-label" for="discountCode" style="margin-left: 10px; margin-top: 7px;">Discount code:</label>
-                  </div>
-                
-                  <div class="card" style="margin-top: -30px;">
-                    <div class="card-body" style="margin-left: 838px;">
-                      <div class="total" style="margin-bottom: -40px; margin-left: -840px; font-size: 20px;">
-                        <strong>Total: </strong><span id="totalAmount">0</span>
-                      </div>
-              
-                      <button type="submit" class="btn btn-warning btn-block btn-lg" style="margin-bottom: -10px;">
-                        Proceed to Pay
-                      </button>
-                    </div>
+
+              <div class="pay-code">
+                <div class="card mb-4">
+                  <!-- Phần nhập mã giảm giá -->
+                  <div class="card-body">
+                    <label class="form-label" for="discountCode" style="margin-left: 10px; margin-top: 7px;">Mã giảm giá:</label>
+                    <input type="text" id="discountCode" class="form-control" placeholder="Nhập mã giảm giá" style="width: 250px; display: inline-block; margin-left: 10px;">
+                    <button class="btn btn-secondary" style="display: inline-block;">Áp dụng</button>
                   </div>
                 </div>
-              </form>
+              
+                <!-- Phần tổng tiền và nút thanh toán -->
+                <div class="card">
+                  <div class="card-body d-flex justify-content-between align-items-center">
+                    <div class="total" style="font-size: 20px;">
+                      <strong>Tổng cộng: </strong><span id="totalAmount">0</span>
+                    </div>
+              
+                    <!-- Nút "Proceed to Pay" với URL động -->
+                    <a href="/payment/option/t/<%= user.id %>" class="btn btn-warning btn-lg">
+                      Tiến hành thanh toán
+                    </a>
+                  </div>
+                </div>
+              </div>
+              
+
       </div>
     </section>
     <div style="position: fixed; bottom: 0; right: 0; width: 150px; z-index: 1000; background-color: transparent; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
@@ -450,7 +457,6 @@
         let total = 0;
         const quantities = document.querySelectorAll('.quantity');
         
-        // Tính tổng chỉ với những sản phẩm được chọn (checkbox được đánh dấu)
         document.querySelectorAll('input[type="checkbox"]').forEach((checkbox, index) => {
             if (checkbox.checked) {
                 const quantity = quantities[index];
@@ -463,45 +469,16 @@
         document.querySelector('.total span').innerText = total.toLocaleString() + " VNĐ";
     }
   
-    // Lắng nghe sự kiện thay đổi cho các trường số lượng
     document.querySelectorAll('.quantity').forEach(input => {
         input.addEventListener('change', calculateTotal);
         input.addEventListener('input', calculateTotal); 
     });
 
-    // Lắng nghe sự kiện thay đổi của checkbox
     document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', calculateTotal);
     });
   
-    // Gọi hàm tính toán lần đầu tiên để khởi tạo giá trị
     calculateTotal();
-  </script>
-
-  
-  
-  <script>
-    function removeFromCart(productId) {
-        fetch(/cart/remove/`${productId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include'
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                alert(data.error); // Thông báo lỗi
-            } else {
-                alert(data.message); // Thông báo thành công
-                window.location.reload(); // Tải lại trang
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
   </script>
   <script>
     const toggleButton = document.getElementById('toggle-dark-mode');

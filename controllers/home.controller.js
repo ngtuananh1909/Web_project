@@ -426,24 +426,6 @@ exports.ScoreboardDisplay = (req, res) => {
     });
 };
 
-exports.Payment = async(req, res) => {
-    const totalAmount = req.body.total;
-
-    client.createTransaction({
-    currency1: 'USD',
-    currency2: 'BTC', 
-    amount: totalAmount,
-    buyer_email: req.user.email,
-  }, (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send('Thanh toán thất bại');
-    }
-
-    res.redirect(result.checkout_url);
-  });
-};
-
 exports.addRating = (req, res) => {
     const { product_id, score } = req.body;
     const userId = req.session.user ? req.session.user.id : null;
