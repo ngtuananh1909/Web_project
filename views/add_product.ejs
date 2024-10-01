@@ -297,22 +297,88 @@
         color: #ffffff; /* Màu đỏ, bạn có thể thay đổi sang màu khác */
       }
 
+     /* Style for the switch */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 48px; /* Tăng chiều rộng để có đủ không gian cho nút */
+        height: 24px; /* Điều chỉnh chiều cao */
+        margin-left: 15px; /* Khoảng cách giữa nhãn và công tắc */
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #d6d6d6; /* Màu nền ban đầu của thanh chuyển */
+        transition: 0.4s;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px; /* Kích thước của nút */
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); /* Đổ bóng cho nút */
+      }
+
+      input:checked + .slider {
+        background-color: #4CAF50; /* Màu nền khi chế độ tối được bật */
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(24px); /* Điều chỉnh độ dịch chuyển khi bật */
+      }
+
+      .slider.round {
+        border-radius: 34px; /* Bo góc cho thanh chuyển */
+      }
+
+      .slider.round:before {
+        border-radius: 50%; /* Bo góc cho nút */
+      }
+
+      .change-mode {
+        font-size: 14px; /* Kích thước chữ dễ nhìn hơn */
+        font-weight: 500; /* Tăng độ đậm của chữ */
+        color: #333; /* Màu chữ cân bằng giữa sáng và tối */
+      }
+      .dark-mode .change-mode {
+        font-size: 14px; /* Kích thước chữ dễ nhìn hơn */
+        font-weight: 500; /* Tăng độ đậm của chữ */
+        color: #ffffff; /* Màu chữ cân bằng giữa sáng và tối */
+      }
+      
+
   </style>
 </head>
   <body>
-    <header class="header-design" >
-      <div class="container-fluid py-3" >
-        <div class=" d-flex justify-content-between align-items-center" style="margin-right: 110px;">
+    <header class="header-design">
+      <div class="container-fluid py-3">
+        <div class="container d-flex justify-content-between align-items-center" style="margin-left: 415px;">
           <h1 class="h4 mb-0">
-            <a href="/" class="text-decoration-none" style="margin-left: 293px;" ><strong>E-Shop</strong></a>
+            <a href="/" class="text-decoration-none" style="margin-left: -130px;"><strong>E-Shop</strong></a>
           </h1>
           <nav class="nav">
             <ul class="nav">
               <li class="nav-item">
                 <a class="nav-link home" href="/">
-                    <img src="/img/home.png" alt="" class="home-icon"></img>
+                  <img src="/img/home.png" alt="" class="home-icon"></img>
                 </a>
-            </li>
+              </li>
               <li class="nav-item">
                 <a class="nav-link bxh" href="/scoreboard">
                   <img src="/img/bxh.jpg" alt="" class="bxh-icon">
@@ -325,13 +391,10 @@
               <li class="nav-item">
                 <a class="nav-link dangky" href="/register">Đăng ký</a>
               </li>
-              <button id="toggle-dark-mode" style="margin-left: 150px;">
-                <img src="img/mode.png" alt="" class="mode-button"></img>
-              </button>
               <% } else { %>
               <li class="nav-item">
                 <a class="nav-link giohang" href="/cart">
-                    <img src="/img/cart.jpg" alt="" class="cart-icon">                  
+                  <img src="/img/cart.jpg" alt="" class="cart-icon">                  
                 </a>
               </li>
               <li class="nav-item">
@@ -339,10 +402,10 @@
                   <img src="/img/add.jpg" alt="" class="add-icon">
                 </a>
               </li>
-              <li class="nav-item dropdown">
+              <li class="nav-item dropdown" style="width: 200px;">
                 <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                   <% if (user.avatar) { %>
-                  <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
+                  <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
                   <% } else { %>
                   <img src="./img/def.jpg" class="avatar me-2" alt="" />
                   <% } %>
@@ -354,12 +417,20 @@
                   <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
                   <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
                   <li><hr class="dropdown-divider" /></li>
+                  <!-- Chuyển đổi giao diện -->
+                  <li class="nav-item">
+                    <div class="d-flex align-items-center px-3 py-2">
+                      <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
+                      <label class="switch" >
+                        <input type="checkbox" id="toggle-dark-mode">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </li>
+                  <li><hr class="dropdown-divider" /></li>
                   <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
                 </ul>
-              </li>
-              <button id="toggle-dark-mode" style="margin-left: 150px;">
-                <img src="img/mode.png" alt="" class="mode-button"></img>
-              </button>
+              </li>                       
               <% } %>
             </ul>
           </nav>
@@ -420,8 +491,8 @@
             </label>
           </div>
       
-          <div class="form-group" id="sale-value-container" style="display: none; margin-left: 286px; margin-top: -82px;">
-            <input type="number" id="saleval" name="saleval" class="form-control button-input" style="height: auto; width: 80px;" min="1" max="99" step="1" placeholder="% Sale">
+          <div class="form-group" id="sale-value-container" style="display: none; margin-left: 286px; margin-top: -58px; height: auto; width: auto; background-color: transparent;">
+            <input type="number" id="saleval" name="saleval" class="form-control button-input" style="height: auto; width: auto;" min="1" max="99" step="1" placeholder="% Sale">
           </div>
           <div class="form-group" style="margin-left: 195px; margin-bottom: 100px;">
             <div id="editor" style="height: 200px; border: 2px solid #7b7b7b;"></div>
@@ -498,24 +569,59 @@
 
 </script>
 
-    <script>
-      const toggleButton = document.getElementById('toggle-dark-mode');
-      const body = document.body;
-    
-      if (localStorage.getItem('darkMode') === 'enabled') {
-        body.classList.add('dark-mode');
-      }
-    
-      toggleButton.addEventListener('click', () => {
-        body.classList.toggle('dark-mode');
-        if (body.classList.contains('dark-mode')) {
-          localStorage.setItem('darkMode', 'enabled');
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+  const toggleDarkMode = document.getElementById("toggle-dark-mode");
+  const modeLabel = document.getElementById("mode-label");
 
-        } else {
-          localStorage.setItem('darkMode', 'disabled');
-        }
-      });
-    </script>
+  // Kiểm tra chế độ hiện tại từ localStorage (nếu có)
+  if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark-mode");
+    toggleDarkMode.checked = true;
+    modeLabel.textContent = "Chế Độ Dark ";
+  }
+
+  // Xử lý sự kiện khi chuyển đổi chế độ
+  toggleDarkMode.addEventListener("change", function () {
+    if (toggleDarkMode.checked) {
+      document.body.classList.add("dark-mode");
+      modeLabel.textContent = "Chế Độ Dark ";
+      localStorage.setItem("darkMode", "enabled"); // Lưu trạng thái
+    } else {
+      document.body.classList.remove("dark-mode");
+      modeLabel.textContent = "Chế Độ Sáng";
+      localStorage.setItem("darkMode", "disabled"); // Lưu trạng thái
+    }
+  });
+});
+
+  document.getElementById('chat-header').onclick = function() {
+      const chatBody = document.getElementById('chat-body');
+      const chatHeader = document.getElementById('chat-header');
+
+      chatHeader.style.display = 'none'; // Ẩn nút Chat
+      chatBody.style.display = 'block'; // Hiện ô chat
+
+      setTimeout(() => {
+          chatBody.classList.add('active'); // Hiện ô chat với hiệu ứng phóng to
+      }, 10); // Đảm bảo transition diễn ra
+  }
+
+  // Đóng ô chat
+  document.getElementById('close-chat').onclick = function() {
+      const chatBody = document.getElementById('chat-body');
+      const chatHeader = document.getElementById('chat-header');
+
+      chatBody.classList.remove('active'); // Thu nhỏ ô chat
+      setTimeout(() => {
+          chatBody.style.display = 'none'; // Ẩn ô chat
+          chatHeader.style.display = 'block'; // Hiện lại nút Chat
+      }, 300); // Thời gian thu nhỏ
+  }
+
+
+
+</script>
   
   <script>
     var quill = new Quill('#editor', {
