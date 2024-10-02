@@ -3,10 +3,13 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1:3001
--- Thời gian đã tạo: Th9 25, 2024 lúc 06:49 AM
+-- Thời gian đã tạo: Th10 02, 2024 lúc 12:16 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
+DROP DATABASE IF EXISTS product_db;
+CREATE DATABASE product_db DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE product_db;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -20,6 +23,22 @@ SET time_zone = "+00:00";
 --
 -- Cơ sở dữ liệu: `product_db`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `paydata`
+--
+
+CREATE TABLE `paydata` (
+  `id` int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
+  `productid` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `discount` decimal(5,2) DEFAULT 1.00,
+  `price` decimal(10,2) NOT NULL,
+  `index` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -58,6 +77,20 @@ INSERT INTO `products` (`id`, `name`, `description`, `price`, `quantity`, `image
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `ratings`
+--
+
+CREATE TABLE `ratings` (
+  `id` int(11) NOT NULL,
+  `user_id` varchar(20) NOT NULL,
+  `product_id` varchar(50) NOT NULL,
+  `rating` int(11) NOT NULL CHECK (`rating` >= 1 and `rating` <= 5),
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `users`
 --
 
@@ -86,7 +119,9 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `avatar`, `balance`, `re
 ('WEsUEBHmJv', 'Trung Kien', 'test4@gmail.com', '$2a$10$kKeYCR6EI1la0g9RpHRv6OMsVEUwiVIuH7Hf5f4vEywN04YJuTiSS', NULL, 0, 0, NULL, '', 0),
 ('iiU3QGItfH', 'Trung Kien2', 'test5@gmail.com', '$2a$10$AVoeJpiGjKVpcymva3bDGeXl6r9XApD.jvV304LNbO0p2Em31Q9Ue', NULL, 0, 0, NULL, '', 0),
 ('YfvViHLuSg', 'Minh Quan', 'tests@gmail.com', '$2a$10$Qbieq3M325I1EXvjsEcRcuwpJBe/P/xr5wkArhByJK7p7DJRMPZqS', 0x75706c6f6164732f5966765669484c7553672e6a7067, 0, 0, NULL, '', 0),
-('TfF2cAin7Z', 'Mink Quan', 'testq@gmail.com', '$2a$10$gPKL5h8vVDEoF.ytexJ5rOiV.QqaV2cVPTr/0WGhkugutM5kXNHgO', NULL, 0, 0, NULL, '', 0);
+('TfF2cAin7Z', 'Mink Quan', 'testq@gmail.com', '$2a$10$gPKL5h8vVDEoF.ytexJ5rOiV.QqaV2cVPTr/0WGhkugutM5kXNHgO', NULL, 0, 0, NULL, '', 0),
+('59xzprS0Xx', 'Quan Minh', 'ezdd@gmail.com', '$2a$10$kHS0QJwn6v9b6VirCDrLw.X4NZFMIDywX4vMQtJp6fYrwUOYYkr5.', NULL, 0, 0, NULL, '', 0),
+('zTo8xZt3ra', 'membeo', 'membeo@gmail.com', '$2a$10$wdBsEfI.ETXqgj8Oyb9mC.iBkLV9w66o8L3bfDeeJNCXPEauDLjLa', NULL, 0, 0, NULL, '', 0);
 
 -- --------------------------------------------------------
 
@@ -111,9 +146,21 @@ INSERT INTO `user_cart` (`user_id`, `product_id`) VALUES
 --
 
 --
+-- Chỉ mục cho bảng `paydata`
+--
+ALTER TABLE `paydata`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Chỉ mục cho bảng `products`
 --
 ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `ratings`
+--
+ALTER TABLE `ratings`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -121,6 +168,22 @@ ALTER TABLE `products`
 --
 ALTER TABLE `user_cart`
   ADD PRIMARY KEY (`user_id`,`product_id`);
+
+--
+-- AUTO_INCREMENT cho các bảng đã đổ
+--
+
+--
+-- AUTO_INCREMENT cho bảng `paydata`
+--
+ALTER TABLE `paydata`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `ratings`
+--
+ALTER TABLE `ratings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
