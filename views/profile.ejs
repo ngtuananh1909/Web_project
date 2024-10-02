@@ -657,23 +657,32 @@
 
 
       <script>
-        const toggleButton = document.getElementById('toggle-dark-mode');
-        const body = document.body;
-      
-        // Kiểm tra nếu chế độ tối đã được kích hoạt trước đó
-        if (localStorage.getItem('darkMode') === 'enabled') {
-          body.classList.add('dark-mode');
-        }
-      
-        toggleButton.addEventListener('click', () => {
-          body.classList.toggle('dark-mode');
-          if (body.classList.contains('dark-mode')) {
-            localStorage.setItem('darkMode', 'enabled');
+        document.addEventListener("DOMContentLoaded", function () {
+        const toggleDarkMode = document.getElementById("toggle-dark-mode");
+        const modeLabel = document.getElementById("mode-label");
   
+        // Kiểm tra chế độ hiện tại từ localStorage (nếu có)
+        if (localStorage.getItem("darkMode") === "enabled") {
+          document.body.classList.add("dark-mode");
+          toggleDarkMode.checked = true;
+          modeLabel.textContent = "Chế Độ Dark ";
+        }
+  
+        // Xử lý sự kiện khi chuyển đổi chế độ
+        toggleDarkMode.addEventListener("change", function () {
+          if (toggleDarkMode.checked) {
+            document.body.classList.add("dark-mode");
+            modeLabel.textContent = "Chế Độ Dark ";
+            localStorage.setItem("darkMode", "enabled"); // Lưu trạng thái
           } else {
-            localStorage.setItem('darkMode', 'disabled');
+            document.body.classList.remove("dark-mode");
+            modeLabel.textContent = "Chế Độ Sáng";
+            localStorage.setItem("darkMode", "disabled"); // Lưu trạng thái
           }
         });
+      });
+      </script>
+      <script>
         document.getElementById('chat-header').onclick = function() {
             const chatBody = document.getElementById('chat-body');
             const chatHeader = document.getElementById('chat-header');
