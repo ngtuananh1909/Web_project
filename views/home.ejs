@@ -755,12 +755,127 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
-    <script src="colorThief.js"></script>
-    <script src="darkMode.js"></script>
-    <script src="chat.js"></script>
-    <script src="cart.js"></script>
-    <script src="rating.js"></script>
-    <script src="formValidation.js"></script>
+    <script>
+      window.onload = function () {
+        const img = document.querySelector('body');
+        const colorThief = new ColorThief();
+        const imgElement = new Image();
+        imgElement.src = img.style.backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/i, "$1");
+        imgElement.onload = function() {
+          const dominantColor = colorThief.getColor(imgElement);
+          document.querySelector('header').style.backgroundColor = `rgb(${dominantColor})`;
+        };
+      };
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+      const toggleDarkMode = document.getElementById("toggle-dark-mode");
+      const modeLabel = document.getElementById("mode-label");
+
+      // Kiểm tra chế độ hiện tại từ localStorage (nếu có)
+      if (localStorage.getItem("darkMode") === "enabled") {
+        document.body.classList.add("dark-mode");
+        toggleDarkMode.checked = true;
+        modeLabel.textContent = "Chế Độ Dark ";
+      }
+
+      // Xử lý sự kiện khi chuyển đổi chế độ
+      toggleDarkMode.addEventListener("change", function () {
+        if (toggleDarkMode.checked) {
+          document.body.classList.add("dark-mode");
+          modeLabel.textContent = "Chế Độ Dark ";
+          localStorage.setItem("darkMode", "enabled"); // Lưu trạng thái
+        } else {
+          document.body.classList.remove("dark-mode");
+          modeLabel.textContent = "Chế Độ Sáng";
+          localStorage.setItem("darkMode", "disabled"); // Lưu trạng thái
+        }
+      });
+    });
+    </script>
+    <script>
+      document.getElementById('chat-header').onclick = function() {
+          const chatBody = document.getElementById('chat-body');
+          const chatHeader = document.getElementById('chat-header');
+
+          chatHeader.style.display = 'none'; // Ẩn nút Chat
+          chatBody.style.display = 'block'; // Hiện ô chat
+
+          setTimeout(() => {
+              chatBody.classList.add('active'); // Hiện ô chat với hiệu ứng phóng to
+          }, 10); // Đảm bảo transition diễn ra
+      }
+
+      // Đóng ô chat
+      document.getElementById('close-chat').onclick = function() {
+          const chatBody = document.getElementById('chat-body');
+          const chatHeader = document.getElementById('chat-header');
+
+          chatBody.classList.remove('active'); // Thu nhỏ ô chat
+          setTimeout(() => {
+              chatBody.style.display = 'none'; // Ẩn ô chat
+              chatHeader.style.display = 'block'; // Hiện lại nút Chat
+          }, 300); // Thời gian thu nhỏ
+      }
+
+
+
+    </script>
+        
+    <script>
+      $(document).on('click', '.addToCartBtn', function() {
+        const productId = $(this).data('product-id');
+        $('#addToCartModal').data('product-id', productId).modal('show');
+    });
+
+
+    $('.confirmAddToCartBtn').on('click', function() {
+        const productId = $('#addToCartModal').data('product-id');
+        $.ajax({
+            type: 'POST',
+            url: '/auth/add-to-cart',
+            data: { productId: productId },
+            success: function(response) {
+                alert('Sản phẩm đã được thêm vào giỏ hàng!');
+                $('#addToCartModal').modal('hide');
+            },
+            error: function() {
+                alert('Đã có lỗi xảy ra, vui lòng thử lại!');
+            }
+        });
+    });
+
+    </script>
+      
+      <script>
+        $(document).ready(function() {
+          $('.viewProductBtn').click(function(event) {
+              event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
+
+              const productId = $(this).data('product-id');
+              const score = $(this).data('product-score'); // Điểm số đánh giá
+
+              // Gửi yêu cầu thêm đánh giá
+              $.post('/add-rating', { product_id: productId, score: score }, function(response) {
+                  if (response.success) {
+                      // Nếu thêm đánh giá thành công, chuyển đến trang chi tiết sản phẩm
+                      window.location.href = `/product/${productId}`;
+                  } else {
+                      alert('Có lỗi xảy ra khi thêm đánh giá. Vui lòng thử lại.');
+                  }
+              });
+          });
+      });
+    </script>
+    <script>
+      function validateForm(event) {
+          const queryInput = document.querySelector('input[name="query"]');
+          if (!queryInput.value.trim()) {
+              event.preventDefault(); // Ngăn chặn gửi biểu mẫu
+              alert("Vui lòng nhập một từ khóa tìm kiếm."); // Hiển thị thông báo
+          }
+      }
+  </script>
 
   
    </body>
