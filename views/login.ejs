@@ -322,7 +322,6 @@
                     <label for="password">Password</label>
                 </div>  
                 <span class="error-message" id="error-message" style="display: none;"></span>
-                            
                 <a href="#">Forget Your Password?</a>
                 <button>Sign In</button>
           </form>
@@ -407,7 +406,27 @@
         }
         marqueeContainer.style.marginLeft = `${offset}px`;
     }, 50);
+
+    // Xử lý khi nhấn nút "Sign In"
+    document.querySelector('.sign-in form button').addEventListener('click', (e) => {
+        e.preventDefault();
+        // Lấy thông tin từ input
+        const email = document.querySelector('.sign-in input[placeholder="Email"]').value;
+        const password = document.querySelector('.sign-in input[placeholder="Password"]').value;
+        const errorMessage = document.getElementById('error-message');
+
+        // Kiểm tra điều kiện đăng nhập
+        if (email === "example@example.com" && password === "password123") { // Thay thế bằng điều kiện thật
+            alert('Logged in successfully!\nEmail: ' + email);
+            errorMessage.style.display = "none"; // Ẩn thông báo lỗi
+        } else {
+            errorMessage.textContent = 'Email hoặc mật khẩu không đúng. Vui lòng thử lại.';
+            errorMessage.style.display = "block"; // Hiển thị thông báo lỗi
+        }
+    });
+
     </script>
+    
     
 
 </html>

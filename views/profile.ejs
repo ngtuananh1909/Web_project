@@ -39,7 +39,7 @@
         }
 
         .scrollable-card-body {
-            height: 700px;
+            height: auto;
             overflow-y: auto;
         }
 
@@ -248,77 +248,188 @@
       .dark-mode .alpha{
         color: rgb(255, 255, 255);
       }
+      .search{
+        height: 80%;
+        width: 50%;
+      }
+      .button-search {
+        background: linear-gradient(to right, #6a11cb, #2575fc); /* Nền gradient màu tím xanh */
+        color: #ffffff; /* Màu chữ trắng */
+        padding: 12px 24px; /* Khoảng cách bên trong nút */
+        border: none; /* Bỏ viền */
+        border-radius: 25px; /* Bo tròn góc */
+        font-size: 16px; /* Kích thước chữ */
+        font-weight: bold; /* Chữ đậm */
+        cursor: pointer; /* Con trỏ chuột thành dạng tay khi di chuột vào nút */
+        transition: all 0.9s ease; /* Hiệu ứng chuyển đổi mượt mà */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Thêm bóng cho nút */
+        width: 25%;
+      }
+
+      .button-search:hover {
+        background: linear-gradient(to right, #005bf9, #11cb11);
+      }
+
+     /* Style for the switch */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 48px; /* Tăng chiều rộng để có đủ không gian cho nút */
+        height: 24px; /* Điều chỉnh chiều cao */
+        margin-left: 15px; /* Khoảng cách giữa nhãn và công tắc */
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #d6d6d6; /* Màu nền ban đầu của thanh chuyển */
+        transition: 0.4s;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px; /* Kích thước của nút */
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); /* Đổ bóng cho nút */
+      }
+
+      input:checked + .slider {
+        background-color: #4CAF50; /* Màu nền khi chế độ tối được bật */
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(24px); /* Điều chỉnh độ dịch chuyển khi bật */
+      }
+
+      .slider.round {
+        border-radius: 34px; /* Bo góc cho thanh chuyển */
+      }
+
+      .slider.round:before {
+        border-radius: 50%; /* Bo góc cho nút */
+      }
+
+      .change-mode {
+        font-size: 14px; /* Kích thước chữ dễ nhìn hơn */
+        font-weight: 500; /* Tăng độ đậm của chữ */
+        color: #333; /* Màu chữ cân bằng giữa sáng và tối */
+      }
+      .dark-mode .change-mode {
+        font-size: 14px; /* Kích thước chữ dễ nhìn hơn */
+        font-weight: 500; /* Tăng độ đậm của chữ */
+        color: #ffffff; /* Màu chữ cân bằng giữa sáng và tối */
+      }
+      .list-connect {
+            background-color: white;
+            color: #000;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .dark-mode .list-connect {
+            background-color: #333333;
+            color: white;
+        }
+
+        .list-group-item {
+            background-color: transparent;
+        }
+
+        .dark-mode .list-group-item {
+            background-color: transparent;
+            color: white;
+        }
 
     </style>
 </head>
 
 <body>
-    <header class="header-design" >
-        <div class="container-fluid py-3" >
-          <div class="container d-flex justify-content-between align-items-center" style="margin-left: 476px;">
-            <h1 class="h4 mb-0">
-              <a href="/" class="text-decoration-none" style="margin-left: -197px;"><strong>E-Shop</strong></a>
-            </h1>
-            <nav class="nav">
-              <ul class="nav">
-                <li class="nav-item">
-                  <a class="nav-link home" href="/">
-                      <img src="/img/home.png" alt="" class="home-icon"></img>
-                  </a>
-              </li>
-                <li class="nav-item">
-                  <a class="nav-link bxh" href="/scoreboard">
-                    <img src="/img/bxh.jpg" alt="" class="bxh-icon">
-                  </a>
-                </li>
-                <% if (!user) { %>
-                <li class="nav-item">
-                  <a class="nav-link login" href="/login">Đăng nhập</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link dangky" href="/register">Đăng ký</a>
-                </li>
-                <button id="toggle-dark-mode" style="margin-left: 150px;">
-                  <img src="img/mode.png" alt="" class="mode-button"></img>
-                </button>
+  <header class="header-design">
+    <div class="container-fluid py-3">
+      <div class="container d-flex justify-content-between align-items-center" style="margin-left: 415px;">
+        <h1 class="h4 mb-0">
+          <a href="/" class="text-decoration-none" style="margin-left: -130px;"><strong>E-Shop</strong></a>
+        </h1>
+        <nav class="nav">
+          <ul class="nav">
+            <li class="nav-item">
+              <a class="nav-link home" href="/">
+                <img src="/img/home.png" alt="" class="home-icon"></img>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link bxh" href="/scoreboard">
+                <img src="/img/bxh.jpg" alt="" class="bxh-icon">
+              </a>
+            </li>
+            <% if (!user) { %>
+            <li class="nav-item">
+              <a class="nav-link login" href="/login">Đăng nhập</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link dangky" href="/register">Đăng ký</a>
+            </li>
+            <% } else { %>
+            <li class="nav-item">
+              <a class="nav-link giohang" href="/cart">
+                <img src="/img/cart.jpg" alt="" class="cart-icon">                  
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link taosanpham" href="/product/add">
+                <img src="/img/add.jpg" alt="" class="add-icon">
+              </a>
+            </li>
+            <li class="nav-item dropdown" style="width: 200px;">
+              <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
+                <% if (user.avatar) { %>
+                <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
                 <% } else { %>
-                <li class="nav-item">
-                  <a class="nav-link giohang" href="/cart">
-                      <img src="/img/cart.jpg" alt="" class="cart-icon">                  
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link taosanpham" href="/product/add">
-                    <img src="/img/add.jpg" alt="" class="add-icon">
-                  </a>
-                </li>
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
-                    <% if (user.avatar) { %>
-                    <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
-                    <% } else { %>
-                    <img src="./img/def.jpg" class="avatar me-2" alt="" />
-                    <% } %>
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                    <li>
-                      <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
-                    </li>
-                    <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                    <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
-                    <li><hr class="dropdown-divider" /></li>
-                    <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
-                  </ul>
-                </li>
-                <button id="toggle-dark-mode" style="margin-left: 150px;">
-                  <img src="img/mode.png" alt="" class="mode-button"></img>
-                </button>
+                <img src="./img/def.jpg" class="avatar me-2" alt="" />
                 <% } %>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <li>
+                  <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
+                </li>
+                <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
+                <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <!-- Chuyển đổi giao diện -->
+                <li class="nav-item">
+                  <div class="d-flex align-items-center px-3 py-2">
+                    <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
+                    <label class="switch" >
+                      <input type="checkbox" id="toggle-dark-mode">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
               </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
+            </li>                       
+            <% } %>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
     <section class="body">
         <div class="container py-5">
             <div class="row">
@@ -343,32 +454,32 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card mb-4 mb-lg-0">
-                        <div class="card-body p-0">
-                            <ul class="list-group list-group-flush rounded-3">
-                                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                    <i class="fas fa-globe fa-lg text-warning"></i>
-                                    <p class="mb-0">https://mdbootstrap.com</p>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                    <i class="fab fa-github fa-lg text-body"></i>
-                                    <p class="mb-0">mdbootstrap</p>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                    <i class="fab fa-twitter fa-lg" style="color: #55acee;"></i>
-                                    <p class="mb-0">@mdbootstrap</p>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                    <i class="fab fa-instagram fa-lg" style="color: #ac2bac;"></i>
-                                    <p class="mb-0">mdbootstrap</p>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                    <i class="fab fa-facebook-f fa-lg" style="color: #3b5998;"></i>
-                                    <p class="mb-0">mdbootstrap</p>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                    <div class="list-connect">
+                      <div class="card-body p-0">
+                          <ul class="list-group list-group-flush rounded-3 list-connect">
+                              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                  <i class="fas fa-globe fa-lg text-warning"></i>
+                                  <p class="mb-0">https://mdbootstrap.com</p>
+                              </li>
+                              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                  <i class="fab fa-github fa-lg text-body"></i>
+                                  <p class="mb-0">mdbootstrap</p>
+                              </li>
+                              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                  <i class="fab fa-twitter fa-lg" style="color: #55acee;"></i>
+                                  <p class="mb-0">@mdbootstrap</p>
+                              </li>
+                              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                  <i class="fab fa-instagram fa-lg" style="color: #ac2bac;"></i>
+                                  <p class="mb-0">mdbootstrap</p>
+                              </li>
+                              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                  <i class="fab fa-facebook-f fa-lg" style="color: #3b5998;"></i>
+                                  <p class="mb-0">mdbootstrap</p>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
                 </div>
                 <div class="col-lg-8">
                     <div class="card mb-4">
@@ -446,6 +557,7 @@
                                     <div class="card-body scrollable-card-body">
                                         <p class="mb-4"><span class="text-primary font-italic me-1">My Product</span> List of my products</p>
                                         <div class="row row-cols-1 row-cols-md-5 g-4" style="display: flex; flex-wrap: wrap; gap: 100px;">
+                                          <% if (products.length > 0) { %>
                                             <% products.forEach(product => { %>
                                                 <div class="col" style="flex: 0 0 20%; max-width: 20%;">
                                                     <div class="card product-card">
@@ -469,8 +581,13 @@
                                                     </div>
                                                 </div>
                                             <% }); %>
-                                        </div>
+                                        <% } else { %>
+                                            <div class="col-12">
+                                                <h3>No items</h3>
+                                            </div>
+                                        <% } %>
                                         
+                                        </div>
                                 </div>
                             </div>
                             <div id="boughtProduct" class="hidden">

@@ -369,6 +369,19 @@
         font-weight: 500; /* Tăng độ đậm của chữ */
         color: #ffffff; /* Màu chữ cân bằng giữa sáng và tối */
       }
+
+      .decresion {
+          background-color: white !important;
+          color: #000 !important;
+          padding: 10px !important;
+          border-radius: 8px !important;
+      }
+
+      .dark-mode .decresion {
+          background-color: rgb(48, 48, 48) !important;
+          color: white !important;
+      }
+
       
 
   </style>
@@ -502,8 +515,8 @@
           <div class="form-group" id="sale-value-container" style="display: none; margin-left: 286px; margin-top: -58px; height: auto; width: auto; background-color: transparent;">
             <input type="number" id="saleval" name="saleval" class="form-control button-input" style="height: auto; width: auto;" min="1" max="99" step="1" placeholder="% Sale">
           </div>
-          <div class="form-group" style="margin-left: 195px; margin-bottom: 100px;">
-            <div id="editor" style="height: 200px;"></div>
+          <div class="form-group decresion" style="margin-left: 195px; margin-bottom: 100px;">
+            <div id="editor" class="decresion" style="height: 200px;"></div>
             <input type="hidden" id="description" name="description">
           </div>
           <button type="submit" class="btn btn-success button-submit" style="margin-top: -25px; margin-left: 510px; width: 350px; background-color: #2897f8;">Add Product</button>
