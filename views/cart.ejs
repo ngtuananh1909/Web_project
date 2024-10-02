@@ -399,142 +399,43 @@
                       <img src="/img/cart.jpg" alt="" class="cart-icon">                  
                     </a>
                   </li>
-                  <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                  <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
-                  <li><hr class="dropdown-divider" /></li>
-                  <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
-                </ul>
-              </li>
-              <button id="toggle-dark-mode" style="margin-left: 150px;">
-                <img src="img/mode.png" alt="" class="mode-button"></img>
-              </button>
-              <% } %>
-            </ul>
-          </nav>
-        </div>
-      </div>
-    </header>
-    
-
-    <section class="h-100">
-      <div class="container h-100 py-5" style="margin-top: 70px;margin-bottom: 200px; margin-left: 406px;">
-          <div class="col-10">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="fw-normal mb-0"><strong>Shopping Cart</strong></h1>
-              </center>
-              <div>
-              </div>
-            </div >
-              <% if (products.length > 0) { %> 
-              <% products.forEach(product => { %>
-                <div class="card rounded-3 mb-4">
-                  <div class="card-bo dy p-4">
-                    <div class="row d-flex justify-content-between align-items-center">
-                      <input type="checkbox" style="width: 20px; height: 20px; margin-left: 0px; background-color: #f0f0f0; border: 1px solid #ccc; margin-right: 10px;">
-
-                      <div class="col-md-2 col-lg-2 col-xl-2">
-                        <img
-                          src="/uploads/<%= product.image %>"
-                          class="img-fluid rounded-3"
-                          alt="<%= product.name %>"
-                        />
+                  <li class="nav-item">
+                    <a class="nav-link taosanpham" href="/product/add">
+                      <img src="/img/add.jpg" alt="" class="add-icon">
+                    </a>
+                  </li>
+                  <li class="nav-item dropdown" style="width: 200px;">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
+                      <% if (user.avatar) { %>
+                      <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
+                      <% } else { %>
+                      <img src="./img/def.jpg" class="avatar me-2" alt="" />
+                      <% } %>
+                    </a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li>
+                      <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
+                    </li>
+                    <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
+                    <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <!-- Chuyển đổi giao diện -->
+                    <li class="nav-item">
+                      <div class="d-flex align-items-center px-3 py-2">
+                        <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
+                        <label class="switch" >
+                          <input type="checkbox" id="toggle-dark-mode">
+                          <span class="slider round"></span>
+                        </label>
                       </div>
-                      <div class="col-md-3 col-lg-3 col-xl-3">
-                        <p class="lead fw-normal mb-2"><%= product.name %></p>
-                      </div>
-                      <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                        <button
-                          data-mdb-button-init
-                          data-mdb-ripple-init
-                          class="btn btn-link px-2"
-                          onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
-                        >
-                          <i class="fas fa-minus"></i>
-                        </button>
-                  
-                        <input
-                          id="quantity_<%= product.id %>"
-                          min="1"
-                          name="quantity"
-                          value="<%= product.quantity %>"
-                          type="number"
-                          class="form-control form-control-sm quantity"
-                          data-price="<%= product.price %>"
-                        />
-  
-                  
-                        <button
-                          data-mdb-button-init
-                          data-mdb-ripple-init
-                          class="btn btn-link px-2"
-                          onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
-                        >
-                          <i class="fas fa-plus"></i>
-                        </button>
-                      </div>
-                      <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                        <h5 class="mb-0">
-                          <%= formatCurrency(product.price * product.quantity) %> VNĐ
-                        </h5>
-                      </div>
-                      <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                        <button
-                          class="text-danger"
-                          style="background: none; border: none; padding: 0;"
-                          onclick="removeFromCart('<%= product.id %>')"
-                        >
-                          <img src="img/delete.png" alt="" class="delete-icon" />
-                        </button>
-                      </div>                    
-                    </div>
-                  </div>                
-                </div>
-                <% }); %> 
-              <% } else { %>
-              <div class="alert alert-info" role="alert">No items in cart.</div>
-              <% } %>
-            
-
-              <div class="pay-code">
-                <div class="card mb-4">
-                  <div class="card-body">
-                    <label class="form-label" for="discountCode" style="margin-left: 10px; margin-top: 7px;">Mã giảm giá:</label>
-                    <input type="text" id="discountCode" class="form-control" placeholder="Nhập mã giảm giá" style="width: 250px; display: inline-block; margin-left: 10px;">
-                    <button class="btn btn-secondary" style="display: inline-block;">Áp dụng</button>
-                  </div>
-                </div>
-                <form action="/checkout/<%= user.id %>" method="POST">
-                  <div class="card">
-                    <div class="card-body d-flex justify-content-between align-items-center">
-                      <div class="total" style="font-size: 20px;">
-                        <strong>Tổng cộng: </strong><span id="totalAmount">0</span>
-                      </div>
-                      <input type="hidden" name="selectedProducts" value="<%= JSON.stringify(selectedProducts) %>">
-                      <input type="hidden" name="discountCode" value="<%= discountCode %>">
-                      <button type="submit" class="btn btn-warning btn-lg">
-                        Tiến hành thanh toán
-                      </button>
-                    </div>
-                  </div>
-                </form>
-      </div>
-    </section>
-    <div style="position: fixed; bottom: 0; right: 0; width: 150px; z-index: 1000; background-color: transparent; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
-      <div id="chat-header" style="background-color: #007bff; color: white; padding: 10px; cursor: pointer; width: 70px; margin-left:78px ;">
-          <img src="/img/mesage.png" alt="" style="height: 30px; width: 30px; margin-left: 10px;" >
-      </div>
-      <div id="chat-body" style="display: none; padding: 10px;">
-        <div id="close-chat" style="cursor: pointer; color: red; margin-left: 460px; margin-top: -10px;">&times;</div> <!-- Nút đóng -->
-        <div style="position: absolute; top: 5px; left: 20px;font-size: 30px;">Chat</div>
-        
-        <div style="margin-top: 10px;"></div>
-        
-        <div style="display: flex;">
-          <div class="row" style="width: 220px; height: 440px; overflow-y: scroll;">
-            <% for (let i = 0; i < 5; i++) { %>
-              <div style="margin-left: 8px; width: 190px; height: 80px; background-color: #007bff; border: 1px solid #ccc; margin-top: 15px; display: block;"></div>
-            <% } %>
-            <div style="margin-bottom: 60px;"></div>
+                    </li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                  </ul>
+                </li>                       
+                <% } %>
+              </ul>
+            </nav>
           </div>
         </div>
       </header>
@@ -555,6 +456,7 @@
                     <div class="card-bo dy p-4">
                       <div class="row d-flex justify-content-between align-items-center">
                         <input type="checkbox" style="width: 20px; height: 20px; margin-left: 0px; background-color: #f0f0f0; border: 1px solid #ccc; margin-right: 10px;">
+  
                         <div class="col-md-2 col-lg-2 col-xl-2">
                           <img
                             src="/uploads/<%= product.image %>"
@@ -613,31 +515,33 @@
                     </div>                
                   </div>
                   <% }); %> 
-                  <% } else { %>
-                      <span class="no-items-container"  role="alert">No items in cart.</span>
-                  <% } %>
-                  
+                <% } else { %>
+                <div class="alert alert-info" role="alert">No items in cart.</div>
+                <% } %>
               
-                <form action="/checkout" method="POST">
-                  <div class="pay-code">
-                    <div class="card mb-4">
-                    <div class="card mb-4 discode" >
-                      <label class="form-label" for="discountCode" style="margin-left: 10px; margin-top: 7px;">Discount code:</label>
+  
+                <div class="pay-code">
+                  <div class="card mb-4">
+                    <div class="card-body">
+                      <label class="form-label" for="discountCode" style="margin-left: 10px; margin-top: 7px;">Mã giảm giá:</label>
+                      <input type="text" id="discountCode" class="form-control" placeholder="Nhập mã giảm giá" style="width: 250px; display: inline-block; margin-left: 10px;">
+                      <button class="btn btn-secondary" style="display: inline-block;">Áp dụng</button>
                     </div>
-                  
-                    <div class="card" style="margin-top: -30px;">
-                      <div class="card-body" style="margin-left: 838px;">
-                        <div class="total" style="margin-bottom: -40px; margin-left: -840px; font-size: 20px;">
-                          <strong>Total:</strong> <!-- Thay thế bằng số tiền thực tế -->
+                  </div>
+                  <form action="/checkout/<%= user.id %>" method="POST">
+                    <div class="card">
+                      <div class="card-body d-flex justify-content-between align-items-center">
+                        <div class="total" style="font-size: 20px;">
+                          <strong>Tổng cộng: </strong><span id="totalAmount">0</span>
                         </div>
-                
-                        <button type="submit" class="btn btn-warning btn-block btn-lg" style="margin-bottom: -10px;">
-                          Proceed to Pay
+                        <input type="hidden" name="selectedProducts" value="<%= JSON.stringify(selectedProducts) %>">
+                        <input type="hidden" name="discountCode" value="<%= discountCode %>">
+                        <button type="submit" class="btn btn-warning btn-lg">
+                          Tiến hành thanh toán
                         </button>
                       </div>
                     </div>
-                  </div>
-                </form>
+                  </form>
         </div>
       </section>
       <div style="position: fixed; bottom: 0; right: 0; width: 150px; z-index: 1000; background-color: transparent; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
@@ -662,46 +566,32 @@
           </div>
           
         </div>
-        
-      </div> 
-    </body>
-  
+      
     </div> 
   </body>
   
 
   <script>
-          function calculateTotal() {
-          let total = 0;
-          const quantities = document.querySelectorAll('.quantity');
+    function calculateTotal() {
+        let total = 0;
+        const quantities = document.querySelectorAll('.quantity');
+        
+        document.querySelectorAll('input[type="checkbox"]').forEach((checkbox, index) => {
+            if (checkbox.checked) {
+                const quantity = quantities[index];
+                const price = parseFloat(quantity.getAttribute('data-price')) || 0;
+                const qty = parseInt(quantity.value) || 0;
+                total += qty * price;
+            }
+        });
 
-          document.querySelectorAll('input[type="checkbox"]').forEach((checkbox, index) => {
-              if (checkbox.checked) {
-                  const quantity = quantities[index];
-                  const price = parseFloat(quantity.getAttribute('data-price')) || 0;
-                  const qty = parseInt(quantity.value) || 0;
-                  total += qty * price;
-              }
-          });
-
-          document.querySelector('.total span').innerText = total.toLocaleString() + " VNĐ";
-      }
-
-      // Gán sự kiện cho các input và checkbox
-      function addEventListeners() {
-          document.querySelectorAll('.quantity').forEach(input => {
-              input.addEventListener('change', calculateTotal);
-              input.addEventListener('input', calculateTotal);
-          });
-
-          document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-              checkbox.addEventListener('change', calculateTotal);
-          });
-      }
-
-      // Gọi hàm khởi tạo
-      addEventListeners();
-      calculateTotal();
+        document.querySelector('.total span').innerText = total.toLocaleString() + " VNĐ";
+    }
+  
+    document.querySelectorAll('.quantity').forEach(input => {
+        input.addEventListener('change', calculateTotal);
+        input.addEventListener('input', calculateTotal); 
+    });
   </script>
   <script>
     const toggleButton = document.getElementById('toggle-dark-mode');
@@ -719,16 +609,7 @@
       } else {
         localStorage.setItem('darkMode', 'disabled');
       }
-    
-      document.querySelectorAll('.quantity').forEach(input => {
-          input.addEventListener('change', calculateTotal);
-          input.addEventListener('input', calculateTotal); // Cập nhật khi người dùng nhập
-      });
-    
-      // Tính tổng lần đầu khi trang được tải
-      calculateTotal();
-    </script>
-    
+      </script>
     <script>
       function removeFromCart(productId) {
           fetch(`/cart/remove/${productId}`, {
@@ -753,49 +634,55 @@
       }
     </script>
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-      const toggleDarkMode = document.getElementById("toggle-dark-mode");
-      const modeLabel = document.getElementById("mode-label");
+        document.addEventListener("DOMContentLoaded", function () {
+        const toggleDarkMode = document.getElementById("toggle-dark-mode");
+        const modeLabel = document.getElementById("mode-label");
 
-      // Kiểm tra chế độ hiện tại từ localStorage (nếu có)
-      if (localStorage.getItem("darkMode") === "enabled") {
-        document.body.classList.add("dark-mode");
-        toggleDarkMode.checked = true;
-        modeLabel.textContent = "Chế Độ Dark ";
-      }
-
-      // Xử lý sự kiện khi chuyển đổi chế độ
-      toggleDarkMode.addEventListener("change", function () {
-        if (toggleDarkMode.checked) {
+        // Kiểm tra chế độ hiện tại từ localStorage (nếu có)
+        if (localStorage.getItem("darkMode") === "enabled") {
           document.body.classList.add("dark-mode");
+          toggleDarkMode.checked = true;
           modeLabel.textContent = "Chế Độ Dark ";
-          localStorage.setItem("darkMode", "enabled"); // Lưu trạng thái
-        } else {
-          document.body.classList.remove("dark-mode");
-          modeLabel.textContent = "Chế Độ Sáng";
-          localStorage.setItem("darkMode", "disabled"); // Lưu trạng thái
         }
+
+        // Xử lý sự kiện khi chuyển đổi chế độ
+        toggleDarkMode.addEventListener("change", function () {
+          if (toggleDarkMode.checked) {
+            document.body.classList.add("dark-mode");
+            modeLabel.textContent = "Chế Độ Dark ";
+            localStorage.setItem("darkMode", "enabled"); // Lưu trạng thái
+          } else {
+            document.body.classList.remove("dark-mode");
+            modeLabel.textContent = "Chế Độ Sáng";
+            localStorage.setItem("darkMode", "disabled"); // Lưu trạng thái
+          }
+        });
+
+        // Hiện ô chat
+        document.getElementById('chat-header').onclick = function () {
+          const chatBody = document.getElementById('chat-body');
+          const chatHeader = document.getElementById('chat-header');
+
+          chatHeader.style.display = 'none'; // Ẩn nút Chat
+          chatBody.style.display = 'block'; // Hiện ô chat
+
+          setTimeout(() => {
+            chatBody.classList.add('active'); // Hiện ô chat với hiệu ứng phóng to
+          }, 10); // Đảm bảo transition diễn ra
+        };
+
+        // Đóng ô chat
+        document.getElementById('close-chat').onclick = function () {
+          const chatBody = document.getElementById('chat-body');
+          const chatHeader = document.getElementById('chat-header');
+
+          chatBody.classList.remove('active'); // Thu nhỏ ô chat
+          setTimeout(() => {
+            chatBody.style.display = 'none'; // Ẩn ô chat
+            chatHeader.style.display = 'block'; // Hiện lại nút Chat
+          }, 300); // Thời gian thu nhỏ
+        };
       });
-    });
+</script>
 
-        chatHeader.style.display = 'none'; 
-        chatBody.style.display = 'block'; 
-
-        setTimeout(() => {
-            chatBody.classList.add('active');
-        }, 10); 
-    }
-
-    document.getElementById('close-chat').onclick = function() {
-        const chatBody = document.getElementById('chat-body');
-        const chatHeader = document.getElementById('chat-header');
-
-        chatBody.classList.remove('active'); 
-        setTimeout(() => {
-            chatBody.style.display = 'none';
-            chatHeader.style.display = 'block'; 
-        }, 300);
-      }
-    </script>
-  
 </html>
