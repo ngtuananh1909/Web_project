@@ -393,25 +393,25 @@
                 <li class="nav-item">
                   <a class="nav-link dangky" href="/register">Đăng ký</a>
                 </li>
-                  <% } else { %>
-                  <li class="nav-item">
-                    <a class="nav-link giohang" href="/cart">
-                      <img src="/img/cart.jpg" alt="" class="cart-icon">                  
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link taosanpham" href="/product/add">
-                      <img src="/img/add.jpg" alt="" class="add-icon">
-                    </a>
-                  </li>
-                  <li class="nav-item dropdown" style="width: 200px;">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
-                      <% if (user.avatar) { %>
-                      <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
-                      <% } else { %>
-                      <img src="./img/def.jpg" class="avatar me-2" alt="" />
-                      <% } %>
-                    </a>
+                <% } else { %>
+                <li class="nav-item">
+                  <a class="nav-link giohang" href="/cart">
+                    <img src="/img/cart.jpg" alt="" class="cart-icon">                  
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link taosanpham" href="/product/add">
+                    <img src="/img/add.jpg" alt="" class="add-icon">
+                  </a>
+                </li>
+                <li class="nav-item dropdown" style="width: 200px;">
+                  <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
+                    <% if (user.avatar) { %>
+                    <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
+                    <% } else { %>
+                    <img src="./img/def.jpg" class="avatar me-2" alt="" />
+                    <% } %>
+                  </a>
                   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                     <li>
                       <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
@@ -446,7 +446,6 @@
             <div class="col-10">
               <div class="d-flex justify-content-between align-items-center mb-4">
                   <h1 class="fw-normal mb-0"><strong>Shopping Cart</strong></h1>
-                </center>
                 <div>
                 </div>
               </div >
@@ -593,23 +592,7 @@
         input.addEventListener('input', calculateTotal); 
     });
   </script>
-  <script>
-    const toggleButton = document.getElementById('toggle-dark-mode');
-    const body = document.body;
-  
-    if (localStorage.getItem('darkMode') === 'enabled') {
-      body.classList.add('dark-mode');
-    }
-  
-    toggleButton.addEventListener('click', () => {
-      body.classList.toggle('dark-mode');
-      if (body.classList.contains('dark-mode')) {
-        localStorage.setItem('darkMode', 'enabled');
-
-      } else {
-        localStorage.setItem('darkMode', 'disabled');
-      }
-      </script>
+  <script src="darkmode.js"></script>
     <script>
       function removeFromCart(productId) {
           fetch(`/cart/remove/${productId}`, {
@@ -634,31 +617,6 @@
       }
     </script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-        const toggleDarkMode = document.getElementById("toggle-dark-mode");
-        const modeLabel = document.getElementById("mode-label");
-
-        // Kiểm tra chế độ hiện tại từ localStorage (nếu có)
-        if (localStorage.getItem("darkMode") === "enabled") {
-          document.body.classList.add("dark-mode");
-          toggleDarkMode.checked = true;
-          modeLabel.textContent = "Chế Độ Dark ";
-        }
-
-        // Xử lý sự kiện khi chuyển đổi chế độ
-        toggleDarkMode.addEventListener("change", function () {
-          if (toggleDarkMode.checked) {
-            document.body.classList.add("dark-mode");
-            modeLabel.textContent = "Chế Độ Dark ";
-            localStorage.setItem("darkMode", "enabled"); // Lưu trạng thái
-          } else {
-            document.body.classList.remove("dark-mode");
-            modeLabel.textContent = "Chế Độ Sáng";
-            localStorage.setItem("darkMode", "disabled"); // Lưu trạng thái
-          }
-        });
-
-        // Hiện ô chat
         document.getElementById('chat-header').onclick = function () {
           const chatBody = document.getElementById('chat-body');
           const chatHeader = document.getElementById('chat-header');
@@ -682,7 +640,6 @@
             chatHeader.style.display = 'block'; // Hiện lại nút Chat
           }, 300); // Thời gian thu nhỏ
         };
-      });
 </script>
 
 </html>
