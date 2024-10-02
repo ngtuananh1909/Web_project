@@ -331,12 +331,17 @@
                 <div class="toggle-panel toggle-right">
                     <h1>Xin chào</h1>
                     <p>Chào mừng bạn đến với E-shop</p>
-                    <button class="hidden" id="register" type="submit">Sign Up</button>
+                    <button class="hidden" id="register" type="submit" href="/register">Sign Up</button>
                 </div>
             </div>
         </div>
     </div>
 </body>
+<script>
+    document.getElementById("register").addEventListener("click", function() {
+      window.location.href = "/register";
+    });
+  </script>
 <script>
   // Xử lý chuyển đổi giữa form đăng ký và đăng nhập
   const signUpButton = document.getElementById('register');
