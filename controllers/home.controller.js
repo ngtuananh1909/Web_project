@@ -19,63 +19,49 @@ exports.registerDisplay = (req, res) => {
     res.render('register');
 };
 
-exports.home = (req, res) => {
+exports.home = async (req, res) => {
     const userId = req.session.user ? req.session.user.id : null;
+    
+    try {
+        const productsQuery = 'SELECT * FROM products';
+        const userRatingsQuery = userId ? 'SELECT * FROM ratings WHERE user_id = ?' : null;
+        const allRatingsQuery = 'SELECT * FROM ratings';
 
-    db.query('SELECT * FROM products', (err, results) => {
-        if (err) {
-            console.error('Error fetching products:', err);
-            return res.render('home', { user: req.session.user, products: [] });
-        }
+        const [products, userRatings, allRatings] = await Promise.all([
+            query(productsQuery),
+            userId ? query(userRatingsQuery, [userId]) : Promise.resolve([]),
+            query(allRatingsQuery)
+        ]);
 
-        const formattedProducts = results.map(product => {
-            return {
-                ...product,
-                formatted_date: new Date(product.created_at).toLocaleDateString('vi-VN', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit'
-                })
-            };
-        });
+        const formattedProducts = products.map(product => ({
+            ...product,
+            formatted_date: new Date(product.created_at).toLocaleDateString('vi-VN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            })
+        }));
 
+        let recommendations = [];
         if (userId) {
-            db.query('SELECT * FROM ratings WHERE user_id = ?', [userId], async (err, userRatings) => {
-                if (err) {
-                    console.error('Error fetching user ratings:', err);
-                    return res.render('home', { user: req.session.user, products: formattedProducts, recommendations: [] });
-                }
-        
-                db.query('SELECT * FROM ratings', async (err, allRatings) => {
-                    if (err) {
-                        console.error('Error fetching all ratings:', err);
-                        return res.render('home', { user: req.session.user, products: formattedProducts, recommendations: [] });
-                    }
-        
-                    const userSimilarities = calculateUserSimilarity(userRatings, allRatings);
-                    const collaborativeRecommendations = getTopRecommendedProducts(userId, userSimilarities, allRatings);
-        
-                    const favoriteProductIds = userRatings.map(r => r.product_id);
-                    const contentRecommendations = await findSimilarProducts(favoriteProductIds);
-        
-                    const allRecommendations = [...collaborativeRecommendations, ...contentRecommendations];
-        
-                    const uniqueRecommendations = Array.from(new Set(allRecommendations.map(a => a.productId)))
-                        .map(id => allRecommendations.find(a => a.productId === id));
-        
-                    res.render('home', {
-                        user: req.session.user,
-                        products: formattedProducts,
-                        recommendations: uniqueRecommendations
-                    });
-                });
-            });
-        } else {
-            res.render('home', { user: req.session.user, products: formattedProducts, recommendations: [] });
+            const userSimilarities = calculateUserSimilarity(userRatings, allRatings);
+            const collaborativeRecommendations = getTopRecommendedProducts(userId, userSimilarities, allRatings);
+            const contentRecommendations = await findSimilarProducts(userRatings.map(r => r.product_id));
+
+            recommendations = [...new Set([...collaborativeRecommendations, ...contentRecommendations])];
         }
-        
-    });
+
+        res.render('home', {
+            user: req.session.user,
+            products: formattedProducts,
+            recommendations
+        });
+    } catch (err) {
+        console.error('Error fetching data:', err);
+        res.render('home', { user: req.session.user, products: [], recommendations: [] });
+    }
 };
+
 
 exports.logout = (req, res) => {
     req.session.destroy(err => {
@@ -137,9 +123,11 @@ exports.cartDisplay = (req, res) => {
                 console.log("error: ", err);
                 return res.status(500).json({ error: 'Server error' });
             }
-            res.render('cart', { user: req.session.user, products: result });
+            // Ghi chú: Đảm bảo bạn truyền user và products vào render
+            res.render('cart', { user: req.session.user, products: result, selectedProducts: result, discountCode: null });
         });
 };
+
 
 exports.SettingDisplay = (req, res) => {
     if (req.session.user) {
@@ -424,24 +412,6 @@ exports.ScoreboardDisplay = (req, res) => {
         });
         res.render('scoreboard', { user:req.session.user ,products: result });
     });
-};
-
-exports.Payment = async(req, res) => {
-    const totalAmount = req.body.total;
-
-    client.createTransaction({
-    currency1: 'USD',
-    currency2: 'BTC', 
-    amount: totalAmount,
-    buyer_email: req.user.email,
-  }, (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send('Thanh toán thất bại');
-    }
-
-    res.redirect(result.checkout_url);
-  });
 };
 
 exports.addRating = (req, res) => {

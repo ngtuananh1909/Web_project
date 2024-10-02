@@ -8,6 +8,7 @@ const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const homeRouter = require('./routes/home.router.js');
 const productRouter = require('./routes/product.router.js');
+const paymentRouter = require('./routes/payment.router.js')
 const fs = require('fs');
 dotenv.config();
 const app = express();
@@ -89,6 +90,7 @@ io.on('connection', function(socket){
 
 app.use('/', homeRouter);
 app.use('/product', productRouter);
+app.use('/payment', paymentRouter);
 app.get('/favicon.ico', (req, res) => res.status(204));
 
 const PORT = process.env.PORT || 3000;
