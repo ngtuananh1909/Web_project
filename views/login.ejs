@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0z4WMWAmHg6rZ9QTprtj0p4SJe5q2zCIhFjs3msn89t+W1" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-2U0O5fTbbhK49EzPbBhKTb64RxQzP0s7mujzXnF2S3iZlbZPsd1xrI8f+fUkTPfV" crossorigin="anonymous">
 
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
@@ -292,6 +292,11 @@
         width: 30px;
         height: 30px;
       }
+      .error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+      }
   </style>
   
   </head>
@@ -302,11 +307,11 @@
           <form action="/auth/login" method="POST">
                 <h1>Sign In</h1>
                 <div class="social-icons">
-                    <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-                    <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
-                    <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
-                </div>
+                    <a href="#"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                  </div>
                 <span>or use your email password</span>
                 <div class="input-container">
                     <input type="email" id="email" name="email" placeholder=" " required />
@@ -315,7 +320,8 @@
                 <div class="input-container">
                     <input type="password" id="password" name="password" placeholder=" " required />
                     <label for="password">Password</label>
-                </div>
+                </div>  
+                <span class="error-message" id="error-message" style="display: none;"></span>
                             
                 <a href="#">Forget Your Password?</a>
                 <button>Sign In</button>
@@ -342,61 +348,66 @@
       window.location.href = "/register";
     });
   </script>
-<script>
-  // Xử lý chuyển đổi giữa form đăng ký và đăng nhập
-  const signUpButton = document.getElementById('register');
-  const signInButton = document.getElementById('login');
-  const container = document.getElementById('container');
+    <script>
+    // Xử lý chuyển đổi giữa form đăng ký và đăng nhập
+    const signUpButton = document.getElementById('register');
+    const signInButton = document.getElementById('login');
+    const container = document.getElementById('container');
 
-  // Thêm sự kiện chuyển đổi khi nhấn nút "Sign Up"
-  signUpButton.addEventListener('click', () => {
-      container.classList.add('right-panel-active');
-  });
+    // Thêm sự kiện chuyển đổi khi nhấn nút "Sign Up"
+    signUpButton.addEventListener('click', () => {
+        container.classList.add('right-panel-active');
+    });
 
-  // Thêm sự kiện chuyển đổi khi nhấn nút "Sign In"
-  signInButton.addEventListener('click', () => {
-      container.classList.remove('right-panel-active');
-  });
+    // Thêm sự kiện chuyển đổi khi nhấn nút "Sign In"
+    signInButton.addEventListener('click', () => {
+        container.classList.remove('right-panel-active');
+    });
 
-  // Xử lý khi nhấn nút "Sign Up"
-  document.querySelector('.sign-up form button').addEventListener('click', (e) => {
-      e.preventDefault();
-      // Lấy thông tin từ input
-      const name = document.querySelector('.sign-up input[placeholder="Name"]').value;
-      const email = document.querySelector('.sign-up input[placeholder="Email"]').value;
-      const password = document.querySelector('.sign-up input[placeholder="Password"]').value;
+    // Xử lý khi nhấn nút "Sign Up"
+    document.querySelector('.sign-up form button').addEventListener('click', (e) => {
+        e.preventDefault();
+        // Lấy thông tin từ input
+        const name = document.querySelector('.sign-up input[placeholder="Name"]').value;
+        const email = document.querySelector('.sign-up input[placeholder="Email"]').value;
+        const password = document.querySelector('.sign-up input[placeholder="Password"]').value;
 
-      if (name && email && password) {
-          alert('Account created successfully!\nName: ' + name + '\nEmail: ' + email);
-      } else {
-          alert('Please fill in all fields to sign up.');
-      }
-  });
+        if (name && email && password) {
+            alert('Account created successfully!\nName: ' + name + '\nEmail: ' + email);
+        } else {
+            alert('Please fill in all fields to sign up.');
+        }
+    });
 
-  // Xử lý khi nhấn nút "Sign In"
-  document.querySelector('.sign-in form button').addEventListener('click', (e) => {
-      e.preventDefault();
-      // Lấy thông tin từ input
-      const email = document.querySelector('.sign-in input[placeholder="Email"]').value;
-      const password = document.querySelector('.sign-in input[placeholder="Password"]').value;
+    // Xử lý khi nhấn nút "Sign In"
+    document.querySelector('.sign-in form button').addEventListener('click', (e) => {
+        e.preventDefault();
+        // Lấy thông tin từ input
+        const email = document.querySelector('.sign-in input[placeholder="Email"]').value;
+        const password = document.querySelector('.sign-in input[placeholder="Password"]').value;
 
-      if (email && password) {
-          alert('Logged in successfully!\nEmail: ' + email);
-      } else {
-          alert('Please fill in all fields to sign in.');
-      }
-  });
+        if (email && password) {
+            alert('Logged in successfully!\nEmail: ' + email);
+        }
+        if (!email || !password) {
+            alert('You password or name not true, try again');
+        }
+        else {
+            alert('Please fill in all fields to sign in.');
+        }
+    });
 
-  // Mã thông báo di chuyển "Welcome to E-shop"
-  const marqueeContainer = document.querySelector('.marquee-container div');
-  let offset = -700;
-  setInterval(() => {
-      offset += 2;
-      if (offset > window.innerWidth) {
-          offset = -700;
-      }
-      marqueeContainer.style.marginLeft = `${offset}px`;
-  }, 50);
-</script>
+    // Mã thông báo di chuyển "Welcome to E-shop"
+    const marqueeContainer = document.querySelector('.marquee-container div');
+    let offset = -700;
+    setInterval(() => {
+        offset += 2;
+        if (offset > window.innerWidth) {
+            offset = -700;
+        }
+        marqueeContainer.style.marginLeft = `${offset}px`;
+    }, 50);
+    </script>
+    
 
 </html>
