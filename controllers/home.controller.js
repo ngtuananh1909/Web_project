@@ -231,86 +231,69 @@ exports.UserUpdate = async (req, res) => {
 
     try {
         const avatar = req.files ? req.files.avatar : null;
-
         const { name, email } = req.body;
         const userId = req.session.user.id;
         const oldAvatarPath = req.session.user.avatar;
 
-        const updateUser = () => {
-            let updateQuery = 'UPDATE users SET';
-            const queryParams = [];
-            let avatarPath = '';
+        const queryParams = [];
+        let updateQuery = 'UPDATE users SET';
 
-            if (name && name !== req.session.user.name) {
-                updateQuery += ' name = ?,';
-                queryParams.push(name);
-            }
+        if (name && name !== req.session.user.name) {
+            updateQuery += ' name = ?,';
+            queryParams.push(name);
+        }
 
-            if (avatar) {
-                avatarPath = `uploads/${userId}${path.extname(avatar.name)}`;
-                updateQuery += ' avatar = ?,';
-                queryParams.push(avatarPath);
+        if (avatar) {
+            const avatarPath = `uploads/${userId}_${avatar.name}`;
+            updateQuery += ' avatar = ?,';
+            queryParams.push(avatarPath);
 
+            await new Promise((resolve, reject) => {
                 avatar.mv(path.join(__dirname, '..', avatarPath), (err) => {
                     if (err) {
                         console.log('Error moving avatar file:', err);
-                        return res.status(500).send('Error saving file');
+                        return reject(new Error('Error saving file'));
                     }
+                    resolve();
                 });
-            }
-
-            if (queryParams.length === 0) {
-                return res.render('setting', { user: req.session.user, message: 'No changes detected' });
-            }
-
-            updateQuery = updateQuery.slice(0, -1); 
-            updateQuery += ' WHERE id = ?';
-            queryParams.push(userId);
-
-            db.query(updateQuery, queryParams, async (error) => {
-                if (error) {
-                    console.log('Error updating settings:', error);
-                    return res.render('setting', { user: req.session.user, message: 'Error updating settings' });
-                }
-
-                req.session.user.name = name || req.session.user.name;
-                req.session.user.avatar = avatarPath || req.session.user.avatar;
-
-                if (oldAvatarPath) {
-                    console.log('Old Avatar Path:', oldAvatarPath); 
-                    try {
-                        const fullPath = path.join(__dirname, '..', oldAvatarPath.toString());
-                        console.log('Full Path:', fullPath); 
-                        await fs.unlink(fullPath);
-                    } catch (unlinkErr) {
-                        console.log('Error deleting old avatar:', unlinkErr);
-                    }
-                }
-
-                res.render('setting', { user: req.session.user, message: 'Settings updated successfully' });
             });
-        };
-
-        if (email && email !== req.session.user.email) {
-            db.query('SELECT email FROM users WHERE email = ? AND id != ?', [email, userId], (error, results) => {
-                if (error) {
-                    console.log('Error checking email:', error);
-                    return res.render('setting', { user: req.session.user, message: 'Error checking email' });
-                }
-
-                if (results.length > 0) {
-                    return res.render('setting', { user: req.session.user, message: 'Email already exists. Please choose a different one.' });
-                }
-                updateUser();
-            });
-        } else {
-            updateUser();
         }
+
+        if (queryParams.length === 0) {
+            return res.render('setting', { user: req.session.user, message: 'No changes detected' });
+        }
+
+        updateQuery = updateQuery.slice(0, -1) + ' WHERE id = ?';
+        queryParams.push(userId);
+
+        db.query(updateQuery, queryParams, async (error) => {
+            if (error) {
+                console.log('Error updating settings:', error);
+                return res.render('setting', { user: req.session.user, message: 'Error updating settings' });
+            }
+
+            req.session.user.name = name || req.session.user.name;
+            req.session.user.avatar = avatarPath || req.session.user.avatar;
+
+            if (oldAvatarPath) {
+                const fullPath = path.join(__dirname, '..', oldAvatarPath);
+                try {
+                    if (fs.existsSync(fullPath)) { // Kiểm tra xem tệp có tồn tại không
+                        await fs.unlink(fullPath);
+                    }
+                } catch (unlinkErr) {
+                    console.log('Error deleting old avatar:', unlinkErr);
+                }
+            }
+
+            res.render('setting', { user: req.session.user, message: 'Settings updated successfully' });
+        });
     } catch (err) {
         console.log('Server error:', err);
         res.render('setting', { user: req.session.user, message: 'Server error' });
     }
 };
+
 
 
 exports.AddToCart = async (req, res) => {

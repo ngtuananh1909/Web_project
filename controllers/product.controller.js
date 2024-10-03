@@ -92,37 +92,41 @@ exports.AddProductDisplay = (req, res) => {
     res.render('add_product', { user: req.session.user, message });
 };
 
-exports.DisplayProductDetails = (req, res) => {
+exports.DisplayProductDetails = async (req, res) => {
     const productId = req.params.id;
     const sql = 'SELECT * FROM products WHERE id = ?';
+    const ratingsSql = 'SELECT * FROM reviews WHERE product_id = ?';
 
-    db.query(sql, productId, (err, rows) => {
-        if (err) {
-            console.error('Error fetching product details:', err);
-            return res.render('home', {
-                message: 'Error fetching product details'
-            });
-        }
-        if (rows.length === 0) {
+    try {
+        const [productRows] = await db.promise().query(sql, [productId]);
+        
+        if (productRows.length === 0) {
             return res.render('home', {
                 message: 'Product not found'
             });
         }
 
-        const product = rows[0];
-        const listSql = 'SELECT * FROM products WHERE id != ?';
-        db.query(listSql, productId, (errs, resp) => {
-            if (errs) {
-                console.error('Error fetching product list:', errs);
-                return res.render('home', {
-                    message: 'Error fetching product list'
-                });
-            }
+        const product = productRows[0];
 
-            res.render('product-details', { user: req.session.user, product, products: resp });
+        const [ratings] = await db.promise().query(ratingsSql, [productId]);
+
+        const listSql = 'SELECT * FROM products WHERE id != ?';
+        const [otherProducts] = await db.promise().query(listSql, [productId]);
+
+        res.render('product-details', { 
+            user: req.session.user, 
+            product, 
+            ratings,
+            products: otherProducts 
         });
-    });
+    } catch (err) {
+        console.error('Error fetching product details:', err);
+        return res.render('home', {
+            message: 'Error fetching product details'
+        });
+    }
 };
+
 
 exports.PasswordVerify = async (req, res) => {
     const { password } = req.body;
@@ -158,3 +162,26 @@ exports.PasswordVerify = async (req, res) => {
         return res.status(500).json({ success: false, message: 'Server error' });
     }
 };
+
+exports.SubmitReview = (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).json({ message: 'Bạn cần đăng nhập để đánh giá sản phẩm.' });
+    }
+
+    const productId = req.body.productId;
+    const userId = req.session.user.id;
+
+    const rating = req.body.rating;
+    const comment = req.body.comment;
+
+    const sql = 'INSERT INTO reviews (product_id, user_id, rating, comment) VALUES (?, ?, ?, ?)';
+    db.query(sql, [productId, userId, rating, comment], (err, result) => {
+        if (err) {
+            console.error('Error submitting review:', err);
+            res.redirect(`/product/${productId}`);
+        }
+
+        res.redirect(`/product/${productId}`);
+    });
+};
+

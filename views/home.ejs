@@ -469,9 +469,9 @@
               <li class="nav-item dropdown" style="width: 200px;">
                 <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                   <% if (user.avatar) { %>
-                  <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
+                  <img src="/uploads/<%= user.avatar %>" class="avatar me-2" alt="" />
                   <% } else { %>
-                  <img src="./img/def.jpg" class="avatar me-2" alt="" />
+                  <img src="/img/def.jpg" class="avatar me-2" alt="" />
                   <% } %>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
@@ -824,27 +824,24 @@
         
     <script>
       $(document).on('click', '.addToCartBtn', function() {
-        const productId = $(this).data('product-id');
-        $('#addToCartModal').data('product-id', productId).modal('show');
-    });
+      const productId = $(this).data('product-id');
+      $('#addToCartModal').modal('show');
 
-
-    $('.confirmAddToCartBtn').on('click', function() {
-        const productId = $('#addToCartModal').data('product-id');
-        $.ajax({
-            type: 'POST',
-            url: '/auth/add-to-cart',
-            data: { productId: productId },
-            success: function(response) {
-                alert('Sản phẩm đã được thêm vào giỏ hàng!');
-                $('#addToCartModal').modal('hide');
-            },
-            error: function() {
-                alert('Đã có lỗi xảy ra, vui lòng thử lại!');
-            }
-        });
-    });
-
+      $('.confirmAddToCartBtn').off('click').on('click', function() {
+          $.ajax({
+              url: '/cart/add', 
+              method: 'POST',
+              data: { productId: productId },
+              success: function(response) {
+                  alert('Sản phẩm đã được thêm vào giỏ hàng!');
+                  $('#addToCartModal').modal('hide');
+              },
+              error: function() {
+                  alert('Đã có lỗi xảy ra. Vui lòng thử lại.');
+              }
+          });
+      });
+  });
     </script>
       
       <script>

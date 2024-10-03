@@ -616,9 +616,6 @@
                 selectedProducts: selectedProducts,
                 discountCode: discountCode
             },
-            success: function(response) {
-                window.location.href = `/payment/option/t/${response.userId}`;
-            },
             error: function(xhr, status, error) {
                 console.log(error)
                 alert('Có lỗi xảy ra khi thanh toán. Vui lòng thử lại.');

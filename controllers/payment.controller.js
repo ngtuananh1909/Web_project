@@ -1,8 +1,7 @@
-const db = require('../connect/database');
-const {ProductIDGenerator} = require('../event_function/function')
+const db = require('../connect/database')
 
 exports.PaymentOptions = (req, res) => {
-    const UserId = req.params.id;
+    const UserId = req.session.user.id;
 
     if (!UserId) {
         return res.redirect('/login');
@@ -22,60 +21,63 @@ exports.PaymentOptions = (req, res) => {
     });
 };
 
-
 exports.Checkout = (req, res) => {
-    const UserId = req.params.id;
-    const { selectedProducts, discountCode } = req.body;
-    let discount = 1.0;
+    const { selectedProducts, discountCode } = req.body; 
+    let discount = 1.0; 
 
     if (discountCode) {
-        discount = 0.9;
+        discountCode = 0.9;
+        // db.query('SELECT * FROM coupons WHERE code = ?', [discountCode], (err, coupon) => {
+        //     if (err || !coupon.length) {
+        //         return res.status(400).send('Mã giảm giá không hợp lệ.');
+        //     }
+        //     discount = coupon[0].discount_value;
+        // });
     }
 
     db.query('SELECT * FROM products WHERE id IN (?)', [selectedProducts], (err, products) => {
         if (err) {
-            return res.status(500).json({ error: 'Lỗi khi lấy thông tin sản phẩm.' });
+            return res.status(500).send('Lỗi khi lấy thông tin sản phẩm.');
         }
 
         db.query('SELECT MAX(`index`) as maxIndex FROM paydata WHERE userid = ?', [UserId], (err, result) => {
             if (err) {
-                return res.status(500).json({ error: 'Lỗi khi tính toán index.' });
+                return res.status(500).send('Lỗi khi tính toán index.');
             }
 
             let currentIndex = result[0].maxIndex ? result[0].maxIndex + 1 : 1;
 
             db.beginTransaction((err) => {
                 if (err) {
-                    return res.status(500).json({ error: 'Lỗi khi bắt đầu transaction.' });
+                    return res.status(500).send('Lỗi khi bắt đầu transaction.');
                 }
 
                 products.forEach((product) => {
-                    const totalPrice = product.price * discount;
-                    const CartId = ProductIDGenerator();
+                    const totalPrice = product.price * discount; 
 
                     db.query(
-                        `INSERT INTO paydata (id, userid, productid, quantity, discount, price, \`index\`) 
-                         VALUES (?, ?, ?, ?, ?, ?, ?)`,
-                        [CartId, UserId, product.id, product.quantity, discount, totalPrice, currentIndex],
+                        `INSERT INTO paydata (userid, productid, quantity, discount, price, \`index\`) 
+                         VALUES (?, ?, ?, ?, ?, ?)`,
+                        [UserId, product.id, product.quantity, discount, totalPrice, currentIndex],
                         (err, result) => {
                             if (err) {
                                 return db.rollback(() => {
-                                    res.status(500).json({ error: 'Lỗi khi lưu sản phẩm vào PayData.' });
+                                    res.status(500).send('Lỗi khi lưu sản phẩm vào PayData.');
                                 });
                             }
                         }
                     );
 
-                    currentIndex++;
+                    currentIndex++; 
                 });
 
                 db.commit((err) => {
                     if (err) {
                         return db.rollback(() => {
-                            res.status(500).json({ error: 'Lỗi khi commit transaction.' });
+                            res.status(500).send('Lỗi khi commit transaction.');
                         });
                     }
-                    return res.json({ success: true, userId: UserId });
+                    return res.redirect(`/payment/option/t/${UserId}`);
                 });
             });
         });
