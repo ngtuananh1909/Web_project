@@ -2,6 +2,7 @@ const db = require('../connect/database');
 const { ProductIDGenerator } = require('../event_function/function');
 const path = require('path');
 const bcrypt = require('bcryptjs');
+const fs = require('fs');
 
 exports.CreateProduct = async (req, res) => {
     if (!req.session.user) {

@@ -123,7 +123,6 @@ exports.cartDisplay = (req, res) => {
                 console.log("error: ", err);
                 return res.status(500).json({ error: 'Server error' });
             }
-            // Ghi chú: Đảm bảo bạn truyền user và products vào render
             res.render('cart', { user: req.session.user, products: result, selectedProducts: result, discountCode: null });
         });
 };
@@ -485,6 +484,3 @@ exports.SearchProducts = async (req, res) => {
         res.status(500).send('Đã xảy ra lỗi khi tìm kiếm sản phẩm');
     }
 };
-
-
-
