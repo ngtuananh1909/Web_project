@@ -11,31 +11,7 @@
     />
   </head>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f2f5;
-      margin: 0;
-      padding: 0;
 
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .container {
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-
-    .container h2 {
-      margin-top: 0;
-      text-align: center;
-      color: #333;
-    }
 
     .form-group {
       display: flex;
@@ -107,37 +83,237 @@
     }
 
     .home-icon {
-            width: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
-            height: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
-        }
-        .bxh-icon{
-          width: 27px; /* Thay đổi kích thước của hình ảnh nếu cần */
-          height: 27px;
-        }
-        .cart-icon{
-          width: 23px;
-          height: 23px;
+      width: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
+      height: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
+    }
+    .bxh-icon{
+      width: 27px; /* Thay đổi kích thước của hình ảnh nếu cần */
+      height: 27px;
+    }
+    .cart-icon{
+      width: 23px;
+      height: 23px;
+    }
+
+    .add-icon{
+      width: 30px;
+      height: 30px;
+    }
+    /* Chế độ sáng (mặc định) */
+    body {
+        background-color: #F5EFFF;
+        color: #000;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      /* Chế độ tối */
+      body.dark-mode {
+        background-color: rgb(40, 40, 40);
+        color: #f1f1f1;
+      }
+
+      .dark-mode .navbar, .dark-mode .card {
+        background-color: #333333;
+        color: #f1f1f1;
+      }
+
+      .dark-mode .btn-primary {
+        background-color: #2897f8;
+        border-color: #666;
+      }
+
+
+      .dark-mode a{
+        color: #ffffff;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .mode-button{
+        height: 30px;
+        width: 30px;
+      }
+
+      .dark-mode .header-design  {
+        background-color: #666666fd; /* Màu nền tối cho header */
+        color: white;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .text-decoration-none{
+        color: black;
+      }
+      .dark-mode .dropdown-menu{
+        background-color: #0c0c0c;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .dropdown-item{
+        color: rgb(0, 0, 0);
+        text-decoration: none;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .dropdown-menu{
+        color: white;
+        transition: background-color 0.5s ease, color 0.5s ease;
+      }
+      /* Ẩn menu mặc định */
+      .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%; /* Đặt menu xuất hiện ngay dưới avatar */
+        left: 0;
+        z-index: 1000;
+      }
+
+      /* Hiển thị menu khi di chuột vào avatar */
+      .nav-link.dropdown-toggle:hover + .dropdown-menu,
+      .dropdown-menu:hover {
+        display: block;
+      }
+      #toggle-dark-mode {
+        border: none; /* Loại bỏ khung viền */
+        outline: none; /* Loại bỏ viền khi nhấn vào nút */
+        background: none; /* Loại bỏ màu nền mặc định */
+        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
+      }
+      .custom{
+        color: black;
+      }
+      .dark-mode .custom{
+        color: white;
+      }
+
+      .modal-content{
+        background-color: white;
+        color: #000;
+      }
+      .dark-mode .modal-content{
+        background-color: rgb(41, 41, 41);
+        color: #ffffff;
+      }
+      #chat-header {
+          height: 65px;
+          color: #000;
+          font-size: 30px;
+          border-radius: 100px;
+      }
+      .dark-mode #chat-body {
+          width: 500px; /* Chiều rộng */
+          height: 460px; /* Chiều cao */
+          background-color: rgb(50, 50, 50);
+          border-radius: 8px;
+          box-shadow: 0px 0px 10px rgba(253, 253, 253, 0.2);
+          position: fixed;
+          top: 48%;
+          left: 73%;
+          transform: scale(0); /* Đặt thu nhỏ ban đầu */
+          transition: transform 0.3s ease, bottom 0.3s ease; /* Hiệu ứng chuyển đổi */
+          overflow: hidden;
+          z-index: 1001; /* Đảm bảo ô chat nằm trên các phần tử khác */
+          display: none; /* Ẩn ô chat ban đầu */
+          color: white;
+      }
+      #chat-body {
+          width: 500px; /* Chiều rộng */
+          height: 460px; /* Chiều cao */
+          background-color: white;
+          border-radius: 8px;
+          box-shadow: 0px 0px 10px rgba(120, 119, 119, 0.2);
+          position: fixed;
+          top: 48%;
+          left: 73%;
+          transform: scale(0); /* Đặt thu nhỏ ban đầu */
+          transition: transform 0.3s ease, bottom 0.3s ease; /* Hiệu ứng chuyển đổi */
+          overflow: hidden;
+          z-index: 1001; /* Đảm bảo ô chat nằm trên các phần tử khác */
+          display: none; /* Ẩn ô chat ban đầu */
+      }
+
+      #chat-body.active {
+          display: block; /* Hiện ô chat */
+          transform: scale(1); /* Phóng to */
+          bottom: 10px; /* Điều chỉnh vị trí khi phóng to */
+      }
+
+      #close-chat{
+        font-size: 30px;
+      }
+      .message {
+          background-color: #f1f1f1; /* Màu nền của tin nhắn */
+          border-radius: 5px; /* Bo góc */
+          padding: 5px; /* Khoảng cách bên trong */
+          margin: 5px 0; /* Khoảng cách giữa các ô tin nhắn */
+      }
+      .nav-link {
+            position: relative; /* Để sử dụng absolute positioning cho underline */
+            display: inline-block;
+            padding-bottom: 5px; /* Khoảng cách giữa text và underline */
         }
 
-        .add-icon{
-          width: 30px;
-          height: 30px;
-        }
+      .nav-link::after {
+          content: ""; /* Nội dung rỗng để tạo thanh nhỏ */
+          position: absolute;
+          left: 16%;
+          bottom: 0;
+          width: 70%;
+          height: 2px; /* Độ dày của thanh nhỏ */
+          background-color: #2300ea; /* Màu của thanh nhỏ */
+          transform: scaleX(0); /* Ẩn thanh nhỏ ban đầu */
+          transform-origin: bottom right; /* Vị trí bắt đầu hiệu ứng */
+          align-items: center;
+          transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp cho thanh nhỏ */
+      }
+
+      .nav-link.home:hover::after,
+      .nav-link.bxh:hover::after,
+      .nav-link.giohang:hover::after,
+      .nav-link.taosanpham:hover::after,
+      .nav-link.nhantin:hover::after,
+      .nav-link.login:hover::after,
+      .nav-link.dangky:hover::after {
+          transform: scaleX(1); /* Hiện thanh nhỏ khi hover */
+          transform-origin: bottom left; /* Vị trí kết thúc hiệu ứng */
+      }
+
+      .setting{
+        width: 100%;
+        height: 700px;
+      }
+      .edit-name{
+        background-color: white;
+        color: #000;
+      }
+      .dark-mode .edit-name{
+        background-color: rgb(40, 40, 40);
+        color: #ffffff;
+      }
+      .alpha{
+        background-color: white;
+        color: #000;
+      }
+      .dark-mode .alpha{
+        background-color: rgb(40, 40, 40);
+        color: #ffffff;
+      }
+      .button-select{
+        height: 60px;
+        width: 150px;
+      }
+      
   </style>
   <body>
-    <header>
-      <div class="container-fluid bg-light py-3" style="margin-left: 0px;">
-        <div class="container d-flex justify-content-between align-items-center">
+    <header class="header-design" >
+      <div class="container-fluid py-3" >
+        <div class="container d-flex justify-content-between align-items-center" style="margin-left: 476px;">
           <h1 class="h4 mb-0">
-            <a href="/" class="text-decoration-none text-dark"><strong>E-Shop</strong></a>
+            <a href="/" class="text-decoration-none" style="margin-left: -197px;"><strong>E-Shop</strong></a>
           </h1>
           <nav class="nav">
             <ul class="nav">
               <li class="nav-item">
                 <a class="nav-link home" href="/">
-                  <img src="/img/home.jpg" alt="" class="home-icon">
+                    <img src="/img/home.png" alt="" class="home-icon"></img>
                 </a>
-              </li>
+            </li>
               <li class="nav-item">
                 <a class="nav-link bxh" href="/scoreboard">
                   <img src="/img/bxh.jpg" alt="" class="bxh-icon">
@@ -150,6 +326,9 @@
               <li class="nav-item">
                 <a class="nav-link dangky" href="/register">Đăng ký</a>
               </li>
+              <button id="toggle-dark-mode" style="margin-left: 150px;">
+                <img src="img/mode.png" alt="" class="mode-button"></img>
+              </button>
               <% } else { %>
               <li class="nav-item">
                 <a class="nav-link giohang" href="/cart">
@@ -162,36 +341,26 @@
                 </a>
               </li>
               <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle d-flex align-items-center"
-                  id="userDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
+                <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                   <% if (user.avatar) { %>
-                  <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
+                  <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
                   <% } else { %>
                   <img src="./img/def.jpg" class="avatar me-2" alt="" />
                   <% } %>
                 </a>
-                <ul
-                  class="dropdown-menu dropdown-menu-end"
-                  aria-labelledby="userDropdown"
-                >
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                   <li>
                     <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
                   </li>
                   <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                  <li>
-                    <a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a>
-                  </li>
-                  <li>
-                    <hr class="dropdown-divider" />
-                  </li>
+                  <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                  <li><hr class="dropdown-divider" /></li>
                   <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
                 </ul>
               </li>
+              <button id="toggle-dark-mode" style="margin-left: 150px;">
+                <img src="img/mode.png" alt="" class="mode-button"></img>
+              </button>
               <% } %>
             </ul>
           </nav>
@@ -199,97 +368,126 @@
       </div>
     </header>
 
-    <div class="container">
-      <h2><strong>User Settings</strong></h2>
-      <form
-        id="settingsForm"
-        action="/auth/UserUpdate"
-        method="POST"
-        enctype="multipart/form-data"
-      >
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value="<%= user.name %>"
-            required
-            readonly
-          />
-          <button type="button" onclick="toggleEditMode('name')">Edit</button>
+    <div class="body">
+      <h1 style="text-align: center;"><strong>User Settings</strong></h1>
+      <div class="setting" style="margin-left: 220px;">
+            <div class="edit-name" style="margin-left: 400px;">
+              <form
+              id="settingsForm"
+              action="/auth/UserUpdate"
+              method="POST"
+              enctype="multipart/form-data"
+              style="width: 40%;"
+              >
+              <div class="form-group alpha">
+                <label class="alpha" for="name" style="margin-right: -65px;">Name:</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value="<%= user.name %>"
+                  required
+                  readonly
+                >
+                <button class="button-select" type="button" onclick="toggleEditMode('name')">Change Your name</button>
+              </div>
+              </form>
+            </div>
+              <div class="edit-name" style="margin-left: 400px;">
+                <div class="form-group" >
+                  <form
+                  id="settingsForm"
+                  action="/auth/UserUpdate"
+                  method="POST"
+                  enctype="multipart/form-data"
+                  style="width: 40%;"
+                  >
+                  <label class="alpha" for="password" style="margin-right: -70px;">Password:</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value="********"
+                    readonly
+                    style="width: 59%;"
+                  >
+                  </form>
+                  <button class="button-select" style="margin-left: -150px; margin-bottom: 0px;" type="button" onclick="togglePasswordCheck()">Change Password</button>
+                </div>
+              </div>
+              <div class="form-group password-check edit-name" id="passwordCheck" style="margin-left: 488px;">
+                <form
+                  id="settingsForm"
+                  action="/auth/UserUpdate"
+                  method="POST"
+                  enctype="multipart/form-data"
+                  style="width: 40%;"
+                  >
+                <input
+                  type="password"
+                  id="password-confirm"
+                  name="password_confirm"
+                  placeholder="Enter your new password"
+                  style="width: 62%;"
+                />
+                </form>
+                <button type="button"  onclick="confirmPassword()" style="margin-left: -200px;">Confirm</button>
+              </div>
+              <div class="edit-name" style="margin-left: 400px;">
+                <div class="form-group">
+                  <form
+                    id="settingsForm"
+                    action="/auth/UserUpdate"
+                    method="POST"
+                    enctype="multipart/form-data"
+                    style="width: 40%;"
+                    >
+                  <label class="alpha" for="email">Email:</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value="<%= user.email %>"
+                    required
+                    readonly
+                    style="width: 60%;margin-left: -80px;"
+                  />
+                  <button type="button" onclick="toggleEditMode('email')">Change email</button>
+                </div>
+              </div>
+              <div class="form-group" style="margin-left: 390px;">
+                <button type="submit">Update Settings</button>
+              </div>
+              <% if (typeof message !=='undefined' && message) { %>
+              <div class="message"><%= message %></div>
+              <% } %>
+          </div>
+      </div>
+      
+    <div style="position: fixed; bottom: 0; right: 0; width: 150px; z-index: 1000; background-color: transparent; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
+      <div id="chat-header" style="background-color: #007bff; color: white; padding: 10px; cursor: pointer; width: 70px; margin-left:78px ;">
+          <img src="/img/mesage.png" alt="" style="height: 30px; width: 30px; margin-left: 10px;" >
+      </div>
+      <div id="chat-body" style="display: none; padding: 10px;">
+        <div id="close-chat" style="cursor: pointer; color: red; margin-left: 460px; margin-top: -10px;">&times;</div> <!-- Nút đóng -->
+        <div style="position: absolute; top: 5px; left: 20px;font-size: 30px;">Chat</div>
+        
+        <div style="margin-top: 10px;"></div>
+        
+        <div style="display: flex;">
+          <div class="row" style="width: 220px; height: 440px; overflow-y: scroll;">
+            <% for (let i = 0; i < 5; i++) { %>
+              <div style="margin-left: 8px; width: 190px; height: 80px; background-color: #007bff; border: 1px solid #ccc; margin-top: 15px; display: block;"></div>
+            <% } %>
+            <div style="margin-bottom: 60px;"></div>
+          </div>
+          <div style="width: 270px; height: 400px; background-color: #ffffff; z-index: 1; margin-left: 20px;"></div>
+        
         </div>
-        <div class="form-group">
-          <label for="avatar">Avatar</label>
-          <img
-            src="<%= user.avatar %>"
-            alt="User Avatar"
-            width="100"
-            height="100"
-          />
-          <input type="file" id="avatar" name="avatar" />
-        </div>
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value="<%= user.email %>"
-            required
-            readonly
-          />
-          <button type="button" onclick="toggleEditMode('email')">Edit</button>
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value="********"
-            readonly
-          />
-          <button type="button" onclick="togglePasswordCheck()">Edit</button>
-        </div>
-        <div class="form-group">
-          <label for="balance">Balance</label>
-          <input
-            type="text"
-            id="balance"
-            name="balance"
-            value="<%= user.balance %>"
-            readonly
-          />
-        </div>
-        <div class="form-group">
-          <label for="reputation">Reputation</label>
-          <input
-            type="text"
-            id="reputation"
-            name="reputation"
-            value="<%= user.reputation %>"
-            readonly
-          />
-        </div>
-        <div class="form-group password-check" id="passwordCheck">
-          <label for="password-confirm">Confirm Password</label>
-          <input
-            type="password"
-            id="password-confirm"
-            name="password_confirm"
-            placeholder="Enter your password to confirm"
-          />
-          <button type="button" onclick="confirmPassword()">Confirm</button>
-        </div>
-        <div class="form-group">
-          <button type="submit">Update Settings</button>
-        </div>
-        <% if (typeof message !=='undefined' && message) { %>
-        <div class="message"><%= message %></div>
-        <% } %>
-      </form>
-    </div>
+        
+      </div>
+      
+    </div>  
 
     <script>
       function toggleEditMode(field) {
@@ -327,6 +525,51 @@
             alert("An error occurred. Please try again later.");
           });
       }
+    </script>
+    <script>
+      const toggleButton = document.getElementById('toggle-dark-mode');
+      const body = document.body;
+    
+      // Kiểm tra nếu chế độ tối đã được kích hoạt trước đó
+      if (localStorage.getItem('darkMode') === 'enabled') {
+        body.classList.add('dark-mode');
+      }
+    
+      toggleButton.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        if (body.classList.contains('dark-mode')) {
+          localStorage.setItem('darkMode', 'enabled');
+
+        } else {
+          localStorage.setItem('darkMode', 'disabled');
+        }
+      });
+      document.getElementById('chat-header').onclick = function() {
+          const chatBody = document.getElementById('chat-body');
+          const chatHeader = document.getElementById('chat-header');
+
+          chatHeader.style.display = 'none'; // Ẩn nút Chat
+          chatBody.style.display = 'block'; // Hiện ô chat
+
+          setTimeout(() => {
+              chatBody.classList.add('active'); // Hiện ô chat với hiệu ứng phóng to
+          }, 10); // Đảm bảo transition diễn ra
+      }
+
+      // Đóng ô chat
+      document.getElementById('close-chat').onclick = function() {
+          const chatBody = document.getElementById('chat-body');
+          const chatHeader = document.getElementById('chat-header');
+
+          chatBody.classList.remove('active'); // Thu nhỏ ô chat
+          setTimeout(() => {
+              chatBody.style.display = 'none'; // Ẩn ô chat
+              chatHeader.style.display = 'block'; // Hiện lại nút Chat
+          }, 300); // Thời gian thu nhỏ
+      }
+
+
+
     </script>
   </body>
 </html>

@@ -4,7 +4,10 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 const { IdGenerator } = require('../event_function/function');
+const {calculateUserSimilarity, getTopRecommendedProducts, findSimilarProducts} = require('../event_function/Filtering')
 const { promisify } = require('util');
+const util = require('util');
+const query = util.promisify(db.query).bind(db);
 
 const unlinkAsync = promisify(fs.unlink);
 
@@ -16,27 +19,49 @@ exports.registerDisplay = (req, res) => {
     res.render('register');
 };
 
-exports.home = (req, res) => {
-    db.query('SELECT * FROM products', (err, results) => {
-        if (err) {
-            console.error('Error fetching products:', err);
-            return res.render('home', { user: req.session.user, products: [] });
+exports.home = async (req, res) => {
+    const userId = req.session.user ? req.session.user.id : null;
+    
+    try {
+        const productsQuery = 'SELECT * FROM products';
+        const userRatingsQuery = userId ? 'SELECT * FROM ratings WHERE user_id = ?' : null;
+        const allRatingsQuery = 'SELECT * FROM ratings';
+
+        const [products, userRatings, allRatings] = await Promise.all([
+            query(productsQuery),
+            userId ? query(userRatingsQuery, [userId]) : Promise.resolve([]),
+            query(allRatingsQuery)
+        ]);
+
+        const formattedProducts = products.map(product => ({
+            ...product,
+            formatted_date: new Date(product.created_at).toLocaleDateString('vi-VN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            })
+        }));
+
+        let recommendations = [];
+        if (userId) {
+            const userSimilarities = calculateUserSimilarity(userRatings, allRatings);
+            const collaborativeRecommendations = getTopRecommendedProducts(userId, userSimilarities, allRatings);
+            const contentRecommendations = await findSimilarProducts(userRatings.map(r => r.product_id));
+
+            recommendations = [...new Set([...collaborativeRecommendations, ...contentRecommendations])];
         }
 
-        const formattedProducts = results.map(product => {
-            return {
-                ...product,
-                formatted_date: new Date(product.created_at).toLocaleDateString('vi-VN', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit'
-                })
-            };
+        res.render('home', {
+            user: req.session.user,
+            products: formattedProducts,
+            recommendations
         });
-
-        res.render('home', { user: req.session.user, products: formattedProducts }); 
-    });
+    } catch (err) {
+        console.error('Error fetching data:', err);
+        res.render('home', { user: req.session.user, products: [], recommendations: [] });
+    }
 };
+
 
 exports.logout = (req, res) => {
     req.session.destroy(err => {
@@ -89,28 +114,19 @@ exports.cartDisplay = (req, res) => {
     
     const userId = req.session.user.id;
 
-    db.query('SELECT product_id FROM user_cart WHERE user_id = ?', [userId], (err, result) => {
-        if (err) {
-            console.log("error: ", err);
-            return res.status(500).json({ error: 'Server error' });
-        }
-
-        if (result.length > 0) {
-            const productIds = result.map(item => item.product_id);
-
-            db.query('SELECT * FROM products WHERE id IN (?)', [productIds], (errs, resp) => {
-                if (errs) {
-                    console.log("error: ", errs);
-                    return res.status(500).json({ error: 'Server error' });
-                }
-
-                res.render('cart', {user:req.session.user, products: resp });
-            });
-        } else {
-            res.render('cart', {user:req.session.user, products: [] });
-        }
-    });
+    db.query(`
+        SELECT p.* 
+        FROM user_cart uc 
+        JOIN products p ON uc.product_id = p.id 
+        WHERE uc.user_id = ?`, [userId], (err, result) => {
+            if (err) {
+                console.log("error: ", err);
+                return res.status(500).json({ error: 'Server error' });
+            }
+            res.render('cart', { user: req.session.user, products: result, selectedProducts: result, discountCode: null });
+        });
 };
+
 
 exports.SettingDisplay = (req, res) => {
     if (req.session.user) {
@@ -300,37 +316,61 @@ exports.UserUpdate = async (req, res) => {
 exports.AddToCart = async (req, res) => {
     try {
         const { productId } = req.body;
+
+        // Kiểm tra xem người dùng đã đăng nhập chưa
         if (!req.session.user) {
             return res.status(401).send('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
         }
+
         const userId = req.session.user.id;
 
-        db.query('SELECT * FROM user_cart WHERE user_id = ? AND product_id = ?', [userId, productId], (error, results) => {
-            if (error) {
-                console.log('Error checking cart:', error);
-                return res.status(500).send('Đã xảy ra lỗi server');
-            }
+        // Kiểm tra sản phẩm đã có trong giỏ hàng chưa
+        const results = await query('SELECT * FROM user_cart WHERE user_id = ? AND product_id = ?', [userId, productId]);
 
-            if (results.length > 0) {
-                return res.status(400).send('Sản phẩm đã có trong giỏ hàng của bạn');
-            }
+        if (results.length > 0) {
+            return res.status(400).send('Sản phẩm đã có trong giỏ hàng của bạn');
+        }
 
-            // Thêm sản phẩm vào giỏ hàng
-            db.query('INSERT INTO user_cart SET ?', { user_id: userId, product_id: productId }, (err) => {
-                if (err) {
-                    console.log('Error adding to cart:', err);
-                    return res.status(500).send('Đã xảy ra lỗi khi thêm vào giỏ hàng');
-                }
-
-                return res.status(200).send('Sản phẩm đã được thêm vào giỏ hàng');
-            });
-        });
+        // Thêm sản phẩm vào giỏ hàng
+        await query('INSERT INTO user_cart SET ?', { user_id: userId, product_id: productId });
+        return res.status(200).send('Sản phẩm đã được thêm vào giỏ hàng');
+        
     } catch (err) {
         console.log('Server error:', err);
         return res.status(500).send('Đã xảy ra lỗi server');
     }
 };
 
+exports.RemoveFromCart = (req, res) => {
+    if (!req.session.user) {
+        return res.render('login', {
+            message: 'You have to login/register to view your cart',
+            redirect: true
+        });
+    }
+
+    const productId = req.params.id;
+    const userId = req.session.user.id;
+
+    db.query('SELECT * FROM user_cart WHERE product_id = ? AND user_id = ?', [productId, userId], (err, result) => {
+        if (err) {
+            console.error("Error retrieving product from cart: ", err);
+            return res.status(500).json({ error: 'Server error while checking product in cart' });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Product not found in cart' });
+        }
+
+        db.query('DELETE FROM user_cart WHERE product_id = ? AND user_id = ?', [productId, userId], (err) => {
+            if (err) {
+                console.error("Error removing product from cart: ", err);
+                return res.status(500).json({ error: 'Server error while removing product from cart' });
+            }
+            res.status(200).json({ message: 'Product removed from cart successfully' });
+        });
+    });
+};
 
 exports.ProfileDisplay = (req, res) => {
     if (!req.session || !req.session.user) {
@@ -371,4 +411,76 @@ exports.ScoreboardDisplay = (req, res) => {
         });
         res.render('scoreboard', { user:req.session.user ,products: result });
     });
+};
+
+exports.addRating = (req, res) => {
+    const { product_id, score } = req.body;
+    const userId = req.session.user ? req.session.user.id : null;
+
+    if (!userId) {
+        return res.json({ success: false, message: 'Bạn cần đăng nhập để đánh giá sản phẩm.' });
+    }
+
+    const sql = 'INSERT INTO ratings (user_id, product_id, score, created_at) VALUES (?, ?, ?, NOW())';
+    db.query(sql, [userId, product_id, score], (err) => {
+        if (err) {
+            console.error('Error adding rating:', err);
+            return res.json({ success: false, message: 'Có lỗi xảy ra khi thêm đánh giá.' });
+        }
+
+        res.json({ success: true });
+    });
+};
+
+exports.MessageDisplay = async (req, res) => {
+    const chatId = req.params.id;
+    const user = req.session.user; 
+
+    if (!user) {
+        return res.redirect('/login');
+    }
+
+    try {
+        const chat = await findChatById(chatId);
+        if (!chat) {
+            return res.render('message', { user, chat: null, message: 'Cuộc trò chuyện không tìm thấy' });
+        }
+        res.render('message', { user, chat });
+    } catch (error) {
+        console.error('Error fetching chat:', error);
+        res.render('message', { user, chat: null, message: 'Lỗi khi lấy cuộc trò chuyện' });
+    }
+};
+
+exports.SendMessage = (req, res) => {
+    const { text, chatId } = req.body;
+
+    const sql = 'INSERT INTO messages (chat_id, sender_id, text) VALUES (?, ?, ?)';
+    db.query(sql, [chatId, req.session.user.id, text], (err, result) => {
+        if (err) {
+            return res.json({ success: false, error: err.message });
+        }
+        res.json({ success: true });
+    });
+}
+
+exports.SearchProducts = async (req, res) => {
+    const searchQuery = req.query.query;
+
+    try {
+        db.query('SELECT * FROM products WHERE name LIKE ? OR description LIKE ?', [`%${searchQuery}%`, `%${searchQuery}%`], (err, results) => {
+            if (err) {
+                console.error('Lỗi khi truy vấn cơ sở dữ liệu:', err);
+                return res.status(500).send('Đã xảy ra lỗi khi truy vấn cơ sở dữ liệu');
+            }
+
+            if (results.length === 0) {
+                return res.render('SearchResults', {products: [], query: searchQuery, user: req.session.user})
+            }
+            res.render('SearchResults', {products: results, query: searchQuery, user: req.session.user})
+        });
+    } catch (error) {
+        console.error('Lỗi khi tìm kiếm sản phẩm:', error);
+        res.status(500).send('Đã xảy ra lỗi khi tìm kiếm sản phẩm');
+    }
 };

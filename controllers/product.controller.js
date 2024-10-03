@@ -2,6 +2,7 @@ const db = require('../connect/database');
 const { ProductIDGenerator } = require('../event_function/function');
 const path = require('path');
 const bcrypt = require('bcryptjs');
+const fs = require('fs');
 
 exports.CreateProduct = async (req, res) => {
     if (!req.session.user) {
@@ -16,7 +17,6 @@ exports.CreateProduct = async (req, res) => {
     }
 
     const imageFile = req.files.image;
-
     const allowedFileTypes = /jpeg|jpg|png|gif/;
     const mimetype = allowedFileTypes.test(imageFile.mimetype);
     const extname = allowedFileTypes.test(path.extname(imageFile.name).toLowerCase());
@@ -25,56 +25,66 @@ exports.CreateProduct = async (req, res) => {
         return res.status(400).send('Only images are allowed');
     }
 
-    const imageName = `${Date.now()}_${imageFile.name}`;
-    const uploadPath = path.join(__dirname, '../uploads/', imageName);
+    const { name, description, price, quantity, sale, saleval } = req.body;
+    if (!name || !description || !price || !quantity) {
+        return res.status(400).send('All fields are required');
+    }
 
-    imageFile.mv(uploadPath, async (err) => {
-        if (err) {
-            console.error('Error uploading image:', err);
-            return res.status(500).send('Error uploading image');
+    const salebool = sale ? 1 : 0;
+    const creator = req.session.user.name;
+    const userID = req.session.user.id;
+    const createdAt = new Date();
+
+    try {
+        const productId = await ProductIDGenerator();
+        
+        const productDir = path.join(__dirname, '../uploads/products');
+        
+        if (!fs.existsSync(productDir)) {
+            fs.mkdirSync(productDir, { recursive: true });
         }
+        const imageName = `${productId}_${Date.now()}_${imageFile.name}`;
+        const uploadPath = path.join(productDir, imageName);
 
-        const { name, description, price, quantity, sale, saleval } = req.body;
-        if (!name || !description || !price || !quantity) {
-            return res.status(400).send('All fields are required');
-        }
-
-        const salebool = sale ? 1 : 0;
-        const creator = req.session.user.name;
-        const image = imageName;
-        const userID = req.session.user.id;
-        const createdAt = new Date();
-
-        try {
-            const productId = await ProductIDGenerator();
-            const newProduct = {
-                id: productId,
-                name,
-                description,
-                price,
-                quantity,
-                image: [image],
-                creator,
-                creator_id: userID,
-                sale: salebool,
-                saleval,
-                sold: 0,
-                created_at: createdAt 
-            };
-
-            const sql = 'INSERT INTO products SET ?';
-            db.query(sql, newProduct, (err) => {
-                if (err) {
-                    console.error('Error creating product:', err);
-                    return res.status(500).send('Error creating product');
-                }
-                res.redirect('back');
+        await mutex.runExclusive(() => {
+            return new Promise((resolve, reject) => {
+                imageFile.mv(uploadPath, (err) => {
+                    if (err) {
+                        console.error('Error uploading image:', err);
+                        return reject(new Error('Error uploading image'));
+                    }
+                    resolve();
+                });
             });
-        } catch (err) {
-            console.error('Error creating product:', err);
-            res.status(500).send('Error creating product');
-        }
-    });
+        });
+
+        const newProduct = {
+            id: productId,
+            name,
+            description,
+            price,
+            quantity,
+            image: [imageName],
+            creator,
+            creator_id: userID,
+            sale: salebool,
+            saleval,
+            sold: 0,
+            created_at: createdAt
+        };
+
+        const sql = 'INSERT INTO products SET ?';
+        db.query(sql, newProduct, (err) => {
+            if (err) {
+                console.error('Error creating product:', err);
+                return res.status(500).send('Error creating product');
+            }
+            res.redirect('back');
+        });
+    } catch (err) {
+        console.error('Error creating product:', err);
+        res.status(500).send('Error creating product');
+    }
 };
 
 exports.AddProductDisplay = (req, res) => {
