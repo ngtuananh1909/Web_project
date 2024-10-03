@@ -332,7 +332,7 @@
           width: 500px; /* Chiều rộng */
           height: 460px; /* Chiều cao */
           background-color: white;
-          border-radius: 8px;
+          border-radius: 8px; 
           box-shadow: 0px 0px 10px rgba(120, 119, 119, 0.2);
           position: fixed;
           top: 48%;
@@ -537,51 +537,53 @@
           <h2 class="section-title text-center" style="margin-bottom:40px ;"><strong>Danh mục sản phẩm</strong></h2>
           <div class="row row-cols-1 row-cols-md-5 g-4" style="display: flex; flex-wrap: wrap; gap: 50px;">
             <% products.forEach(product => { %>
-                <div class="col" style="flex: 0 0 20%; max-width: 20%;">
-                    <div class="card product-card">
-                        <a href="/product/<%= product.id %>">
-                            <img src="/uploads/<%= product.image %>" class="card-img-top" alt="" />
-                        </a>
-                        <div class="card-body">
-                            <h4 class="card-title text-center"><%= product.name %></h4>
-                            <% if (product.sale) { %>
-                                <center><span class="badge bg-danger ms-2" style="margin-bottom: 10px;">-<%= product.saleval %>%</span></center>
-                                <p class="card-text" style="margin-bottom:4px;">
-                                    Giá: <del><%= product.price %> VNĐ</del>
-                                    <%= (product.price - (product.price * product.saleval / 100)).toFixed(2) %> VNĐ
-                                </p>
-                                
-                            <% } else { %>
-                                <p class="card-text">Giá: <%= product.price %> VNĐ</p>
-                            <% } %>
-                            <p class="card-text">Creator: <%= product.creator %></p>
-                            <p class="card-text">Ngày tạo: <%= product.created_at %></p>
-                            <div class="d-flex mt-3" style="gap: 20px; width: 250px;">
-                              <a
-                              href="/product/<%= product.id %>"
-                              class="btn btn-success rounded">
-                                <div>
-                                  Thông tin
-                                </div>
-                                <div>
-                                  sản phẩm
-                                </div>
+              <div class="col" style="flex: 0 0 20%; max-width: 20%;">
+                  <div class="card product-card">
+                      <a href="/product/<%= product.id %>">
+                          <img 
+                              src="<%= product.image ? ('/uploads/' + product.image) : '/img/cart-def.png' %>" 
+                              class="card-img-top" 
+                              alt="" 
+                              onerror="this.onerror=null; this.src='/img/cart-def.png';"
+                          />
+                      </a>
+                      <div class="card-body">
+                          <h4 class="card-title text-center"><%= product.name %></h4>
+                          <% if (product.sale) { %>
+                              <center><span class="badge bg-danger ms-2" style="margin-bottom: 10px;">-<%= product.saleval %>%</span></center>
+                              <p class="card-text" style="margin-bottom:4px;">
+                                  Giá: <del><%= product.price %> VNĐ</del>
+                                  <%= (product.price - (product.price * product.saleval / 100)).toFixed(2) %> VNĐ
+                              </p>
+                          <% } else { %>
+                              <p class="card-text">Giá: <%= product.price %> VNĐ</p>
+                          <% } %>
+                          <p class="card-text">Creator: <%= product.creator %></p>
+                          <p class="card-text">Ngày tạo: <%= product.created_at %></p>
+                          <div class="d-flex mt-3" style="gap: 20px; width: 250px;">
+                              <a href="/product/<%= product.id %>" class="btn btn-success rounded">
+                                  <div>
+                                      Thông tin
+                                  </div>
+                                  <div>
+                                      sản phẩm
+                                  </div>
                               </a>
                               <a style="width: 300px;">
-                                <button
-                                type="button"
-                                class="btn btn-primary rounded addToCartBtn"
-                                data-product-id="<%= product.id %>"
-                                >
-                                  Thêm vào giỏ
-                                </button>
+                                  <button
+                                      type="button"
+                                      class="btn btn-primary rounded addToCartBtn"
+                                      data-product-id="<%= product.id %>"
+                                  >
+                                      Thêm vào giỏ
+                                  </button>
                               </a>
                           </div>
-                        </div>
-                    </div>
-                </div>
-            <% }); %>
-        </div>
+                      </div>
+                  </div>
+              </div>
+          <% }); %>
+              
         </div>
       </div>
     </section>
