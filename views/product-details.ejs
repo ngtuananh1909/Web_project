@@ -389,14 +389,13 @@
             .dropdown-menu:hover {
                 display: block;
             }
-            .header-design{
-                position: sticky;
-                background-color: #e2e2e2;
-                top: 0px; 
-                width: 100%;
-                height: auto;
-                z-index: 1000;
+            .header-design {
+                position: fixed; /* Hoặc sử dụng position: sticky; */
+                top: 0;
+                width: 100%; /* Đảm bảo header chiếm toàn bộ chiều rộng */
+                z-index: 1000; /* Đảm bảo header nằm trên các phần tử khác */
             }
+
             .main-content {
                 padding-top: 60px; /* Đảm bảo nội dung không bị che bởi header (thay đổi kích thước này nếu cần) */
             }
@@ -436,14 +435,14 @@
                 width: 30px;
             }
 
-            .dark-mode .header-design{
-                position: sticky;
+            .dark-mode .header-design {
+                position: fixed; /* Hoặc sử dụng position: sticky; */
+                top: 0;
+                width: 100%; /* Đảm bảo header chiếm toàn bộ chiều rộng */
+                z-index: 1000; /* Đảm bảo header nằm trên các phần tử khác */
                 background-color: #666666fd;
-                top: 0px; 
-                width: 100%;
-                height: auto;
-                z-index: 1000;
             }
+
             .text-decoration-none{
                 color: black;
             }
@@ -760,7 +759,7 @@
                     <div class="col" style="margin-left: -200px;">
                         <h2 class="section-title text-center product_name" style="margin-left: -120px;">Thông tin sản phẩm:</h2>
                         <div class="square-box description" style="font-size: 20px;">
-                            <p class="thong-tin" style=""><%- product.description %></p>
+                            <p class="thong-tin" ><%- product.description %></p>
                         </div>
                                              
                     </div>                    
