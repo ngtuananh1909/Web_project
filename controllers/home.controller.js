@@ -20,8 +20,8 @@ exports.registerDisplay = (req, res) => {
 };
 
 exports.home = async (req, res) => {
-    const userId = req.session.user.id;
-    
+    const userId = req.session.user 
+
     try {
         const productsQuery = 'SELECT * FROM products';
         const userRatingsQuery = userId ? 'SELECT * FROM ratings WHERE user_id = ?' : null;
@@ -253,18 +253,18 @@ exports.UserUpdate = async (req, res) => {
                 queryParams.push(name);
             }
 
-            if (avatar) {
+            if (avatar && avatar.name !== path.basename(oldAvatarPath)) {
                 avatarPath = `uploads/${userId}${path.extname(avatar.name)}`;
                 updateQuery += ' avatar = ?,';
                 queryParams.push(avatarPath);
-
+            
                 avatar.mv(path.join(__dirname, '..', avatarPath), (err) => {
                     if (err) {
                         console.log('Error moving avatar file:', err);
                         return res.status(500).send('Error saving file');
                     }
                 });
-            }
+            }            
 
             if (queryParams.length === 0) {
                 return res.render('setting', { user: req.session.user, message: 'No changes detected' });
