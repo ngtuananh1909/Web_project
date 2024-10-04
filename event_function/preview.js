@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Cập nhật xem trước giá trị giảm giá
     saleValueInput.addEventListener("input", function () {
-      previewSale.textContent = "Sale Value: " + (saleValueInput.value ? saleValueInput.value + "%" : "0%");
+      previewSale.textContent = "Sale Value: " + (formatCurrency(saleValueInput.value) ? formatCurrency(saleValueInput.value) + "%" : "0%");
     });
 
     // Cập nhật ảnh xem trước

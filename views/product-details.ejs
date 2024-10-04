@@ -99,14 +99,13 @@
                     <h2 class ="product_name"><%= product.name %></h2>
                     <% if (product.sale) { %>
                         <p class="card-text product_name" style="margin-bottom:4px ;">
-                            <%= (product.price - (product.price * product.saleval /
-                            100))%> VNĐ
+                            <%= formatCurrency((product.price - (product.price * product.saleval / 100))) %> VNĐ
                             <del> <%= product.price %> </del>
                             
                             <span class="badge bg-danger ms-2" style="margin-bottom: 10px;" >-<%= product.saleval %>%</span>
                           </p>
                     <% } else { %>
-                        <p class="product_name"><strong>Price:</strong> <%= product.price %> VNĐ</p>
+                        <p class="product_name"><strong>Price:</strong> <%= formatCurrency(product.price) %> VNĐ</p>
                     <% } %>            
                     <p class="thong-tin"><strong>Quantity:</strong> <%= product.quantity %></p>
                     <div class="tuan_anh">
@@ -203,8 +202,8 @@
                                           <center><span class="badge bg-danger ms-2" style="margin-bottom: 5px;" >-<%= product.saleval %>%</span></center>
                                           <p class="card-text product_name" style="margin-bottom:4px ;">
                                             Giá:<del> <%= product.price %> </del>
-                                            <%= (product.price - (product.price * product.saleval /
-                                            100)).toFixed(2)%> VNĐ
+                                            <%= formatCurrency((product.price - (product.price * product.saleval /
+                                            100)).toFixed(0))%> VNĐ
                                           </p>
                                           <div style="padding-left: 1px; padding-bottom: 10px">
                                             <div class ="creator-day " style ="margin-top: -0px;">
@@ -228,7 +227,7 @@
                                             </div>                                            
                                         <% } else { %>
                                           <div style="margin-top: 40px;">
-                                              <p class="card-text product_name">Giá: <%= product.price %> VNĐ</p>
+                                              <p class="card-text product_name">Giá: <%= formatCurrency(product.price) %> VNĐ</p>
                                           </div>
                                           <div style="padding-left: -10px; padding-bottom: 10px">
                                             <div class ="creator-day" style ="margin-top:1px;">

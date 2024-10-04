@@ -20,8 +20,8 @@ exports.registerDisplay = (req, res) => {
 };
 
 exports.home = async (req, res) => {
-    const userId = req.session.user 
-
+    const userId = req.session.user ? req.session.user.id : null;
+    
     try {
         const productsQuery = 'SELECT * FROM products';
         const userRatingsQuery = userId ? 'SELECT * FROM ratings WHERE user_id = ?' : null;
@@ -61,9 +61,6 @@ exports.home = async (req, res) => {
         res.render('home', { user: req.session.user, products: [], recommendations: [] });
     }
 };
-
-
-
 
 exports.logout = (req, res) => {
     req.session.destroy(err => {
