@@ -11,359 +11,15 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Shopping Cart</title>
     </head>
-    <style>
-
-      .avatar {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        object-fit: cover;
-      }
-
-      .scrollable-card-body {
-        height: 600px;
-        overflow-y: auto;
-      }
-      
-
-      .btn {
-        margin-right: 20px;
-      }
-
-      .sticky-header {
-          position: sticky;
-          top: 0;
-          z-index: 1000;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-      body {
-        background-color: #eeee;
-      }
-      .nav-link {
-          position: relative; /* Để sử dụng absolute positioning cho underline */
-          display: inline-block;
-          padding-bottom: 5px; /* Khoảng cách giữa text và underline */
-      }
-
-      .nav-link::after {
-          content: ""; /* Nội dung rỗng để tạo thanh nhỏ */
-          position: absolute;
-          left: 16%;
-          bottom: 0;
-          width: 70%;
-          height: 2px; /* Độ dày của thanh nhỏ */
-          background-color: #0056ea; /* Màu của thanh nhỏ */
-          transform: scaleX(0); /* Ẩn thanh nhỏ ban đầu */
-          transform-origin: bottom right; /* Vị trí bắt đầu hiệu ứng */
-          align-items: center;
-          transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp cho thanh nhỏ */
-      }
-
-      .nav-link.home:hover::after,
-      .nav-link.bxh:hover::after,
-      .nav-link.giohang:hover::after,
-      .nav-link.taosanpham:hover::after,
-      .nav-link.login:hover::after,
-      .nav-link.dangky:hover::after {
-          transform: scaleX(1); /* Hiện thanh nhỏ khi hover */
-          transform-origin: bottom left; /* Vị trí kết thúc hiệu ứng */
-      }
-
-      .home-icon {
-          width: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
-          height: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
-      }
-      .bxh-icon{
-        width: 27px; /* Thay đổi kích thước của hình ảnh nếu cần */
-        height: 27px;
-      }
-      .cart-icon{
-        width: 23px;
-        height: 23px;
-      }
-
-      .add-icon{
-        width: 30px;
-        height: 30px;
-      }
-      .header-design {
-          position: sticky;
-          background-color: #e2e2e2;
-          top: 0; 
-          z-index: 1000;
-      }
-      .main-content {
-          padding-top: 60px; /* Đảm bảo nội dung không bị che bởi header (thay đổi kích thước này nếu cần) */
-      }
-
-
-        /* Chế độ sáng (mặc định) */
-        body {
-          background-color: #F5EFFF;
-          color: #000;
-          transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        /* Chế độ tối */
-        body.dark-mode {
-          background-color: #1b1b1b;
-          color: #f1f1f1;
-        }
-
-        .dark-mode .navbar, .dark-mode .card {
-          background-color: #333333;
-          color: #f1f1f1;
-        }
-
-        .dark-mode .btn-primary {
-          background-color: #2897f8;
-          border-color: #666;
-        }
-
-
-        .dark-mode a{
-          color: #ffffff;
-          transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .mode-button{
-          height: 30px;
-          width: 30px;
-          cursor: pointer;
-        }
-
-        .dark-mode .header-design  {
-          background-color: #666666fd; /* Màu nền tối cho header */
-          color: white;
-          transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        .text-decoration-none{
-          color: black;
-        }
-        /* Ẩn menu mặc định */
-        .dropdown-menu {
-          display: none;
-          position: absolute;
-          top: 100%; /* Đặt menu xuất hiện ngay dưới avatar */
-          left: 0;
-          z-index: 1000;
-        }
-
-        /* Hiển thị menu khi di chuột vào avatar */
-        .nav-link.dropdown-toggle:hover + .dropdown-menu,
-        .dropdown-menu:hover {
-          display: block;
-        }
-        .dark-mode .dropdown-menu{
-          background-color: #0c0c0c;
-          transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        .form-control{
-          background-color: rgb(219, 255, 213);
-          color: #000;
-        }
-
-        .dark-mode .form-control{
-          background-color: rgba(185, 186, 186, 0.253);
-          color: white;
-        }
-        .pay-code {
-            position: fixed; /* Giữ cho div luôn cố định trên màn hình */
-            bottom: 10px; /* Căn chỉnh vị trí từ đáy màn hình */
-            left: 50%; /* Căn chỉnh từ trái màn hình */
-            transform: translateX(-50%); /* Đẩy div sang trái một nửa chiều rộng của nó để nó nằm giữa */
-            background-color: #f1f1f1; /* Màu nền của div */
-            padding: 10px; /* Khoảng cách bên trong div */
-            border: 1px solid #ccc; /* Đường viền của div */
-            z-index: 1000; /* Giúp div xuất hiện trên các thành phần khác */
-            height: auto;
-            width: 1080px; /* Hoặc có thể thay đổi thành % để nó linh hoạt hơn */
-        }
-
-        .dark-mode .pay-code {
-          position: fixed; /* Giữ cho div luôn cố định trên màn hình */
-          bottom: 10px; /* Căn chỉnh vị trí từ đáy màn hình */
-          left: 50%;
-          background-color: #2e2e2e; /* Màu nền của div */
-          padding: 10px; /* Khoảng cách bên trong div */
-          transform: translateX(-50%); /* Đẩy div sang trái một nửa chiều rộng của nó để nó nằm giữa */
-          border: 1px solid #ccc; /* Đường viền của div */
-          z-index: 1000; /* Giúp div xuất hiện trên các thành phần khác */
-          height: auto;
-          width: 1080px;
-        }
-        .delete-icon{
-          width: 25px;
-          height: 25px;
-          cursor: pointer;
-        }
-        #toggle-dark-mode {
-          border: none; /* Loại bỏ khung viền */
-          outline: none; /* Loại bỏ viền khi nhấn vào nút */
-          background: none; /* Loại bỏ màu nền mặc định */
-          cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
-        }
-        .discode{
-          height: auto;
-          width: 130px;
-        }
-        #chat-header {
-            height: 65px;
-            color: #000;
-            font-size: 30px;
-            border-radius: 100px;
-        }
-        .dark-mode #chat-body {
-            width: 500px; /* Chiều rộng */
-            height: 460px; /* Chiều cao */
-            background-color: rgb(50, 50, 50);
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(253, 253, 253, 0.2);
-            position: fixed;
-            top: 48%;
-            left: 73%;
-            transform: scale(0); /* Đặt thu nhỏ ban đầu */
-            transition: transform 0.3s ease, bottom 0.3s ease; /* Hiệu ứng chuyển đổi */
-            overflow: hidden;
-            z-index: 1001; /* Đảm bảo ô chat nằm trên các phần tử khác */
-            display: none; /* Ẩn ô chat ban đầu */
-            color: white;
-        }
-        #chat-body {
-            width: 500px; /* Chiều rộng */
-            height: 460px; /* Chiều cao */
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(120, 119, 119, 0.2);
-            position: fixed;
-            top: 48%;
-            left: 73%;
-            transform: scale(0); /* Đặt thu nhỏ ban đầu */
-            transition: transform 0.3s ease, bottom 0.3s ease; /* Hiệu ứng chuyển đổi */
-            overflow: hidden;
-            z-index: 1001; /* Đảm bảo ô chat nằm trên các phần tử khác */
-            display: none; /* Ẩn ô chat ban đầu */
-        }
-
-        #chat-body.active {
-            display: block; /* Hiện ô chat */
-            transform: scale(1); /* Phóng to */
-            bottom: 10px; /* Điều chỉnh vị trí khi phóng to */
-        }
-
-        #close-chat{
-          font-size: 30px;
-        }
-        .message {
-            background-color: #f1f1f1; /* Màu nền của tin nhắn */
-            border-radius: 5px; /* Bo góc */
-            padding: 5px; /* Khoảng cách bên trong */
-            margin: 5px 0; /* Khoảng cách giữa các ô tin nhắn */
-        }
-        
-        .search{
-          height: 80%;
-          width: 50%;
-        }
-        .button-search {
-          background: linear-gradient(to right, #6a11cb, #2575fc); /* Nền gradient màu tím xanh */
-          color: #ffffff; /* Màu chữ trắng */
-          padding: 12px 24px; /* Khoảng cách bên trong nút */
-          border: none; /* Bỏ viền */
-          border-radius: 25px; /* Bo tròn góc */
-          font-size: 16px; /* Kích thước chữ */
-          font-weight: bold; /* Chữ đậm */
-          cursor: pointer; /* Con trỏ chuột thành dạng tay khi di chuột vào nút */
-          transition: all 0.9s ease; /* Hiệu ứng chuyển đổi mượt mà */
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Thêm bóng cho nút */
-          width: 25%;
-        }
-
-        .button-search:hover {
-          background: linear-gradient(to right, #005bf9, #11cb11);
-        }
-
-      /* Style for the switch */
-        .switch {
-          position: relative;
-          display: inline-block;
-          width: 48px; /* Tăng chiều rộng để có đủ không gian cho nút */
-          height: 24px; /* Điều chỉnh chiều cao */
-          margin-left: 15px; /* Khoảng cách giữa nhãn và công tắc */
-        }
-
-        .switch input {
-          opacity: 0;
-          width: 0;
-          height: 0;
-        }
-
-        .slider {
-          position: absolute;
-          cursor: pointer;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: #d6d6d6; /* Màu nền ban đầu của thanh chuyển */
-          transition: 0.4s;
-        }
-
-        .slider:before {
-          position: absolute;
-          content: "";
-          height: 18px; /* Kích thước của nút */
-          width: 18px;
-          left: 3px;
-          bottom: 3px;
-          background-color: white;
-          transition: 0.4s;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); /* Đổ bóng cho nút */
-        }
-
-        input:checked + .slider {
-          background-color: #4CAF50; /* Màu nền khi chế độ tối được bật */
-        }
-
-        input:checked + .slider:before {
-          transform: translateX(24px); /* Điều chỉnh độ dịch chuyển khi bật */
-        }
-
-        .slider.round {
-          border-radius: 34px; /* Bo góc cho thanh chuyển */
-        }
-
-        .slider.round:before {
-          border-radius: 50%; /* Bo góc cho nút */
-        }
-
-        .change-mode {
-          font-size: 14px; /* Kích thước chữ dễ nhìn hơn */
-          font-weight: 500; /* Tăng độ đậm của chữ */
-          color: #333; /* Màu chữ cân bằng giữa sáng và tối */
-        }
-        .dark-mode .change-mode {
-          font-size: 14px; /* Kích thước chữ dễ nhìn hơn */
-          font-weight: 500; /* Tăng độ đậm của chữ */
-          color: #ffffff; /* Màu chữ cân bằng giữa sáng và tối */
-        }
-        .no-items-container {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 30px
-        }
-
-    </style>
-
+    <link rel="stylesheet" href="css/cart.css">
     <body>
       <header class="header-design">
         <div class="container-fluid py-3">
-          <div class="container d-flex justify-content-between align-items-center" style="margin-left: 415px;">
+          <div class="container d-flex justify-content-between align-items-center">
             <h1 class="h4 mb-0">
-              <a href="/" class="text-decoration-none" style="margin-left: -130px;"><strong>E-Shop</strong></a>
+              <a href="/" class="text-decoration-none"><strong>E-Shop</strong></a>
             </h1>
+            <!-- Thanh tìm kiếm -->
             <form class="d-flex search" action="/search" method="GET" onsubmit="validateForm(event)">
               <input
                 class="form-control me-2"
@@ -371,7 +27,6 @@
                 placeholder="Tìm kiếm sản phẩm..."
                 aria-label="Search"
                 name="query"
-                style="background-color: white;"
               />
               <button class="button-search" type="submit">Tìm kiếm</button>
             </form>
@@ -379,60 +34,61 @@
               <ul class="nav">
                 <li class="nav-item">
                   <a class="nav-link home" href="/">
-                    <img src="/img/home.png" alt="" class="home-icon"></img>
+                    <img src="/img/home.png" alt="Home" class="home-icon">
                   </a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link bxh" href="/scoreboard">
-                    <img src="/img/bxh.jpg" alt="" class="bxh-icon">
+                    <img src="/img/bxh.jpg" alt="BXH" class="bxh-icon">
                   </a>
                 </li>
                 <% if (!user) { %>
-                <li class="nav-item">
-                  <a class="nav-link login" href="/login">Đăng nhập</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link dangky" href="/register">Đăng ký</a>
-                </li>
+                  <li class="nav-item">
+                    <a class="nav-link login" href="/login">Đăng nhập</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link dangky" href="/register">Đăng ký</a>
+                  </li>
                 <% } else { %>
-                <li class="nav-item">
-                  <a class="nav-link giohang" href="/cart">
-                    <img src="/img/cart.jpg" alt="" class="cart-icon">                  
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link taosanpham" href="/product/add">
-                    <img src="/img/add.jpg" alt="" class="add-icon">
-                  </a>
-                </li>
-                <li class="nav-item dropdown" style="width: 200px;">
-                  <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
-                    <% if (user.avatar) { %>
-                    <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
-                    <% } else { %>
-                    <img src="./img/def.jpg" class="avatar me-2" alt="" />
-                    <% } %>
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                    <li>
-                      <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
-                    </li>
-                    <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                    <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
-                    <li><hr class="dropdown-divider" /></li>
-                    <li class="nav-item">
-                      <div class="d-flex align-items-center px-3 py-2">
-                        <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
-                        <label class="switch" >
-                          <input type="checkbox" id="toggle-dark-mode">
-                          <span class="slider round"></span>
-                        </label>
-                      </div>
-                    </li>
-                    <li><hr class="dropdown-divider" /></li>
-                    <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
-                  </ul>
-                </li>                       
+                  <li class="nav-item">
+                    <a class="nav-link giohang" href="/cart">
+                      <img src="/img/cart.jpg" alt="Giỏ hàng" class="cart-icon">                  
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link taosanpham" href="/product/add">
+                      <img src="/img/add.jpg" alt="Thêm sản phẩm" class="add-icon">
+                    </a>
+                  </li>
+                  <li class="nav-item dropdown" style="width: 200px;">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
+                      <% if (user.avatar) { %>
+                        <img src="/uploads/<%= user.avatar %>" class="avatar me-2" alt="Avatar" />
+                      <% } else { %>
+                        <img src="/img/def.jpg" class="avatar me-2" alt="Avatar mặc định" />
+                      <% } %>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                      <li>
+                        <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
+                      </li>
+                      <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
+                      <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                      <li><hr class="dropdown-divider" /></li>
+                      <!-- Chuyển đổi giao diện -->
+                      <li class="nav-item">
+                        <div class="d-flex align-items-center px-3 py-2">
+                          <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
+                          <label class="switch">
+                            <input type="checkbox" id="toggle-dark-mode">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </li>
+                      <li><hr class="dropdown-divider" /></li>
+                      <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                    </ul>
+                  </li>                       
                 <% } %>
               </ul>
             </nav>
@@ -626,69 +282,8 @@
 });
 
   </script>
-  <script>
-      function removeFromCart(productId) {
-          fetch(`/cart/remove/${productId}`, {
-              method: 'DELETE',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              credentials: 'include'
-          })
-          .then(response => response.json())
-          .then(data => {
-              if (data.error) {
-                  alert(data.error); 
-              } else {
-                  alert(data.message); 
-                  location.reload(); 
-              }
-          })
-          .catch(error => {
-              console.error('Error:', error);
-          });
-      }
-    </script>
-    <script>
-        document.getElementById('chat-header').onclick = function () {
-          const chatBody = document.getElementById('chat-body');
-          const chatHeader = document.getElementById('chat-header');
-
-          chatHeader.style.display = 'none'; // Ẩn nút Chat
-          chatBody.style.display = 'block'; // Hiện ô chat
-
-          setTimeout(() => {
-            chatBody.classList.add('active'); // Hiện ô chat với hiệu ứng phóng to
-          }, 10); // Đảm bảo transition diễn ra
-        };
-
-        // Đóng ô chat
-        document.getElementById('close-chat').onclick = function () {
-          const chatBody = document.getElementById('chat-body');
-          const chatHeader = document.getElementById('chat-header');
-
-          chatBody.classList.remove('active'); // Thu nhỏ ô chat
-          setTimeout(() => {
-            chatBody.style.display = 'none'; // Ẩn ô chat
-<<<<<<< HEAD
-            chatHeader.style.display = 'block'; // Hiện lại nút Chat
-          }, 300); // Thời gian thu nhỏ
-        }
-    </script>
-    <script>
-      function validateForm(event) {
-          const queryInput = document.querySelector('input[name="query"]');
-          if (!queryInput.value.trim()) {
-              event.preventDefault(); // Ngăn chặn gửi biểu mẫu
-              alert("Vui lòng nhập một từ khóa tìm kiếm."); // Hiển thị thông báo
-          }
-      }
-  </script>
-=======
-            chatHeader.style.display = 'block'; 
-          }, 300); 
-        };
-</script>
->>>>>>> Payment
+  <script src="delete.js"></script>
+  <script src="chat.js"></script>
+  <script src="search.js"></script>
 
 </html>

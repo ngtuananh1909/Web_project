@@ -3,12 +3,9 @@ const { ProductIDGenerator } = require('../event_function/function');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
-<<<<<<< HEAD
 const { Mutex } = require('async-mutex'); // Import Mutex từ async-mutex
 
 const mutex = new Mutex(); // Tạo một instance của Mutex
-=======
->>>>>>> Payment
 
 exports.CreateProduct = async (req, res) => {
     if (!req.session.user) {
