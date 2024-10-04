@@ -1,7 +1,7 @@
 const db = require('../connect/database')
 
 exports.PaymentOptions = (req, res) => {
-    const UserId = req.session.user.id;
+    const UserId = req.params.id;
 
     if (!UserId) {
         return res.redirect('/login');
@@ -22,17 +22,17 @@ exports.PaymentOptions = (req, res) => {
 };
 
 exports.Checkout = (req, res) => {
+    const UserId = req.session.user.id;
     const { selectedProducts, discountCode } = req.body; 
     let discount = 1.0; 
 
     if (discountCode) {
-        discountCode = 0.9;
-        // db.query('SELECT * FROM coupons WHERE code = ?', [discountCode], (err, coupon) => {
-        //     if (err || !coupon.length) {
-        //         return res.status(400).send('Mã giảm giá không hợp lệ.');
-        //     }
-        //     discount = coupon[0].discount_value;
-        // });
+        db.query('SELECT * FROM coupons WHERE code = ?', [discountCode], (err, coupon) => {
+            if (err || !coupon.length) {
+                return res.status(400).send('Mã giảm giá không hợp lệ.');
+            }
+            discount = coupon[0].discount_value;
+        });
     }
 
     db.query('SELECT * FROM products WHERE id IN (?)', [selectedProducts], (err, products) => {
@@ -52,33 +52,41 @@ exports.Checkout = (req, res) => {
                     return res.status(500).send('Lỗi khi bắt đầu transaction.');
                 }
 
-                products.forEach((product) => {
+                const queries = products.map((product) => {
                     const totalPrice = product.price * discount; 
 
-                    db.query(
-                        `INSERT INTO paydata (userid, productid, quantity, discount, price, \`index\`) 
-                         VALUES (?, ?, ?, ?, ?, ?)`,
-                        [UserId, product.id, product.quantity, discount, totalPrice, currentIndex],
-                        (err, result) => {
+                    return new Promise((resolve, reject) => {
+                        db.query(
+                            `INSERT INTO paydata (userid, productid, quantity, discount, price, \`index\`) 
+                             VALUES (?, ?, ?, ?, ?, ?)`,
+                            [UserId, product.id, req.body.quantity[product.id], discount, totalPrice, currentIndex],
+                            (err, result) => {
+                                if (err) {
+                                    return reject(err);
+                                }
+                                currentIndex++;
+                                resolve(result);
+                            }
+                        );
+                    });
+                });
+
+                Promise.all(queries)
+                    .then(() => {
+                        db.commit((err) => {
                             if (err) {
                                 return db.rollback(() => {
-                                    res.status(500).send('Lỗi khi lưu sản phẩm vào PayData.');
+                                    res.status(500).send('Lỗi khi commit transaction.');
                                 });
                             }
-                        }
-                    );
-
-                    currentIndex++; 
-                });
-
-                db.commit((err) => {
-                    if (err) {
-                        return db.rollback(() => {
-                            res.status(500).send('Lỗi khi commit transaction.');
+                            return res.redirect(`/payment/option/t/${UserId}`);
                         });
-                    }
-                    return res.redirect(`/payment/option/t/${UserId}`);
-                });
+                    })
+                    .catch((err) => {
+                        db.rollback(() => {
+                            res.status(500).send('Lỗi khi lưu sản phẩm vào PayData.');
+                        });
+                    });
             });
         });
     });

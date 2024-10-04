@@ -32,7 +32,7 @@ exports.CreateProduct = async (req, res) => {
     if (!name || !description || !price || !quantity) {
         return res.status(400).send('All fields are required');
     }
-
+    const salevalNum = saleval && !isNaN(saleval) ? parseInt(saleval) : 0;
     const salebool = sale ? 1 : 0;
     const creator = req.session.user.name;
     const userID = req.session.user.id;
@@ -71,7 +71,7 @@ exports.CreateProduct = async (req, res) => {
             image: [imageName],
             creator,
             creator_id: userID,
-            sale: salebool,
+            sale: salevalNum,
             saleval,
             sold: 0,
             created_at: createdAt
@@ -90,6 +90,7 @@ exports.CreateProduct = async (req, res) => {
         res.status(500).send('Error creating product');
     }
 };
+
 
 exports.AddProductDisplay = (req, res) => {
     const message = req.query.message || null;

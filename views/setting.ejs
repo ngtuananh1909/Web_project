@@ -501,11 +501,17 @@
 
     <script>
       function toggleEditMode(field) {
-        const inputField = document.getElementById(field);
-        inputField.readOnly = !inputField.readOnly;
-        const editButton = inputField.nextElementSibling;
-        editButton.textContent = inputField.readOnly ? "Edit" : "Save";
-      }
+    const inputField = document.getElementById(field);
+    const editButton = inputField.nextElementSibling;
+    if (inputField.readOnly) {
+        inputField.readOnly = false;
+        editButton.textContent = "Save";
+    } else {
+        inputField.readOnly = true;
+        editButton.textContent = "Edit";
+    }
+}
+
 
       function togglePasswordCheck() {
         const passwordCheck = document.getElementById("passwordCheck");

@@ -62,7 +62,6 @@ exports.home = async (req, res) => {
     }
 };
 
-
 exports.logout = (req, res) => {
     req.session.destroy(err => {
         if (err) {
@@ -123,6 +122,7 @@ exports.cartDisplay = (req, res) => {
                 console.log("error: ", err);
                 return res.status(500).json({ error: 'Server error' });
             }
+            // Ghi chú: Đảm bảo bạn truyền user và products vào render
             res.render('cart', { user: req.session.user, products: result, selectedProducts: result, discountCode: null });
         });
 };
@@ -137,92 +137,93 @@ exports.SettingDisplay = (req, res) => {
 };
 
 exports.register = async (req, res) => {
-    const { name, email, password, password_confirm } = req.body;
+    const { name, email, password, password_confirm, avatar } = req.body; // Thêm avatar vào đây
     try {
-        db.query('SELECT email from users WHERE email = ?', [email], async (error, results) => {
-            if (error) {
-                console.log(error);
-                return res.render('register', { message: 'Server error' });
-            }
-            if (results.length > 0) {
-                return res.render('register', { message: 'This Email is already in use' });
-            }
-            if (password !== password_confirm) {
-                return res.render('register', { message: 'Passwords do not match' });
-            }
+        // Kiểm tra xem email đã được sử dụng hay chưa
+        const results = await query('SELECT email FROM users WHERE email = ?', [email]);
+        if (results.length > 0) {
+            return res.render('register', { message: 'This email is already in use' });
+        }
+        if (password !== password_confirm) {
+            return res.render('register', { message: 'Passwords do not match' });
+        }
 
-            const hashpassword = await bcrypt.hash(password, 10);
-            const UserId = await IdGenerator();
+        const hashpassword = await bcrypt.hash(password, 10);
+        const UserId = await IdGenerator();
 
-            db.query('INSERT INTO users SET ?', { id: UserId, name, email, password: hashpassword, balance: 0, reputation: 0 }, (err) => {
-                if (err) {
-                    console.log(error);
-                    return res.render('register', { message: 'Server error' });
-                }
-                if (req.session) {
-                    req.session.user = {
-                        id: UserId,
-                        name,
-                        email,
-                        password: hashpassword,
-                    };
-                    res.redirect('/');
-                } else {
-                    console.log('Session is not initialized.');
-                    res.render('login', { message: 'Session error' });
-                }
-            });
+        const avatarData = avatar ? Buffer.from(avatar, 'base64') : null;
+
+        await query('INSERT INTO users SET ?', {
+            id: UserId,
+            name,
+            email,
+            password: hashpassword,
+            avatar: avatarData,  
+            balance: 0,
+            reputation: 0,
+            story: null, 
+            phone: '',   
+            friends: 0   
         });
+
+        // Khởi tạo session cho người dùng
+        req.session.user = {
+            id: UserId,
+            name,
+            email,
+            avatar: avatarData // Truyền avatar vào session nếu cần
+        };
+
+        res.redirect('/');
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.render('register', { message: 'Server error' });
     }
 };
 
+
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
-            if (err) {
-                console.log(err);
-                return res.render('login', { message: 'Server error' });
-            }
-            if (results.length === 0) {
-                return res.render('login', { message: 'Email or password is incorrect' });
-            }
-            try {
-                const isMatch = await bcrypt.compare(password, results[0].password);
-                if (!isMatch) {
-                    return res.render('login', { message: 'Email or password is incorrect' });
-                }
-                if (req.session) {
-                    req.session.user = {
-                        id: results[0].id,
-                        name: results[0].name,
-                        email: results[0].email,
-                        avatar: results[0].avatar,
-                        balance: results[0].balance,
-                        reputation: results[0].reputation,
-                        story: results[0].story,
-                        phone: results[0].phone,
-                        friends: results[0].friends
-                    };
-                    return res.redirect('/');
-                } else {
-                    console.log('Session is not initialized.');
-                    return res.render('login', { message: 'Session error' });
-                }
-            } catch (error) {
-                console.log(error);
-                return res.render('login', { message: 'Server error' });
-            }
-        });
+        // Truy vấn người dùng theo email
+        const results = await query('SELECT * FROM users WHERE email = ?', [email]);
+        
+        // Kiểm tra xem người dùng có tồn tại không
+        if (results.length === 0) {
+            return res.render('login', { message: 'Email hoặc mật khẩu không chính xác' });
+        }
+        
+        const user = results[0]; // Lưu trữ thông tin người dùng vào biến user
+
+        // Kiểm tra mật khẩu
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.render('login', { message: 'Email hoặc mật khẩu không chính xác' });
+        }
+
+        // Khởi tạo session cho người dùng
+        if (req.session) {
+            req.session.user = {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                avatar: user.avatar,
+                balance: user.balance,
+                reputation: user.reputation,
+                story: user.story,
+                phone: user.phone,
+                friends: user.friends
+            };
+            return res.redirect('/');
+        } else {
+            console.log('Session is not initialized.');
+            return res.render('login', { message: 'Lỗi hệ thống. Vui lòng thử lại sau.' });
+        }
     } catch (err) {
-        console.log(err);
-        return res.render('login', { message: 'Server error' });
+        console.error('Server error:', err);
+        return res.render('login', { message: 'Lỗi máy chủ. Vui lòng thử lại sau.' });
     }
 };
-
 
 exports.UserUpdate = async (req, res) => {
     if (!req.session.user) {
@@ -231,69 +232,86 @@ exports.UserUpdate = async (req, res) => {
 
     try {
         const avatar = req.files ? req.files.avatar : null;
+
         const { name, email } = req.body;
         const userId = req.session.user.id;
         const oldAvatarPath = req.session.user.avatar;
 
-        const queryParams = [];
-        let updateQuery = 'UPDATE users SET';
+        const updateUser = () => {
+            let updateQuery = 'UPDATE users SET';
+            const queryParams = [];
+            let avatarPath = '';
 
-        if (name && name !== req.session.user.name) {
-            updateQuery += ' name = ?,';
-            queryParams.push(name);
-        }
+            if (name && name !== req.session.user.name) {
+                updateQuery += ' name = ?,';
+                queryParams.push(name);
+            }
 
-        if (avatar) {
-            const avatarPath = `uploads/${userId}_${avatar.name}`;
-            updateQuery += ' avatar = ?,';
-            queryParams.push(avatarPath);
-
-            await new Promise((resolve, reject) => {
+            if (avatar && avatar.name !== path.basename(oldAvatarPath)) {
+                avatarPath = `uploads/${userId}${path.extname(avatar.name)}`;
+                updateQuery += ' avatar = ?,';
+                queryParams.push(avatarPath);
+            
                 avatar.mv(path.join(__dirname, '..', avatarPath), (err) => {
                     if (err) {
                         console.log('Error moving avatar file:', err);
-                        return reject(new Error('Error saving file'));
+                        return res.status(500).send('Error saving file');
                     }
-                    resolve();
                 });
-            });
-        }
+            }            
 
-        if (queryParams.length === 0) {
-            return res.render('setting', { user: req.session.user, message: 'No changes detected' });
-        }
-
-        updateQuery = updateQuery.slice(0, -1) + ' WHERE id = ?';
-        queryParams.push(userId);
-
-        db.query(updateQuery, queryParams, async (error) => {
-            if (error) {
-                console.log('Error updating settings:', error);
-                return res.render('setting', { user: req.session.user, message: 'Error updating settings' });
+            if (queryParams.length === 0) {
+                return res.render('setting', { user: req.session.user, message: 'No changes detected' });
             }
 
-            req.session.user.name = name || req.session.user.name;
-            req.session.user.avatar = avatarPath || req.session.user.avatar;
+            updateQuery = updateQuery.slice(0, -1); 
+            updateQuery += ' WHERE id = ?';
+            queryParams.push(userId);
 
-            if (oldAvatarPath) {
-                const fullPath = path.join(__dirname, '..', oldAvatarPath);
-                try {
-                    if (fs.existsSync(fullPath)) { // Kiểm tra xem tệp có tồn tại không
-                        await fs.unlink(fullPath);
-                    }
-                } catch (unlinkErr) {
-                    console.log('Error deleting old avatar:', unlinkErr);
+            db.query(updateQuery, queryParams, async (error) => {
+                if (error) {
+                    console.log('Error updating settings:', error);
+                    return res.render('setting', { user: req.session.user, message: 'Error updating settings' });
                 }
-            }
 
-            res.render('setting', { user: req.session.user, message: 'Settings updated successfully' });
-        });
+                req.session.user.name = name || req.session.user.name;
+                req.session.user.avatar = avatarPath || req.session.user.avatar;
+
+                if (oldAvatarPath) {
+                    console.log('Old Avatar Path:', oldAvatarPath); 
+                    try {
+                        const fullPath = path.join(__dirname, '..', oldAvatarPath.toString());
+                        console.log('Full Path:', fullPath); 
+                        await fs.unlink(fullPath);
+                    } catch (unlinkErr) {
+                        console.log('Error deleting old avatar:', unlinkErr);
+                    }
+                }
+
+                res.render('setting', { user: req.session.user, message: 'Settings updated successfully' });
+            });
+        };
+
+        if (email && email !== req.session.user.email) {
+            db.query('SELECT email FROM users WHERE email = ? AND id != ?', [email, userId], (error, results) => {
+                if (error) {
+                    console.log('Error checking email:', error);
+                    return res.render('setting', { user: req.session.user, message: 'Error checking email' });
+                }
+
+                if (results.length > 0) {
+                    return res.render('setting', { user: req.session.user, message: 'Email already exists. Please choose a different one.' });
+                }
+                updateUser();
+            });
+        } else {
+            updateUser();
+        }
     } catch (err) {
         console.log('Server error:', err);
         res.render('setting', { user: req.session.user, message: 'Server error' });
     }
 };
-
 
 
 exports.AddToCart = async (req, res) => {
@@ -467,3 +485,6 @@ exports.SearchProducts = async (req, res) => {
         res.status(500).send('Đã xảy ra lỗi khi tìm kiếm sản phẩm');
     }
 };
+
+
+
