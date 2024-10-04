@@ -63,6 +63,7 @@ exports.home = async (req, res) => {
 };
 
 
+
 exports.logout = (req, res) => {
     req.session.destroy(err => {
         if (err) {
@@ -152,22 +153,19 @@ exports.register = async (req, res) => {
         const hashpassword = await bcrypt.hash(password, 10);
         const UserId = await IdGenerator();
 
-        // Nếu có avatar, bạn cần xử lý và chuyển đổi nó thành định dạng phù hợp
-        // Giả sử avatar là một Base64 string (thay đổi tùy theo cách bạn gửi avatar)
         const avatarData = avatar ? Buffer.from(avatar, 'base64') : null;
 
-        // Thêm người dùng mới vào cơ sở dữ liệu
         await query('INSERT INTO users SET ?', {
             id: UserId,
             name,
             email,
             password: hashpassword,
-            avatar: avatarData,  // Thêm avatar vào cơ sở dữ liệu
+            avatar: avatarData,  
             balance: 0,
             reputation: 0,
-            story: null, // Nếu cần có thể thêm vào
-            phone: '',   // Đảm bảo truyền giá trị phù hợp
-            friends: 0   // Giá trị mặc định
+            story: null, 
+            phone: '',   
+            friends: 0   
         });
 
         // Khởi tạo session cho người dùng
