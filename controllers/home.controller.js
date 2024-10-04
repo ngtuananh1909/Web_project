@@ -64,6 +64,7 @@ exports.home = async (req, res) => {
 
 
 
+
 exports.logout = (req, res) => {
     req.session.destroy(err => {
         if (err) {
@@ -192,7 +193,7 @@ exports.login = async (req, res) => {
         
         // Kiểm tra xem người dùng có tồn tại không
         if (results.length === 0) {
-            return res.render('login', { message: 'Email or password is incorrect' });
+            return res.render('login', { message: 'Email hoặc mật khẩu không chính xác' });
         }
         
         const user = results[0]; // Lưu trữ thông tin người dùng vào biến user
@@ -200,7 +201,7 @@ exports.login = async (req, res) => {
         // Kiểm tra mật khẩu
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.render('login', { message: 'Email or password is incorrect' });
+            return res.render('login', { message: 'Email hoặc mật khẩu không chính xác' });
         }
 
         // Khởi tạo session cho người dùng
@@ -219,15 +220,13 @@ exports.login = async (req, res) => {
             return res.redirect('/');
         } else {
             console.log('Session is not initialized.');
-            return res.render('login', { message: 'Session error' });
+            return res.render('login', { message: 'Lỗi hệ thống. Vui lòng thử lại sau.' });
         }
     } catch (err) {
-        console.error(err);
-        return res.render('login', { message: 'Server error' });
+        console.error('Server error:', err);
+        return res.render('login', { message: 'Lỗi máy chủ. Vui lòng thử lại sau.' });
     }
 };
-
-
 
 exports.UserUpdate = async (req, res) => {
     if (!req.session.user) {
