@@ -664,25 +664,18 @@ input:checked + .slider:before {
     color: #ffffff;
 }
 .stars {
-    display: flex; /* Hiển thị ngôi sao trong hàng */
+    display: flex;
+    direction: row-reverse; /* Đảo ngược chiều hiển thị */
 }
-
-.stars input {
-    display: none; /* Ẩn các input radio */
-}
-
 .star {
-    font-size: 30px; /* Kích thước của sao */
-    color: lightgray; /* Màu sao không chọn */
-    cursor: pointer; /* Đổi con trỏ khi hover */
+    font-size: 45px; /* Kích thước sao */
+    color: lightgray; /* Màu sắc sao chưa chọn */
+    cursor: pointer; /* Con trỏ khi di chuột */
 }
-
-.star:hover,
-.star:hover ~ .star {
-    color: gold; /* Màu sao khi hover */
+input[type="radio"]:checked ~ .star {
+    color: gold; /* Màu sắc sao đã chọn */
 }
-
-.stars input:checked ~ .star {
-    color: gold; /* Màu sao đã chọn */
+.comment {
+    margin-top: 10px; /* Khoảng cách giữa sao và bình luận */
+    font-size: 25px; /* Kích thước chữ cho bình luận */
 }
-
