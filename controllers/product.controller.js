@@ -99,7 +99,7 @@ exports.DisplayProductDetails = async (req, res) => {
 
     try {
         const [productRows] = await db.promise().query(sql, [productId]);
-        
+
         if (productRows.length === 0) {
             return res.render('home', {
                 message: 'Product not found'
@@ -113,8 +113,11 @@ exports.DisplayProductDetails = async (req, res) => {
         const listSql = 'SELECT * FROM products WHERE id != ?';
         const [otherProducts] = await db.promise().query(listSql, [productId]);
 
+        // Truyền giá trị mặc định cho user nếu không có trong session
+        const user = req.session.user || null; 
+
         res.render('product-details', { 
-            user: req.session.user, 
+            user, 
             product, 
             ratings,
             products: otherProducts 
@@ -126,6 +129,7 @@ exports.DisplayProductDetails = async (req, res) => {
         });
     }
 };
+
 
 
 exports.PasswordVerify = async (req, res) => {
