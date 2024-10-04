@@ -227,6 +227,7 @@ p {
     position: fixed;
     top: 0; /* Giữ header ở vị trí đầu trang */
     z-index: 1000; /* Đảm bảo header có z-index cao để không bị che */
+    background-color: #9c9c9c;
 }
 
 
@@ -384,6 +385,7 @@ height: 30px;
     top: 0;
     width: 100%; /* Đảm bảo header chiếm toàn bộ chiều rộng */
     z-index: 1000; /* Đảm bảo header nằm trên các phần tử khác */
+    background-color: #e2e2e2;
 }
 
 .main-content {
@@ -639,17 +641,17 @@ input:checked + .slider:before {
     border-radius: 5px;
     background-color: #f9f9f9;
     height: auto;
-    width: 60%;
-    margin-left: 30%;
+    width: 70%;
+    margin-left: 29%;
 }
 .dark-mode .rating-section, .reviews {
     margin-top: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    background-color: #474747;
+    background-color: #636363;
     height: auto;
-    width: 60%;
-    margin-left: 30%;
+    width: 70%;
+    margin-left: 29%;
 }
 
 .review {
@@ -741,5 +743,37 @@ button[type="submit"]:active {
 }
 
 .review{
-    background-color: rgb(211, 211, 211);
+    background-color: rgb(241, 239, 239);
+}
+.dark-mode .review{
+    background-color: rgb(148, 146, 146);
+}
+.rating {
+    display: flex;
+    direction: row-reverse; /* Đảo chiều từ phải sang trái (sao 5 sẽ ở ngoài cùng bên phải) */
+    justify-content: center;
+}
+
+.rating input[type="radio"] {
+    display: none; /* Ẩn hoàn toàn nút radio */
+}
+
+.rating label {
+    font-size: 30px;
+    color: grey; /* Màu mặc định cho các sao chưa chọn */
+    cursor: pointer;
+    transition: color 0.3s; /* Hiệu ứng chuyển màu khi chọn */
+}
+
+.reviews{
+    background-color:#d1d1d1 ;
+}
+.dark-mode .reviews{
+    background-color:#636363 ;
+}
+.user-info .user-name {
+    white-space: normal;    /* Cho phép tên xuống dòng nếu quá dài */
+    word-wrap: break-word;  /* Bẻ từ nếu từ quá dài */
+    word-break: break-all;  /* Chia từ nếu quá dài để vừa khít với chiều rộng */
+    max-width: 100%;       /* Chiều rộng tối đa của tên, có thể thay đổi theo ý muốn */
 }
