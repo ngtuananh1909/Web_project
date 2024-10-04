@@ -41,8 +41,8 @@ exports.CreateProduct = async (req, res) => {
     try {
         const productId = await ProductIDGenerator();
         
-        const productDir = path.join(__dirname, '../uploads/products');
-
+        const productDir = path.join(__dirname, '../public/uploads');
+        
         if (!fs.existsSync(productDir)) {
             fs.mkdirSync(productDir, { recursive: true });
         }
@@ -82,7 +82,7 @@ exports.CreateProduct = async (req, res) => {
                 console.error('Error creating product:', err);
                 return res.status(500).send('Error creating product');
             }
-            res.redirect('back');
+            res.redirect(req.get("Referrer") || "/");
         });
     } catch (err) {
         console.error('Error creating product:', err);
