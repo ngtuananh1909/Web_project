@@ -678,4 +678,68 @@ input[type="radio"]:checked ~ .star {
 .comment {
     margin-top: 10px; /* Khoảng cách giữa sao và bình luận */
     font-size: 25px; /* Kích thước chữ cho bình luận */
+    height: auto;
+    width: 100%;
+    background-color: transparent;
+}
+
+.comment-write {
+    margin-top: 10px; /* Khoảng cách giữa sao và bình luận */
+    font-size: 25px; /* Kích thước chữ cho bình luận */
+    height: auto;
+    width: 100%;
+    background-color: white;
+    color: #000;
+}
+.dark-mode .comment-write {
+    margin-top: 10px; /* Khoảng cách giữa sao và bình luận */
+    font-size: 25px; /* Kích thước chữ cho bình luận */
+    height: auto;
+    width: 100%;
+    background-color: #696969;
+    color: white;
+}
+
+.square-box.description {
+    font-size: 20px;
+    overflow: auto;       /* Thêm thanh cuộn khi nội dung quá dài */
+    max-height: 600px;    /* Chiều cao tối đa của hộp, có thể điều chỉnh */
+    width: 70%;          /* Đảm bảo hộp không bị tràn theo chiều ngang */
+    box-sizing: border-box; /* Đảm bảo padding và border không làm tăng kích thước hộp */
+    color: white;
+}
+.square-box.description p {
+    color: rgb(0, 0, 0) !important;
+}
+.dark-mode .square-box.description p {
+    color: rgb(255, 255, 255) !important;
+}
+button[type="submit"] {
+    background-color: #4CAF50; /* Màu nền xanh lá cây */
+    color: white; /* Màu chữ trắng */
+    border: none; /* Không có đường viền */
+    padding: 15px 32px; /* Khoảng cách bên trong nút */
+    text-align: center; /* Căn giữa chữ */
+    text-decoration: none; /* Không gạch chân */
+    display: inline-block; /* Hiển thị inline */
+    font-size: 16px; /* Kích thước chữ */
+    font-weight: bold; /* Chữ đậm */
+    margin: 10px 0; /* Khoảng cách phía trên và dưới */
+    cursor: pointer; /* Con trỏ dạng bàn tay khi hover */
+    border-radius: 8px; /* Góc bo tròn */
+    transition: background-color 0.3s, transform 0.2s; /* Hiệu ứng chuyển màu nền và kích thước khi hover */
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049; /* Màu nền khi hover */
+    transform: scale(1.05); /* Phóng to nhẹ khi hover */
+}
+
+button[type="submit"]:active {
+    background-color: #3e8e41; /* Màu nền khi nhấn */
+    transform: scale(0.98); /* Thu nhỏ nhẹ khi nhấn giữ */
+}
+
+.review{
+    background-color: rgb(211, 211, 211);
 }

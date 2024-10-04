@@ -125,13 +125,13 @@
                             <p class="thong-tin" ><%- product.description %></p>
                         </div>
                         <div class="rating-section">
-                            <center><h3 class="alpha">Đánh giá sản phẩm</h3></center>
+                            <center><h3 class="alpha" style="margin-bottom: 20px;margin-top: 20px;">Đánh giá sản phẩm</h3></center>
                             <form id="ratingForm" method="POST" action="/product/submit-review">
                               <input type="hidden" name="productId" value="<%= product.id %>">
                           
-                              <div>
+                              <div style="margin-left: 20px;">
                                 <label for="rating" class="alpha" style="font-size: 25px;">Số sao:</label>
-                                <div class="stars" style="gap: 20px;margin-left: 100px;margin-top: -49px;">
+                                <div class="stars" style="gap: 20px;margin-left: 120px;margin-top: -51px;">
                                     <input type="radio" id="star1" name="rating" value="1" required>
                                     <label for="star1" class="star" style="margin-left: -45px;margin-top: -2px;">&#9733;</label>
                                     <input type="radio" id="star2" name="rating" value="2" required>
@@ -147,11 +147,11 @@
                                 
                             </div>
                           
-                              <div>
-                                  <label for="comment">Bình luận:</label>
-                                  <textarea name="comment" rows="4"></textarea>
+                              <div style="margin-left: 20px;">
+                                  <label for="comment" style="font-size: 25px;">Bình luận:</label>
+                                  <textarea name="comment" class="comment-write" style="margin-left: -12px;" rows="4"></textarea>
                               </div>
-                              <button type="submit">Gửi đánh giá</button>
+                              <center><button type="submit">Gửi đánh giá</button></center>
                           </form>                       
                         </div>
                         
@@ -161,11 +161,10 @@
                                 <% ratings.forEach(review => { %>
                                     <div class="review">
                                         <p class="alpha"><strong><%= review.user_id %></strong> (Ngày: <%= new Date(review.created_at).toDateString() %>)</p>
-                                        
                                         <p class="alpha">Số sao: 
                                             <% for (let i = 1; i <= 5; i++) { %>
                                                 <% if (i <= review.rating) { %>
-                                                    <span class="star">★</span> <!-- Sao đã đánh giá -->
+                                                    <span class="star" style="color: yellow;">★</span> <!-- Sao đã đánh giá -->
                                                 <% } else { %>
                                                     <span class="star">☆</span> <!-- Sao chưa đánh giá -->
                                                 <% } %>

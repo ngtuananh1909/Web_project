@@ -117,12 +117,13 @@
                 </li>
               <% } %>
               <a href="/product/<%= product.id %>">
-                <img
-                  src="/uploads/<%= product.image %>"
-                  class="card-img-top"
-                  alt=""
+                <img 
+                    src="<%= product.image ? ('uploads/' + product.image) : '/img/cart-def.png' %>" 
+                    class="card-img-top" 
+                    alt="" 
+                    onerror="this.onerror=null; this.src='/img/cart-def.png';"
                 />
-              </a>
+            </a>
               <div class="card-body">
                 <h4 class="card-title"><%= product.name %></h4>
                 <% if (product.sale) { %>
