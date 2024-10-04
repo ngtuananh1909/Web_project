@@ -181,18 +181,17 @@
                       <button class="btn btn-secondary" style="display: inline-block;">Áp dụng</button>
                     </div>
                   </div>
-                  <form id="checkoutForm">
+                  <form id="checkoutForm" action="/payment/checkout" method="POST" onsubmit="return prepareCheckout()">
                     <div class="card">
-                      <div class="card-body d-flex justify-content-between align-items-center">
-                        <div class="total" style="font-size: 20px;">
-                          <strong>Tổng cộng: </strong><span id="totalAmount">0</span>
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div class="total" style="font-size: 20px;">
+                                <strong>Tổng cộng: </strong><span id="totalAmount">0</span>
+                            </div>
+                            <input type="hidden" name="selectedProducts" id="selectedProducts">
+                            <button type="submit" class="btn btn-warning btn-lg">Tiến hành thanh toán</button>
                         </div>
-                        <input type="hidden" name="selectedProducts" id="selectedProducts" value="<%= JSON.stringify(selectedProducts) %>">
-                        <input type="hidden" name="discountCode" id="discountCode" value="<%= discountCode %>">
-                        <button type="submit" class="btn btn-warning btn-lg">Tiến hành thanh toán</button>
-                      </div>
                     </div>
-                  </form>                  
+                </form>                       
         </div>
       </section>
       <div style="position: fixed; bottom: 0; right: 0; width: 150px; z-index: 1000; background-color: transparent; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
@@ -238,7 +237,7 @@
             }
         });
 
-        document.querySelector('#totalAmount').innerText = total.toLocaleString() + " VNĐ"; // Hiển thị tổng cộng
+        document.querySelector('#totalAmount').innerText = total.toLocaleString() + " VNĐ";
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -254,32 +253,33 @@
         });
     });
 
+    function getSelectedProducts() {
+    const selectedProducts = [];
+    document.querySelectorAll('input.product-checkbox').forEach((checkbox, index) => {
+        if (checkbox.checked) {
+            const quantityInput = document.querySelector(`#quantity_${products[index].id}`);
+            selectedProducts.push({
+                id: products[index].id,
+                name: products[index].name,
+                quantity: parseInt(quantityInput.value),
+                price: parseFloat(quantityInput.getAttribute('data-price')),
+            });
+        }
+    });
+    return selectedProducts;
+}
+function prepareCheckout() {
+    const selectedProducts = getSelectedProducts();
+    document.getElementById('selectedProducts').value = JSON.stringify(selectedProducts); 
+    if (selectedProducts.length === 0) {
+        alert("Vui lòng chọn ít nhất một sản phẩm để thanh toán.");
+        return false; 
+    }
+
+    return true; 
+}
   </script>
   <script src="darkmode.js"></script>
-  <script>
-    $(document).ready(function() {
-    $('#checkoutForm').submit(function(e) {
-        e.preventDefault(); 
-
-        const selectedProducts = $('#selectedProducts').val();
-        const discountCode = $('#discountCode').val();
-
-        $.ajax({
-            url: '/payment/checkout',
-            type: 'POST',
-            data: {
-                selectedProducts: selectedProducts,
-                discountCode: discountCode
-            },
-            error: function(xhr, status, error) {
-                console.log(error)
-                alert('Có lỗi xảy ra khi thanh toán. Vui lòng thử lại.');
-            }
-        });
-    });
-});
-
-  </script>
   <script src="delete.js"></script>
   <script src="chat.js"></script>
   <script src="search.js"></script>
