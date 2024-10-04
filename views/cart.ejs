@@ -410,7 +410,7 @@
                     <% if (user.avatar) { %>
                     <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
                     <% } else { %>
-                    <img src="./img/def.jpg" class="avatar me-2" alt="" />
+                    <img src="img/def.jpg" class="avatar me-2" alt="" />
                     <% } %>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
@@ -670,7 +670,6 @@
           chatBody.classList.remove('active'); // Thu nhỏ ô chat
           setTimeout(() => {
             chatBody.style.display = 'none'; // Ẩn ô chat
-<<<<<<< HEAD
             chatHeader.style.display = 'block'; // Hiện lại nút Chat
           }, 300); // Thời gian thu nhỏ
         }
@@ -684,11 +683,5 @@
           }
       }
   </script>
-=======
-            chatHeader.style.display = 'block'; 
-          }, 300); 
-        };
-</script>
->>>>>>> Payment
 
 </html>

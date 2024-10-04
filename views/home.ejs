@@ -469,7 +469,7 @@
                 <li class="nav-item dropdown" style="width: 200px;">
                   <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                     <% if (user.avatar) { %>
-                      <img src="/uploads/<%= user.avatar %>" class="avatar me-2" alt="Avatar" />
+                      <img src="/<%= user.avatar %>" class="avatar me-2" alt="Avatar" />
                     <% } else { %>
                       <img src="/img/def.jpg" class="avatar me-2" alt="Avatar mặc định" />
                     <% } %>
@@ -642,7 +642,7 @@
                       </div>
                     <% } else { %>
                       <div style="margin-top: 40px;">
-                          <p class="card-text">Giá: <%= formatCurrency(product.price) %>VNĐ</p>
+                          <p class="card-text">Giá: <%= formatCurrency(product.price) %> VNĐ</p>
                       </div>
                       <div style="padding-left: -10px; padding-bottom: 10px">
                         <div class ="creator-day" style ="margin-top:1px;">
