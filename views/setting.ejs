@@ -391,6 +391,16 @@
                 >
                 <button class="button-select" type="button" onclick="toggleEditMode('name')">Change Your name</button>
               </div>
+              <div class="form-group">
+                <label for="avatar">Avatar</label>
+                <img
+                  src="<%= user.avatar %>"
+                  alt="User Avatar"
+                  width="100"
+                  height="100"
+                />
+                <input type="file" id="avatar" name="avatar" />
+              </div>
               </form>
             </div>
               <div class="edit-name" style="margin-left: 400px;">
