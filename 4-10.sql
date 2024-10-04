@@ -3,13 +3,10 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1:3001
--- Thời gian đã tạo: Th10 02, 2024 lúc 12:16 PM
+-- Thời gian đã tạo: Th10 04, 2024 lúc 04:01 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
-DROP DATABASE IF EXISTS product_db;
-CREATE DATABASE product_db DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE product_db;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -67,9 +64,12 @@ CREATE TABLE `products` (
 
 INSERT INTO `products` (`id`, `name`, `description`, `price`, `quantity`, `image`, `creator`, `creator_id`, `sale`, `saleval`, `sold`, `created_at`) VALUES
 ('1mhCp3yA6xa26gH48wdJEad6PbMh6NVI9WyJQAtlrOLNTt434s', 'Phat Ta Simp', 'gay', 100, 1, 0x313732313337333630303332365f6465662e6a7067, 'Quan Minh', 'aL4RptWAMs', 0, 0, 0, '2024-07-22 03:16:26'),
+('2G2AhptYyfB6dIj8MF7cmdeYDZZiFKIURCPV3IhELKmVjguof9', 'TUANANH', '<p><br></p>', 123235000, 12, 0x32473241687074597966423664496a384d4637636d646559445a5a69464b495552435056334968454c4b6d566a67756f6639433034643348636d423859416335526277584a72466b4c6452537a51564f72434a47377746595751636e6645557a735552505f313732383030323938383331325f31383961326462663238373636633966616537343461363839346561623666342e6a7067, 'TUANANH', 'fFkHwuxGou', 0, 0, 0, '2024-10-04 00:49:48'),
+('32wSLUdRD5Pg4vd4QgKSpGmdFRF2jqukIDGiw0E97x8TfRjA9w', 'Furina', '<p><br></p>', 1223000, 1, 0x333277534c556452443550673476643451674b5370476d64465246326a71756b49444769773045393778385466526a4139775754546f3666356f656f6c446537796967516f457a476a35507973584e72464679557a74614d6f446c635661373345616b395f313732383030333133363039355f31383961326462663238373636633966616537343461363839346561623666342e6a7067, 'TUANANH', 'fFkHwuxGou', 0, 0, 0, '2024-10-04 00:52:16'),
 ('BoonQ5K4vkWuEjNQ3gNjNzmPUcB1EWyl3JdVyOMkQktxzJC9wq', 'Tuan Anh beo', 'gay', 100, 1, 0x313732313337333439373738305f5475616e20416e682e6a7067, 'Quan Minh', 'aL4RptWAMs', 1, 99, 0, '2024-07-22 03:16:26'),
 ('dtiUELIJajgyzcSfMBXnapmxqMapVEkTXL1ctIgIXVIT766Oij', 'Trung Kien', 'gay', 100, 1, 0x313732313336353635373736385f5472756e674b69656e536c6565702e6a7067, 'Quan Minh', 'aL4RptWAMs', 1, 99, 0, '2024-07-22 03:16:26'),
 ('hUriIAklJA1IQmYt0dinAJiAtyEOekaFOgacl4ZD7nlXUy9jh3', 'Quan Minh', 'gay', 100, 1, 0x3635313065313231666665616562333130356536633932393034306331323430, 'Quan Minh', '', 0, 0, 0, '2024-07-22 03:16:26'),
+('JyT19MBtCx9AoMaHSfJmgPaWR0FaOmp9X9Gj2a4FLS0eWtC6Y0', 'Furina', '<p><strong>Furina cuti <em>susss</em></strong></p>', 120000, 1, 0x4a795431394d4274437839416f4d614853664a6d67506157523046614f6d70395839476a326134464c533065577443365930633554455259436b3670644162417a456c46734767307036524d413267626f734e55554b4163593547637457714d464b334c5f313732373837383533343235375f31383961326462663238373636633966616537343461363839346561623666342e6a7067, 'TUANANH', 'fFkHwuxGou', 0, 0, 0, '2024-10-02 14:15:34'),
 ('kJy4WQaUD1oezriugFq9thwSuc0FV1UEkV7D9zpCc55Irb2eUm', 'Minh Quân', 'gay', 1000, 1, 0x313732313730323739343830325f6e67756f696e696767612e706e67, 'Quan Minh', 'aL4RptWAMs', 1, 99, 0, '2024-07-23 02:46:34'),
 ('lYcvZ9B8rIR5dQFX8N4IcwLti0wNzFmagyA52SkwdD7Ek5UOlu', 'Ta Tan Phat', 'gay', 100, 1, 0x313732313337373832303537365f6465662e6a7067, 'Quan Minh', 'aL4RptWAMs', 1, 69, 0, '2024-07-22 03:16:26'),
 ('Xg32XkFR7EpGlQoPZIw2Et9UKsicJKA30kem86ausAkDwQ3iRo', 'Quan Minh', 'gay', 100, 1, 0x313732313335383737323832325f5472756e674b69656e536c6565702e6a7067, 'Quan Minh', '', 0, 0, 0, '2024-07-22 03:16:26');
@@ -87,6 +87,28 @@ CREATE TABLE `ratings` (
   `rating` int(11) NOT NULL CHECK (`rating` >= 1 and `rating` <= 5),
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `reviews`
+--
+
+CREATE TABLE `reviews` (
+  `id` int(11) NOT NULL,
+  `product_id` varchar(255) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `rating` int(11) NOT NULL,
+  `comment` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `reviews`
+--
+
+INSERT INTO `reviews` (`id`, `product_id`, `user_id`, `rating`, `comment`, `created_at`) VALUES
+(1, 'BoonQ5K4vkWuEjNQ3gNjNzmPUcB1EWyl3JdVyOMkQktxzJC9wq', 0, 1, 'non', '2024-10-04 01:59:36');
 
 -- --------------------------------------------------------
 
@@ -121,7 +143,8 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `avatar`, `balance`, `re
 ('YfvViHLuSg', 'Minh Quan', 'tests@gmail.com', '$2a$10$Qbieq3M325I1EXvjsEcRcuwpJBe/P/xr5wkArhByJK7p7DJRMPZqS', 0x75706c6f6164732f5966765669484c7553672e6a7067, 0, 0, NULL, '', 0),
 ('TfF2cAin7Z', 'Mink Quan', 'testq@gmail.com', '$2a$10$gPKL5h8vVDEoF.ytexJ5rOiV.QqaV2cVPTr/0WGhkugutM5kXNHgO', NULL, 0, 0, NULL, '', 0),
 ('59xzprS0Xx', 'Quan Minh', 'ezdd@gmail.com', '$2a$10$kHS0QJwn6v9b6VirCDrLw.X4NZFMIDywX4vMQtJp6fYrwUOYYkr5.', NULL, 0, 0, NULL, '', 0),
-('zTo8xZt3ra', 'membeo', 'membeo@gmail.com', '$2a$10$wdBsEfI.ETXqgj8Oyb9mC.iBkLV9w66o8L3bfDeeJNCXPEauDLjLa', NULL, 0, 0, NULL, '', 0);
+('zTo8xZt3ra', 'membeo', 'membeo@gmail.com', '$2a$10$wdBsEfI.ETXqgj8Oyb9mC.iBkLV9w66o8L3bfDeeJNCXPEauDLjLa', NULL, 0, 0, NULL, '', 0),
+('fFkHwuxGou', 'TUANANH', 'tuananh190907@gmail.com', '$2a$10$qyqdApIVyctiPC0Xh95XyemGu/Csoaku7vLB8.czTOJzigyJ5d2gW', NULL, 0, 0, NULL, '', 0);
 
 -- --------------------------------------------------------
 
@@ -139,7 +162,10 @@ CREATE TABLE `user_cart` (
 --
 
 INSERT INTO `user_cart` (`user_id`, `product_id`) VALUES
-('aL4RptWAMs', 'BoonQ5K4vkWuEjNQ3gNjNzmPUcB1EWyl3JdVyOMkQktxzJC9wq');
+('aL4RptWAMs', 'BoonQ5K4vkWuEjNQ3gNjNzmPUcB1EWyl3JdVyOMkQktxzJC9wq'),
+('fFkHwuxGou', 'BoonQ5K4vkWuEjNQ3gNjNzmPUcB1EWyl3JdVyOMkQktxzJC9wq'),
+('fFkHwuxGou', 'dtiUELIJajgyzcSfMBXnapmxqMapVEkTXL1ctIgIXVIT766Oij'),
+('fFkHwuxGou', 'hUriIAklJA1IQmYt0dinAJiAtyEOekaFOgacl4ZD7nlXUy9jh3');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -164,6 +190,13 @@ ALTER TABLE `ratings`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Chỉ mục cho bảng `reviews`
+--
+ALTER TABLE `reviews`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_id` (`product_id`);
+
+--
 -- Chỉ mục cho bảng `user_cart`
 --
 ALTER TABLE `user_cart`
@@ -184,6 +217,22 @@ ALTER TABLE `paydata`
 --
 ALTER TABLE `ratings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `reviews`
+--
+ALTER TABLE `reviews`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- Các ràng buộc cho các bảng đã đổ
+--
+
+--
+-- Các ràng buộc cho bảng `reviews`
+--
+ALTER TABLE `reviews`
+  ADD CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

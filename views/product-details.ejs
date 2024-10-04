@@ -643,7 +643,19 @@
         color: #ffffff;
       }
 
+            .rating-section, .reviews {
+                margin-top: 20px;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                background-color: #f9f9f9;
+            }
 
+            .review {
+                margin-top: 10px;
+                padding: 5px;
+                border-bottom: 1px solid #eee;
+            }
         </style>
     </head>
     <body>
@@ -842,6 +854,44 @@
                 </div>
             </div>
         </main>
+        <div class="rating-section">
+            <h3>Đánh giá sản phẩm</h3>
+            <form id="ratingForm" method="POST" action="/product/submit-review"> <!-- Thay đổi action phù hợp -->
+                <input type="hidden" name="productId" value="<%= product.id %>">
+                <div>
+                    <label for="rating">Số sao:</label>
+                    <select name="rating" required>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="comment">Bình luận:</label>
+                    <textarea name="comment" rows="4"></textarea>
+                </div>
+                <button type="submit">Gửi đánh giá</button>
+            </form>
+        </div>
+        
+        <div class="reviews">
+            <h3>Đánh giá</h3>
+            <% if (ratings.length > 0) { %>
+                <% ratings.forEach(review => { %>
+                    <div class="review">
+                        <p><strong><%= review.user_id %></strong> (Ngày: <%= new Date(review.created_at).toDateString() %>)</p>
+                        <p>Số sao: <%= review.rating %></p>
+                        <p>Bình luận: <%= review.comment || 'Chưa có bình luận' %></p>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+            <% } %>
+        </div>
+        
+        
     </body>
     <script>
         document.addEventListener("DOMContentLoaded", function () {

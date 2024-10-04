@@ -421,9 +421,9 @@
   <body>
     <header class="header-design">
       <div class="container-fluid py-3">
-        <div class="container d-flex justify-content-between align-items-center" style="margin-left: 415px;">
+        <div class="container d-flex justify-content-between align-items-center">
           <h1 class="h4 mb-0">
-            <a href="/" class="text-decoration-none" style="margin-left: -130px;"><strong>E-Shop</strong></a>
+            <a href="/" class="text-decoration-none"><strong>E-Shop</strong></a>
           </h1>
           <!-- Thanh tìm kiếm -->
           <form class="d-flex search" action="/search" method="GET" onsubmit="validateForm(event)">
@@ -440,67 +440,68 @@
             <ul class="nav">
               <li class="nav-item">
                 <a class="nav-link home" href="/">
-                  <img src="/img/home.png" alt="" class="home-icon"></img>
+                  <img src="/img/home.png" alt="Home" class="home-icon">
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link bxh" href="/scoreboard">
-                  <img src="/img/bxh.jpg" alt="" class="bxh-icon">
+                  <img src="/img/bxh.jpg" alt="BXH" class="bxh-icon">
                 </a>
               </li>
               <% if (!user) { %>
-              <li class="nav-item">
-                <a class="nav-link login" href="/login">Đăng nhập</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link dangky" href="/register">Đăng ký</a>
-              </li>
+                <li class="nav-item">
+                  <a class="nav-link login" href="/login">Đăng nhập</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link dangky" href="/register">Đăng ký</a>
+                </li>
               <% } else { %>
-              <li class="nav-item">
-                <a class="nav-link giohang" href="/cart">
-                  <img src="/img/cart.jpg" alt="" class="cart-icon">                  
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link taosanpham" href="/product/add">
-                  <img src="/img/add.jpg" alt="" class="add-icon">
-                </a>
-              </li>
-              <li class="nav-item dropdown" style="width: 200px;">
-                <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
-                  <% if (user.avatar) { %>
-                  <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
-                  <% } else { %>
-                  <img src="./img/def.jpg" class="avatar me-2" alt="" />
-                  <% } %>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                  <li>
-                    <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
-                  </li>
-                  <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                  <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
-                  <li><hr class="dropdown-divider" /></li>
-                  <!-- Chuyển đổi giao diện -->
-                  <li class="nav-item">
-                    <div class="d-flex align-items-center px-3 py-2">
-                      <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
-                      <label class="switch" >
-                        <input type="checkbox" id="toggle-dark-mode">
-                        <span class="slider round"></span>
-                      </label>
-                    </div>
-                  </li>
-                  <li><hr class="dropdown-divider" /></li>
-                  <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
-                </ul>
-              </li>                       
+                <li class="nav-item">
+                  <a class="nav-link giohang" href="/cart">
+                    <img src="/img/cart.jpg" alt="Giỏ hàng" class="cart-icon">                  
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link taosanpham" href="/product/add">
+                    <img src="/img/add.jpg" alt="Thêm sản phẩm" class="add-icon">
+                  </a>
+                </li>
+                <li class="nav-item dropdown" style="width: 200px;">
+                  <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
+                    <% if (user.avatar) { %>
+                      <img src="/uploads/<%= user.avatar %>" class="avatar me-2" alt="Avatar" />
+                    <% } else { %>
+                      <img src="/img/def.jpg" class="avatar me-2" alt="Avatar mặc định" />
+                    <% } %>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li>
+                      <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
+                    </li>
+                    <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
+                    <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <!-- Chuyển đổi giao diện -->
+                    <li class="nav-item">
+                      <div class="d-flex align-items-center px-3 py-2">
+                        <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
+                        <label class="switch">
+                          <input type="checkbox" id="toggle-dark-mode">
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                    </li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                  </ul>
+                </li>                       
               <% } %>
             </ul>
           </nav>
         </div>
       </div>
     </header>
+    
     
     
     <main>
@@ -825,41 +826,36 @@
         
     <script>
       $(document).on('click', '.addToCartBtn', function() {
-        const productId = $(this).data('product-id');
-        $('#addToCartModal').data('product-id', productId).modal('show');
-    });
+      const productId = $(this).data('product-id');
+      $('#addToCartModal').modal('show');
 
-
-    $('.confirmAddToCartBtn').on('click', function() {
-        const productId = $('#addToCartModal').data('product-id');
-        $.ajax({
-            type: 'POST',
-            url: '/auth/add-to-cart',
-            data: { productId: productId },
-            success: function(response) {
-                alert('Sản phẩm đã được thêm vào giỏ hàng!');
-                $('#addToCartModal').modal('hide');
-            },
-            error: function() {
-                alert('Đã có lỗi xảy ra, vui lòng thử lại!');
-            }
-        });
-    });
-
+      $('.confirmAddToCartBtn').off('click').on('click', function() {
+          $.ajax({
+              url: '/cart/add', 
+              method: 'POST',
+              data: { productId: productId },
+              success: function(response) {
+                  alert('Sản phẩm đã được thêm vào giỏ hàng!');
+                  $('#addToCartModal').modal('hide');
+              },
+              error: function() {
+                  alert('Đã có lỗi xảy ra. Vui lòng thử lại.');
+              }
+          });
+      });
+  });
     </script>
       
       <script>
         $(document).ready(function() {
           $('.viewProductBtn').click(function(event) {
-              event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
+              event.preventDefault();
 
               const productId = $(this).data('product-id');
-              const score = $(this).data('product-score'); // Điểm số đánh giá
+              const score = $(this).data('product-score'); 
 
-              // Gửi yêu cầu thêm đánh giá
               $.post('/add-rating', { product_id: productId, score: score }, function(response) {
                   if (response.success) {
-                      // Nếu thêm đánh giá thành công, chuyển đến trang chi tiết sản phẩm
                       window.location.href = `/product/${productId}`;
                   } else {
                       alert('Có lỗi xảy ra khi thêm đánh giá. Vui lòng thử lại.');
@@ -872,8 +868,8 @@
       function validateForm(event) {
           const queryInput = document.querySelector('input[name="query"]');
           if (!queryInput.value.trim()) {
-              event.preventDefault(); // Ngăn chặn gửi biểu mẫu
-              alert("Vui lòng nhập một từ khóa tìm kiếm."); // Hiển thị thông báo
+              event.preventDefault(); 
+              alert("Vui lòng nhập một từ khóa tìm kiếm."); 
           }
       }
   </script>

@@ -1,4 +1,4 @@
-const db = require('../connect/database')
+const db = require('../connect/database');
 
 const calculateUserSimilarity = (userRatings, allRatings) => {
     const userVector = {};
@@ -34,7 +34,7 @@ const cosineSimilarity = (vecA, vecB) => {
     const normA = Math.sqrt(Object.values(vecA).reduce((sum, val) => sum + val * val, 0));
     const normB = Math.sqrt(Object.values(vecB).reduce((sum, val) => sum + val * val, 0));
 
-    return dotProduct / (normA * normB);
+    return normA && normB ? dotProduct / (normA * normB) : 0; 
 };
 
 const getTopRecommendedProducts = (userId, similarUsers, allRatings) => {
@@ -73,7 +73,7 @@ const findSimilarProducts = async (favoriteProducts) => {
         const attributes = attributesMap[productId];
 
         try {
-            const [products] = await db.query('SELECT * FROM products WHERE attributes IN (?) AND id != ?', [attributes, productId]);
+            const [products] = await db.query('SELECT * FROM products WHERE JSON_CONTAINS(attributes, ?) AND id != ?', [JSON.stringify(attributes), productId]);
             similarProducts.push(...products);
         } catch (err) {
             console.error('Error fetching similar products:', err);
@@ -83,5 +83,4 @@ const findSimilarProducts = async (favoriteProducts) => {
     return similarProducts.length > 0 ? similarProducts : [];
 };
 
-
-module.exports = {calculateUserSimilarity, getTopRecommendedProducts, findSimilarProducts}
+module.exports = { calculateUserSimilarity, getTopRecommendedProducts, findSimilarProducts };
