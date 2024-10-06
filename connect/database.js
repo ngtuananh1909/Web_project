@@ -1,13 +1,13 @@
 const mysql = require('mysql2');
 
 const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  port: 3001,
-  password: '',
-  database: 'product_db',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  port: process.env.DB_PORT || 3306,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DBNAME,
   waitForConnections: true,
-  connectionLimit: 5, // Thay đổi tùy theo nhu cầu của bạn
+  connectionLimit: 5,
   queueLimit: 0
 });
 

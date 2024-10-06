@@ -60,12 +60,10 @@ app.use(express.json());
 
 app.use(session({
     secret: 'uit2027goo',
-    resave: false,
     saveUninitialized: true,
     cookie: {
         maxAge: 60000,
-        secure: false,
-        sameSite: 'lax' 
+        secure: true,
     }
 }));
 
