@@ -111,10 +111,11 @@
                         <input type="checkbox" class="product-checkbox" style="width: 20px; height: 20px; margin-left: 0px; background-color: #f0f0f0; border: 1px solid #ccc; margin-right: 10px;">
   
                         <div class="col-md-2 col-lg-2 col-xl-2">
-                          <img
-                            src="/uploads/<%= product.image %>"
-                            class="img-fluid rounded-3"
-                            alt="<%= product.name %>"
+                          <img 
+                              src="<%= product.image ? ('uploads/' + product.image) : '/img/cart-def.png' %>" 
+                              class="card-img-top" 
+                              alt="" 
+                              onerror="this.onerror=null; this.src='/img/cart-def.png';"
                           />
                         </div>
                         <div class="col-md-3 col-lg-3 col-xl-3">
@@ -130,14 +131,16 @@
                             <i class="fas fa-minus"></i>
                           </button>
                     
-                          <input
+                          <input 
                             id="quantity_<%= product.id %>"
                             min="1"
+                            max="<%= product.quantity %>"
                             name="quantity"
-                            value="<%= product.quantity %>"
+                            value="1"
                             type="number"
                             class="form-control form-control-sm quantity"
                             data-price="<%= product.price %>"
+                            onchange="updatePrice('<%= product.id %>')"
                           />
     
                     
@@ -151,8 +154,8 @@
                           </button>
                         </div>
                         <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                          <h5 class="mb-0">
-                            <%= formatCurrency(product.price * product.quantity) %> VNĐ
+                          <h5 class="mb-0" id="total_<%= product.id %>">
+                            <%= formatCurrency(product.price) %> VNĐ
                           </h5>
                         </div>
                         <div class="col-md-1 col-lg-1 col-xl-1 text-end">
@@ -253,6 +256,34 @@
             checkbox.addEventListener('change', calculateTotal);
         });
     });
+    
+    function updatePrice(productId) {
+  // Lấy input của số lượng và giá sản phẩm
+  const quantityInput = document.getElementById('quantity_' + productId);
+  const price = parseFloat(quantityInput.dataset.price);
+  const totalPriceElement = document.getElementById('total_' + productId);
+
+  // Giới hạn giá trị nhập của người dùng
+  const maxQuantity = parseInt(quantityInput.max);
+  const minQuantity = parseInt(quantityInput.min);
+  let quantity = parseInt(quantityInput.value);
+
+  // Kiểm tra và điều chỉnh giá trị nếu vượt quá giới hạn
+  if (quantity > maxQuantity) {
+    quantity = maxQuantity;
+    quantityInput.value = maxQuantity; // Thiết lập lại giá trị cho ô nhập liệu nếu vượt quá max
+  } else if (quantity < minQuantity) {
+    quantity = minQuantity;
+    quantityInput.value = minQuantity; // Thiết lập lại giá trị cho ô nhập liệu nếu nhỏ hơn min
+  }
+
+  // Tính lại giá trị tổng
+  const totalPrice = price * quantity;
+
+  // Cập nhật lại phần hiển thị giá
+  totalPriceElement.innerHTML = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPrice);
+}
+
     
   </script>
   <script src="darkmode.js"></script>

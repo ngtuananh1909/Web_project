@@ -122,7 +122,7 @@ exports.cartDisplay = (req, res) => {
                 console.log("error: ", err);
                 return res.status(500).json({ error: 'Server error' });
             }
-            res.render('cart', { user: req.session.user, products: result, discountCode: null });
+            res.render('cart', { user: req.session.user, selectedProducts: result, products: result, discountCode: null });
         });
 };
 
