@@ -1,11 +1,13 @@
+require('dotenv').config(); // Nạp biến môi trường từ .env
+
 const mysql = require('mysql2');
 
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  port: 3001,
-  password: '', 
-  database: 'product_db'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  port: process.env.DB_PORT || 3306, // Dùng cổng mặc định 3306 nếu không có
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
 
 connection.connect((err) => {
