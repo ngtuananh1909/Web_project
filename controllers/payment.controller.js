@@ -24,6 +24,7 @@ exports.PaymentOptions = (req, res) => {
 exports.Checkout = async (req, res) => {
     const UserId = req.session.user.id;
     const { selectedProducts, discountCode } = req.body;
+    console.log('Selected Products:', selectedProducts);
     let discount = 1.0; // Mặc định không giảm giá
 
     try {
@@ -40,7 +41,11 @@ exports.Checkout = async (req, res) => {
             discount = coupon[0].discount_value / 100;
         }
 
-        const [products] = await db.promise().query('SELECT * FROM products WHERE id IN (?)', [Object.keys(selectedProducts)]);
+        // Chuyển đổi selectedProducts từ JSON string thành object
+        const productsData = JSON.parse(selectedProducts);
+        
+        const productIds = productsData.map(product => product.productId);
+        const [products] = await db.promise().query('SELECT * FROM products WHERE id IN (?)', [productIds]);
         if (!products.length) {
             return res.status(404).send('Không tìm thấy sản phẩm nào.');
         }
@@ -48,15 +53,17 @@ exports.Checkout = async (req, res) => {
         const [result] = await db.promise().query('SELECT MAX(`index`) as maxIndex FROM paydata WHERE userid = ?', [UserId]);
         let currentIndex = result[0].maxIndex ? result[0].maxIndex + 1 : 1;
 
-        await db.promise().beginTransaction(); 
+        await db.promise().beginTransaction();
 
         const queries = products.map((product) => {
-            const quantity = selectedProducts[product.id];
+            const selectedProduct = productsData.find(p => p.productId === product.id);
+            const quantity = selectedProduct ? selectedProduct.quantity : 0; // Lấy số lượng từ selectedProducts
+
             if (!quantity || quantity <= 0) {
                 throw new Error('Số lượng sản phẩm không hợp lệ.');
             }
 
-            const totalPrice = product.price * quantity * discount; 
+            const totalPrice = product.price * quantity * discount;
             return db.promise().query(
                 `INSERT INTO paydata (userid, productid, quantity, discount, price, \`index\`) 
                  VALUES (?, ?, ?, ?, ?, ?)`,
@@ -64,12 +71,13 @@ exports.Checkout = async (req, res) => {
             );
         });
 
-        await Promise.all(queries); 
-        await db.promise().commit(); 
+        await Promise.all(queries);
+        await db.promise().commit();
         return res.redirect(`/payment/option/t/${UserId}`);
     } catch (err) {
-        await db.promise().rollback(); 
-        console.error(err); 
+        await db.promise().rollback();
+        console.error(err);
         return res.status(500).send('Lỗi xảy ra trong quá trình thanh toán. Vui lòng thử lại sau.');
     }
 };
+
