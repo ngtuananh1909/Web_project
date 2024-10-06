@@ -157,7 +157,7 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                window.location.href = '/success'; 
+                window.location.href = '/'; 
             } else {
                 alert(data.message || 'Có lỗi xảy ra, vui lòng thử lại.');
             }

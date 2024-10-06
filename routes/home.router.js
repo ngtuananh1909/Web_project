@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/auth')
 const homeController = require('../controllers/home.controller');
+const { route } = require('./payment.router');
 
 router.get('/', homeController.home);
 router.get('/login', homeController.loginDisplay);
@@ -14,6 +15,8 @@ router.get('/settings', homeController.SettingDisplay);
 router.get('/user/:id', homeController.ProfileDisplay)
 router.get('/scoreboard', homeController.ScoreboardDisplay)
 router.get('/search', homeController.SearchProducts)
+router.get('/api/users', homeController.usersStats)
+router.get('/stats', homeController.StatsDisplay)
 router.post('/auth/UserUpdate', authMiddleware, homeController.UserUpdate);
 router.post('/auth/register', homeController.register);
 router.post('/auth/login', homeController.login);

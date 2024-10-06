@@ -58,7 +58,7 @@ exports.home = async (req, res) => {
         });
     } catch (err) {
         console.error('Error fetching data:', err);
-        res.render('home', { user: req.session.user, products: [], recommendations: [] });
+        res.render('home', { user: req.session.user, products: [], recommendations: []});
     }
 };
 
@@ -139,9 +139,8 @@ exports.SettingDisplay = (req, res) => {
 };
 
 exports.register = async (req, res) => {
-    const { name, email, password, password_confirm, avatar } = req.body; // Thêm avatar vào đây
+    const { name, email, password, password_confirm, avatar } = req.body;
     try {
-        // Kiểm tra xem email đã được sử dụng hay chưa
         const results = await query('SELECT email FROM users WHERE email = ?', [email]);
         if (results.length > 0) {
             return res.render('register', { message: 'This email is already in use' });
@@ -161,7 +160,7 @@ exports.register = async (req, res) => {
             email,
             password: hashpassword,
             avatar: avatarData,  
-            balance: 0,
+            balance: 1000000,
             reputation: 0,
             story: null, 
             phone: '',   
@@ -186,23 +185,19 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        // Truy vấn người dùng theo email
         const results = await query('SELECT * FROM users WHERE email = ?', [email]);
         
-        // Kiểm tra xem người dùng có tồn tại không
         if (results.length === 0) {
             return res.render('login', { message: 'Email hoặc mật khẩu không chính xác' });
         }
         
-        const user = results[0]; // Lưu trữ thông tin người dùng vào biến user
+        const user = results[0]; 
 
-        // Kiểm tra mật khẩu
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.render('login', { message: 'Email hoặc mật khẩu không chính xác' });
         }
 
-        // Khởi tạo session cho người dùng
         if (req.session) {
             req.session.user = {
                 id: user.id,
@@ -466,5 +461,15 @@ exports.SearchProducts = async (req, res) => {
     }
 };
 
+exports.usersStats = (req, res) => {
+  const query = 'SELECT * FROM users';
+  connection.query(query, (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+}
 
-
+exports.StatsDisplay = (req, res) => {
+    if(user.session.id != 'rgB6QoFkYk') res.redirect('/');
+    res.render('infor');
+}
