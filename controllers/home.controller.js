@@ -110,7 +110,7 @@ exports.cartDisplay = (req, res) => {
             redirect: true
         });
     }
-    
+
     const userId = req.session.user.id;
     const selectedProducts = [];
 
@@ -123,7 +123,9 @@ exports.cartDisplay = (req, res) => {
                 console.log("error: ", err);
                 return res.status(500).json({ error: 'Server error' });
             }
-            res.render('cart', { user: req.session.user, products: result, selectedProducts: selectedProducts, discountCode: null });
+
+            req.session.selectedProducts = result; 
+            res.render('cart', { user: req.session.user, products: result, selectedProducts, discountCode: null });
         });
 };
 
