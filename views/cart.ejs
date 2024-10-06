@@ -181,13 +181,13 @@
                       <button class="btn btn-secondary" style="display: inline-block;">Áp dụng</button>
                     </div>
                   </div>
-                  <form id="checkoutForm" action="/payment/cart/checkout" method="POST">
+                  <form id="checkoutForm" action="/payment/checkout" method="POST">
                     <div class="card">
                       <div class="card-body d-flex justify-content-between align-items-center">
                         <div class="total" style="font-size: 20px;">
                           <strong>Tổng cộng: </strong><span id="totalAmount">0</span>
                         </div>
-                        <input type="hidden" name="selectedProducts" id="selectedProducts" value="<%= JSON.stringify(selectedProducts) %>">
+                        <input type="hidden" name="selectedProducts" id="selectedProducts" value="<%= JSON.stringify(selectedProducts || []) %>">
                         <input type="hidden" name="discountCode" id="discountCode" value="<%= discountCode %>">
                         <button type="submit" class="btn btn-warning btn-lg">Tiến hành thanh toán</button>
                       </div>
@@ -220,40 +220,52 @@
       
     </div> 
   </body>
-  
-
   <script>
-        function calculateTotal() {
-        let total = 0;
-        const quantities = document.querySelectorAll('.quantity');
+function formatCurrency(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "); 
+}
+function calculateTotal() {
+    var total = 0;
+    const quantities = document.querySelectorAll('.quantity');
+    const selectedProducts = []; 
 
-        document.querySelectorAll('input.product-checkbox').forEach((checkbox, index) => {
-            if (checkbox.checked) {
-                const quantityInput = quantities[index];
-                if (quantityInput) {
-                    const price = parseFloat(quantityInput.getAttribute('data-price')) || 0; 
-                    const qty = parseInt(quantityInput.value) || 0; 
-                    total += qty * price; 
-                }
+    document.querySelectorAll('input.product-checkbox').forEach((checkbox, index) => {
+        if (checkbox.checked) {
+            const quantityInput = quantities[index];
+            if (quantityInput) {
+                const price = parseFloat(quantityInput.getAttribute('data-price')) || 0;
+                const qty = parseInt(quantityInput.value) || 0;
+                total += qty * price;
+
+                const productId = quantityInput.id.split('_')[1]; 
+                selectedProducts.push({ productId, quantity: qty }); 
             }
-        });
-
-        document.querySelector('#totalAmount').innerText = total.toLocaleString() + " VNĐ"; // Hiển thị tổng cộng
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        calculateTotal();
-
-        document.querySelectorAll('.quantity').forEach(input => {
-            input.addEventListener('change', calculateTotal);
-            input.addEventListener('input', calculateTotal);
-        });
-
-        document.querySelectorAll('input.product-checkbox').forEach(checkbox => {
-            checkbox.addEventListener('change', calculateTotal);
-        });
+        }
     });
-    
+
+    document.getElementById('totalAmount').textContent = formatCurrency(total) + " VNĐ";
+    return selectedProducts; // Trả về danh sách sản phẩm đã chọn
+}
+
+// Hàm để gán sự kiện và gọi calculateTotal() khi có thay đổi
+function addEventListeners() {
+    document.querySelectorAll('.quantity').forEach(input => {
+        input.addEventListener('change', calculateTotal);
+        input.addEventListener('input', calculateTotal);
+    });
+
+    document.querySelectorAll('input.product-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', calculateTotal);
+    });
+}
+
+// Gọi addEventListeners khi DOM đã sẵn sàng
+document.addEventListener('DOMContentLoaded', () => {
+    addEventListeners(); // Gán sự kiện cho các input và checkbox
+    calculateTotal(); // Tính toán tổng ban đầu
+});
+
+
   </script>
   <script src="darkmode.js"></script>
   <script src="delete.js"></script>

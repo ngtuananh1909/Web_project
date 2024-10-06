@@ -112,6 +112,7 @@ exports.cartDisplay = (req, res) => {
     }
     
     const userId = req.session.user.id;
+    const selectedProducts = [];
 
     db.query(`
         SELECT p.* 
@@ -122,7 +123,7 @@ exports.cartDisplay = (req, res) => {
                 console.log("error: ", err);
                 return res.status(500).json({ error: 'Server error' });
             }
-            res.render('cart', { user: req.session.user, products: result, discountCode: null });
+            res.render('cart', { user: req.session.user, products: result, selectedProducts: selectedProducts, discountCode: null });
         });
 };
 
