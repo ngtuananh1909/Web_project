@@ -1,21 +1,24 @@
-require('dotenv').config();
-
 const mysql = require('mysql2');
 
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
-  port: process.env.DB_PORT || 3306, // Dùng cổng mặc định 3306 nếu không có
+  port: process.env.DB_PORT || 3306,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
-connection.connect((err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err);
+// Thực hiện truy vấn từ pool
+pool.query('SELECT * FROM your_table_name', (error, results) => {
+  if (error) {
+    console.error('Error fetching data:', error);
     return;
   }
-  console.log('Connected to the MySQL database.');
+  console.log('Results:', results);
 });
 
-module.exports = connection;
+// Xuất pool
+module.exports = pool;
