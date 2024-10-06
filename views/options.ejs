@@ -5,13 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thanh toán</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/option.css" rel="stylesheet">
 </head>
 
-<style>
-    .container mt-5 {
-        height: 500px;
-    }
-</style>
 
 <body>
     <section style="background-color: #eee;">
@@ -19,52 +15,45 @@
           <div class="card">
             <div class="card-body">
               <div class="row d-flex justify-content-center pb-5">
+                <div class="py-4 d-flex name-shop" style="margin-top: -2%;margin-left:3%; font-size: 30px;">
+                    <span class="far fa-check-square pe-2"></span><b>EZDOG</b> |
+                    <span class="ps-2" style="font-size: 30px;" >Pay</span>
+                </div>
+                <div class="product-buy">
+                    <div class="card rounded-3 mb-4 product" style="margin-left: -25%;">
+                        <div class="card-body p-4">
+                            <div class="row d-flex justify-content-between align-items-center">
+                                <!-- Phần hình ảnh sản phẩm -->
+                                <div class="col-md-2 col-lg-2 col-xl-2">
+                                    <img
+                                        src="hutao.jpg"
+                                        class="img-fluid rounded-3"
+                                        alt="<%= product[i].name %>"
+                                    />
+                                </div>
+                                <!-- Tên sản phẩm và điều chỉnh số lượng -->
+                                <div class="col-md-10 col-lg-10 col-xl-10">
+                                    <div class="row align-items-center">
+                                        <!-- Tên sản phẩm -->
+                                        <div class="col-md-6" style="font-size: 40px;">
+                                            <strong><p class="mb-2">Tuananh</p></strong>
+                                        </div>
+                                        <!-- Điều chỉnh số lượng -->
+                                        <div class="d-flex" style="width: auto; font-size: 16px; margin-left: -15%; margin-top: 2.2%;">
+                                            x1000
+                                        </div>                                                                          
+                                    </div>
+                                    <!-- Giá tiền (ở hàng dưới) -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div >
                 <div class="col-md-7 col-xl-5 mb-4 mb-md-0">
-                  <div class="py-4 d-flex flex-row">
-                    <h5><span class="far fa-check-square pe-2"></span><b>EZDOG</b> |</h5>
-                    <span class="ps-2">Pay</span>
-                  </div>
-                  <h4 class="text-success">$85.00</h4>
-                  <h4>Diabetes   & Supplies</h4>
-                  <div class="d-flex pt-2">
-                    <div>
-                      <p>
-                        <b>Insurance Responsibility <span class="text-success">$71.76</span></b>
-                      </p>
-                    </div>
-                    <div class="ms-auto">
-                      <p class="text-primary">
-                        <i class="fas fa-plus-circle text-primary pe-1"></i>Add insurance card
-                      </p>
-                    </div>
-                  </div>
-                  <p>
-                    Insurance claims and all necessary dependencies will be submitted to your
-                    insurer for the coverred portion of this order
-                  </p>
-                  <div class="rounded d-flex bg-body-tertiary">
-                    <div class="p-2">Aetna-Open Access</div>
-                    <div class="ms-auto p-2">OAP</div>
-                  </div>
-                  <hr />
                   <div class="pt-2">
                     <div class="d-flex pb-2">
-                      <div>
-                        <p>
-                          <b>Patient Balance <span class="text-success">$13.24</span></b>
-                        </p>
-                      </div>
-                      <div class="ms-auto">
-                        <p class="text-primary">
-                          <i class="fas fa-plus-circle text-primary pe-1"></i>Add payment card
-                        </p>
-                      </div>
+
                     </div>
-                    <p>
-                      This is an estimate for the portion of your order (not covered by
-                      insurance) due today . once insurance finalizes their review refunds
-                      and/or balances will reconcile automatically.
-                    </p>
                     <form class="pb-3">
                       <div class="d-flex flex-row pb-3">
                         <div class="d-flex align-items-center pe-2">
@@ -177,13 +166,6 @@
 
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    document.getElementById('credit_card').addEventListener('click', function() {
-        document.getElementById('creditCardDetails').classList.remove('d-none');
-    });
+<script src="option.js"></script>
 
-    document.getElementById('cash').addEventListener('click', function() {
-        document.getElementById('creditCardDetails').classList.add('d-none');
-    });
-</script>
 </html>
