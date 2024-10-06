@@ -1,0 +1,14 @@
+.container mt-5 {
+    height: 500px;
+}
+.name-shop{
+    left: 10px;
+}
+.product-buy{
+    height: auto;
+    width: 60%;
+}
+.product{
+    height: auto;
+    width: 80%;
+}

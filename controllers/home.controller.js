@@ -66,9 +66,9 @@ exports.logout = (req, res) => {
     req.session.destroy(err => {
         if (err) {
             console.log(err);
-            return res.redirect('back');
+            return res.location(req.get("Referrer") || "/") 
         }
-        return res.redirect('back');
+        return res.location(req.get("Referrer") || "/") 
     });
 };
 
@@ -112,6 +112,7 @@ exports.cartDisplay = (req, res) => {
     }
     
     const userId = req.session.user.id;
+    const selectedProducts = [];
 
     db.query(`
         SELECT p.* 
@@ -122,7 +123,11 @@ exports.cartDisplay = (req, res) => {
                 console.log("error: ", err);
                 return res.status(500).json({ error: 'Server error' });
             }
+<<<<<<< HEAD
             res.render('cart', { user: req.session.user, selectedProducts: result, products: result, discountCode: null });
+=======
+            res.render('cart', { user: req.session.user, products: result, selectedProducts: selectedProducts, discountCode: null });
+>>>>>>> frontend
         });
 };
 
@@ -165,12 +170,11 @@ exports.register = async (req, res) => {
             friends: 0   
         });
 
-        // Khởi tạo session cho người dùng
         req.session.user = {
             id: UserId,
             name,
             email,
-            avatar: avatarData // Truyền avatar vào session nếu cần
+            avatar: avatarData 
         };
 
         res.redirect('/');
