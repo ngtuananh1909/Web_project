@@ -10,18 +10,11 @@ const homeRouter = require('./routes/home.router.js');
 const productRouter = require('./routes/product.router.js');
 const paymentRouter = require('./routes/payment.router.js');
 const fs = require('fs');
-
 dotenv.config();
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
-// Kết nối Redis
-const redisClient = redis.createClient({
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT || 6379,
-    password: process.env.REDIS_PASSWORD // Nếu cần mật khẩu
-});
 
 redisClient.on('error', (err) => {
     console.error('Redis error:', err);
