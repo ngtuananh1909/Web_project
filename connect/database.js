@@ -1,4 +1,4 @@
-require('dotenv').config(); // Nạp biến môi trường từ .env
+require('dotenv').config();
 
 const mysql = require('mysql2');
 
