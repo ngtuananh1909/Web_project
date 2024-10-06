@@ -16,10 +16,6 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
 
-redisClient.on('error', (err) => {
-    console.error('Redis error:', err);
-});
-
 app.use(fileUpload({
     createParentPath: true
 }));
