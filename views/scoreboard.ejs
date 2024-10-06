@@ -15,9 +15,9 @@
     <body>
       <header class="header-design">
         <div class="container-fluid py-3">
-          <div class="container d-flex justify-content-between align-items-center" style="margin-left: 415px;">
+          <div class="container d-flex justify-content-between align-items-center" style="margin-left: 10%;">
             <h1 class="h4 mb-0">
-              <a href="/" class="text-decoration-none" style="margin-left: -130px;"><strong>E-Shop</strong></a>
+              <a href="/" class="text-decoration-none"><strong>E-Shop</strong></a>
             </h1>
             <!-- Thanh tìm kiếm -->
             <form class="d-flex search" action="/search" method="GET" onsubmit="validateForm(event)">
@@ -145,10 +145,10 @@
                   </a>
                   <button
                     type="button"
-                    class="btn btn-primary addToCartBtn"
+                    class="btn btn-primary rounded addToCartBtn"
                     data-product-id="<%= product.id %>"
-                  >
-                    Thêm vào giỏ
+                    >
+                      Thêm vào giỏ
                   </button>
                 </div>
               </div>
@@ -184,11 +184,40 @@
           </div>
           
         </div>
-        
+        <div
+      class="modal fade"
+      id="addToCartModal"
+      tabindex="-1"
+      aria-labelledby="addToCartModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addToCartModalLabel">
+              Xác nhận thêm vào giỏ hàng
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            Bạn có chắc chắn muốn thêm sản phẩm này vào giỏ hàng?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary confirmAddToCartBtn">
+              Thêm vào giỏ
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
       </div> 
     </body>
     <script src="darkmode.js"></script>
     <script src="chat.js"></script>
     <script src="search.js"></script>
-    <script src="add-product.js"></script>
+    <script src="add-cart.js"></script>
   </html>
