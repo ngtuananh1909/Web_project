@@ -21,73 +21,55 @@ exports.PaymentOptions = (req, res) => {
     });
 };
 
-exports.Checkout = (req, res) => {
+exports.Checkout = async (req, res) => {
     const UserId = req.session.user.id;
-    const { selectedProducts, discountCode } = req.body; 
-    let discount = 1.0; 
+    const { selectedProducts, discountCode } = req.body;
+    let discount = 1.0; // Mặc định không giảm giá
 
-    if (discountCode) {
-        db.query('SELECT * FROM coupons WHERE code = ?', [discountCode], (err, coupon) => {
-            if (err || !coupon.length) {
-                return res.status(400).send('Mã giảm giá không hợp lệ.');
-            }
-            discount = coupon[0].discount_value;
-        });
-    }
-
-    db.query('SELECT * FROM products WHERE id IN (?)', [selectedProducts], (err, products) => {
-        if (err) {
-            return res.status(500).send('Lỗi khi lấy thông tin sản phẩm.');
+    try {
+        // Kiểm tra mã giảm giá
+        if (discountCode) {
+            // const [coupon] = await db.promise().query('SELECT * FROM coupons WHERE code = ?', [discountCode]);
+            // if (!coupon.length) {
+            //     return res.status(400).send('Mã giảm giá không hợp lệ.');
+            // }
+            // discount = coupon[0].discount_value / 100; // Giảm giá theo tỷ lệ phần trăm (20% -> 0.8)
         }
 
-        db.query('SELECT MAX(`index`) as maxIndex FROM paydata WHERE userid = ?', [UserId], (err, result) => {
-            if (err) {
-                return res.status(500).send('Lỗi khi tính toán index.');
+        // Lấy sản phẩm từ CSDL dựa trên danh sách sản phẩm đã chọn
+        const [products] = await db.promise().query('SELECT * FROM products WHERE id IN (?)', [selectedProducts]);
+        if (!products.length) {
+            return res.status(404).send('Sản phẩm không tồn tại.');
+        }
+
+        // Lấy chỉ số đơn hàng cao nhất để tạo chỉ số mới
+        const [result] = await db.promise().query('SELECT MAX(`index`) as maxIndex FROM paydata WHERE userid = ?', [UserId]);
+        let currentIndex = result[0].maxIndex ? result[0].maxIndex + 1 : 1;
+
+        await db.promise().beginTransaction(); // Bắt đầu giao dịch
+
+        // Lặp qua từng sản phẩm để tạo query chèn dữ liệu thanh toán
+        const queries = products.map((product) => {
+            const quantity = req.body.quantity[product.id];
+            if (!quantity || quantity <= 0) {
+                throw new Error('Số lượng sản phẩm không hợp lệ.'); // Ném lỗi nếu số lượng không hợp lệ
             }
 
-            let currentIndex = result[0].maxIndex ? result[0].maxIndex + 1 : 1;
-
-            db.beginTransaction((err) => {
-                if (err) {
-                    return res.status(500).send('Lỗi khi bắt đầu transaction.');
-                }
-
-                const queries = products.map((product) => {
-                    const totalPrice = product.price * discount; 
-
-                    return new Promise((resolve, reject) => {
-                        db.query(
-                            `INSERT INTO paydata (userid, productid, quantity, discount, price, \`index\`) 
-                             VALUES (?, ?, ?, ?, ?, ?)`,
-                            [UserId, product.id, req.body.quantity[product.id], discount, totalPrice, currentIndex],
-                            (err, result) => {
-                                if (err) {
-                                    return reject(err);
-                                }
-                                currentIndex++;
-                                resolve(result);
-                            }
-                        );
-                    });
-                });
-
-                Promise.all(queries)
-                    .then(() => {
-                        db.commit((err) => {
-                            if (err) {
-                                return db.rollback(() => {
-                                    res.status(500).send('Lỗi khi commit transaction.');
-                                });
-                            }
-                            return res.redirect(`/payment/option/t/${UserId}`);
-                        });
-                    })
-                    .catch((err) => {
-                        db.rollback(() => {
-                            res.status(500).send('Lỗi khi lưu sản phẩm vào PayData.');
-                        });
-                    });
-            });
+            const totalPrice = product.price * discount; // Tính giá sau khi giảm giá
+            return db.promise().query(
+                `INSERT INTO paydata (userid, productid, quantity, discount, price, \`index\`) 
+                 VALUES (?, ?, ?, ?, ?, ?)`,
+                [UserId, product.id, quantity, discount, totalPrice, currentIndex++]
+            );
         });
-    });
+
+        await Promise.all(queries); // Thực hiện tất cả các truy vấn đồng thời
+
+        await db.promise().commit(); // Xác nhận giao dịch
+        return res.redirect(`/payment/option/t/${UserId}`);
+    } catch (err) {
+        await db.promise().rollback(); // Hoàn tác nếu có lỗi
+        console.error(err); // In ra lỗi để debug
+        return res.status(500).send('Lỗi xảy ra trong quá trình thanh toán.');
+    }
 };

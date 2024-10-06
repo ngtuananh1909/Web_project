@@ -181,7 +181,7 @@
                       <button class="btn btn-secondary" style="display: inline-block;">Áp dụng</button>
                     </div>
                   </div>
-                  <form id="checkoutForm">
+                  <form id="checkoutForm" action="/payment/cart/checkout" method="POST">
                     <div class="card">
                       <div class="card-body d-flex justify-content-between align-items-center">
                         <div class="total" style="font-size: 20px;">
@@ -253,33 +253,9 @@
             checkbox.addEventListener('change', calculateTotal);
         });
     });
-
+    
   </script>
   <script src="darkmode.js"></script>
-  <script>
-    $(document).ready(function() {
-    $('#checkoutForm').submit(function(e) {
-        e.preventDefault(); 
-
-        const selectedProducts = $('#selectedProducts').val();
-        const discountCode = $('#discountCode').val();
-
-        $.ajax({
-            url: '/payment/checkout',
-            type: 'POST',
-            data: {
-                selectedProducts: selectedProducts,
-                discountCode: discountCode
-            },
-            error: function(xhr, status, error) {
-                console.log(error)
-                alert('Có lỗi xảy ra khi thanh toán. Vui lòng thử lại.');
-            }
-        });
-    });
-});
-
-  </script>
   <script src="delete.js"></script>
   <script src="chat.js"></script>
   <script src="search.js"></script>
