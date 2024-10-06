@@ -14,6 +14,8 @@ dotenv.config();
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+const RedisStore = require('connect-redis')(session);
+const redis = require('redis');
 
 app.use(fileUpload({
     createParentPath: true
@@ -59,14 +61,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use(session({
-    secret: 'uit2027goo',
+    store: new RedisStore({ client: redisClient }),
+    secret: 'truepablo',
     resave: false,
-    saveUninitialized: true,
-    cookie: {
-        secure: false,
-        sameSite: 'lax' 
-    }
-}));
+    saveUninitialized: false,
+    cookie: { secure: true } 
+  }));
 
 app.use((req, res, next) => {
     res.locals.session = req.session;
