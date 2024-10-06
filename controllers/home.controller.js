@@ -231,86 +231,65 @@ exports.UserUpdate = async (req, res) => {
 
     try {
         const avatar = req.files ? req.files.avatar : null;
-
         const { name, email } = req.body;
         const userId = req.session.user.id;
         const oldAvatarPath = req.session.user.avatar;
+        const updateQuery = [];
+        const queryParams = [];
+        let avatarPath = '';
 
-        const updateUser = () => {
-            let updateQuery = 'UPDATE users SET';
-            const queryParams = [];
-            let avatarPath = '';
+        if (name && name !== req.session.user.name) {
+            updateQuery.push('name = ?');
+            queryParams.push(name);
+        }
 
-            if (name && name !== req.session.user.name) {
-                updateQuery += ' name = ?,';
-                queryParams.push(name);
-            }
+        if (avatar && avatar.name !== path.basename(oldAvatarPath)) {
+            avatarPath = `uploads/${userId}${path.extname(avatar.name)}`;
+            updateQuery.push('avatar = ?');
+            queryParams.push(avatarPath);
 
-            if (avatar && avatar.name !== path.basename(oldAvatarPath)) {
-                avatarPath = `uploads/${userId}${path.extname(avatar.name)}`;
-                updateQuery += ' avatar = ?,';
-                queryParams.push(avatarPath);
-            
-                avatar.mv(path.join(__dirname, '..', avatarPath), (err) => {
-                    if (err) {
-                        console.log('Error moving avatar file:', err);
-                        return res.status(500).send('Error saving file');
-                    }
-                });
-            }            
-
-            if (queryParams.length === 0) {
-                return res.render('setting', { user: req.session.user, message: 'No changes detected' });
-            }
-
-            updateQuery = updateQuery.slice(0, -1); 
-            updateQuery += ' WHERE id = ?';
-            queryParams.push(userId);
-
-            db.query(updateQuery, queryParams, async (error) => {
-                if (error) {
-                    console.log('Error updating settings:', error);
-                    return res.render('setting', { user: req.session.user, message: 'Error updating settings' });
-                }
-
-                req.session.user.name = name || req.session.user.name;
-                req.session.user.avatar = avatarPath || req.session.user.avatar;
-
-                if (oldAvatarPath) {
-                    console.log('Old Avatar Path:', oldAvatarPath); 
-                    try {
-                        const fullPath = path.join(__dirname, '..', oldAvatarPath.toString());
-                        console.log('Full Path:', fullPath); 
-                        await fs.unlink(fullPath);
-                    } catch (unlinkErr) {
-                        console.log('Error deleting old avatar:', unlinkErr);
-                    }
-                }
-
-                res.render('setting', { user: req.session.user, message: 'Settings updated successfully' });
-            });
-        };
+            // Di chuyển tệp avatar
+            await avatar.mv(path.join(__dirname, '..', avatarPath));
+        }
 
         if (email && email !== req.session.user.email) {
-            db.query('SELECT email FROM users WHERE email = ? AND id != ?', [email, userId], (error, results) => {
-                if (error) {
-                    console.log('Error checking email:', error);
-                    return res.render('setting', { user: req.session.user, message: 'Error checking email' });
-                }
+            const [results] = await db.query('SELECT email FROM users WHERE email = ? AND id != ?', [email, userId]);
 
-                if (results.length > 0) {
-                    return res.render('setting', { user: req.session.user, message: 'Email already exists. Please choose a different one.' });
-                }
-                updateUser();
-            });
-        } else {
-            updateUser();
+            if (results.length > 0) {
+                return res.render('setting', { user: req.session.user, message: 'Email already exists. Please choose a different one.' });
+            }
         }
+
+        if (updateQuery.length === 0) {
+            return res.render('setting', { user: req.session.user, message: 'No changes detected' });
+        }
+
+        const sqlQuery = `UPDATE users SET ${updateQuery.join(', ')} WHERE id = ?`;
+        queryParams.push(userId);
+
+        await db.query(sqlQuery, queryParams);
+
+        // Cập nhật session user
+        req.session.user.name = name || req.session.user.name;
+        req.session.user.avatar = avatarPath || req.session.user.avatar;
+
+        // Xóa avatar cũ
+        if (oldAvatarPath) {
+            const fullPath = path.join(__dirname, '..', oldAvatarPath);
+            try {
+                await fs.unlink(fullPath);
+            } catch (unlinkErr) {
+                console.log('Error deleting old avatar:', unlinkErr);
+            }
+        }
+
+        res.render('setting', { user: req.session.user, message: 'Settings updated successfully' });
     } catch (err) {
         console.log('Server error:', err);
         res.render('setting', { user: req.session.user, message: 'Server error' });
     }
 };
+
 
 
 exports.AddToCart = async (req, res) => {
