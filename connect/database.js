@@ -11,14 +11,4 @@ const pool = mysql.createPool({
   queueLimit: 0
 });
 
-// Thực hiện truy vấn từ pool
-pool.query('SELECT * FROM your_table_name', (error, results) => {
-  if (error) {
-    console.error('Error fetching data:', error);
-    return;
-  }
-  console.log('Results:', results);
-});
-
-// Xuất pool
 module.exports = pool;
