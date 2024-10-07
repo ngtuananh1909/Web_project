@@ -71,8 +71,8 @@ exports.CreateProduct = async (req, res) => {
             image: [imageName],
             creator,
             creator_id: userID,
-            sale: salevalNum,
-            saleval,
+            sale: salebool,
+            saleval: salevalNum,
             sold: 0,
             created_at: createdAt
         };
