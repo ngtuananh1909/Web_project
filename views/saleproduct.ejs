@@ -9,259 +9,32 @@
       rel="stylesheet"
     />
     <title>List of sale product</title>
-    <style>
-      .sticky-header {
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        background-color: #ffffff;
-      }
-
-      .product-card {
-        position: relative;
-        overflow: hidden;
-        transition: transform 0.3s ease;
-        width: 100%; /* Sửa chiều rộng thành 100% */
-        max-width: 270px; /* Thiết lập chiều rộng tối đa */
-      }
-
-      .product-card img {
-        max-height: 200px;
-        object-fit: cover;
-        width: 100%;
-      }
-
-      .product-card:hover {
-        transform: translateY(-5px) scale(1.01);
-        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
-      }
-
-      .btn-primary,
-      .btn-danger,
-      .btn-success {
-        height: 50%;
-        width: 100%;
-        border-radius: 15px;
-        transition: transform 0.3s ease;
-      }
-
-      .btn-primary:hover,
-      .btn-danger:hover,
-      .btn-success:hover {
-        transform: translateY(-3px);
-      }
-
-      .nav-link {
-          position: relative; /* Để sử dụng absolute positioning cho underline */
-          display: inline-block;
-          padding-bottom: 5px; /* Khoảng cách giữa text và underline */
-      }
-
-      .nav-link::after {
-          content: ""; /* Nội dung rỗng để tạo thanh nhỏ */
-          position: absolute;
-          left: 16%;
-          bottom: 0;
-          width: 70%;
-          height: 2px; /* Độ dày của thanh nhỏ */
-          background-color: #0056ea; /* Màu của thanh nhỏ */
-          transform: scaleX(0); /* Ẩn thanh nhỏ ban đầu */
-          transform-origin: bottom right; /* Vị trí bắt đầu hiệu ứng */
-          align-items: center;
-          transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp cho thanh nhỏ */
-      }
-
-      .nav-link.home:hover::after,
-      .nav-link.bxh:hover::after,
-      .nav-link.giohang:hover::after,
-      .nav-link.taosanpham:hover::after,
-      .nav-link.login:hover::after,
-      .nav-link.dangky:hover::after {
-          transform: scaleX(1); /* Hiện thanh nhỏ khi hover */
-          transform-origin: bottom left; /* Vị trí kết thúc hiệu ứng */
-      }
-
-      .home-icon {
-          width: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
-          height: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
-      }
-      .bxh-icon{
-        width: 27px; /* Thay đổi kích thước của hình ảnh nếu cần */
-        height: 27px;
-      }
-      .cart-icon{
-        width: 23px;
-        height: 23px;
-      }
-
-      .add-icon{
-        width: 30px;
-        height: 30px;
-      }
-
-      .avatar {
-        width: 30px; /* Kích thước của avatar */
-        height: 30px; /* Kích thước của avatar */
-        border-radius: 50%; /* Để ảnh avatar thành hình tròn */
-        object-fit: cover;
-      }
-
-      /* Đặt màu nền cho phần sản phẩm là màu xám */
-      /* Thiết lập khoảng cách giữa các thẻ sản phẩm */
-      .row {
-        gap: 0px; /* Khoảng cách giữa các thẻ sản phẩm */
-      }
-
-      /* Center card content */
-      .card-body {
-        text-align: center;
-      }
-      /* Chế độ sáng (mặc định) */
-      body {
-        background-color: #F5EFFF;
-        color: #000;
-        transition: background-color 0.3s ease, color 0.3s ease;
-      }
-
-      /* Chế độ tối */
-      body.dark-mode {
-        background-color: #1b1b1b;
-        color: #f1f1f1;
-      }
-
-      .dark-mode .navbar, .dark-mode .card {
-        background-color: #333333;
-        color: #f1f1f1;
-      }
-
-      .dark-mode .btn-primary {
-        background-color: #2897f8;
-        border-color: #666;
-      }
-
-
-      .dark-mode a{
-        color: #ffffff;
-        transition: background-color 0.3s ease, color 0.3s ease;
-      }
-
-      .mode-button{
-        height: 30px;
-        width: 30px;
-      }
-
-      .dark-mode .header-design  {
-        background-color: #666666fd; /* Màu nền tối cho header */
-        color: white;
-        transition: background-color 0.3s ease, color 0.3s ease;
-      }
-      .text-decoration-none{
-        color: black;
-      }
-      .dark-mode .dropdown-menu{
-        background-color: #0c0c0c;
-        transition: background-color 0.3s ease, color 0.3s ease;
-      }
-
-      .dropdown-item{
-        color: rgb(0, 0, 0);
-        text-decoration: none;
-        transition: background-color 0.3s ease, color 0.3s ease;
-      }
-      .dropdown-menu{
-        color: white;
-        transition: background-color 0.5s ease, color 0.5s ease;
-      }
-      #toggle-dark-mode {
-        border: none; /* Loại bỏ khung viền */
-        outline: none; /* Loại bỏ viền khi nhấn vào nút */
-        background: none; /* Loại bỏ màu nền mặc định */
-        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
-      }
-      .custom{
-        color: black;
-      }
-      .dark-mode .custom{
-        color: white;
-      }
-
-      .modal-content{
-        background-color: white;
-        color: #000;
-      }
-      .dark-mode .modal-content{
-        background-color: rgb(41, 41, 41);
-        color: #ffffff;
-      }
-      #chat-header {
-          height: 65px;
-          color: #000;
-          font-size: 30px;
-          border-radius: 100px;
-      }
-      .dark-mode #chat-body {
-          width: 500px; /* Chiều rộng */
-          height: 460px; /* Chiều cao */
-          background-color: rgb(50, 50, 50);
-          border-radius: 8px;
-          box-shadow: 0px 0px 10px rgba(253, 253, 253, 0.2);
-          position: fixed;
-          top: 48%;
-          left: 73%;
-          transform: scale(0); /* Đặt thu nhỏ ban đầu */
-          transition: transform 0.3s ease, bottom 0.3s ease; /* Hiệu ứng chuyển đổi */
-          overflow: hidden;
-          z-index: 1001; /* Đảm bảo ô chat nằm trên các phần tử khác */
-          display: none; /* Ẩn ô chat ban đầu */
-          color: white;
-      }
-      #chat-body {
-          width: 500px; /* Chiều rộng */
-          height: 460px; /* Chiều cao */
-          background-color: white;
-          border-radius: 8px;
-          box-shadow: 0px 0px 10px rgba(120, 119, 119, 0.2);
-          position: fixed;
-          top: 48%;
-          left: 73%;
-          transform: scale(0); /* Đặt thu nhỏ ban đầu */
-          transition: transform 0.3s ease, bottom 0.3s ease; /* Hiệu ứng chuyển đổi */
-          overflow: hidden;
-          z-index: 1001; /* Đảm bảo ô chat nằm trên các phần tử khác */
-          display: none; /* Ẩn ô chat ban đầu */
-      }
-
-      #chat-body.active {
-          display: block; /* Hiện ô chat */
-          transform: scale(1); /* Phóng to */
-          bottom: 10px; /* Điều chỉnh vị trí khi phóng to */
-      }
-
-      #close-chat{
-        font-size: 30px;
-      }
-      .message {
-          background-color: #f1f1f1; /* Màu nền của tin nhắn */
-          border-radius: 5px; /* Bo góc */
-          padding: 5px; /* Khoảng cách bên trong */
-          margin: 5px 0; /* Khoảng cách giữa các ô tin nhắn */
-      }
-    </style>
   </head>
   <body>
-    <header class="header-design" >
-      <div class="container-fluid py-3" >
-        <div class="container d-flex justify-content-between align-items-center" style="margin-left: 476px;">
+    <header class="header-design">
+      <div class="container-fluid py-3 d-flex justify-content-center align-items-center" style="height: 10vh;">
+        <div class="container d-flex justify-content-between align-items-center">
           <h1 class="h4 mb-0">
-            <a href="/" class="text-decoration-none" style="margin-left: -197px;"><strong>E-Shop</strong></a>
+            <a href="/" class="text-decoration-none"><strong>E-Shop</strong></a>
           </h1>
+          <!-- Thanh tìm kiếm -->
+          <form class="d-flex search" action="/search" method="GET" onsubmit="validateForm(event)">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Tìm kiếm sản phẩm..."
+              aria-label="Search"
+              name="query"
+            />
+            <button class="button-search" type="submit">Tìm kiếm</button>
+          </form>
           <nav class="nav">
             <ul class="nav">
               <li class="nav-item">
                 <a class="nav-link home" href="/">
-                    <img src="/img/home.png" alt="" class="home-icon"></img>
+                  <img src="/img/home.png" alt="" class="home-icon"></img>
                 </a>
-            </li>
+              </li>
               <li class="nav-item">
                 <a class="nav-link bxh" href="/scoreboard">
                   <img src="/img/bxh.jpg" alt="" class="bxh-icon">
@@ -274,13 +47,10 @@
               <li class="nav-item">
                 <a class="nav-link dangky" href="/register">Đăng ký</a>
               </li>
-              <button id="toggle-dark-mode" style="margin-left: 150px;">
-                <img src="img/mode.png" alt="" class="mode-button"></img>
-              </button>
               <% } else { %>
               <li class="nav-item">
                 <a class="nav-link giohang" href="/cart">
-                    <img src="/img/cart.jpg" alt="" class="cart-icon">                  
+                  <img src="/img/cart.jpg" alt="" class="cart-icon">                  
                 </a>
               </li>
               <li class="nav-item">
@@ -288,7 +58,7 @@
                   <img src="/img/add.jpg" alt="" class="add-icon">
                 </a>
               </li>
-              <li class="nav-item dropdown">
+              <li class="nav-item dropdown" style="width: 200px;">
                 <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                   <% if (user.avatar) { %>
                   <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
@@ -303,12 +73,20 @@
                   <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
                   <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
                   <li><hr class="dropdown-divider" /></li>
+                  <!-- Chuyển đổi giao diện -->
+                  <li class="nav-item">
+                    <div class="d-flex align-items-center px-3 py-2">
+                      <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
+                      <label class="switch" >
+                        <input type="checkbox" id="toggle-dark-mode">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </li>
+                  <li><hr class="dropdown-divider" /></li>
                   <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
                 </ul>
-              </li>
-              <button id="toggle-dark-mode" style="margin-left: 150px;">
-                <img src="img/mode.png" alt="" class="mode-button"></img>
-              </button>
+              </li>                       
               <% } %>
             </ul>
           </nav>
