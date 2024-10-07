@@ -118,7 +118,6 @@ exports.DisplayProductDetails = async (req, res) => {
         const listSql = 'SELECT * FROM products WHERE id != ?';
         const [otherProducts] = await db.promise().query(listSql, [productId]);
 
-        // Truyền giá trị mặc định cho user nếu không có trong session
         const user = req.session.user || null; 
 
         res.render('product-details', { 
