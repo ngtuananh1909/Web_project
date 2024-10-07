@@ -104,20 +104,71 @@
                 </div>
               </div >
                 <% if (products.length > 0) { %> 
-                <% products.forEach(product => { %>
-                  <div class="card rounded-3 mb-4">
-                    <div class="card-bo dy p-4">
-                      <div class="row d-flex justify-content-between align-items-center">
-                        <input type="checkbox" class="product-checkbox" style="width: 20px; height: 20px; margin-left: 0px; background-color: #f0f0f0; border: 1px solid #ccc; margin-right: 10px;">
-  
-                        <div class="col-md-2 col-lg-2 col-xl-2">
-                          <img 
-                              src="<%= product.image ? ('uploads/' + product.image) : '/img/cart-def.png' %>" 
-                              class="card-img-top" 
-                              alt="" 
-                              onerror="this.onerror=null; this.src='/img/cart-def.png';"
+                  <% products.forEach(product => { %>
+                    <div class="card rounded-3 mb-4">
+                      <div class="card-body p-4">
+                        <div class="row d-flex justify-content-between align-items-center">
+                          <input type="checkbox" class="product-checkbox" style="width: 20px; height: 20px; margin-left: 0px; background-color: #f0f0f0; border: 1px solid #ccc; margin-right: 10px;">
+                          
+                          <div class="col-md-2 col-lg-2 col-xl-2">
+                            <img
+                              src="/uploads/<%= product.image %>"
+                              class="img-fluid rounded-3"
+                              alt="<%= product.name %>"
+                            />
+                          </div>
+                          <div class="col-md-3 col-lg-3 col-xl-3">
+                            <p class="lead fw-normal mb-2"><%= product.name %></p>
+                          </div>
+                          <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                            <button
+                              data-mdb-button-init
+                              data-mdb-ripple-init
+                              class="btn btn-link px-2"
+                              onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                            >
+                              <i class="fas fa-minus"></i>
+                            </button>
+                            
+                            <input
+                              id="<%= product.id %>"
+                              min="1"
+                              max="<%= product.quantity %>"
+                              name="quantity"
+                              value="1"
+                              type="number"
+                              class="form-control form-control-sm quantity"
+                              data-price="<%= product.price %>"
+                              data-name="<%= product.name %>"  
+                              data-image="<%= product.image %>" 
+                              step="1"
                           />
+                            
+                            <button
+                              data-mdb-button-init
+                              data-mdb-ripple-init
+                              class="btn btn-link px-2"
+                              onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                            >
+                              <i class="fas fa-plus"></i>
+                            </button>
+                          </div>
+                          <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                            <h5 class="mb-0">
+                              <%= formatCurrency(product.price * product.quantity) %> VNĐ
+                            </h5>
+                          </div>
+                          <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                            <button
+                              class="text-danger"
+                              style="background: none; border: none; padding: 0;"
+                              onclick="removeFromCart('<%= product.id %>')"
+                            >
+                              <img src="img/delete.png" alt="" class="delete-icon" />
+                            </button>
+                          </div>                    
                         </div>
+<<<<<<< HEAD
                         <div class="col-md-3 col-lg-3 col-xl-3">
                           <p class="lead fw-normal mb-2"><%= product.name %></p>
                         </div>
@@ -177,29 +228,28 @@
                     </div>                
                   </div>
                   <% }); %> 
+=======
+                      </div>                
+                    </div>
+                  <% }); %>
+>>>>>>> 3c6487da1eead88cd19907bc68cb1a89ade9f2b5
                   <% } else { %>
                     <span class="no-items-container"  role="alert">No items in cart.</span>
                   <% } %>
                 <div class="pay-code">
                   <div class="card mb-4">
                     <div class="card-body">
-                      <label class="form-label" for="discountCode" style="margin-left: 10px; margin-top: 7px;">Mã giảm giá:</label>
-                      <input type="text" id="discountCode" class="form-control" placeholder="Nhập mã giảm giá" style="width: 250px; display: inline-block; margin-left: 10px;">
-                      <button class="btn btn-secondary" style="display: inline-block;">Áp dụng</button>
-                    </div>
-                  </div>
-                  <form id="checkoutForm" action="/payment/checkout" method="POST">
+                  <form id="checkoutForm" onsubmit="validateCheckout(event, '<%= user.id %>')">
                     <div class="card">
-                      <div class="card-body d-flex justify-content-between align-items-center">
-                        <div class="total" style="font-size: 20px;">
-                          <strong>Tổng cộng: </strong><span id="totalAmount">0</span>
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div class="total" style="font-size: 20px;">
+                                <strong>Tổng cộng: </strong><span id="totalAmount">0</span>
+                            </div>
+                            <input type="hidden" name="selectedProducts" id="selectedProducts" value="[]">
+                            <button type="submit" class="btn btn-warning btn-lg">Tiến hành thanh toán</button>
                         </div>
-                        <input type="hidden" name="selectedProducts" id="selectedProducts" value="<%= JSON.stringify(selectedProducts || []) %>">
-                        <input type="hidden" name="discountCode" id="discountCode" value="<%= discountCode %>">
-                        <button type="submit" class="btn btn-warning btn-lg">Tiến hành thanh toán</button>
-                      </div>
                     </div>
-                  </form>                  
+                </form>              
         </div>
       </section>
       <div style="position: fixed; bottom: 0; right: 0; width: 150px; z-index: 1000; background-color: transparent; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
@@ -226,7 +276,123 @@
 
     </div> 
   </body>
+<<<<<<< HEAD
   <script src="formatCurrency.js"></script>
+=======
+  <script>
+function formatCurrency(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "); 
+}
+let selectedProducts = []
+function calculateTotal() {
+    var total = 0;
+    const quantities = document.querySelectorAll('.quantity');
+    selectedProducts = []; 
+
+    document.querySelectorAll('input.product-checkbox').forEach((checkbox, index) => {
+        if (checkbox.checked) {
+            const quantityInput = quantities[index];
+            if (quantityInput) {
+                const price = parseFloat(quantityInput.getAttribute('data-price')) || 0;
+                const qty = parseInt(quantityInput.value) || 0;
+
+                // Cập nhật selectedProducts với thông tin mong muốn
+                selectedProducts.push({
+                    id: quantityInput.getAttribute('id'),  // product.id
+                    quantity: qty,
+                    name: quantityInput.getAttribute('data-name'), // Cần thêm data-name cho input
+                    image: quantityInput.getAttribute('data-image'), // Cần thêm data-image cho input
+                    price: price
+                });
+
+                total += qty * price;
+            }
+        }
+    });
+
+    document.getElementById('totalAmount').textContent = formatCurrency(total) + " VNĐ";
+    document.getElementById('selectedProducts').value = JSON.stringify(selectedProducts);
+    return selectedProducts; 
+}
+
+// Đảm bảo gọi calculateTotal khi checkbox thay đổi
+function addEventListeners() {
+    document.querySelectorAll('.quantity').forEach(input => {
+        input.addEventListener('change', calculateTotal);
+        input.addEventListener('input', calculateTotal);
+    });
+
+    document.querySelectorAll('input.product-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', calculateTotal);
+    });
+}
+
+// Gọi addEventListeners khi DOM đã sẵn sàng
+document.addEventListener('DOMContentLoaded', () => {
+    addEventListeners(); // Gán sự kiện cho các input và checkbox
+    calculateTotal(); // Tính toán tổng ban đầu
+    console.log(selectedProducts);
+});
+  </script>
+  <script>
+    document.querySelectorAll('.quantity').forEach(input => {
+    input.addEventListener('input', function() {
+        const maxQuantity = parseInt(this.getAttribute('max'));
+        const enteredValue = parseInt(this.value);
+
+        // Kiểm tra giá trị hợp lệ
+        if (isNaN(enteredValue)) {
+            this.value = '';
+            return; // Dừng lại nếu không phải là số
+        }
+
+        // Nếu giá trị nhập vào lớn hơn giá trị tối đa
+        if (enteredValue > maxQuantity) {
+            this.value = maxQuantity; // Đặt lại giá trị
+            Swal.fire({
+                icon: 'warning',
+                title: 'Cảnh báo!',
+                text: `Số lượng tối đa là ${maxQuantity}`,
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+});
+  </script>
+  <script>
+function validateCheckout(event, userId) {
+    event.preventDefault();
+    const selectedProducts = JSON.parse(document.getElementById('selectedProducts').value);
+
+    const hasSelectedProducts = selectedProducts.some(product => product.quantity > 0);
+
+    if (hasSelectedProducts) {
+        // Tạo một form tạm thời để gửi dữ liệu
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/payment/option/t/${userId}`;
+        form.style.display = 'none';
+
+        // Thêm selectedProducts vào form
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'selectedProducts';
+        input.value = JSON.stringify(selectedProducts);
+        form.appendChild(input);
+
+        document.body.appendChild(form);
+        form.submit(); // Gửi form
+    } else {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Cảnh báo!',
+            text: 'Vui lòng chọn sản phẩm với số lượng lớn hơn 0.',
+            confirmButtonText: 'OK'
+        });
+    }
+}
+  </script>
+>>>>>>> 3c6487da1eead88cd19907bc68cb1a89ade9f2b5
   <script src="darkmode.js"></script>
   <script src="delete.js"></script>
   <script src="chat.js"></script>

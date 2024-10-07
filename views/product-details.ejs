@@ -165,27 +165,27 @@
                                 <% ratings.forEach(review => { %>
                                   <div class="review">
                                     <div class="review-header">
-                                        <img class="avatar" src="/img/def.jpg" alt="Avatar"> <!-- Ảnh đại diện -->
+                                        <img class="avatar" src="/img/def.jpg" alt="Avatar"> 
                                         <div class="user-info" style="margin-left: 6%; margin-top: -45px; width: auto;">
                                           <div class="my-3 user-name" style="font-size: 20px;">
-                                              NAME
+                                              <%= user.name %>
                                           </div>
-                                          <p class="review-date alpha" style="margin-left: 10%; margin-top: -7%; font-size: 20px;">
-                                            Ngày: <%= new Date(review.created_at).toLocaleString() %> <!-- Ngày giờ tạo -->
+                                          <p class="review-date alpha" style="margin-left: 70%; margin-top: -7%; font-size: 20px;">
+                                            Ngày: <%= new Date(review.created_at).toLocaleString() %> 
                                         </p> 
                                       </div>
                                                                            
                                         <div class="review-rating">
                                             <% for (let i = 1; i <= 5; i++) { %>
                                                 <% if (i <= review.rating) { %>
-                                                    <span class="star" style="color: yellow;">★</span> <!-- Sao đã đánh giá -->
+                                                    <span class="star" style="color: yellow;">★</span> 
                                                 <% } else { %>
-                                                    <span class="star">☆</span> <!-- Sao chưa đánh giá -->
+                                                    <span class="star">☆</span>
                                                 <% } %>
                                             <% } %>
                                         </div>
                                     </div>
-                                    <p class="review-comment alpha" style="font-size: 25px;"><%= review.comment || 'Chưa có bình luận' %></p> <!-- Bình luận -->
+                                    <p class="review-comment alpha" style="font-size: 25px;"><%= review.comment || 'Chưa có bình luận' %></p> 
                                 </div>
                                 
                                 <% }) %>
