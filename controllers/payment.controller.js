@@ -1,93 +1,87 @@
-const db = require('../connect/database')
+const db = require('../connect/database');
+const { IdGenerator } = require('../event_function/function');
 
-exports.PaymentOptions = (req, res) => {
+exports.PaymentOptions = async (req, res) => {
     const UserId = req.params.id;
 
     if (!UserId) {
         return res.redirect('/login');
     }
 
-    db.query('SELECT * FROM users WHERE id = ?', [UserId], (err, result) => {
-        if (err) {
-            console.error('Database error:', err);
+    try {
+        const [userResult] = await db.promise().query('SELECT * FROM users WHERE id = ?', [UserId]);
+
+        if (userResult.length === 0) {
             return res.redirect('/login');
         }
 
-        if (result.length === 0) {
-            return res.redirect('/login'); 
-        }
+        const selectedProducts = JSON.parse(req.body.selectedProducts || '[]');
+        console.log(selectedProducts);
 
-        return res.render('options', { user: result[0] });
-    });
-};
+        const totalAmount = selectedProducts.reduce((total, product) => total + (product.price * product.quantity), 0);
 
-exports.Checkout = (req, res) => {
-    const UserId = req.session.user.id;
-    const { selectedProducts, discountCode } = req.body; 
-    let discount = 1.0; 
-
-    if (discountCode) {
-        db.query('SELECT * FROM coupons WHERE code = ?', [discountCode], (err, coupon) => {
-            if (err || !coupon.length) {
-                return res.status(400).send('Mã giảm giá không hợp lệ.');
-            }
-            discount = coupon[0].discount_value;
-        });
+        return res.render('options', { user: userResult[0], products: selectedProducts, totalAmount });
+    } catch (err) {
+        console.error('Database error:', err);
+        return res.redirect('/login');
     }
+}
 
-    db.query('SELECT * FROM products WHERE id IN (?)', [selectedProducts], (err, products) => {
+
+exports.ConfirmPayment = (req, res) => {
+    const { userId, paymentMethod, products, totalAmount } = req.body;
+
+    db.query('SELECT balance FROM users WHERE id = ?', [userId], (err, user) => {
         if (err) {
-            return res.status(500).send('Lỗi khi lấy thông tin sản phẩm.');
+            console.error('Có lỗi xảy ra:', err.message);
+            return res.status(500).json({ success: false, message: 'Có lỗi xảy ra, vui lòng thử lại.' });
         }
 
-        db.query('SELECT MAX(`index`) as maxIndex FROM paydata WHERE userid = ?', [UserId], (err, result) => {
+        if (user.length === 0 || user[0].balance < totalAmount) {
+            return res.status(400).json({ success: false, message: 'Số dư không đủ để thực hiện giao dịch.' });
+        }
+
+        db.query('UPDATE users SET balance = balance - ? WHERE id = ?', [totalAmount, userId], (err) => {
             if (err) {
-                return res.status(500).send('Lỗi khi tính toán index.');
+                console.error('Có lỗi xảy ra:', err.message);
+                return res.status(500).json({ success: false, message: 'Có lỗi xảy ra, vui lòng thử lại.' });
             }
 
-            let currentIndex = result[0].maxIndex ? result[0].maxIndex + 1 : 1;
+            let productsProcessed = 0;
 
-            db.beginTransaction((err) => {
-                if (err) {
-                    return res.status(500).send('Lỗi khi bắt đầu transaction.');
-                }
+            for (const product of products) {
+                db.query('SELECT quantity FROM products WHERE name = ?', [product.name], (err, productData) => {
+                    if (err) {
+                        console.error('Có lỗi xảy ra:', err.message);
+                        return res.status(500).json({ success: false, message: 'Có lỗi xảy ra, vui lòng thử lại.' });
+                    }
 
-                const queries = products.map((product) => {
-                    const totalPrice = product.price * discount; 
+                    if (productData.length === 0) {
+                        return res.status(400).json({ success: false, message: `Sản phẩm ${product.name} không tồn tại.` });
+                    }
 
-                    return new Promise((resolve, reject) => {
-                        db.query(
-                            `INSERT INTO paydata (userid, productid, quantity, discount, price, \`index\`) 
-                             VALUES (?, ?, ?, ?, ?, ?)`,
-                            [UserId, product.id, req.body.quantity[product.id], discount, totalPrice, currentIndex],
-                            (err, result) => {
-                                if (err) {
-                                    return reject(err);
-                                }
-                                currentIndex++;
-                                resolve(result);
-                            }
-                        );
+                    if (productData[0].quantity < product.quantity) {
+                        return res.status(400).json({ success: false, message: `Số lượng sản phẩm ${product.name} không đủ.` });
+                    }
+
+                    db.query('UPDATE products SET quantity = quantity - ? WHERE name = ?', [product.quantity, product.name], (err) => {
+                        if (err) {
+                            console.error('Có lỗi xảy ra:', err.message);
+                            return res.status(500).json({ success: false, message: 'Có lỗi xảy ra, vui lòng thử lại.' });
+                        }
+
+                        productsProcessed++;
+
+                        if (productsProcessed === products.length) {
+                            res.json({ success: true });
+                        }
                     });
                 });
+            }
 
-                Promise.all(queries)
-                    .then(() => {
-                        db.commit((err) => {
-                            if (err) {
-                                return db.rollback(() => {
-                                    res.status(500).send('Lỗi khi commit transaction.');
-                                });
-                            }
-                            return res.redirect(`/payment/option/t/${UserId}`);
-                        });
-                    })
-                    .catch((err) => {
-                        db.rollback(() => {
-                            res.status(500).send('Lỗi khi lưu sản phẩm vào PayData.');
-                        });
-                    });
-            });
+            if (products.length === 0) {
+                res.json({ success: true });
+            }
         });
     });
 };

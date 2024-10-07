@@ -52,7 +52,7 @@
                         <% if (user.avatar) { %>
                         <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
                         <% } else { %>
-                        <img src="./img/def.jpg" class="avatar me-2" alt="" />
+                        <img src="/img/def.jpg" class="avatar me-2" alt="" />
                         <% } %>
                       </a>
                       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
@@ -124,58 +124,74 @@
                             <p class="thong-tin" ><%- product.description %></p>
                         </div>
                         <div class="rating-section">
-                            <center><h3 class="alpha">Đánh giá sản phẩm</h3></center>
+                            <center><h3 class="alpha" style="margin-bottom: 20px;margin-top: 20px;">Đánh giá sản phẩm</h3></center>
                             <form id="ratingForm" method="POST" action="/product/submit-review">
                               <input type="hidden" name="productId" value="<%= product.id %>">
                           
-                              <div>
-                                <label for="rating" class="alpha" style="font-size: 25px;">Số sao:</label>
-                                <div class="stars" style="gap: 20px;margin-left: 100px;margin-top: -49px;">
-                                    <input type="radio" id="star1" name="rating" value="1" required>
-                                    <label for="star1" class="star" style="margin-left: -45px;margin-top: -2px;">&#9733;</label>
-                                    <input type="radio" id="star2" name="rating" value="2" required>
-                                    <label for="star2" class="star" style="margin-left: -45px;margin-top: -2px;">&#9733;</label>
-                                    <input type="radio" id="star3" name="rating" value="3" required>
-                                    <label for="star3" class="star"style="margin-left: -45px;margin-top: -2px;">&#9733;</label>
-                                    <input type="radio" id="star4" name="rating" value="4" required>
-                                    <label for="star4" class="star"style="margin-left: -45px;margin-top: -2px;">&#9733;</label>
-                                    <input type="radio" id="star5" name="rating" value="5" required>
-                                    <label for="star5" class="star"style="margin-left: -45px;margin-top: -2px;">&#9733;</label>
-                                    <div id="comment" class="comment alpha" style="margin-top: 20px;"></div> <!-- Thêm phần hiển thị bình luận -->
-                                </div>
+                              <div style="margin-left: 20px;">
+                                <label for="rating" class="alpha" style="font-size: 25px;">Chất lượng sản phẩm</label>
+                                <div class="stars" style="gap: 20px;margin-left: 280px;margin-top: -51px;">
+                                  <input type="radio" id="star1" name="rating" value="1" required>
+                                  <label for="star1" class="star" style="margin-left: -45px;margin-top: -2px;">&#9733;</label>
+                              
+                                  <input type="radio" id="star2" name="rating" value="2" required>
+                                  <label for="star2" class="star" style="margin-left: -45px;margin-top: -2px;">&#9733;</label>
+                              
+                                  <input type="radio" id="star3" name="rating" value="3" required>
+                                  <label for="star3" class="star" style="margin-left: -45px;margin-top: -2px;">&#9733;</label>
+                              
+                                  <input type="radio" id="star4" name="rating" value="4" required>
+                                  <label for="star4" class="star" style="margin-left: -45px;margin-top: -2px;">&#9733;</label>
+                              
+                                  <input type="radio" id="star5" name="rating" value="5" required checked> <!-- Đặt mặc định là 5 sao -->
+                                  <label for="star5" class="star" style="margin-left: -45px;margin-top: -2px;">&#9733;</label>
+                              
+                                  <div id="comment" class="comment alpha" style="margin-top: 20px;"></div> <!-- Thêm phần hiển thị bình luận -->
+                              </div>
+                              
                                 
                             </div>
                           
-                              <div>
-                                  <label for="comment">Bình luận:</label>
-                                  <textarea name="comment" rows="4"></textarea>
+                              <div style="margin-left: 20px;">
+                                  <label for="comment" style="font-size: 25px;">Bình luận:</label>
+                                  <textarea name="comment" class="comment-write" style="margin-left: -12px;" rows="4"></textarea>
                               </div>
-                              <button type="submit">Gửi đánh giá</button>
+                              <center><button type="submit">Gửi đánh giá</button></center>
                           </form>                       
                         </div>
                         
                         <div class="reviews">
-                            <h3>Đánh giá</h3>
+                            <center><h3>Đánh giá</h3></center>
                             <% if (ratings.length > 0) { %>
                                 <% ratings.forEach(review => { %>
-                                    <div class="review">
-                                        <p class="alpha"><strong><%= review.user_id %></strong> (Ngày: <%= new Date(review.created_at).toDateString() %>)</p>
-                                        
-                                        <p class="alpha">Số sao: 
+                                  <div class="review">
+                                    <div class="review-header">
+                                        <img class="avatar" src="/img/def.jpg" alt="Avatar"> 
+                                        <div class="user-info" style="margin-left: 6%; margin-top: -45px; width: auto;">
+                                          <div class="my-3 user-name" style="font-size: 20px;">
+                                              <%= user.name %>
+                                          </div>
+                                          <p class="review-date alpha" style="margin-left: 70%; margin-top: -7%; font-size: 20px;">
+                                            Ngày: <%= new Date(review.created_at).toLocaleString() %> 
+                                        </p> 
+                                      </div>
+                                                                           
+                                        <div class="review-rating">
                                             <% for (let i = 1; i <= 5; i++) { %>
                                                 <% if (i <= review.rating) { %>
-                                                    <span class="star">★</span> <!-- Sao đã đánh giá -->
+                                                    <span class="star" style="color: yellow;">★</span> 
                                                 <% } else { %>
-                                                    <span class="star">☆</span> <!-- Sao chưa đánh giá -->
+                                                    <span class="star">☆</span>
                                                 <% } %>
                                             <% } %>
-                                        </p>
-                        
-                                        <p class="alpha">Bình luận: <%= review.comment || 'Chưa có bình luận' %></p>
+                                        </div>
                                     </div>
+                                    <p class="review-comment alpha" style="font-size: 25px;"><%= review.comment || 'Chưa có bình luận' %></p> 
+                                </div>
+                                
                                 <% }) %>
                             <% } else { %>
-                                <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+                                <p class="alpha">Chưa có đánh giá nào cho sản phẩm này.</p>
                             <% } %>
                         </div>
                         

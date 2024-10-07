@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Data Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="userChart" width="400" height="200"></canvas>
+
+    <script>
+        async function fetchUserData() {
+            const response = await fetch('/api/users');
+            return await response.json();
+        }
+
+        async function renderChart() {
+            const userData = await fetchUserData();
+            const labels = userData.map(user => user.name); // Lấy tên người dùng
+            const data = userData.map(user => user.reputation); // Lấy điểm uy tín
+
+            const ctx = document.getElementById('userChart').getContext('2d');
+            const userChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Reputation',
+                        data: data,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        renderChart();
+    </script>
+</body>
+</html>

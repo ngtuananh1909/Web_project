@@ -59,13 +59,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use(session({
-    secret: 'uit2027goo',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        secure: false,
-        sameSite: 'lax' 
-    }
+    secret: 'truepablo',
+    resave: true,
+    saveUninitialized: true
 }));
 
 app.use((req, res, next) => {

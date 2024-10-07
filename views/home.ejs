@@ -72,7 +72,7 @@
                   <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
                   <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
                   <li><hr class="dropdown-divider" /></li>
-                  <!-- Chuyển đổi giao diện -->
+                  
                   <li class="nav-item">
                     <div class="d-flex align-items-center px-3 py-2">
                       <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
@@ -85,7 +85,14 @@
                   <li><hr class="dropdown-divider" /></li>
                   <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
                 </ul>
-              </li>                       
+              </li>
+              <% if(user.id == 'rgB6QoFkYk'){ %>   
+                <li class="nav-item">
+                  <a class="nav-link taosanpham" href="/api/users">
+                    <img src="/img/add.jpg" alt="" class="add-icon">
+                  </a>
+                </li>  
+                <% }; %>                  
               <% } %>
             </ul>
           </nav>
@@ -180,7 +187,8 @@
             <h2 class="section-title text-center">Danh mục sản phẩm</h2>
             <div class="row row-cols-1 row-cols-md-5 g-4">
               <% products.forEach(product=> { %>
-              <div class="col">
+              <% if(product.quantity > 0){ %>
+                <div class="col">
                 <div class="card product-card">
                   <a href="/product/<%= product.id %>">
                     <img 
@@ -270,6 +278,7 @@
                   </div>
                 </div>
               </div>
+              <% }; %>
               <% }); %>
             </div>
           </div>
@@ -348,7 +357,7 @@
     <script src="colorThief.js"></script>
     <script src="darkmode.js"></script>
     <script src="chat.js"></script>  
-    <script src="add-product.js"></script>
+    <script src="add-cart.js"></script>
     <script src="scoreboard.js"></script>
     <script src="search.js"></script>
    </body>

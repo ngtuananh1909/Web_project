@@ -25,3 +25,20 @@ const stars = document.querySelectorAll('.stars input[type="radio"]');
             commentDiv.textContent = comments[star.value];
         });
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const stars = document.querySelectorAll('.star');
+        
+        stars.forEach((star, index) => {
+            star.addEventListener('click', () => {
+                stars.forEach((s, i) => {
+                    if (i <= index) {
+                        s.classList.add('filled'); // Tô màu vàng cho các sao được chọn
+                    } else {
+                        s.classList.remove('filled'); // Các sao còn lại không được tô màu
+                    }
+                });
+            });
+        });
+    });
+    

@@ -324,6 +324,9 @@
                 <span class="error-message" id="error-message" style="display: none;"></span>
                 <a href="#">Forget Your Password?</a>
                 <button>Sign In</button>
+                <% if (typeof message !=='undefined' && message) { %>
+                    <div class="message"><%= message %></div>
+                    <% } %>
           </form>
         </div>
         <div class="toggle-container">
