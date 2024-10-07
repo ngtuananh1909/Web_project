@@ -436,3 +436,169 @@ width: 25%;
 .button-search:hover {
 background: linear-gradient(to right, #005bf9, #11cb11);
 }
+@media (max-width: 768px) {
+    .search {
+      display: none; /* Ẩn thanh tìm kiếm trên màn hình nhỏ */
+    }
+  }
+  .nav-item {
+    margin-right: 0px; /* Đảm bảo khoảng cách hợp lý giữa các icon */
+  }
+  .header-design h1 a {
+      margin-left: 50%; /* Giữ nguyên margin-left cho màn hình lớn */
+  }
+  @media (max-width: 1200px) {
+      .header-design h1 a {
+          margin-left: 8%; /* Giảm margin-left cho màn hình nhỏ hơn 1200px */
+      }
+  }
+
+  @media (max-width: 992px) {
+      .header-design h1 a {
+          margin-left: 5%; /* Giảm thêm margin-left cho màn hình nhỏ hơn 992px */
+      }
+  }
+
+  @media (max-width: 768px) {
+      .header-design h1 a {
+          margin-left: 10%; /* Giảm thêm margin-left cho màn hình nhỏ hơn 768px */
+      }
+  }
+
+  @media (max-width: 576px) {
+      .header-design h1 a {
+          margin-left: 1%; /* Giảm margin-left cho màn hình nhỏ hơn 576px */
+      }
+  }
+  .nav.d-flex.align-items-center {
+    margin-right: 43%;
+  }
+
+  /* Màn hình nhỏ hơn 1200px */
+  @media (max-width: 1400px) {
+    .nav.d-flex.align-items-center {
+      margin-right: 15%;
+    }
+  }
+
+  /* Màn hình nhỏ hơn 992px */
+  @media (max-width: 1200px) {
+    .nav.d-flex.align-items-center {
+      margin-right: 2%;
+    }
+  }
+
+  /* Màn hình nhỏ hơn 768px */
+  @media (max-width: 900px) {
+    .nav.d-flex.align-items-center {
+      margin-right: -10%;
+    }
+  }
+
+  /* Màn hình nhỏ hơn 576px */
+  @media (max-width: 576px) {
+    .nav.d-flex.align-items-center {
+      margin-right: -20%;
+    }
+  }
+  .search-input-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+    padding-right: 40px; /* Tạo khoảng trống cho icon */
+  }
+
+  .search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px; /* Kích thước icon */
+    color: gray;
+    cursor: pointer;
+  }
+  .search-input-wrapper {
+    position: relative;
+    width: 100%;
+    transition: width 0.4s ease-in-out;
+  }
+
+  .search-input {
+    width: 100%;
+    padding-right: 40px; /* Tạo khoảng trống cho icon */
+    transition: width 0.4s ease-in-out;
+  }
+
+  .search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px; /* Kích thước icon */
+    color: gray;
+    cursor: pointer;
+  }
+
+  .cancel-btn {
+    display: none;
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+
+  /* Media query để ẩn search input trên màn hình nhỏ */
+  @media (max-width: 768px) {
+    .search-input-wrapper {
+      width: auto;
+    }
+
+    .search-input {
+      width: 0;
+      opacity: 0;
+      visibility: hidden;
+      padding-right: 0;
+    }
+
+    .search-active .search-input {
+      width: 100%;
+      opacity: 1;
+      visibility: visible;
+      padding-right: 40px;
+    }
+
+    .search-active .cancel-btn {
+      display: block;
+    }
+  }
+  .search-input-wrapper {
+    position: relative;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding-right: 50px; /* Tạo không gian cho nút search */
+  }
+  
+  .search-button {
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Đặt nút search gần bên phải */
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .cancel-btn {
+    position: absolute;
+    top: 50%;
+    right: 50px; /* Vị trí nút cancel, bên trái nút search */
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  

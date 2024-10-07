@@ -2,6 +2,7 @@ function formatCurrency(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "); 
 }
 let selectedProducts = []
+
 function calculateTotal() {
     var total = 0;
     const quantities = document.querySelectorAll('.quantity');
