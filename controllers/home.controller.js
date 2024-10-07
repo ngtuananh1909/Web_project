@@ -409,6 +409,12 @@ exports.addRating = (req, res) => {
 };
 
 exports.MessageDisplay = async (req, res) => {
+    if (!req.session.user) {
+        return res.render('login', {
+            message: 'You have to login/register to message',
+            redirect: true
+        });
+    }
     const chatId = req.params.id;
     const user = req.session.user; 
 
@@ -429,6 +435,12 @@ exports.MessageDisplay = async (req, res) => {
 };
 
 exports.SendMessage = (req, res) => {
+    if (!req.session.user) {
+        return res.render('login', {
+            message: 'You have to login/register to send message',
+            redirect: true
+        });
+    }
     const { text, chatId } = req.body;
 
     const sql = 'INSERT INTO messages (chat_id, sender_id, text) VALUES (?, ?, ?)';

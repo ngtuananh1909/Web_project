@@ -1,10 +1,11 @@
 function formatCurrency(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "); 
 }
+let selectedProducts = []
 function calculateTotal() {
     var total = 0;
     const quantities = document.querySelectorAll('.quantity');
-    const selectedProducts = []; 
+    selectedProducts = []; 
 
     document.querySelectorAll('input.product-checkbox').forEach((checkbox, index) => {
         if (checkbox.checked) {
@@ -12,18 +13,27 @@ function calculateTotal() {
             if (quantityInput) {
                 const price = parseFloat(quantityInput.getAttribute('data-price')) || 0;
                 const qty = parseInt(quantityInput.value) || 0;
-                total += qty * price;
 
-                const productId = quantityInput.id.split('_')[1]; 
-                selectedProducts.push({ productId, quantity: qty }); 
+                // Cập nhật selectedProducts với thông tin mong muốn
+                selectedProducts.push({
+                    id: quantityInput.getAttribute('id'),  // product.id
+                    quantity: qty,
+                    name: quantityInput.getAttribute('data-name'), // Cần thêm data-name cho input
+                    image: quantityInput.getAttribute('data-image'), // Cần thêm data-image cho input
+                    price: price
+                });
+
+                total += qty * price;
             }
         }
     });
 
     document.getElementById('totalAmount').textContent = formatCurrency(total) + " VNĐ";
+    document.getElementById('selectedProducts').value = JSON.stringify(selectedProducts);
     return selectedProducts; 
 }
 
+// Đảm bảo gọi calculateTotal khi checkbox thay đổi
 function addEventListeners() {
     document.querySelectorAll('.quantity').forEach(input => {
         input.addEventListener('change', calculateTotal);
@@ -39,6 +49,7 @@ function addEventListeners() {
 document.addEventListener('DOMContentLoaded', () => {
     addEventListeners(); // Gán sự kiện cho các input và checkbox
     calculateTotal(); // Tính toán tổng ban đầu
+    console.log(selectedProducts);
 });
     document.querySelectorAll('.quantity').forEach(input => {
     input.addEventListener('input', function() {
@@ -63,3 +74,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+function validateCheckout(event, userId) {
+    event.preventDefault();
+    const selectedProducts = JSON.parse(document.getElementById('selectedProducts').value);
+
+    const hasSelectedProducts = selectedProducts.some(product => product.quantity > 0);
+
+    if (hasSelectedProducts) {
+        // Tạo một form tạm thời để gửi dữ liệu
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/payment/option/t/${userId}`;
+        form.style.display = 'none';
+
+        // Thêm selectedProducts vào form
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'selectedProducts';
+        input.value = JSON.stringify(selectedProducts);
+        form.appendChild(input);
+
+        document.body.appendChild(form);
+        form.submit(); // Gửi form
+    } else {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Cảnh báo!',
+            text: 'Vui lòng chọn sản phẩm với số lượng lớn hơn 0.',
+            confirmButtonText: 'OK'
+        });
+    }
+}
