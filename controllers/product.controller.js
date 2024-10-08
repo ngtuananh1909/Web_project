@@ -71,8 +71,8 @@ exports.CreateProduct = async (req, res) => {
             image: [imageName],
             creator,
             creator_id: userID,
-            sale: salevalNum,
-            saleval,
+            sale: salebool,
+            saleval: salevalNum,
             sold: 0,
             created_at: createdAt
         };
@@ -118,7 +118,6 @@ exports.DisplayProductDetails = async (req, res) => {
         const listSql = 'SELECT * FROM products WHERE id != ?';
         const [otherProducts] = await db.promise().query(listSql, [productId]);
 
-        // Truyền giá trị mặc định cho user nếu không có trong session
         const user = req.session.user || null; 
 
         res.render('product-details', { 

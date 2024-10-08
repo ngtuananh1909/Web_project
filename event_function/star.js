@@ -42,3 +42,4 @@ const stars = document.querySelectorAll('.stars input[type="radio"]');
         });
     });
     
+    

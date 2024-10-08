@@ -27,15 +27,7 @@ SET time_zone = "+00:00";
 -- Cấu trúc bảng cho bảng `paydata`
 --
 
-CREATE TABLE `paydata` (
-  `id` int(11) NOT NULL,
-  `userid` int(11) NOT NULL,
-  `productid` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `discount` decimal(5,2) DEFAULT 1.00,
-  `price` decimal(10,2) NOT NULL,
-  `index` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
 
 -- --------------------------------------------------------
 
@@ -62,17 +54,6 @@ CREATE TABLE `products` (
 -- Đang đổ dữ liệu cho bảng `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `description`, `price`, `quantity`, `image`, `creator`, `creator_id`, `sale`, `saleval`, `sold`, `created_at`) VALUES
-('1mhCp3yA6xa26gH48wdJEad6PbMh6NVI9WyJQAtlrOLNTt434s', 'Phat Ta Simp', 'gay', 100, 1, 0x313732313337333630303332365f6465662e6a7067, 'Quan Minh', 'aL4RptWAMs', 0, 0, 0, '2024-07-22 03:16:26'),
-('2G2AhptYyfB6dIj8MF7cmdeYDZZiFKIURCPV3IhELKmVjguof9', 'TUANANH', '<p><br></p>', 123235000, 12, 0x32473241687074597966423664496a384d4637636d646559445a5a69464b495552435056334968454c4b6d566a67756f6639433034643348636d423859416335526277584a72466b4c6452537a51564f72434a47377746595751636e6645557a735552505f313732383030323938383331325f31383961326462663238373636633966616537343461363839346561623666342e6a7067, 'TUANANH', 'fFkHwuxGou', 0, 0, 0, '2024-10-04 00:49:48'),
-('32wSLUdRD5Pg4vd4QgKSpGmdFRF2jqukIDGiw0E97x8TfRjA9w', 'Furina', '<p><br></p>', 1223000, 1, 0x333277534c556452443550673476643451674b5370476d64465246326a71756b49444769773045393778385466526a4139775754546f3666356f656f6c446537796967516f457a476a35507973584e72464679557a74614d6f446c635661373345616b395f313732383030333133363039355f31383961326462663238373636633966616537343461363839346561623666342e6a7067, 'TUANANH', 'fFkHwuxGou', 0, 0, 0, '2024-10-04 00:52:16'),
-('BoonQ5K4vkWuEjNQ3gNjNzmPUcB1EWyl3JdVyOMkQktxzJC9wq', 'Tuan Anh beo', 'gay', 100, 1, 0x313732313337333439373738305f5475616e20416e682e6a7067, 'Quan Minh', 'aL4RptWAMs', 1, 99, 0, '2024-07-22 03:16:26'),
-('dtiUELIJajgyzcSfMBXnapmxqMapVEkTXL1ctIgIXVIT766Oij', 'Trung Kien', 'gay', 100, 1, 0x313732313336353635373736385f5472756e674b69656e536c6565702e6a7067, 'Quan Minh', 'aL4RptWAMs', 1, 99, 0, '2024-07-22 03:16:26'),
-('hUriIAklJA1IQmYt0dinAJiAtyEOekaFOgacl4ZD7nlXUy9jh3', 'Quan Minh', 'gay', 100, 1, 0x3635313065313231666665616562333130356536633932393034306331323430, 'Quan Minh', '', 0, 0, 0, '2024-07-22 03:16:26'),
-('JyT19MBtCx9AoMaHSfJmgPaWR0FaOmp9X9Gj2a4FLS0eWtC6Y0', 'Furina', '<p><strong>Furina cuti <em>susss</em></strong></p>', 120000, 1, 0x4a795431394d4274437839416f4d614853664a6d67506157523046614f6d70395839476a326134464c533065577443365930633554455259436b3670644162417a456c46734767307036524d413267626f734e55554b4163593547637457714d464b334c5f313732373837383533343235375f31383961326462663238373636633966616537343461363839346561623666342e6a7067, 'TUANANH', 'fFkHwuxGou', 0, 0, 0, '2024-10-02 14:15:34'),
-('kJy4WQaUD1oezriugFq9thwSuc0FV1UEkV7D9zpCc55Irb2eUm', 'Minh Quân', 'gay', 1000, 1, 0x313732313730323739343830325f6e67756f696e696767612e706e67, 'Quan Minh', 'aL4RptWAMs', 1, 99, 0, '2024-07-23 02:46:34'),
-('lYcvZ9B8rIR5dQFX8N4IcwLti0wNzFmagyA52SkwdD7Ek5UOlu', 'Ta Tan Phat', 'gay', 100, 1, 0x313732313337373832303537365f6465662e6a7067, 'Quan Minh', 'aL4RptWAMs', 1, 69, 0, '2024-07-22 03:16:26'),
-('Xg32XkFR7EpGlQoPZIw2Et9UKsicJKA30kem86ausAkDwQ3iRo', 'Quan Minh', 'gay', 100, 1, 0x313732313335383737323832325f5472756e674b69656e536c6565702e6a7067, 'Quan Minh', '', 0, 0, 0, '2024-07-22 03:16:26');
 
 -- --------------------------------------------------------
 
@@ -107,8 +88,6 @@ CREATE TABLE `reviews` (
 -- Đang đổ dữ liệu cho bảng `reviews`
 --
 
-INSERT INTO `reviews` (`id`, `product_id`, `user_id`, `rating`, `comment`, `created_at`) VALUES
-(1, 'BoonQ5K4vkWuEjNQ3gNjNzmPUcB1EWyl3JdVyOMkQktxzJC9wq', 0, 1, 'non', '2024-10-04 01:59:36');
 
 -- --------------------------------------------------------
 
@@ -133,19 +112,6 @@ CREATE TABLE `users` (
 -- Đang đổ dữ liệu cho bảng `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `avatar`, `balance`, `reputation`, `story`, `phone`, `friends`) VALUES
-('EUbXBmJABE', 'Tuan Anh', 'tes2t@gmail.com', '$2a$10$nibHRtShxVl66IOxRnpZ/u4bMCg3biLd8IiVdyFWy6IrRa4dy6ciu', NULL, NULL, NULL, NULL, '', 0),
-('aL4RptWAMs', 'Quan Minh noob', 'test@gmail.com', '$2a$10$PHbJd0tH0TYyUV937w6cC.NKOn/PHLxFR76C9rF0uRAc/cqpXQiOm', 0x75706c6f6164732f614c3452707457414d732e706e67, 0, NULL, NULL, '', 0),
-('MucJ31Cuch', 'Trung Kien', 'test2@gmail.com', '$2a$10$uRRigeffK8h0H4iUPhfmdOpHLh82FemMkwswUxSqts6rUT3vsiPBC', 0x75706c6f6164732f4d75634a3331437563682e6a7067, 0, 0, NULL, '', 0),
-('AFbzX92VFg', 'Giang Trung Kien', 'test3@gmail.com', '$2a$10$XivEbLRNIw3VxtiQSwOzWuazuFqBoZxOKh7MWwco5s8FaX7Dwaley', NULL, 0, 0, NULL, '', 0),
-('WEsUEBHmJv', 'Trung Kien', 'test4@gmail.com', '$2a$10$kKeYCR6EI1la0g9RpHRv6OMsVEUwiVIuH7Hf5f4vEywN04YJuTiSS', NULL, 0, 0, NULL, '', 0),
-('iiU3QGItfH', 'Trung Kien2', 'test5@gmail.com', '$2a$10$AVoeJpiGjKVpcymva3bDGeXl6r9XApD.jvV304LNbO0p2Em31Q9Ue', NULL, 0, 0, NULL, '', 0),
-('YfvViHLuSg', 'Minh Quan', 'tests@gmail.com', '$2a$10$Qbieq3M325I1EXvjsEcRcuwpJBe/P/xr5wkArhByJK7p7DJRMPZqS', 0x75706c6f6164732f5966765669484c7553672e6a7067, 0, 0, NULL, '', 0),
-('TfF2cAin7Z', 'Mink Quan', 'testq@gmail.com', '$2a$10$gPKL5h8vVDEoF.ytexJ5rOiV.QqaV2cVPTr/0WGhkugutM5kXNHgO', NULL, 0, 0, NULL, '', 0),
-('59xzprS0Xx', 'Quan Minh', 'ezdd@gmail.com', '$2a$10$kHS0QJwn6v9b6VirCDrLw.X4NZFMIDywX4vMQtJp6fYrwUOYYkr5.', NULL, 0, 0, NULL, '', 0),
-('zTo8xZt3ra', 'membeo', 'membeo@gmail.com', '$2a$10$wdBsEfI.ETXqgj8Oyb9mC.iBkLV9w66o8L3bfDeeJNCXPEauDLjLa', NULL, 0, 0, NULL, '', 0),
-('fFkHwuxGou', 'TUANANH', 'tuananh190907@gmail.com', '$2a$10$qyqdApIVyctiPC0Xh95XyemGu/Csoaku7vLB8.czTOJzigyJ5d2gW', NULL, 0, 0, NULL, '', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -161,11 +127,6 @@ CREATE TABLE `user_cart` (
 -- Đang đổ dữ liệu cho bảng `user_cart`
 --
 
-INSERT INTO `user_cart` (`user_id`, `product_id`) VALUES
-('aL4RptWAMs', 'BoonQ5K4vkWuEjNQ3gNjNzmPUcB1EWyl3JdVyOMkQktxzJC9wq'),
-('fFkHwuxGou', 'BoonQ5K4vkWuEjNQ3gNjNzmPUcB1EWyl3JdVyOMkQktxzJC9wq'),
-('fFkHwuxGou', 'dtiUELIJajgyzcSfMBXnapmxqMapVEkTXL1ctIgIXVIT766Oij'),
-('fFkHwuxGou', 'hUriIAklJA1IQmYt0dinAJiAtyEOekaFOgacl4ZD7nlXUy9jh3');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -174,8 +135,6 @@ INSERT INTO `user_cart` (`user_id`, `product_id`) VALUES
 --
 -- Chỉ mục cho bảng `paydata`
 --
-ALTER TABLE `paydata`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Chỉ mục cho bảng `products`
@@ -209,8 +168,6 @@ ALTER TABLE `user_cart`
 --
 -- AUTO_INCREMENT cho bảng `paydata`
 --
-ALTER TABLE `paydata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `ratings`

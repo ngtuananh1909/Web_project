@@ -14,84 +14,106 @@
     <link rel="stylesheet" href="css/cart.css">
     <body>
       <header class="header-design">
-        <div class="container-fluid py-3 d-flex justify-content-center align-items-center" style="height: 10vh;">
-          <div class="container d-flex justify-content-between align-items-center">
-            <h1 class="h4 mb-0">
-              <a href="/" class="text-decoration-none"><strong>E-Shop</strong></a>
-            </h1>
-            <!-- Thanh tìm kiếm -->
-            <form class="d-flex search" action="/search" method="GET" onsubmit="validateForm(event)">
-              <input
-                class="form-control me-2"
-                type="search"
-                placeholder="Tìm kiếm sản phẩm..."
-                aria-label="Search"
-                name="query"
-              />
-              <button class="button-search" type="submit">Tìm kiếm</button>
-            </form>
-            <nav class="nav">
-              <ul class="nav">
-                <li class="nav-item">
-                  <a class="nav-link home" href="/">
-                    <img src="/img/home.png" alt="" class="home-icon"></img>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link bxh" href="/scoreboard">
-                    <img src="/img/bxh.jpg" alt="" class="bxh-icon">
-                  </a>
-                </li>
-                <% if (!user) { %>
-                <li class="nav-item">
-                  <a class="nav-link login" href="/login">Đăng nhập</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link dangky" href="/register">Đăng ký</a>
-                </li>
-                <% } else { %>
-                <li class="nav-item">
-                  <a class="nav-link giohang" href="/cart">
-                    <img src="/img/cart.jpg" alt="" class="cart-icon">                  
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link taosanpham" href="/product/add">
-                    <img src="/img/add.jpg" alt="" class="add-icon">
-                  </a>
-                </li>
-                <li class="nav-item dropdown" style="width: 200px;">
-                  <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
-                    <% if (user.avatar) { %>
-                    <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
-                    <% } else { %>
-                    <img src="./img/def.jpg" class="avatar me-2" alt="" />
-                    <% } %>
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                    <li>
-                      <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
-                    </li>
-                    <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                    <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
-                    <li><hr class="dropdown-divider" /></li>
-                    <!-- Chuyển đổi giao diện -->
-                    <li class="nav-item">
-                      <div class="d-flex align-items-center px-3 py-2">
-                        <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
-                        <label class="switch" >
-                          <input type="checkbox" id="toggle-dark-mode">
-                          <span class="slider round"></span>
-                        </label>
-                      </div>
-                    </li>
-                    <li><hr class="dropdown-divider" /></li>
-                    <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
-                  </ul>
-                </li>                       
-                <% } %>
-              </ul>
-            </nav>
+        <div class="container-fluid py-3 d-flex justify-content-between align-items-center">
+          <div class="row w-100 d-flex justify-content-between align-items-center">
+            <div class="col-md-4 col-6">
+              <h1 class="h4 mb-0">
+                <a href="/" class="text-decoration-none" style=" font-size: 40px;"><strong>E-Shop</strong></a>
+              </h1>
+            </div>
+            <div class="col-md-4 col-12 d-none d-md-flex justify-content-center">
+              <form class="d-flex search w-100" action="/search" method="GET" onsubmit="validateForm(event)">
+                <div class="search-input-wrapper position-relative" id="searchContainer">
+                  <input
+                    class="form-control search-input"
+                    type="search"
+                    placeholder="Tìm kiếm sản phẩm..."
+                    aria-label="Search"
+                    name="query"
+                    style="padding-right: 40px;"
+                  />
+                  <!-- Nút search icon nằm trong input -->
+                  <button class="search-button position-absolute" type="submit" style="right: 10px; top: 50%; transform: translateY(-50%); border: none; background-color: transparent;">
+                    <img src="img/search.png" alt="search icon" style="height: 30px; width: 30px;">
+                  </button>
+                  <!-- Nút cancel để ẩn thanh search -->
+                  <i class="fas fa-times cancel-btn position-absolute" id="cancelIcon" style="top: 50%; transform: translateY(-50%); ">
+                    <img src="img/x.png" alt="" style="height: 30px;width: 30px;">
+                  </i>
+                </div>
+              </form>
+              
+            </div>
+            <div class="col-md-4 col-6">
+              <nav class="nav justify-content-end">
+                <ul class="nav d-flex align-items-center" style="gap: 10px; flex-wrap: nowrap;">
+                  <li class="nav-item me-1">
+                    <a class="nav-link home" href="/">
+                      <img src="/img/home.png" alt="home icon" class="home-icon" style="width: 25px; height: 25px;">
+                    </a>
+                  </li>
+                  <li class="nav-item me-1">
+                    <a class="nav-link bxh" href="/scoreboard">
+                      <img src="/img/bxh.jpg" alt="scoreboard icon" class="bxh-icon" style="width: 25px; height: 25px;">
+                    </a>
+                  </li>
+                  <% if (!user) { %>
+                  <li class="nav-item me-1">
+                    <a class="nav-link login" href="/login">Đăng nhập</a>
+                  </li>
+                  <li class="nav-item me-1">
+                    <a class="nav-link dangky" href="/register">Đăng ký</a>
+                  </li>
+                  <% } else { %>
+                  <li class="nav-item me-1">
+                    <a class="nav-link giohang" href="/cart">
+                      <img src="/img/cart.jpg" alt="cart icon" class="cart-icon" style="width: 25px; height: 25px;">
+                    </a>
+                  </li>
+                  <li class="nav-item me-1">
+                    <a class="nav-link taosanpham" href="/product/add">
+                      <img src="/img/add.jpg" alt="add product icon" class="add-icon" style="width: 25px; height: 25px;">
+                    </a>
+                  </li>
+                  <li class="nav-item dropdown" style="width: auto;">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
+                      <% if (user.avatar) { %>
+                      <img src="/<%= user.avatar %>" class="avatar me-1" alt="user avatar" style="width: 30px; height: 30px;" />
+                      <% } else { %>
+                      <img src="./img/def.jpg" class="avatar me-1" alt="default avatar" style="width: 30px; height: 30px;" />
+                      <% } %>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                      <li>
+                        <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
+                      </li>
+                      <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
+                      <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                      <li><hr class="dropdown-divider" /></li>
+                      <li class="nav-item">
+                        <div class="d-flex align-items-center px-3 py-2">
+                          <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
+                          <label class="switch">
+                            <input type="checkbox" id="toggle-dark-mode">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </li>
+                      <li><hr class="dropdown-divider" /></li>
+                      <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                    </ul>
+                  </li>
+                  <% if (user.id == 'rgB6QoFkYk') { %>
+                  <li class="nav-item me-1">
+                    <a class="nav-link taosanpham" href="/api/users">
+                      <img src="/img/add.jpg" alt="admin icon" class="add-icon" style="width: 25px; height: 25px;">
+                    </a>
+                  </li>
+                  <% } %>
+                  <% } %>
+                </ul>
+              </nav>
+            </div>
           </div>
         </div>
       </header>
@@ -104,90 +126,95 @@
                 </div>
               </div >
                 <% if (products.length > 0) { %> 
-                <% products.forEach(product => { %>
-                  <div class="card rounded-3 mb-4">
-                    <div class="card-bo dy p-4">
-                      <div class="row d-flex justify-content-between align-items-center">
-                        <input type="checkbox" class="product-checkbox" style="width: 20px; height: 20px; margin-left: 0px; background-color: #f0f0f0; border: 1px solid #ccc; margin-right: 10px;">
-  
-                        <div class="col-md-2 col-lg-2 col-xl-2">
-                          <img 
-                              src="<%= product.image ? ('uploads/' + product.image) : '/img/cart-def.png' %>" 
-                              class="card-img-top" 
-                              alt="" 
-                              onerror="this.onerror=null; this.src='/img/cart-def.png';"
+                  <% products.forEach(product => { %>
+                    <div class="card rounded-3 mb-4">
+                      <div class="card-body p-4">
+                        <div class="row d-flex justify-content-between align-items-center">
+                          <input type="checkbox" class="product-checkbox" style="width: 20px; height: 20px; margin-left: 0px; background-color: #f0f0f0; border: 1px solid #ccc; margin-right: 10px;">
+                          <div class="col-md-2 col-lg-2 col-xl-2">
+                            <img 
+                                src="<%= product.image ? ('uploads/' + product.image) : '/img/cart-def.png' %>" 
+                                class="card-img-top" 
+                                alt="" 
+                                onerror="this.onerror=null; this.src='/img/cart-def.png';"
+                            />
+                          </div>
+                          <div class="col-md-3 col-lg-3 col-xl-3">
+                            <p class="lead fw-normal mb-2"><%= product.name %></p>
+                          </div>
+                          <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                            <button
+                              data-mdb-button-init
+                              data-mdb-ripple-init
+                              class="btn btn-link px-2"
+                              onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                            >
+                              <i class="fas fa-minus"></i>
+                            </button>
+                            
+                            <input
+                              id="<%= product.id %>"
+                              min="1"
+                              max="<%= product.quantity %>"
+                              name="quantity"
+                              value="1"
+                              type="number"
+                              class="form-control form-control-sm quantity"
+                              data-price="<%= product.price %>"
+                              data-name="<%= product.name %>"  
+                              data-image="<%= product.image %>" 
+                              step="1"
                           />
+                            
+                            <button
+                              data-mdb-button-init
+                              data-mdb-ripple-init
+                              class="btn btn-link px-2"
+                              onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                            >
+                              <i class="fas fa-plus"></i>
+                            </button>
+                          </div>
+                          <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                            <h5 class="mb-0">
+                              <%= formatCurrency(product.price * product.quantity) %> VNĐ
+                            </h5>
+                          </div>
+                          <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                            <button
+                              class="text-danger"
+                              style="background: none; border: none; padding: 0;"
+                              onclick="removeFromCart('<%= product.id %>')"
+                            >
+                              <img src="img/delete.png" alt="" class="delete-icon" />
+                            </button>
+                          </div>                    
                         </div>
-                        <div class="col-md-3 col-lg-3 col-xl-3">
-                          <p class="lead fw-normal mb-2"><%= product.name %></p>
-                        </div>
-                        <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                          <button
-                            data-mdb-button-init
-                            data-mdb-ripple-init
-                            class="btn btn-link px-2"
-                            onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
-                          >
-                            <i class="fas fa-minus"></i>
-                          </button>
-                    
-                          <input
-                            id="quantity_<%= product.id %>"
-                            min="1"
-                            max="<%= product.quantity %>"
-                            name="quantity"
-                            value="1"
-                            type="number"
-                            class="form-control form-control-sm quantity"
-                            data-price="<%= product.price %>"
-                            step="1"
-                        />
-
-    
-                    
-                          <button
-                            data-mdb-button-init
-                            data-mdb-ripple-init
-                            class="btn btn-link px-2"
-                            onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
-                          >
-                            <i class="fas fa-plus"></i>
-                          </button>
-                        </div>
-                        <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                          <h5 class="mb-0">
-                            <%= formatCurrency(product.price * product.quantity) %> VNĐ
-                          </h5>
-                        </div>
-                        <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                          <button
-                            class="text-danger"
-                            style="background: none; border: none; padding: 0;"
-                            onclick="removeFromCart('<%= product.id %>')"
-                          >
-                            <img src="img/delete.png" alt="" class="delete-icon" />
-                          </button>
-                        </div>                    
-                      </div>
-                    </div>                
+                      </div>                
+                    </div>              
                   </div>
                   <% }); %> 
                   <% } else { %>
                     <span class="no-items-container"  role="alert">No items in cart.</span>
                   <% } %>
                 <div class="pay-code">
+<<<<<<< HEAD
                   <form id="checkoutForm" action="/payment/checkout" method="POST">
+=======
+                  <div class="card mb-4">
+                    <div class="card-body">
+                  <form id="checkoutForm" onsubmit="validateCheckout(event, '<%= user.id %>')">
+>>>>>>> beta
                     <div class="card">
-                      <div class="card-body d-flex justify-content-between align-items-center">
-                        <div class="total" style="font-size: 20px;">
-                          <strong>Tổng cộng: </strong><span id="totalAmount">0</span>
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div class="total" style="font-size: 20px;">
+                                <strong>Tổng cộng: </strong><span id="totalAmount">0</span>
+                            </div>
+                            <input type="hidden" name="selectedProducts" id="selectedProducts" value="[]">
+                            <button type="submit" class="btn btn-warning btn-lg">Tiến hành thanh toán</button>
                         </div>
-                        <input type="hidden" name="selectedProducts" id="selectedProducts" value="<%= JSON.stringify(selectedProducts || []) %>">
-                        <input type="hidden" name="discountCode" id="discountCode" value="<%= discountCode %>">
-                        <button type="submit" class="btn btn-warning btn-lg">Tiến hành thanh toán</button>
-                      </div>
                     </div>
-                  </form>                  
+                </form>              
         </div>
       </section>
       <div style="position: fixed; bottom: 0; right: 0; width: 150px; z-index: 1000; background-color: transparent; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
@@ -219,5 +246,4 @@
   <script src="delete.js"></script>
   <script src="chat.js"></script>
   <script src="search.js"></script>
-
 </html>

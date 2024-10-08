@@ -10,78 +10,89 @@
         <link rel="stylesheet" href="/css/product-detail.css">
     </head>
     <body>
-        <header class="header-design">
-            <div class="container-fluid py-3">
-              <div class="container d-flex justify-content-between align-items-center" style="margin-left: 415px;">
-                <h1 class="h4 mb-0">
-                  <a href="/" class="text-decoration-none" style="margin-left: -130px;"><strong>E-Shop</strong></a>
-                </h1>
-                <!-- Thanh tìm kiếm -->
-                <nav class="nav">
-                  <ul class="nav">
-                    <li class="nav-item">
-                      <a class="nav-link home" href="/">
-                        <img src="/img/home.png" alt="" class="home-icon"></img>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link bxh" href="/scoreboard">
-                        <img src="/img/bxh.jpg" alt="" class="bxh-icon">
-                      </a>
-                    </li>
-                    <% if (!user) { %>
-                    <li class="nav-item">
-                      <a class="nav-link login" href="/login">Đăng nhập</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link dangky" href="/register">Đăng ký</a>
-                    </li>
-                    <% } else { %>
-                    <li class="nav-item">
-                      <a class="nav-link giohang" href="/cart">
-                        <img src="/img/cart.jpg" alt="" class="cart-icon">                  
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link taosanpham" href="/product/add">
-                        <img src="/img/add.jpg" alt="" class="add-icon">
-                      </a>
-                    </li>
-                    <li class="nav-item dropdown" style="width: 200px;">
-                      <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
-                        <% if (user.avatar) { %>
-                        <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
-                        <% } else { %>
-                        <img src="./img/def.jpg" class="avatar me-2" alt="" />
-                        <% } %>
-                      </a>
-                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li>
-                          <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
-                        </li>
-                        <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                        <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
-                        <li><hr class="dropdown-divider" /></li>
-                        <!-- Chuyển đổi giao diện -->
-                        <li class="nav-item">
-                          <div class="d-flex align-items-center px-3 py-2">
-                            <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
-                            <label class="switch" >
-                              <input type="checkbox" id="toggle-dark-mode">
-                              <span class="slider round"></span>
-                            </label>
-                          </div>
-                        </li>
-                        <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
-                      </ul>
-                    </li>                       
-                    <% } %>
-                  </ul>
-                </nav>
-              </div>
+      <header class="header-design">
+        <div class="container-fluid py-3 d-flex justify-content-between align-items-center">
+          <div class="row w-100 d-flex justify-content-between align-items-center">
+            <div class="col-md-4 col-6">
+              <h1 class="h4 mb-0">
+                <a href="/" class="text-decoration-none" style=" font-size: 40px;"><strong>E-Shop</strong></a>
+              </h1>
             </div>
-          </header>
+            <div class="col-md-4 col-12 d-none d-md-flex justify-content-center">
+            </div>
+            <div class="col-md-4 col-6">
+              <nav class="nav justify-content-end">
+                <ul class="nav d-flex align-items-center" style="gap: 10px; flex-wrap: nowrap;">
+                  <li class="nav-item me-1">
+                    <a class="nav-link home" href="/">
+                      <img src="/img/home.png" alt="home icon" class="home-icon" style="width: 25px; height: 25px;">
+                    </a>
+                  </li>
+                  <li class="nav-item me-1">
+                    <a class="nav-link bxh" href="/scoreboard">
+                      <img src="/img/bxh.jpg" alt="scoreboard icon" class="bxh-icon" style="width: 25px; height: 25px;">
+                    </a>
+                  </li>
+                  <% if (!user) { %>
+                  <li class="nav-item me-1">
+                    <a class="nav-link login" href="/login">Đăng nhập</a>
+                  </li>
+                  <li class="nav-item me-1">
+                    <a class="nav-link dangky" href="/register">Đăng ký</a>
+                  </li>
+                  <% } else { %>
+                  <li class="nav-item me-1">
+                    <a class="nav-link giohang" href="/cart">
+                      <img src="/img/cart.jpg" alt="cart icon" class="cart-icon" style="width: 25px; height: 25px;">
+                    </a>
+                  </li>
+                  <li class="nav-item me-1">
+                    <a class="nav-link taosanpham" href="/product/add">
+                      <img src="/img/add.jpg" alt="add product icon" class="add-icon" style="width: 25px; height: 25px;">
+                    </a>
+                  </li>
+                  <li class="nav-item dropdown" style="width: auto;">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
+                      <% if (user.avatar) { %>
+                      <img src="/<%= user.avatar %>" class="avatar me-1" alt="user avatar" style="width: 30px; height: 30px;" />
+                      <% } else { %>
+                      <img src="./img/def.jpg" class="avatar me-1" alt="" style="width: 30px; height: 30px;" />
+                      <% } %>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                      <li>
+                        <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
+                      </li>
+                      <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
+                      <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                      <li><hr class="dropdown-divider" /></li>
+                      <li class="nav-item">
+                        <div class="d-flex align-items-center px-3 py-2">
+                          <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
+                          <label class="switch">
+                            <input type="checkbox" id="toggle-dark-mode">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </li>
+                      <li><hr class="dropdown-divider" /></li>
+                      <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                    </ul>
+                  </li>
+                  <% if (user.id == 'rgB6QoFkYk') { %>
+                  <li class="nav-item me-1">
+                    <a class="nav-link taosanpham" href="/api/users">
+                      <img src="/img/add.jpg" alt="admin icon" class="add-icon" style="width: 25px; height: 25px;">
+                    </a>
+                  </li>
+                  <% } %>
+                  <% } %>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </header>
         <m1 style="font-size: 50px;"><strong><center>Product Details</center></strong></m1>
         <div class="container-anh" >
             <div class="image-container" style="margin-left: -175px;">
@@ -143,7 +154,7 @@
                                   <input type="radio" id="star4" name="rating" value="4" required>
                                   <label for="star4" class="star" style="margin-left: -45px;margin-top: -2px;">&#9733;</label>
                               
-                                  <input type="radio" id="star5" name="rating" value="5" required checked> <!-- Đặt mặc định là 5 sao -->
+                                  <input type="radio" id="star5" name="rating" value="5" required> <!-- Đặt mặc định là 5 sao -->
                                   <label for="star5" class="star" style="margin-left: -45px;margin-top: -2px;">&#9733;</label>
                               
                                   <div id="comment" class="comment alpha" style="margin-top: 20px;"></div> <!-- Thêm phần hiển thị bình luận -->
@@ -166,27 +177,27 @@
                                 <% ratings.forEach(review => { %>
                                   <div class="review">
                                     <div class="review-header">
-                                        <img class="avatar" src="/img/def.jpg" alt="Avatar"> <!-- Ảnh đại diện -->
+                                        <img class="avatar" src="/img/def.jpg" alt="Avatar"> 
                                         <div class="user-info" style="margin-left: 6%; margin-top: -45px; width: auto;">
                                           <div class="my-3 user-name" style="font-size: 20px;">
-                                              NAME
+                                              <%= user.name %>
                                           </div>
-                                          <p class="review-date alpha" style="margin-left: 10%; margin-top: -7%; font-size: 20px;">
-                                            Ngày: <%= new Date(review.created_at).toLocaleString() %> <!-- Ngày giờ tạo -->
+                                          <p class="review-date alpha" style="margin-left: 70%; margin-top: -7%; font-size: 20px;">
+                                            Ngày: <%= new Date(review.created_at).toLocaleString() %> 
                                         </p> 
                                       </div>
                                                                            
                                         <div class="review-rating">
                                             <% for (let i = 1; i <= 5; i++) { %>
                                                 <% if (i <= review.rating) { %>
-                                                    <span class="star" style="color: yellow;">★</span> <!-- Sao đã đánh giá -->
+                                                    <span class="star" style="color: yellow;">★</span> 
                                                 <% } else { %>
-                                                    <span class="star">☆</span> <!-- Sao chưa đánh giá -->
+                                                    <span class="star">☆</span>
                                                 <% } %>
                                             <% } %>
                                         </div>
                                     </div>
-                                    <p class="review-comment alpha" style="font-size: 25px;"><%= review.comment || 'Chưa có bình luận' %></p> <!-- Bình luận -->
+                                    <p class="review-comment alpha" style="font-size: 25px;"><%= review.comment || 'Chưa có bình luận' %></p> 
                                 </div>
                                 
                                 <% }) %>

@@ -58,7 +58,7 @@ exports.home = async (req, res) => {
         });
     } catch (err) {
         console.error('Error fetching data:', err);
-        res.render('home', { user: req.session.user, products: [], recommendations: [] });
+        res.render('home', { user: req.session.user, products: [], recommendations: []});
     }
 };
 
@@ -110,7 +110,7 @@ exports.cartDisplay = (req, res) => {
             redirect: true
         });
     }
-    
+
     const userId = req.session.user.id;
     const selectedProducts = [];
 
@@ -123,7 +123,9 @@ exports.cartDisplay = (req, res) => {
                 console.log("error: ", err);
                 return res.status(500).json({ error: 'Server error' });
             }
-            res.render('cart', { user: req.session.user, products: result, selectedProducts: selectedProducts, discountCode: null });
+
+            req.session.selectedProducts = result; 
+            res.render('cart', { user: req.session.user, products: result, selectedProducts, discountCode: null });
         });
 };
 
@@ -137,9 +139,8 @@ exports.SettingDisplay = (req, res) => {
 };
 
 exports.register = async (req, res) => {
-    const { name, email, password, password_confirm, avatar } = req.body; // Thêm avatar vào đây
+    const { name, email, password, password_confirm, avatar } = req.body;
     try {
-        // Kiểm tra xem email đã được sử dụng hay chưa
         const results = await query('SELECT email FROM users WHERE email = ?', [email]);
         if (results.length > 0) {
             return res.render('register', { message: 'This email is already in use' });
@@ -159,7 +160,7 @@ exports.register = async (req, res) => {
             email,
             password: hashpassword,
             avatar: avatarData,  
-            balance: 0,
+            balance: 1000000,
             reputation: 0,
             story: null, 
             phone: '',   
@@ -184,23 +185,19 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        // Truy vấn người dùng theo email
         const results = await query('SELECT * FROM users WHERE email = ?', [email]);
         
-        // Kiểm tra xem người dùng có tồn tại không
         if (results.length === 0) {
             return res.render('login', { message: 'Email hoặc mật khẩu không chính xác' });
         }
         
-        const user = results[0]; // Lưu trữ thông tin người dùng vào biến user
+        const user = results[0]; 
 
-        // Kiểm tra mật khẩu
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.render('login', { message: 'Email hoặc mật khẩu không chính xác' });
         }
 
-        // Khởi tạo session cho người dùng
         if (req.session) {
             req.session.user = {
                 id: user.id,
@@ -231,86 +228,65 @@ exports.UserUpdate = async (req, res) => {
 
     try {
         const avatar = req.files ? req.files.avatar : null;
-
         const { name, email } = req.body;
         const userId = req.session.user.id;
         const oldAvatarPath = req.session.user.avatar;
+        const updateQuery = [];
+        const queryParams = [];
+        let avatarPath = '';
 
-        const updateUser = () => {
-            let updateQuery = 'UPDATE users SET';
-            const queryParams = [];
-            let avatarPath = '';
+        if (name && name !== req.session.user.name) {
+            updateQuery.push('name = ?');
+            queryParams.push(name);
+        }
 
-            if (name && name !== req.session.user.name) {
-                updateQuery += ' name = ?,';
-                queryParams.push(name);
-            }
+        if (avatar && avatar.name !== path.basename(oldAvatarPath)) {
+            avatarPath = `uploads/${userId}${path.extname(avatar.name)}`;
+            updateQuery.push('avatar = ?');
+            queryParams.push(avatarPath);
 
-            if (avatar && avatar.name !== path.basename(oldAvatarPath)) {
-                avatarPath = `uploads/${userId}${path.extname(avatar.name)}`;
-                updateQuery += ' avatar = ?,';
-                queryParams.push(avatarPath);
-            
-                avatar.mv(path.join(__dirname, '..', avatarPath), (err) => {
-                    if (err) {
-                        console.log('Error moving avatar file:', err);
-                        return res.status(500).send('Error saving file');
-                    }
-                });
-            }            
-
-            if (queryParams.length === 0) {
-                return res.render('setting', { user: req.session.user, message: 'No changes detected' });
-            }
-
-            updateQuery = updateQuery.slice(0, -1); 
-            updateQuery += ' WHERE id = ?';
-            queryParams.push(userId);
-
-            db.query(updateQuery, queryParams, async (error) => {
-                if (error) {
-                    console.log('Error updating settings:', error);
-                    return res.render('setting', { user: req.session.user, message: 'Error updating settings' });
-                }
-
-                req.session.user.name = name || req.session.user.name;
-                req.session.user.avatar = avatarPath || req.session.user.avatar;
-
-                if (oldAvatarPath) {
-                    console.log('Old Avatar Path:', oldAvatarPath); 
-                    try {
-                        const fullPath = path.join(__dirname, '..', oldAvatarPath.toString());
-                        console.log('Full Path:', fullPath); 
-                        await fs.unlink(fullPath);
-                    } catch (unlinkErr) {
-                        console.log('Error deleting old avatar:', unlinkErr);
-                    }
-                }
-
-                res.render('setting', { user: req.session.user, message: 'Settings updated successfully' });
-            });
-        };
+            // Di chuyển tệp avatar
+            await avatar.mv(path.join(__dirname, '..', avatarPath));
+        }
 
         if (email && email !== req.session.user.email) {
-            db.query('SELECT email FROM users WHERE email = ? AND id != ?', [email, userId], (error, results) => {
-                if (error) {
-                    console.log('Error checking email:', error);
-                    return res.render('setting', { user: req.session.user, message: 'Error checking email' });
-                }
+            const [results] = await db.query('SELECT email FROM users WHERE email = ? AND id != ?', [email, userId]);
 
-                if (results.length > 0) {
-                    return res.render('setting', { user: req.session.user, message: 'Email already exists. Please choose a different one.' });
-                }
-                updateUser();
-            });
-        } else {
-            updateUser();
+            if (results.length > 0) {
+                return res.render('setting', { user: req.session.user, message: 'Email already exists. Please choose a different one.' });
+            }
         }
+
+        if (updateQuery.length === 0) {
+            return res.render('setting', { user: req.session.user, message: 'No changes detected' });
+        }
+
+        const sqlQuery = `UPDATE users SET ${updateQuery.join(', ')} WHERE id = ?`;
+        queryParams.push(userId);
+
+        await db.query(sqlQuery, queryParams);
+
+        // Cập nhật session user
+        req.session.user.name = name || req.session.user.name;
+        req.session.user.avatar = avatarPath || req.session.user.avatar;
+
+        // Xóa avatar cũ
+        if (oldAvatarPath) {
+            const fullPath = path.join(__dirname, '..', oldAvatarPath);
+            try {
+                await fs.unlink(fullPath);
+            } catch (unlinkErr) {
+                console.log('Error deleting old avatar:', unlinkErr);
+            }
+        }
+
+        res.render('setting', { user: req.session.user, message: 'Settings updated successfully' });
     } catch (err) {
         console.log('Server error:', err);
         res.render('setting', { user: req.session.user, message: 'Server error' });
     }
 };
+
 
 
 exports.AddToCart = async (req, res) => {
@@ -433,6 +409,12 @@ exports.addRating = (req, res) => {
 };
 
 exports.MessageDisplay = async (req, res) => {
+    if (!req.session.user) {
+        return res.render('login', {
+            message: 'You have to login/register to message',
+            redirect: true
+        });
+    }
     const chatId = req.params.id;
     const user = req.session.user; 
 
@@ -453,6 +435,12 @@ exports.MessageDisplay = async (req, res) => {
 };
 
 exports.SendMessage = (req, res) => {
+    if (!req.session.user) {
+        return res.render('login', {
+            message: 'You have to login/register to send message',
+            redirect: true
+        });
+    }
     const { text, chatId } = req.body;
 
     const sql = 'INSERT INTO messages (chat_id, sender_id, text) VALUES (?, ?, ?)';
@@ -485,5 +473,15 @@ exports.SearchProducts = async (req, res) => {
     }
 };
 
+exports.usersStats = (req, res) => {
+  const query = 'SELECT * FROM users';
+  connection.query(query, (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+}
 
-
+exports.StatsDisplay = (req, res) => {
+    if(user.session.id != 'rgB6QoFkYk') res.redirect('/');
+    res.render('infor');
+}
