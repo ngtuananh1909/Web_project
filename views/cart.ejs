@@ -131,12 +131,12 @@
                       <div class="card-body p-4">
                         <div class="row d-flex justify-content-between align-items-center">
                           <input type="checkbox" class="product-checkbox" style="width: 20px; height: 20px; margin-left: 0px; background-color: #f0f0f0; border: 1px solid #ccc; margin-right: 10px;">
+                          
                           <div class="col-md-2 col-lg-2 col-xl-2">
-                            <img 
-                                src="<%= product.image ? ('uploads/' + product.image) : '/img/cart-def.png' %>" 
-                                class="card-img-top" 
-                                alt="" 
-                                onerror="this.onerror=null; this.src='/img/cart-def.png';"
+                            <img
+                              src="/uploads/<%= product.image %>"
+                              class="img-fluid rounded-3"
+                              alt="<%= product.name %>"
                             />
                           </div>
                           <div class="col-md-3 col-lg-3 col-xl-3">
