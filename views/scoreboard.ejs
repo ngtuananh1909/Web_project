@@ -183,59 +183,6 @@
           </div>
           <% }); %>
         </div>
-      </div>    
-      <div style="position: fixed; bottom: 0; right: 0; width: 150px; z-index: 1000; background-color: transparent; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
-        <div id="chat-header" style="background-color: #007bff; color: white; padding: 10px; cursor: pointer; width: 70px; margin-left:78px ;">
-            <img src="/img/mesage.png" alt="" style="height: 30px; width: 30px; margin-left: 10px;" >
-        </div>
-        <div id="chat-body" style="display: none; padding: 10px;">
-          <div id="close-chat" style="cursor: pointer; color: red; margin-left: 460px; margin-top: -10px;">&times;</div> <!-- Nút đóng -->
-          <div style="position: absolute; top: 5px; left: 20px;font-size: 30px;">Chat</div>
-          
-          <div style="margin-top: 10px;"></div>
-          
-          <div style="display: flex;">
-            <div class="row" style="width: 220px; height: 440px; overflow-y: scroll;">
-              <% for (let i = 0; i < 5; i++) { %>
-                <div style="margin-left: 8px; width: 190px; height: 80px; background-color: #007bff; border: 1px solid #ccc; margin-top: 15px; display: block;"></div>
-              <% } %>
-              <div style="margin-bottom: 60px;"></div>
-            </div>
-            <div style="width: 270px; height: 400px; background-color: #ffffff; z-index: 1; margin-left: 20px;"></div>
-          
-          </div>
-          
-        </div>
-        <div
-      class="modal fade"
-      id="addToCartModal"
-      tabindex="-1"
-      aria-labelledby="addToCartModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="addToCartModalLabel">
-              Xác nhận thêm vào giỏ hàng
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            Bạn có chắc chắn muốn thêm sản phẩm này vào giỏ hàng?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary confirmAddToCartBtn">
-              Thêm vào giỏ
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
       </div> 
     </body>
     <script src="darkmode.js"></script>
