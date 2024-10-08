@@ -1,0 +1,274 @@
+.sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+@media (max-width: 768px) {
+    .search {
+      display: none; /* Ẩn thanh tìm kiếm trên màn hình nhỏ */
+    }
+  }
+  .nav-item {
+    margin-right: 0px; /* Đảm bảo khoảng cách hợp lý giữa các icon */
+  }
+  .header-design h1 a {
+      margin-left: 50%; /* Giữ nguyên margin-left cho màn hình lớn */
+  }
+  @media (max-width: 1200px) {
+      .header-design h1 a {
+          margin-left: 8%; /* Giảm margin-left cho màn hình nhỏ hơn 1200px */
+      }
+  }
+
+  @media (max-width: 992px) {
+      .header-design h1 a {
+          margin-left: 5%; /* Giảm thêm margin-left cho màn hình nhỏ hơn 992px */
+      }
+  }
+
+  @media (max-width: 768px) {
+      .header-design h1 a {
+          margin-left: 10%; /* Giảm thêm margin-left cho màn hình nhỏ hơn 768px */
+      }
+  }
+
+  @media (max-width: 576px) {
+      .header-design h1 a {
+          margin-left: 1%; /* Giảm margin-left cho màn hình nhỏ hơn 576px */
+      }
+  }
+  .nav.d-flex.align-items-center {
+    margin-right: 43%;
+  }
+
+  /* Màn hình nhỏ hơn 1200px */
+  @media (max-width: 1400px) {
+    .nav.d-flex.align-items-center {
+      margin-right: 15%;
+    }
+  }
+
+  /* Màn hình nhỏ hơn 992px */
+  @media (max-width: 1200px) {
+    .nav.d-flex.align-items-center {
+      margin-right: 2%;
+    }
+  }
+
+  /* Màn hình nhỏ hơn 768px */
+  @media (max-width: 900px) {
+    .nav.d-flex.align-items-center {
+      margin-right: -10%;
+    }
+  }
+
+  /* Màn hình nhỏ hơn 576px */
+  @media (max-width: 576px) {
+    .nav.d-flex.align-items-center {
+      margin-right: -20%;
+    }
+  }
+  .search-input-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+    padding-right: 40px; /* Tạo khoảng trống cho icon */
+  }
+
+  .search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px; /* Kích thước icon */
+    color: gray;
+    cursor: pointer;
+  }
+  .search-input-wrapper {
+    position: relative;
+    width: 100%;
+    transition: width 0.4s ease-in-out;
+  }
+
+  .search-input {
+    width: 100%;
+    padding-right: 40px; /* Tạo khoảng trống cho icon */
+    transition: width 0.4s ease-in-out;
+  }
+
+  .search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px; /* Kích thước icon */
+    color: gray;
+    cursor: pointer;
+  }
+
+  .cancel-btn {
+    display: none;
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+
+  /* Media query để ẩn search input trên màn hình nhỏ */
+  @media (max-width: 768px) {
+    .search-input-wrapper {
+      width: auto;
+    }
+
+    .search-input {
+      width: 0;
+      opacity: 0;
+      visibility: hidden;
+      padding-right: 0;
+    }
+
+    .search-active .search-input {
+      width: 100%;
+      opacity: 1;
+      visibility: visible;
+      padding-right: 40px;
+    }
+
+    .search-active .cancel-btn {
+      display: block;
+    }
+  }
+  .search-input-wrapper {
+    position: relative;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding-right: 50px; /* Tạo không gian cho nút search */
+  }
+  
+  .search-button {
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Đặt nút search gần bên phải */
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .cancel-btn {
+    position: absolute;
+    top: 50%;
+    right: 50px; /* Vị trí nút cancel, bên trái nút search */
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  /* Ẩn menu mặc định */
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%; /* Đặt menu xuất hiện ngay dưới avatar */
+    left: 0;
+    z-index: 1000;
+  }
+
+  /* Hiển thị menu khi di chuột vào avatar */
+  .nav-link.dropdown-toggle:hover + .dropdown-menu,
+  .dropdown-menu:hover {
+    display: block;
+  }
+  .header-design{
+    background-color: #e2e2e2;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .nav .nav-link img {
+    width: 24px; /* Điều chỉnh kích thước icon */
+    height: 24px;
+  }
+  .main-content {
+    padding-top: 60px; /* Đảm bảo nội dung không bị che bởi header (thay đổi kích thước này nếu cần) */
+  }
+  .nav-link {
+    position: relative; /* Để sử dụng absolute positioning cho underline */
+    display: inline-block;
+    padding-bottom: 5px; /* Khoảng cách giữa text và underline */
+    padding: 4px 8px; /* Điều chỉnh padding để tiết kiệm không gian */
+}
+.nav-item {
+  margin-right: 5px; /* Giảm khoảng cách giữa các phần tử */
+}
+
+.nav-link::after {
+  content: ""; /* Nội dung rỗng để tạo thanh nhỏ */
+  position: absolute;
+  left: 16%;
+  bottom: 0;
+  width: 70%;
+  height: 2px; /* Độ dày của thanh nhỏ */
+  background-color: #2300ea; /* Màu của thanh nhỏ */
+  transform: scaleX(0); /* Ẩn thanh nhỏ ban đầu */
+  transform-origin: bottom right; /* Vị trí bắt đầu hiệu ứng */
+  align-items: center;
+  transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp cho thanh nhỏ */
+}
+
+.nav-link.home:hover::after,
+.nav-link.bxh:hover::after,
+.nav-link.giohang:hover::after,
+.nav-link.taosanpham:hover::after,
+.nav-link.nhantin:hover::after,
+.nav-link.login:hover::after,
+.nav-link.dangky:hover::after {
+  transform: scaleX(1); /* Hiện thanh nhỏ khi hover */
+  transform-origin: bottom left; /* Vị trí kết thúc hiệu ứng */
+}
+
+.home-icon {
+  width: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
+  height: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
+}
+.bxh-icon{
+width: 27px; /* Thay đổi kích thước của hình ảnh nếu cần */
+height: 27px;
+}
+.cart-icon{
+width: 23px;
+height: 23px;
+}
+
+.add-icon{
+width: 30px;
+height: 30px;
+}
+
+.the-link {
+  position: relative; /* Để sử dụng absolute positioning cho underline */
+  display: inline-block;
+  padding-bottom: 2px;
+}
+
+.the-link::after {
+  content: ""; /* Nội dung rỗng để tạo thanh nhỏ */
+  position: absolute;
+  left: 14%;
+  bottom: 0;
+  width: 80%;
+  height: 2px; /* Độ dày của thanh nhỏ */
+  background-color: #0056ea; /* Màu của thanh nhỏ */
+  transform-origin: bottom right; /* Vị trí bắt đầu hiệu ứng */
+  align-items: center;
+  transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp cho thanh nhỏ */
+}
+.avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+  }

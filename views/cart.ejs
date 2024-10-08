@@ -12,6 +12,7 @@
     <title>Shopping Cart</title>
     </head>
     <link rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="css/header.css">
     <body>
       <header class="header-design">
         <div class="container-fluid py-3 d-flex justify-content-between align-items-center">
@@ -118,7 +119,7 @@
         </div>
       </header> 
       <section class="h-100">
-        <div class="container h-100 py-5" style="margin-top: 70px;margin-bottom: 200px; margin-left: 406px;">
+        <div class="container h-100 py-5" style="margin-top: 1%;margin-bottom: 200px; margin-left: 406px;">
             <div class="col-10">
               <div class="d-flex justify-content-between align-items-center mb-4">
                   <h1 class="fw-normal mb-0"><strong>Shopping Cart</strong></h1>
@@ -131,15 +132,14 @@
                       <div class="card-body p-4">
                         <div class="row d-flex justify-content-between align-items-center">
                           <input type="checkbox" class="product-checkbox" style="width: 20px; height: 20px; margin-left: 0px; background-color: #f0f0f0; border: 1px solid #ccc; margin-right: 10px;">
-                          
                           <div class="col-md-2 col-lg-2 col-xl-2">
                             <img 
                                 src="<%= product.image ? ('uploads/' + product.image) : '/img/cart-def.png' %>" 
-                                class="card-img-top" 
+                                class="card-img-top fixed-size" 
                                 alt="" 
                                 onerror="this.onerror=null; this.src='/img/cart-def.png';"
                             />
-                          </div>
+                        </div>                        
                           <div class="col-md-3 col-lg-3 col-xl-3">
                             <p class="lead fw-normal mb-2"><%= product.name %></p>
                           </div>
