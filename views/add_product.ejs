@@ -141,6 +141,14 @@
           <div class="form-group alpha" style="margin-top: -147px; margin-left: 206px; width: 300px;">
             <input type="file" id="image" name="image" class="form-control button-input" style="height: 50px;" accept="image/*" required>
           </div>
+
+          <div class="cropper-container" id="cropper-container" style="display: none;">
+            <h2>Crop Image</h2>
+            <div id="cropper-area">
+                <img id="cropper-image" src="" alt="Image for Cropping" />
+            </div>
+            <button id="crop-button" class="btn btn-primary">Crop and Save</button>
+          </div>
         
           <!-- Sale checkbox -->
           <div class="form-check alpha" style="margin-left: 277px; margin-top: -80px; width: 100px; background-color: transparent; display: flex; align-items: center;">
@@ -178,6 +186,7 @@
     <script src="/preview.js"></script>
     <script src="/darkmode.js"></script>
     <script src="/sale.js"></script>
+    <script src="/crop-image.js"></script>
 
   </body>
 </html>
