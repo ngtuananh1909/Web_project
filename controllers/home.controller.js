@@ -409,6 +409,12 @@ exports.addRating = (req, res) => {
 };
 
 exports.MessageDisplay = async (req, res) => {
+    if (!req.session.user) {
+        return res.render('login', {
+            message: 'You have to login/register to message',
+            redirect: true
+        });
+    }
     const chatId = req.params.id;
     const user = req.session.user; 
 
@@ -427,7 +433,6 @@ exports.MessageDisplay = async (req, res) => {
         res.render('message', { user, chat: null, message: 'Lỗi khi lấy cuộc trò chuyện' });
     }
 };
-
 exports.SendMessage = (req, res) => {
     const { text, chatId } = req.body;
 
