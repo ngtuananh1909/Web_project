@@ -16,3 +16,53 @@ var quill = new Quill('#editor', {
       saleValueContainer.style.display = 'none';
     }
   }
+  // Cập nhật thông tin preview
+  function updatePreview() {
+    const name = document.getElementById('name').value;
+    const price = document.getElementById('price').value;
+    const quantity = document.getElementById('quantity').value;
+    const saleCheckbox = document.getElementById('sale');
+    const saleValue = document.getElementById('saleval').value;
+    const description = document.getElementById('editor').textContent;
+    
+    // Hiển thị tên, giá, số lượng, và mô tả
+    document.getElementById('preview-name').textContent = name || 'Name';
+    document.getElementById('preview-price').textContent = 'Price: ' + (price || 0) + ' VND';
+    document.getElementById('preview-quantity').textContent = 'Quantity: ' + (quantity || 0);
+    document.getElementById('preview-description').textContent = description || 'Description';
+    
+    // Hiển thị giá trị sale nếu checkbox được chọn
+    const salePreview = document.getElementById('preview-sale');
+    if (saleCheckbox.checked && saleValue) {
+      salePreview.style.display = 'block';
+      salePreview.textContent = 'Sale Value: ' + saleValue + '%';
+    } else {
+      salePreview.style.display = 'none';
+    }
+  }
+
+  // Hàm bật/tắt trường sale
+  function toggleSaleValue() {
+    const saleValueContainer = document.getElementById('sale-value-container');
+    const saleCheckbox = document.getElementById('sale');
+    
+    if (saleCheckbox.checked) {
+      saleValueContainer.style.display = 'block';
+    } else {
+      saleValueContainer.style.display = 'none';
+    }
+    
+    updatePreview();
+  }
+
+  // Lắng nghe sự kiện thay đổi
+  document.getElementById('name').addEventListener('input', updatePreview);
+  document.getElementById('price').addEventListener('input', updatePreview);
+  document.getElementById('quantity').addEventListener('input', updatePreview);
+  document.getElementById('saleval').addEventListener('input', updatePreview);
+  document.getElementById('sale').addEventListener('change', toggleSaleValue);
+
+  // Khởi tạo
+  document.addEventListener('DOMContentLoaded', function() {
+    updatePreview(); // Cập nhật ngay khi trang tải xong
+  });
