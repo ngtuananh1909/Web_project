@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/login.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/login.css" crossorigin="anonymous">
 
   </head>
 
@@ -33,23 +33,20 @@
                 <a href="#">Forget Your Password?</a>
                 <button>Sign In</button>
                 <% if (typeof message !== 'undefined' && message) { %>
-                    <div id="blur-background" class="blur-background"></div>
-
-                    <div id="custom-alert" class="custom-alert">
-                        <div class="alert-content">
-                            <div class="message"><%= message %></div>
-                            <button id="alert-ok-btn">OK</button>
+                    <div class="popup-overlay">
+                        <div class="popup-content">
+                            <strong><p style="font-size: 20px;"><%= message %></p></strong>
+                            <button onclick="closePopup()">OK</button>
                         </div>
                     </div>
-
                 <% } %>                
           </form>
         </div>
         <div class="toggle-container">
             <div class="toggle">
                 <div class="toggle-panel toggle-left">
-                    <h1>Welcome Back!</h1>
-                    <p>Enter your personal details to use all of site features</p>
+                    <h1>Xin Chào</h1>
+                    <p>Nếu có tài khoản hãy đăng nhập</p>
                     <button class="hidden" id="login">Sign In</button>
                 </div>
                 <div class="toggle-panel toggle-right">
@@ -61,7 +58,6 @@
         </div>
     </div>
 </body>
-<script src="/errol-login.js"></script>
-    
-
+    <script src="/register.js"></script>
+    <script src="/login.js"></script>
 </html>

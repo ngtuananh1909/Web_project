@@ -203,7 +203,7 @@
       }
   
       .toggle-panel {
-          position: fixed; /* Giữ cho div cố định trên màn hình */
+          position: absolute;
           width: 50%;
           height: 100%;
           display: flex;
@@ -215,8 +215,6 @@
           top: 0;
           transform: translateX(0);
           transition: all 0.6s ease-in-out;
-          z-index: 998; /* Nhỏ hơn lớp làm mờ (999) và hộp thông báo (1000) */
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Tạo hiệu ứng đổ bóng */
       }
   
       .toggle-left {
@@ -290,53 +288,41 @@
         font-size: 14px;
         margin-top: 5px;
       }
-      /* Làm mờ tất cả các phần tử phía sau */
-    .blur-background {
-        display: none; /* Ẩn ban đầu */
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(5px); /* Hiệu ứng làm mờ nền */
-        z-index: 999; /* Đảm bảo lớp nền nằm dưới hộp thông báo */
-    }
+      /* Đặt lớp phủ che toàn bộ màn hình */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Nền đen mờ */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Luôn nằm trên tất cả các phần tử khác */
+        }
 
-    /* Hộp thoại thông báo */
-    #custom-alert {
-        display: none; /* Ẩn hộp thoại ban đầu */
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 300px;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        z-index: 1000; /* Đảm bảo hộp thoại nằm trên lớp làm mờ */
-    }
+        /* Nội dung của popup */
+        .popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 300px;
+        }
 
-    .alert-content {
-        padding: 20px;
-        text-align: center;
-    }
+        /* Nút OK */
+        .popup-content button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-    #alert-message {
-        margin-bottom: 20px;
-        font-size: 1em;
-        color: #333;
-    }
-
-    #alert-ok-btn {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    #alert-ok-btn:hover {
-        background-color: #0056b3;
-    }
+        .popup-content button:hover {
+            background-color: #45a049;
+        }

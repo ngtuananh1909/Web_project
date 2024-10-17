@@ -433,7 +433,6 @@ exports.MessageDisplay = async (req, res) => {
         res.render('message', { user, chat: null, message: 'Lỗi khi lấy cuộc trò chuyện' });
     }
 };
-
 exports.SendMessage = (req, res) => {
     if (!req.session.user) {
         return res.render('login', {
