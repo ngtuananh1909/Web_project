@@ -44,14 +44,13 @@
 
 /* Định dạng cho thẻ card sản phẩm */
 .card img {
-    height: 229px;
+    height: 100%;
     width: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
 }
 
 .card {
-    width: 120%;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;
     border-radius: 10px;
@@ -69,13 +68,17 @@
     transition: transform 0.3s ease;
     display: flex;
     flex-direction: column;
-    height: au;
-    width: 330px;
+    width: 100%;
+    height: auto;
     margin: 0 auto; /* Căn giữa thẻ product-card */
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .product-card img {
-    height: 200px;
+    height: 100%;
     object-fit: cover;
     width: 100%;
 }
@@ -96,7 +99,6 @@
 .btn-success {
     height: 60px;
     width: 100%;
-    border-radius: 15px;
     transition: transform 0.3s ease;
 }
 
@@ -419,3 +421,8 @@ color: #ffffff; /* Màu chữ cân bằng giữa sáng và tối */
 height: 80%;
 width: 50%;
 }
+.medal-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
