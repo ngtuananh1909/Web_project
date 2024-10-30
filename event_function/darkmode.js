@@ -6,18 +6,18 @@
       if (localStorage.getItem("darkMode") === "enabled") {
         document.body.classList.add("dark-mode");
         toggleDarkMode.checked = true;
-        modeLabel.textContent = "Chế Độ Dark ";
+        modeLabel.textContent = "Dark ";
       }
 
       // Xử lý sự kiện khi chuyển đổi chế độ
       toggleDarkMode.addEventListener("change", function () {
         if (toggleDarkMode.checked) {
           document.body.classList.add("dark-mode");
-          modeLabel.textContent = "Chế Độ Dark ";
+          modeLabel.textContent = "Dark ";
           localStorage.setItem("darkMode", "enabled"); // Lưu trạng thái
         } else {
           document.body.classList.remove("dark-mode");
-          modeLabel.textContent = "Chế Độ Sáng";
+          modeLabel.textContent = "Light";
           localStorage.setItem("darkMode", "disabled"); // Lưu trạng thái
         }
       });

@@ -27,8 +27,7 @@
                 <div class="search-input-wrapper position-relative" id="searchContainer">
                   <input
                     class="form-control search-input"
-                    type="search"
-                    placeholder="Tìm kiếm sản phẩm..."
+                    placeholder="Tìm kiếm sản phẩm"
                     aria-label="Search"
                     name="query"
                     style="padding-right: 40px;"
@@ -38,9 +37,9 @@
                     <img src="img/search.png" alt="search icon" style="height: 30px; width: 30px;">
                   </button>
                   <!-- Nút cancel để ẩn thanh search -->
-                  <i class="fas fa-times cancel-btn position-absolute" id="cancelIcon" style="top: 50%; transform: translateY(-50%); ">
-                    <img src="img/x.png" alt="" style="height: 30px;width: 30px;">
-                  </i>
+                  <!-- <i class="fas fa-times cancel-btn position-absolute" id="cancelIcon" style="top: 50%; transform: translateY(-50%); ">
+                    <img src="img/x.png" alt="" style="height: 30px;width: 30px;margin-right:;">
+                  </i> -->
                 </div>
               </form>
               
@@ -84,7 +83,7 @@
                       <img src="./img/def.jpg" class="avatar me-1" alt="default avatar" style="width: 30px; height: 30px;" />
                       <% } %>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" style="margin-left: -310%;">
                       <li>
                         <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
                       </li>
@@ -93,9 +92,9 @@
                       <li><hr class="dropdown-divider" /></li>
                       <li class="nav-item">
                         <div class="d-flex align-items-center px-3 py-2">
-                          <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
-                          <label class="switch">
-                            <input type="checkbox" id="toggle-dark-mode">
+                          <label class="change-mode" for="toggle-dark-mode" id="mode-label">Light</label>
+                          <label class="switch" style="margin-left: 50%;">
+                            <input type="checkbox" id="toggle-dark-mode" >
                             <span class="slider round"></span>
                           </label>
                         </div>
@@ -122,9 +121,9 @@
       <h1 class="center-title top">LIST TOP PRODUCT</h1>
       </center>
       <div class="top-list mt-4" >
-        <div class="row" style="width: 1000px; height: 120%;">
+        <div class="row" style="width: auto; height: 120%;">
           <% products.forEach((product, index) => { %>
-          <div class="col-md-4">
+          <div class="col-md-4" style="width: 110%;">
             <div class="card product-card">
               <% if (index === 0) { %> 
                 <img src="/img/top 1.png" alt="" class="medal-overlay" style="height: 100px; width: 60px;">

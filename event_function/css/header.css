@@ -18,24 +18,28 @@
   @media (max-width: 1200px) {
       .header-design h1 a {
           margin-left: 8%; /* Giảm margin-left cho màn hình nhỏ hơn 1200px */
+          gap: 1px;
       }
   }
 
   @media (max-width: 992px) {
       .header-design h1 a {
           margin-left: 5%; /* Giảm thêm margin-left cho màn hình nhỏ hơn 992px */
+          gap: 1px;
       }
   }
 
   @media (max-width: 768px) {
       .header-design h1 a {
           margin-left: 10%; /* Giảm thêm margin-left cho màn hình nhỏ hơn 768px */
+          gap: 1px;
       }
   }
 
   @media (max-width: 576px) {
       .header-design h1 a {
           margin-left: 1%; /* Giảm margin-left cho màn hình nhỏ hơn 576px */
+          gap: 1px;
       }
   }
   .nav.d-flex.align-items-center {

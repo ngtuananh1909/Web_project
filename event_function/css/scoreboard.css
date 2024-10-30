@@ -1,7 +1,5 @@
 .top-list {
-    max-width: 1000px;
     width: 100%;
-    margin: 0 auto;
     border-radius: 10px;
     padding: 0px; /* Sửa lỗi thiếu khoảng trắng */
     background-color: transparent
@@ -418,4 +416,16 @@ color: #ffffff; /* Màu chữ cân bằng giữa sáng và tối */
 .search{
 height: 80%;
 width: 50%;
+}
+.col-md-4 {
+    width: 15%; /* Chiều rộng mặc định */
+    margin: 0 auto; /* Căn giữa */
+    box-sizing: border-box; /* Đảm bảo padding không làm tăng chiều rộng */
+}
+
+/* Áp dụng chiều rộng 15% cho màn hình có chiều rộng từ 768px trở lên */
+@media (min-width: 768px) {
+    .col-md-4 {
+        width: 100%;
+    }
 }

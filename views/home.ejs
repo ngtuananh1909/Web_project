@@ -24,8 +24,7 @@
               <div class="search-input-wrapper position-relative" id="searchContainer">
                 <input
                   class="form-control search-input"
-                  type="search"
-                  placeholder="Tìm kiếm sản phẩm..."
+                  placeholder="Tìm kiếm sản phẩm"
                   aria-label="Search"
                   name="query"
                   style="padding-right: 40px;"
@@ -35,9 +34,9 @@
                   <img src="img/search.png" alt="search icon" style="height: 30px; width: 30px;">
                 </button>
                 <!-- Nút cancel để ẩn thanh search -->
-                <i class="fas fa-times cancel-btn position-absolute" id="cancelIcon" style="top: 50%; transform: translateY(-50%); ">
-                  <img src="img/x.png" alt="" style="height: 30px;width: 30px;">
-                </i>
+                <!-- <i class="fas fa-times cancel-btn position-absolute" id="cancelIcon" style="top: 50%; transform: translateY(-50%); ">
+                  <img src="img/x.png" alt="" style="height: 30px;width: 30px;margin-right:;">
+                </i> -->
               </div>
             </form>
             
@@ -90,9 +89,9 @@
                     <li><hr class="dropdown-divider" /></li>
                     <li class="nav-item">
                       <div class="d-flex align-items-center px-3 py-2">
-                        <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
-                        <label class="switch">
-                          <input type="checkbox" id="toggle-dark-mode">
+                        <label class="change-mode" for="toggle-dark-mode" id="mode-label">Light</label>
+                        <label class="switch" style="margin-left: 50%;">
+                          <input type="checkbox" id="toggle-dark-mode" >
                           <span class="slider round"></span>
                         </label>
                       </div>
@@ -174,7 +173,7 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="card mb-3">
-                  <img src="" class="card-img-top" alt="Sản phẩm" />
+                  <h2 style="margin-left: 40%;">Sản phẩm</h2>
                   <div class="card-body">
                     <h3 class="card-title">Tên sản phẩm</h3>
                     <p class="card-text">Mô tả ngắn về sản phẩm.</p>
@@ -185,7 +184,7 @@
               </div>
               <div class="col-md-6">
                 <div class="card mb-3">
-                  <img src="" class="card-img-top" alt="Khuyến mãi" />
+                  <h2 style="margin-left: 40%;">Khuyến mãi</h2>
                   <div class="card-body">
                     <h3 class="card-title">Tên chương trình khuyến mãi</h3>
                     <p class="card-text">Chi tiết chương trình khuyến mãi.</p>
