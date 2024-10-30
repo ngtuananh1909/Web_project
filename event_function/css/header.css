@@ -296,3 +296,8 @@ height: 30px;
     margin: 0 0px;
   }
 }
+@media (max-width: 700px) {
+  .responsive-margin {
+    margin-left: 25%;
+  }
+}
