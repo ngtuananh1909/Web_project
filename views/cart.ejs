@@ -7,7 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Shopping Cart</title>
     </head>
@@ -214,143 +213,8 @@
                 </form>              
         </div>
       </section>
-      <div style="position: fixed; bottom: 0; right: 0; width: 150px; z-index: 1000; background-color: transparent; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
-        <div id="chat-header" style="background-color: #007bff; color: white; padding: 10px; cursor: pointer; width: 70px; margin-left:78px ;">
-            <img src="/img/mesage.png" alt="" style="height: 30px; width: 30px; margin-left: 10px;" >
-        </div>
-        <div id="chat-body" style="display: none; padding: 10px;">
-          <div id="close-chat" style="cursor: pointer; color: red; margin-left: 460px; margin-top: -10px;">&times;</div> <!-- Nút đóng -->
-          <div style="position: absolute; top: 5px; left: 20px;font-size: 30px;">Chat</div>
-          
-          <div style="margin-top: 10px;"></div>
-          
-          <div style="display: flex;">
-            <div class="row" style="width: 220px; height: 440px; overflow-y: scroll;">
-              <% for (let i = 0; i < 5; i++) { %>
-                <div style="margin-left: 8px; width: 190px; height: 80px; background-color: #007bff; border: 1px solid #ccc; margin-top: 15px; display: block;"></div>
-              <% } %>
-              <div style="margin-bottom: 60px;"></div>
-            </div>
-            <div style="width: 270px; height: 400px; background-color: #ffffff; z-index: 1; margin-left: 20px;"></div>
-          
-          </div>
-        </div>
-
-    </div> 
   </body>
-  <script>
-function formatCurrency(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "); 
-}
-let selectedProducts = []
-function calculateTotal() {
-    var total = 0;
-    const quantities = document.querySelectorAll('.quantity');
-    selectedProducts = []; 
-
-    document.querySelectorAll('input.product-checkbox').forEach((checkbox, index) => {
-        if (checkbox.checked) {
-            const quantityInput = quantities[index];
-            if (quantityInput) {
-                const price = parseFloat(quantityInput.getAttribute('data-price')) || 0;
-                const qty = parseInt(quantityInput.value) || 0;
-
-                // Cập nhật selectedProducts với thông tin mong muốn
-                selectedProducts.push({
-                    id: quantityInput.getAttribute('id'),  // product.id
-                    quantity: qty,
-                    name: quantityInput.getAttribute('data-name'), // Cần thêm data-name cho input
-                    image: quantityInput.getAttribute('data-image'), // Cần thêm data-image cho input
-                    price: price
-                });
-
-                total += qty * price;
-            }
-        }
-    });
-
-    document.getElementById('totalAmount').textContent = formatCurrency(total) + " VNĐ";
-    document.getElementById('selectedProducts').value = JSON.stringify(selectedProducts);
-    return selectedProducts; 
-}
-
-// Đảm bảo gọi calculateTotal khi checkbox thay đổi
-function addEventListeners() {
-    document.querySelectorAll('.quantity').forEach(input => {
-        input.addEventListener('change', calculateTotal);
-        input.addEventListener('input', calculateTotal);
-    });
-
-    document.querySelectorAll('input.product-checkbox').forEach(checkbox => {
-        checkbox.addEventListener('change', calculateTotal);
-    });
-}
-
-// Gọi addEventListeners khi DOM đã sẵn sàng
-document.addEventListener('DOMContentLoaded', () => {
-    addEventListeners(); // Gán sự kiện cho các input và checkbox
-    calculateTotal(); // Tính toán tổng ban đầu
-    console.log(selectedProducts);
-});
-  </script>
-  <script>
-    document.querySelectorAll('.quantity').forEach(input => {
-    input.addEventListener('input', function() {
-        const maxQuantity = parseInt(this.getAttribute('max'));
-        const enteredValue = parseInt(this.value);
-
-        // Kiểm tra giá trị hợp lệ
-        if (isNaN(enteredValue)) {
-            this.value = '';
-            return; // Dừng lại nếu không phải là số
-        }
-
-        // Nếu giá trị nhập vào lớn hơn giá trị tối đa
-        if (enteredValue > maxQuantity) {
-            this.value = maxQuantity; // Đặt lại giá trị
-            Swal.fire({
-                icon: 'warning',
-                title: 'Cảnh báo!',
-                text: `Số lượng tối đa là ${maxQuantity}`,
-                confirmButtonText: 'OK'
-            });
-        }
-    });
-});
-  </script>
-  <script>
-function validateCheckout(event, userId) {
-    event.preventDefault();
-    const selectedProducts = JSON.parse(document.getElementById('selectedProducts').value);
-
-    const hasSelectedProducts = selectedProducts.some(product => product.quantity > 0);
-
-    if (hasSelectedProducts) {
-        // Tạo một form tạm thời để gửi dữ liệu
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = `/payment/option/t/${userId}`;
-        form.style.display = 'none';
-
-        // Thêm selectedProducts vào form
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'selectedProducts';
-        input.value = JSON.stringify(selectedProducts);
-        form.appendChild(input);
-
-        document.body.appendChild(form);
-        form.submit(); // Gửi form
-    } else {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Cảnh báo!',
-            text: 'Vui lòng chọn sản phẩm với số lượng lớn hơn 0.',
-            confirmButtonText: 'OK'
-        });
-    }
-}
-  </script>
+  <script src="warning.js"></script>
   <script src="darkmode.js"></script>
   <script src="delete.js"></script>
   <script src="chat.js"></script>
