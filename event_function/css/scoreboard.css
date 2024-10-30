@@ -58,7 +58,7 @@
 
 .card:hover {
     transform: translateY(-10px) scale(1.03);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 15px 30px rgba(255, 255, 255, 0.2);
 }
 
 /* Định dạng cho các thẻ card sản phẩm với lớp product-card */
@@ -426,3 +426,42 @@ width: 50%;
     top: 10px;
     left: 10px;
   }
+
+  /* Mặc định cho màn hình lớn hơn 1200px */
+.btn {
+    font-size: 1rem; /* Kích thước chữ tiêu chuẩn */
+    padding: 10px 12px;
+  }
+  
+  /* Màn hình từ 992px đến 1199px (Tablet và Laptop nhỏ) */
+  @media (max-width: 1199px) {
+    .btn {
+      font-size: 0.85rem; /* Giảm nhẹ kích thước */
+      padding: 8px 10px;
+    }
+  }
+  
+  /* Màn hình từ 768px đến 991px (Tablet dọc) */
+  @media (max-width: 991px) {
+    .btn {
+      font-size: 0.8rem;
+      padding: 7px 9px;
+    }
+  }
+  
+  /* Màn hình từ 576px đến 767px (Điện thoại lớn) */
+  @media (max-width: 767px) {
+    .btn {
+      font-size: 0.8rem; /* Giảm thêm cho điện thoại lớn */
+      padding: 6px 8px;
+    }
+  }
+  
+  /* Màn hình nhỏ hơn 576px (Điện thoại nhỏ) */
+  @media (max-width: 575px) {
+    .btn {
+      font-size: 0.78rem; /* Giảm tối đa cho điện thoại nhỏ */
+      padding: 5px 6px;
+    }
+  }
+  

@@ -27,8 +27,7 @@
               <div class="search-input-wrapper position-relative" id="searchContainer">
                 <input
                   class="form-control search-input"
-                  type="search"
-                  placeholder="Tìm kiếm sản phẩm..."
+                  placeholder="Tìm kiếm sản phẩm"
                   aria-label="Search"
                   name="query"
                   style="padding-right: 40px;"
@@ -38,16 +37,16 @@
                   <img src="img/search.png" alt="search icon" style="height: 30px; width: 30px;">
                 </button>
                 <!-- Nút cancel để ẩn thanh search -->
-                <i class="fas fa-times cancel-btn position-absolute" id="cancelIcon" style="top: 50%; transform: translateY(-50%); ">
-                  <img src="img/x.png" alt="" style="height: 30px;width: 30px;">
-                </i>
+                <!-- <i class="fas fa-times cancel-btn position-absolute" id="cancelIcon" style="top: 50%; transform: translateY(-50%); ">
+                  <img src="img/x.png" alt="" style="height: 30px;width: 30px;margin-right:;">
+                </i> -->
               </div>
             </form>
             
           </div>
           <div class="col-md-4 col-6">
             <nav class="nav justify-content-end">
-              <ul class="nav d-flex align-items-center" style="gap: 10px; flex-wrap: nowrap;">
+              <ul class="nav d-flex align-items-center" style=" flex-wrap: nowrap;">
                 <li class="nav-item me-1">
                   <a class="nav-link home" href="/">
                     <img src="/img/home.png" alt="home icon" class="home-icon" style="width: 25px; height: 25px;">
@@ -84,7 +83,7 @@
                     <img src="./img/def.jpg" class="avatar me-1" alt="default avatar" style="width: 30px; height: 30px;" />
                     <% } %>
                   </a>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" style="margin-left: -310%;">
                     <li>
                       <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
                     </li>
@@ -93,9 +92,9 @@
                     <li><hr class="dropdown-divider" /></li>
                     <li class="nav-item">
                       <div class="d-flex align-items-center px-3 py-2">
-                        <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
-                        <label class="switch">
-                          <input type="checkbox" id="toggle-dark-mode">
+                        <label class="change-mode" for="toggle-dark-mode" id="mode-label">Light</label>
+                        <label class="switch" style="margin-left: 50%;">
+                          <input type="checkbox" id="toggle-dark-mode" >
                           <span class="slider round"></span>
                         </label>
                       </div>
@@ -118,71 +117,71 @@
         </div>
       </div>
     </header>
-    <h1 class="text-center top">LIST TOP PRODUCT</h1>
-<div class="container mt-4">
-  <div class="row g-3"> <!-- Giảm khoảng cách giữa các sản phẩm -->
-    <% products.forEach((product, index) => { %>
-      <div class="col-6 col-md-4 col-lg-3"> <!-- Điều chỉnh số cột tùy theo màn hình -->
-        <div class="card product-card ">
-          <% if (index === 0) { %> 
-            <img src="/img/top 1.png" alt="Top 1" class="medal-overlay" style="height: 80px; width: 50px;">
-          <% } else if (index === 1) { %> 
-            <img src="/img/top 2.png" alt="Top 2" class="medal-overlay" style="height: 80px; width: 50px;">
-          <% } else if (index === 2) { %> 
-            <img src="/img/top 3.png" alt="Top 3" class="medal-overlay" style="height: 80px; width: 50px;">
-          <% } else { %>
-            <li class="num" style="height: 80px; width: 50px;">
-              <a><p><%= index + 1 %></p></a>
-            </li>
-          <% } %>
+    <center><h1 class="text-center top">LIST TOP PRODUCT</h1></center>
+    <div class="container mt-4">
+      <div class="row g-3"> <!-- Giảm khoảng cách giữa các sản phẩm -->
+        <% products.forEach((product, index) => { %>
+          <div class="col-6 col-md-4 col-lg-3"> <!-- Điều chỉnh số cột tùy theo màn hình -->
+            <div class="card product-card" style="height: 100;">
+              <% if (index === 0) { %> 
+                <img src="/img/top 1.png" alt="Top 1" class="medal-overlay" style="height: 80px; width: 50px;">
+              <% } else if (index === 1) { %> 
+                <img src="/img/top 2.png" alt="Top 2" class="medal-overlay" style="height: 80px; width: 50px;">
+              <% } else if (index === 2) { %> 
+                <img src="/img/top 3.png" alt="Top 3" class="medal-overlay" style="height: 80px; width: 50px;">
+              <% } else { %>
+                <li class="num" style="height: 80px; width: 50px;">
+                  <a><p><%= index + 1 %></p></a>
+                </li>
+              <% } %>
 
-          <a href="/product/<%= product.id %>">
-            <img 
-              src="<%= product.image ? ('uploads/' + product.image) : '/img/cart-def.png' %>" 
-              class="card-img-top" 
-              alt="Product Image" 
-              onerror="this.onerror=null; this.src='/img/cart-def.png';"
-            />
-          </a>
-
-          <div class="card-body">
-            <h5 class="card-title"><%= product.name %></h5> <!-- Giảm kích thước chữ -->
-            <% if (product.sale) { %>
-              <p class="card-text">
-                Giá: <%= formatCurrency((product.price - (product.price * product.saleval / 100)).toFixed(0)) %> VNĐ
-                <del> <%= formatCurrency(product.price) %> VNĐ</del>
-                <span class="badge bg-danger ms-2">-<%= product.saleval %>%</span>
-              </p>
-            <% } else { %>
-              <p class="card-text">Giá: <%= formatCurrency(product.price) %> VNĐ</p>
-            <% } %>
-
-            <p class="card-text">Ngày tạo: <%= product.formatted_date %></p>
-            <p class="card-text">Creator: <%= product.creator %></p>
-
-            <div class="d-flex">
-              <a href="/product/<%= product.id %>" class="btn btn-success me-2 w-100">
-                Thông tin sản phẩm
+              <a href="/product/<%= product.id %>">
+                <img 
+                  src="<%= product.image ? ('uploads/' + product.image) : '/img/cart-def.png' %>" 
+                  class="card-img-top" 
+                  alt="Product Image" 
+                  onerror="this.onerror=null; this.src='/img/cart-def.png';"
+                />
               </a>
-              <button
-                type="button"
-                class="btn btn-primary rounded addToCartBtn ms-2"
-                data-product-id="<%= product.id %>"
-              >
-                Thêm vào giỏ
-              </button>
+
+              <div class="card-body">
+                <h5 class="card-title"><%= product.name %></h5> <!-- Giảm kích thước chữ -->
+                <% if (product.sale) { %>
+                  <p class="card-text">
+                    Giá: <%= formatCurrency((product.price - (product.price * product.saleval / 100)).toFixed(0)) %> VNĐ
+                    <del> <%= formatCurrency(product.price) %> VNĐ</del><br>
+                    <span class="badge bg-danger ms-2">-<%= product.saleval %>%</span>
+                  </p>
+                <% } else { %>
+                  <p class="card-text">Giá: <%= formatCurrency(product.price) %> VNĐ</p>
+                <% } %>
+
+                <p class="card-text">Ngày tạo: <%= product.formatted_date %></p>
+                <p class="card-text">Creator: <%= product.creator %></p>
+
+                <div class="d-flex">
+                  <a href="/product/<%= product.id %>" class="btn btn-success me-2 w-100">
+                    Thông tin sản phẩm
+                  </a>
+                  <button
+                    type="button"
+                    class="btn btn-primary rounded addToCartBtn ms-2"
+                    data-product-id="<%= product.id %>"
+                  >
+                    Thêm vào giỏ
+                  </button>
+                </div>
+              </div>
+
+              <span
+                class="badge bg-primary rounded-pill position-absolute"
+                style="top: 10px; right: 10px"
+              ><%= product.sold %></span>
             </div>
           </div>
-
-          <span
-            class="badge bg-primary rounded-pill position-absolute"
-            style="top: 10px; right: 10px"
-          ><%= product.sold %></span>
-        </div>
+        <% }); %>
       </div>
-    <% }); %>
-  </div>
-</div>
+    </div>
 
 
   </body>

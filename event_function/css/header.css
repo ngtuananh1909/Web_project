@@ -4,41 +4,37 @@
     z-index: 1000;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-@media (max-width: 768px) {
-    .search {
-      display: none; /* Ẩn thanh tìm kiếm trên màn hình nhỏ */
-    }
-  }
   .nav-item {
     margin-right: 0px; /* Đảm bảo khoảng cách hợp lý giữa các icon */
   }
   .header-design h1 a {
       margin-left: 50%; /* Giữ nguyên margin-left cho màn hình lớn */
+      gap: 10px;
   }
   @media (max-width: 1200px) {
       .header-design h1 a {
           margin-left: 8%; /* Giảm margin-left cho màn hình nhỏ hơn 1200px */
-          gap: 1px;
+          gap: 0px;
       }
   }
 
   @media (max-width: 992px) {
       .header-design h1 a {
-          margin-left: 5%; /* Giảm thêm margin-left cho màn hình nhỏ hơn 992px */
-          gap: 1px;
+          margin-left: 1%; /* Giảm thêm margin-left cho màn hình nhỏ hơn 992px */
+          gap: 9px;
       }
   }
 
   @media (max-width: 768px) {
       .header-design h1 a {
-          margin-left: 10%; /* Giảm thêm margin-left cho màn hình nhỏ hơn 768px */
-          gap: 1px;
+          margin-left: 1%; /* Giảm thêm margin-left cho màn hình nhỏ hơn 768px */
+          gap: 2px;
       }
   }
 
-  @media (max-width: 576px) {
+  @media (max-width: 100px) {
       .header-design h1 a {
-          margin-left: 1%; /* Giảm margin-left cho màn hình nhỏ hơn 576px */
+          margin-left: 0.1%; /* Giảm margin-left cho màn hình nhỏ hơn 576px */
           gap: 1px;
       }
   }
@@ -70,18 +66,10 @@
   /* Màn hình nhỏ hơn 576px */
   @media (max-width: 576px) {
     .nav.d-flex.align-items-center {
-      margin-right: -20%;
+      margin-right: -10%;
     }
   }
-  .search-input-wrapper {
-    position: relative;
-    width: 100%;
-  }
 
-  .search-input {
-    width: 100%;
-    padding-right: 40px; /* Tạo khoảng trống cho icon */
-  }
 
   .search-icon {
     position: absolute;
@@ -122,39 +110,7 @@
     transform: translateY(-50%);
     cursor: pointer;
   }
-
-  /* Media query để ẩn search input trên màn hình nhỏ */
-  @media (max-width: 768px) {
-    .search-input-wrapper {
-      width: auto;
-    }
-
-    .search-input {
-      width: 0;
-      opacity: 0;
-      visibility: hidden;
-      padding-right: 0;
-    }
-
-    .search-active .search-input {
-      width: 100%;
-      opacity: 1;
-      visibility: visible;
-      padding-right: 40px;
-    }
-
-    .search-active .cancel-btn {
-      display: block;
-    }
-  }
-  .search-input-wrapper {
-    position: relative;
-  }
   
-  .search-input {
-    width: 100%;
-    padding-right: 50px; /* Tạo không gian cho nút search */
-  }
   
   .search-button {
     position: absolute;
@@ -276,3 +232,67 @@ height: 30px;
     border-radius: 50%;
     object-fit: cover;
   }
+
+/* Default styles for the search input */
+.search-wrapper {
+  flex-grow: 1; /* Allow the search bar to grow */
+}
+
+/* Media query for screen sizes 700px and below */
+@media (max-width: 700px) {
+  .search-wrapper {
+      display: flex; /* Keep the wrapper visible */
+      justify-content: center; /* Center the icon */
+  }
+
+  .search-wrapper button {
+      padding: 0; /* Adjust padding for the button */
+  }
+
+}
+
+/* Styles for larger screens */
+@media (min-width: 701px) {
+  .search-input {
+      width: 100%; /* Full width on larger screens */
+  }
+}
+/* Default styles for the search input */
+.search-wrapper {
+  flex-grow: 1; /* Allow the search bar to grow */
+}
+
+/* Media query for screen sizes 700px and below */
+@media (max-width: 700px) {
+  .search-wrapper {
+      display: flex; /* Keep the wrapper visible */
+  }
+
+
+  .search-wrapper button {
+      padding: 0; /* Adjust padding for the button */
+  }
+}
+
+/* Styles for larger screens */
+@media (min-width: 701px) {
+  .search-input {
+      width: 100%; /* Full width on larger screens */
+  }
+}
+/* Default styles for the navbar */
+#navbar {
+  justify-content: space-between; /* This centers the items in larger screens */
+}
+
+/* Media query for screens 770px and below */
+@media (max-width: 770px) {
+  #navbar {
+    justify-content: center; /* Centers all icons */
+    flex-wrap: wrap; /* Allow items to wrap in case of small screen */
+  }
+  
+  .nav-item {
+    margin: 0 0px;
+  }
+}

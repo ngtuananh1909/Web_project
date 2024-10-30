@@ -212,10 +212,7 @@
       padding: 5px; /* Khoảng cách bên trong */
       margin: 5px 0; /* Khoảng cách giữa các ô tin nhắn */
   }
-  .search{
-    height: 80%;
-    width: 50%;
-  }
+  
   .button-search {
     background: linear-gradient(to right, #6a11cb, #2575fc); /* Nền gradient màu tím xanh */
     color: #ffffff; /* Màu chữ trắng */
@@ -298,6 +295,7 @@
     font-weight: 500; /* Tăng độ đậm của chữ */
     color: #ffffff; /* Màu chữ cân bằng giữa sáng và tối */
   }
+  
 
   
   
