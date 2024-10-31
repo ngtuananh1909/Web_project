@@ -51,13 +51,17 @@
     object-fit: cover;
   }
 
-  .custom {
-    display: flex;
-  }
 
   .preview {
-    width: 400px;
+    width: 650px;
   }
+  @media (max-width: 1000px) { 
+    .preview {
+      width: 250px;
+    }
+
+  }
+  
 
   #preview-name, #preview-description {
     word-wrap: break-word;
@@ -78,10 +82,6 @@
     background-color: rgb(48, 48, 48);
   }
   
-
-  body {
-    background-color: #eeeeee54;
-  }
   
   .history-group {
     width: 400px;
@@ -148,7 +148,7 @@
       flex: 1;
     }
   /* Chế độ sáng (mặc định) */
-  body {
+    body {
       background-color: #F5EFFF;
       color: #000;
       transition: background-color 0.3s ease, color 0.3s ease;
@@ -185,6 +185,8 @@
       background-color: #666666fd; /* Màu nền tối cho header */
       color: white;
       transition: background-color 0.3s ease, color 0.3s ease;
+      width: 100%;
+      max-width: 2000px;
     }
     .text-decoration-none{
       color: black;
@@ -234,11 +236,49 @@
     }
     .table{
       background-color: white;
+      color: black;
+      display: flex; 
+      gap: 20px;
     }
     .dark-mode .table{
       background-color: rgb(49, 49, 49);
       color: white;
+      display: flex; 
     }
+    
+    @media (max-width: 1880px) {
+      .table {
+          display: flex;
+          flex-direction: column;
+          align-items: center; /* Căn giữa theo chiều ngang */
+          justify-content: center; /* Căn giữa theo chiều dọc */
+          width: 149%;
+          max-width: 2000px; /* Đặt kích thước tối đa để giới hạn chiều rộng */
+          box-sizing: border-box;
+      }
+  
+      /* Điều chỉnh các phần tử con nếu cần */
+      .preview, .add, .form-container {
+          width: 30%; /* Đảm bảo mỗi phần tử chiếm 100% chiều rộng khi xuống dòng */
+      }
+  
+      /* Thêm khoảng cách giữa các phần tử khi xuống dòng */
+      .preview, .add, .form-container {
+          margin-bottom: 20px;
+      }
+  }
+  
+  @media (max-width: 1300px) {
+      .preview, .add, .form-container {
+          width: 90%; /* Mỗi phần tử chiếm 90% chiều rộng khi màn hình nhỏ */
+          max-width: 100%; /* Đảm bảo không vượt quá 100% */
+      }
+  
+      .table {
+          padding: 10px; /* Thêm khoảng đệm cho bảng */
+      }
+  }
+  
     .form-group{
       color: #000;
       background-color: white;
@@ -257,11 +297,19 @@
     }
 
     #editor {
-      height: auto; /* Thay đổi chiều cao */
-      width: 670px; /* Thay đổi chiều rộng */
+      height: 250px !important;
+      width: 670px !important;
       color: #000;
       background-color: white;
     }
+    
+    @media (max-width: 2000px) {
+      #editor {
+        height: 300px !important;
+        width: 470px !important;
+      }
+    }
+    
     .dark-mode #editor {
       height: auto; /* Thay đổi chiều cao */
       width: 670px; /* Thay đổi chiều rộng */
@@ -370,4 +418,107 @@
     .cropper-container {
       margin-top: 10px;
   }
+  .form-container,
+  .preview {
+    vertical-align: top;
+  }
+  
+  /* Khi màn hình có chiều rộng nhỏ hơn 800px */
+  .add{
+    margin-left: 4%; 
+  }
+  @media (max-width: 970px) { 
+    .add{
+      margin-left: -23%;
+    }
+
+  }
+  @media (max-width: 1000px) { 
+    .add{
+      margin-left: -25%;
+    }
+
+  }
+  .form-group {
+    margin: 0 auto; /* Căn giữa form */
+    margin-bottom: 20px;
+    max-width: 800px; /* Giới hạn độ rộng tối đa */
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  .ql-toolbar.ql-snow {
+    width: 100%; /* Chiếm toàn bộ chiều rộng của parent */
+    max-width: 1000px; /* Đặt giới hạn tối đa để tránh quá rộng */
+    box-sizing: border-box;
+  }
+  
+  /* Đảm bảo form hiển thị tốt trên màn hình nhỏ */
+  @media (max-width: 2000px) {
+    .ql-toolbar.ql-snow {
+      width: 93.5%; /* Chiếm toàn bộ chiều rộng của parent */
+      max-width: 1000px; /* Đặt giới hạn tối đa để tránh quá rộng */
+      box-sizing: border-box;
+    }
+  }
+  .class_preview{
+    width: 550px; 
+    height: 850px; 
+    border: 2px solid #7b7b7b;
+  }
+  .add h1 {
+    margin-left: 20%;
+  }
+  @media (max-width: 2000px) {
+    .add h1 {
+      margin-left: 40%;
+    }
+    .add {
+      justify-content: center;
+      padding: 0 20px;
+    }
+    .class_preview{
+      width: 500px; 
+      height: 750px; 
+      border: 2px solid #7b7b7b;
+    }
+  }
+  .add .form-control {
+    width: 100%; /* Chiếm toàn bộ chiều rộng */
+    margin-left: 0; /* Đưa về lề trái */
+  }
+  .add .button-submit {
+    width: 100%;
+  }
+  .name_price{
+    width: 650px;
+    height: auto;
+    background-color: transparent;
+  }
+  
+  /* Căn giữa các phần tử khi chiều rộng nhỏ hơn hoặc bằng 2000px */
+/* Bổ sung phong cách tùy chỉnh khác */
+.alpha {
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.product-card {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.button-input {
+  padding: 10px;
+  font-size: 16px;
+}
+
+.button-submit {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+
+
   

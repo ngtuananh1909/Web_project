@@ -98,18 +98,10 @@
         </div>
       </div>
     </header>
-    <div class="custom table">
-      <div class="preview" style="margin-left: 10px;">
-        <!-- Thêm vào phần preview -->
-        <div class="cropper-container" style="display: none;">
-          <h2>Crop Image</h2>
-          <div id="cropper-area">
-            <img id="cropper-image" src="" alt="Image for Cropping" />
-          </div>
-          <button id="crop-button" class="btn btn-primary">Crop and Save</button>
-        </div>
-        <h2 class="alpha">Product Preview</h2>
-        <div class="card product-card" style="width: 650px; height: 650px; border: 2px solid #7b7b7b;">
+    <div class="table" >
+      <div class="preview">
+        <h2 class="alpha" style="text-align: center;">Product Preview</h2>
+        <div class="card product-card class_preview">
           <img id="preview-image" class="card-img-top" src="" alt="Product Image">
           <div class="card-body info">
             <h3 id="preview-name" class="card-title alpha">Name</h3>
@@ -120,56 +112,49 @@
           </div>
         </div>
       </div>
-      <div class="form-container" style="margin-left: 75px;">
-        <h1 style="margin-left: 350px;">Add New Product</h1>
-        <form id="product-form" action="/product/auth/add" method="POST" enctype="multipart/form-data">
-          <!-- Tên sản phẩm -->
-          <div class="form-group" style="margin-left: 200px; margin-top: 30px;">
-            <input type="text" id="name" name="name" class="form-control button-input" style="border: 2px solid #7b7b7b; margin-left: 4px; margin-top: -10px;" required placeholder="Product name">
-          </div>
+      <div class="add">
+        <h1>Add New Product</h1>
+        <form id="product-form" action="/product/auth/add" method="POST" enctype="multipart/form-data" style="margin-top: 5%;">
+          <div class="name_price" style="display: flex;background-color: transparent;gap: 20px;">
+            <!-- Tên sản phẩm -->
+            <input type="text" id="name" name="name" class="form-control button-input" style="border: 2px solid #7b7b7b; margin-bottom: 6%; width: 45%;" required placeholder="Product name">
         
-          <!-- Giá sản phẩm -->
-          <div class="form-group " style="margin-left: 550px; margin-top: -147px;">
-            <input type="number" id="price" name="price" class="form-control button-input" step="100" style="border: 2px solid #7b7b7b;" required min="100" placeholder="Enter Price">
+            <!-- Giá sản phẩm -->
+            <input type="number" id="price" name="price" class="form-control button-input" step="100" style="border: 2px solid #7b7b7b; width: 45%; margin-bottom: 6%;" required min="100" placeholder="Enter Price">
           </div>
+          
+      
+          <div class="name_price" style="display: flex;background-color: transparent;gap: 20px;">
+            <!-- Số lượng sản phẩm -->
+            <input type="number" id="quantity" name="quantity" class="form-control button-input" style="border: 2px solid #7b7b7b; width: 45%; margin-bottom: 6%;" required min="1" placeholder="Enter quantity">
         
-          <!-- Số lượng sản phẩm -->
-          <div class="form-group alpha" style="margin-left: 552px; margin-top: -67px;">
-            <input type="number" id="quantity" name="quantity" class="form-control button-input" style="border: 2px solid #7b7b7b;" required min="1" placeholder="Enter quantity">
+            <!-- Hình ảnh sản phẩm -->
+            <input type="file" id="image" name="image" multiple class="form-control button-input" style="height: 50px; width: 45%; margin-bottom: 6%;" accept="image/*" required>
           </div>
-        
-          <!-- Hình ảnh sản phẩm -->
-          <div class="form-group alpha" style="margin-top: -147px; margin-left: 206px; width: 300px;">
-            <input type="file" id="image" name="image" class="form-control button-input" style="height: 50px;" accept="image/*" required>
-          </div>
-
-          <div class="cropper-container" id="cropper-container" style="display: none;">
-            <h2>Crop Image</h2>
-            <div id="cropper-area">
-                <img id="cropper-image" src="" alt="Image for Cropping" />
-            </div>
-            <button id="crop-button" class="btn btn-primary">Crop and Save</button>
-          </div>
-        
+      
           <!-- Sale checkbox -->
-          <div class="form-check alpha" style="margin-left: 277px; margin-top: -80px; width: 100px; background-color: transparent; display: flex; align-items: center;">
-            <input type="checkbox" id="sale" name="sale" class="form-check-input" style="height: 1px; width: 1px; margin-right: -50px;" onclick="toggleSaleValue()">
-            <label for="sale" style="position: relative; display: inline-block; justify-content: center; width: 60px; height: 40px; border-radius: 8px; color: #1e1b1b; background-color: lightgray; text-align: center; cursor: pointer; font-size: 25px;">
+          <div class="form-check alpha" style="width: 100%; display: flex; align-items: right; margin-bottom: 6%;margin-left: 9%; background-color: transparent;">
+            <input type="checkbox" id="sale" name="sale" class="form-check-input" style="margin-right: -50px;" onclick="toggleSaleValue()">
+            <label for="sale" style="position: relative; display: inline-block; justify-content: center; width: 60px; height: 40px; border-radius: 5px; color: #1e1b1b; background-color: lightgray; text-align: center; cursor: pointer; font-size: 25px;">
               Sale
               <input type="checkbox" style="opacity: 0; position: absolute; width: 0%; height: 0%; cursor: pointer;">
             </label>
+            <div class="form-group" id="sale-value-container" style="display: none; width: 100%; background-color: transparent;">
+              <input type="number" id="saleval" name="saleval" class="form-control button-input" style="width: 100%;width: 100px; margin-bottom: -10%;margin-top: -2%;" min="1" max="99" step="1" placeholder="% Sale">
+            </div>
           </div>
       
-          <div class="form-group" id="sale-value-container" style="display: none; margin-left: 286px; margin-top: -58px; height: auto; width: auto; background-color: transparent;">
-            <input type="number" id="saleval" name="saleval" class="form-control button-input" style="height: auto; width: auto;" min="1" max="99" step="1" placeholder="% Sale">
-          </div>
-          <div class="form-group" style="margin-left: 195px; margin-bottom: 100px;">
-            <div id="editor" style="height: 200px;"></div>
+          
+      
+          <div class="form-group" style="width: 100%; margin-bottom: 6%;">
+            <div id="editor"></div>
             <input type="hidden" id="description" name="description">
           </div>
-          <button type="submit" class="btn btn-success button-submit" style="margin-top: -25px; margin-left: 510px; width: 350px; background-color: #2897f8;">Add Product</button>
+      
+          <button type="submit" class="btn btn-success button-submit" style="width: 100%; background-color: #2897f8;">Add Product</button>
         </form>
       </div>
+      
 
       
       <div class="form-container " style="margin-left: 10px;">
