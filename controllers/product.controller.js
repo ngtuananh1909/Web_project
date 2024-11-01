@@ -3,85 +3,76 @@ const { ProductIDGenerator } = require('../event_function/function');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
-const { Mutex } = require('async-mutex'); 
+const openai = require('openai');
+const sharp = require('sharp');
+const { Mutex } = require('async-mutex');
+const mutex = new Mutex();
 
-const mutex = new Mutex(); 
+openai.apiKey = process.env.OPENAI_API_KEY; 
+async function loadModel() {
+    const yolo = await import('tfjs-yolo-tiny'); 
+    const model = await yolo.downloadModel();
+    return model;
+}
+
+let yoloModel;
+loadModel().then(model => {
+    yoloModel = model;
+    console.log("Model loaded successfully");
+}).catch(err => {
+    console.error("Error loading YOLO model:", err);
+});
+
+async function detectObjectsYOLO(imagePath) {
+    const sharpImage = await sharp(imagePath).resize(416, 416).toBuffer();
+    const boxes = await yoloModel(sharpImage);
+    const keywords = boxes.map(box => box.className);
+    return keywords;
+}
 
 exports.CreateProduct = async (req, res) => {
-    if (!req.session.user) {
-        return res.render('add_product', {
-            message: 'You have to login/register to Create Product',
-            redirect: true
-        });
-    }
-
-    if (!req.files || !req.files.image) {
-        return res.status(400).send('Please upload an image');
-    }
-
-    const imageFile = req.files.image;
-    const allowedFileTypes = /jpeg|jpg|png|gif/;
-    const mimetype = allowedFileTypes.test(imageFile.mimetype);
-    const extname = allowedFileTypes.test(path.extname(imageFile.name).toLowerCase());
-
-    if (!mimetype || !extname) {
-        return res.status(400).send('Only images are allowed');
-    }
-
-    const { name, description, price, quantity, sale, saleval } = req.body;
-    if (!name || !description || !price || !quantity) {
-        return res.status(400).send('All fields are required');
-    }
-    const salevalNum = saleval && !isNaN(saleval) ? parseInt(saleval) : 0;
-    const salebool = sale ? 1 : 0;
-    const creator = req.session.user.name;
+    const { name, description, price, quantity, creator, sale, saleval } = req.body;
     const userID = req.session.user.id;
-    const createdAt = new Date();
-
+    const imageFile = req.files.image;
+    const productId = ProductIDGenerator(); 
+    const uploadPath = path.join(__dirname, '../public/uploads', `${productId}_${Date.now()}_${imageFile.name}`);
+    
     try {
-        const productId = await ProductIDGenerator();
-        
-        const productDir = path.join(__dirname, '../public/uploads');
-        
-        if (!fs.existsSync(productDir)) {
-            fs.mkdirSync(productDir, { recursive: true });
-        }
-        const imageName = `${productId}_${Date.now()}_${imageFile.name}`;
-        const uploadPath = path.join(productDir, imageName);
-
-        await mutex.runExclusive(() => {
-            return new Promise((resolve, reject) => {
-                imageFile.mv(uploadPath, (err) => {
-                    if (err) {
-                        console.error('Error uploading image:', err);
-                        return reject(new Error('Error uploading image'));
-                    }
+        await mutex.runExclusive(async () => {
+            await new Promise((resolve, reject) => {
+                imageFile.mv(uploadPath, err => {
+                    if (err) reject(new Error('Error uploading image'));
                     resolve();
                 });
             });
+        });
+
+        const keywords = await detectObjectsYOLO(uploadPath);
+        const descriptionAiResponse = await openai.Completion.create({
+            model: "text-davinci-003",
+            prompt: `Viết mô tả sản phẩm dựa trên hình ảnh với từ khóa: ${keywords.join(', ')}.`,
+            max_tokens: 150,
         });
 
         const newProduct = {
             id: productId,
             name,
             description,
+            description_ai: descriptionAiResponse.choices[0].text.trim(),
             price,
             quantity,
-            image: [imageName],
+            image: imageFile.name,
             creator,
             creator_id: userID,
-            sale: salebool,
-            saleval: salevalNum,
+            sale: sale === "true",
+            saleval: parseFloat(saleval),
             sold: 0,
-            created_at: createdAt
+            created_at: new Date(),
         };
 
         const sql = 'INSERT INTO products SET ?';
-        db.query(sql, newProduct, (err) => {
-            if (err) {
-                console.error('Error creating product:', err);
-                return res.status(500).send('Error creating product');
-            }
+        db.query(sql, newProduct, err => {
+            if (err) return res.status(500).send('Error creating product');
             res.redirect(req.get("Referrer") || "/");
         });
     } catch (err) {
@@ -89,8 +80,6 @@ exports.CreateProduct = async (req, res) => {
         res.status(500).send('Error creating product');
     }
 };
-
-
 exports.AddProductDisplay = (req, res) => {
     const message = req.query.message || null;
     res.render('add_product', { user: req.session.user, message });
