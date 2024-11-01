@@ -186,7 +186,7 @@
       color: white;
       transition: background-color 0.3s ease, color 0.3s ease;
       width: 100%;
-      max-width: 2000px;
+      max-width: 40000px;
     }
     .text-decoration-none{
       color: black;
@@ -465,6 +465,7 @@
     width: 550px; 
     height: 850px; 
     border: 2px solid #7b7b7b;
+    margin-left: 20%;
   }
   .add h1 {
     margin-left: 20%;
@@ -481,6 +482,7 @@
       width: 500px; 
       height: 750px; 
       border: 2px solid #7b7b7b;
+      margin-left: -4%;
     }
   }
   .add .form-control {
