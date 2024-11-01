@@ -8,7 +8,7 @@ const sharp = require('sharp');
 const { Mutex } = require('async-mutex');
 const mutex = new Mutex();
 
-openai.apiKey = process.env.OPENAI_API_KEY; 
+openai.apiKey = process.env; 
 async function loadModel() {
     const yolo = await import('tfjs-yolo-tiny'); 
     const model = await yolo.downloadModel();
