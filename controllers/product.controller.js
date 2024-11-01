@@ -3,9 +3,9 @@ const { ProductIDGenerator } = require('../event_function/function');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
-const { Mutex } = require('async-mutex'); // Import Mutex từ async-mutex
+const { Mutex } = require('async-mutex'); 
 
-const mutex = new Mutex(); // Tạo một instance của Mutex
+const mutex = new Mutex(); 
 
 exports.CreateProduct = async (req, res) => {
     if (!req.session.user) {
@@ -43,7 +43,6 @@ exports.CreateProduct = async (req, res) => {
         
         const productDir = path.join(__dirname, '../public/uploads');
         
-        // Kiểm tra và tạo thư mục nếu chưa tồn tại
         if (!fs.existsSync(productDir)) {
             fs.mkdirSync(productDir, { recursive: true });
         }
