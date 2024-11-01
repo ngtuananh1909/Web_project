@@ -71,9 +71,9 @@
                     <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
                     <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
                     <li><hr class="dropdown-divider" /></li>
-                    <li class="nav-item">
+                    <li class="nav-item" style="margin-left: 30px;">
                       <div class="d-flex align-items-center px-3 py-2">
-                        <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
+                        <label class="change-mode" for="toggle-dark-mode" id="mode-label">Light</label>
                         <label class="switch">
                           <input type="checkbox" id="toggle-dark-mode">
                           <span class="slider round"></span>
@@ -98,9 +98,9 @@
         </div>
       </div>
     </header>
-    <div class="table" >
+    <div class="table">
       <div class="preview">
-        <h2 class="alpha" style="text-align: center;">Product Preview</h2>
+        <h2>Product Preview</h2>
         <div class="card product-card class_preview">
           <img id="preview-image" class="card-img-top" src="" alt="Product Image">
           <div class="card-body info">
@@ -108,61 +108,47 @@
             <p id="preview-price" class="card-text alpha">Price: 0 VND</p>
             <p id="preview-quantity" class="card-text alpha">Quantity: 0</p>
             <p id="preview-sale" class="card-text alpha" style="display:none;">Sale Value: 0%</p>
-            <p id="preview-description" class="card-text alpha">Decrision</p>
+            <p id="preview-description" class="card-text alpha">Description</p>
           </div>
         </div>
       </div>
+    
       <div class="add">
-        <h1>Add New Product</h1>
-        <form id="product-form" action="/product/auth/add" method="POST" enctype="multipart/form-data" style="margin-top: 5%;">
-          <div class="name_price" style="display: flex;background-color: transparent;gap: 20px;">
-            <!-- Tên sản phẩm -->
-            <input type="text" id="name" name="name" class="form-control button-input" style="border: 2px solid #7b7b7b; margin-bottom: 6%; width: 45%;" required placeholder="Product name">
-        
-            <!-- Giá sản phẩm -->
-            <input type="number" id="price" name="price" class="form-control button-input" step="100" style="border: 2px solid #7b7b7b; width: 45%; margin-bottom: 6%;" required min="100" placeholder="Enter Price">
+        <h1 class="add-product">Add New Product</h1>
+        <form id="product-form" action="/product/auth/add" method="POST" enctype="multipart/form-data">
+          <div class="name_price" style="background-color: transparent;">
+            <input type="text" id="name" name="name" class="form-control button-input nut-bam" required placeholder="Product name">
+            <input type="number" id="price" name="price" class="form-control button-input nut-bam" step="100" required min="100" placeholder="Enter Price">
           </div>
-          
-      
-          <div class="name_price" style="display: flex;background-color: transparent;gap: 20px;">
-            <!-- Số lượng sản phẩm -->
-            <input type="number" id="quantity" name="quantity" class="form-control button-input" style="border: 2px solid #7b7b7b; width: 45%; margin-bottom: 6%;" required min="1" placeholder="Enter quantity">
-        
-            <!-- Hình ảnh sản phẩm -->
-            <input type="file" id="image" name="image" multiple class="form-control button-input" style="height: 50px; width: 45%; margin-bottom: 6%;" accept="image/*" required>
+    
+          <div class="name_price" style="background-color: transparent;">
+            <input type="number" id="quantity" name="quantity" class="form-control button-input nut-bam" required min="1" placeholder="Enter quantity">
+            <input type="file" id="image" name="image" multiple class="form-control button-input nut-bam" accept="image/*" required>
           </div>
-      
-          <!-- Sale checkbox -->
-          <div class="form-check alpha" style="width: 100%; display: flex; align-items: right; margin-bottom: 6%;margin-left: 9%; background-color: transparent;">
-            <input type="checkbox" id="sale" name="sale" class="form-check-input" style="margin-right: -50px;" onclick="toggleSaleValue()">
-            <label for="sale" style="position: relative; display: inline-block; justify-content: center; width: 60px; height: 40px; border-radius: 5px; color: #1e1b1b; background-color: lightgray; text-align: center; cursor: pointer; font-size: 25px;">
-              Sale
-              <input type="checkbox" style="opacity: 0; position: absolute; width: 0%; height: 0%; cursor: pointer;">
-            </label>
-            <div class="form-group" id="sale-value-container" style="display: none; width: 100%; background-color: transparent;">
-              <input type="number" id="saleval" name="saleval" class="form-control button-input" style="width: 100%;width: 100px; margin-bottom: -10%;margin-top: -2%;" min="1" max="99" step="1" placeholder="% Sale">
+    
+          <div class="form-check alpha">
+            <input type="checkbox" id="sale" class="form-check-input sale-btn" onclick="toggleSaleValue()">
+            <label for="sale" class="sale-label" style="color: white;"><span>Sale</span></label>
+            <div class="form-group" id="sale-value-container" style="display: none;">
+              <input type="number" id="saleval" name="saleval" class="form-control button-input nut-bam" min="1" max="99" step="1" placeholder="% Sale">
             </div>
           </div>
-                
-          <div class="form-group" style="width: 100%; margin-bottom: 6%;">
+    
+          <div class="form-group">
             <div id="editor"></div>
             <input type="hidden" id="description" name="description">
           </div>
-      
-          <button type="submit" class="btn btn-success button-submit" style="width: 100%; background-color: #2897f8;">Add Product</button>
+    
+          <button type="submit" class="btn btn-success button-submit button-add">Add Product</button>
         </form>
+        <!-- Phần mới thêm vào - History -->
       </div>
+      <div class="history the"></div>
       
-
-      
-      <div class="form-container " style="margin-left: 10px;">
-        <h1>History</h1>
-          <div class="history-group ">
-              <name="history" class="form-control button-input" rows="4" required></textarea>
-          </div>
-      </div>
-
     </div>
+    
+
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <script src="/preview.js"></script>

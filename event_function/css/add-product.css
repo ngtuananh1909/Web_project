@@ -5,10 +5,13 @@
   background-color: #e2e2e2;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.dark-mode .header-design, .dark-mode .navbar, .dark-mode .card, .dark-mode .card-body.info, .dark-mode .table, .dark-mode .form-group, .dark-mode #editor, .dark-mode .button-input, .dark-mode .dropdown-menu, .dark-mode .alpha {
+.dark-mode .navbar, .dark-mode .card, .dark-mode .card-body.info, .dark-mode .table, .dark-mode .form-group, .dark-mode #editor, .dark-mode .button-input, .dark-mode .dropdown-menu, .dark-mode .alpha {
   background-color: rgb(48, 48, 48);
   color: white;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+.dark-mode .header-design{
+  background-color: rgb(100, 99, 99);
 }
 .product-card, .dark-mode .product-card {
   position: relative;
@@ -43,18 +46,50 @@
 }
 .preview {
   width: 650px;
+  margin-left: -2%;
 }
-
+.form-check .form-check-input {
+  float: left;
+  margin-left: 0.5em;
+}
 #preview-name, #preview-description, .card-body.info, .alpha, .table {
   word-wrap: break-word;
   white-space: normal;
   width: 100%;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
 }
-.history-group, .form-control {
-  width: 400px;
-  height: 630px;
-  color: #ffffff;
-  border: 2px solid #7b7b7b;
+.table {
+  display: flex;
+  width: 100vw; /* Chiếm toàn bộ chiều rộng của cửa sổ */
+  height: 100vh; /* Chiếm toàn bộ chiều cao của cửa sổ */
+  box-sizing: border-box; /* Đảm bảo padding và border được tính trong kích thước */
+  padding: 20px; /* Padding có thể điều chỉnh theo nhu cầu */
+  overflow: auto; /* Thêm cuộn nếu nội dung vượt quá chiều cao */
+  flex-wrap: nowrap; /* Đảm bảo các phần tử không xuống dòng */
+  align-items: flex-start; /* Canh đều các phần tử ở đầu */
+}
+.the{
+  width: 20%;
+}
+
+/* Đảm bảo các phần tử con có độ rộng tối ưu */
+.table > div {
+  width: 100%;
+  max-width: 600px; /* Đặt chiều rộng tối đa cho mỗi phần tử */
+  margin-bottom: 0; /* Tạo khoảng cách giữa các phần tử */
+}
+
+.form-control {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+#sale-value-container{
+  margin-left: 5%;
+  margin-top: 1%;
 }
 .nav-link {
   position: relative;
@@ -82,6 +117,10 @@
 .card-body {
   flex: 1;
 }
+.name_price {
+  display: flex;
+  gap: 10px;
+}
 body {
   background-color: #F5EFFF;
   color: #000;
@@ -105,7 +144,58 @@ body.dark-mode {
   text-decoration: none;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
-.dark-mode a, .dark-mode .change-mode, .dark-mode #quantity::placeholder, .dark-mode #name::placeholder, .dark-mode #price::placeholder {
+.button-input {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #007bff;
+  border-radius: 5px;
+}
+/* CSS Styles for Sale Button */
+.sale-btn {
+  font-size: 10px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+label {
+  display: inline-block;
+  margin-left: -16%;
+  margin-top: 2%;
+}
+.sale-label span {
+  pointer-events: none;
+}
+.form-check-input {
+  width: 15%;
+  height: 4em;
+  margin-right: 5px;
+}
+.button-submit {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.button-submit:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+.form-check-input {
+  margin-left: 0.5em;
+}
+.button-submit:active {
+  background-color: #004494;
+  transform: scale(1.02);
+}
+.dark-mode a, .dark-mode .change-mode, .dark-mode #quantity::placeholder, .dark-mode #name::placeholder, .dark-mode #price::placeholder,.dark-mode #saleval::placeholder {
   color: white;
 }
 .change-mode {
@@ -147,6 +237,9 @@ body.dark-mode {
   transition: 0.4s;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
+.preview h2 {
+  margin-left: 32%;
+}
 input:checked + .slider {
   background-color: #4CAF50;
 }
@@ -160,47 +253,123 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 #editor {
-  height: 250px !important;
-  width: 670px !important;
+  height: 222px !important;
   background-color: white;
   color: #000;
+}
+.button-add{
+  margin-left: 2%;
+  height: 60px !important;
+  width: 95% !important;
 }
 .class_preview{
   height: 445px;
   width: 60%;
   margin-left: 22%;
 }
-@media (max-width: 2000px) {
-  #editor {
-      height: 300px !important;
-      width: 470px !important;
-  }
+.nut-bam{
+  height: 88%;
+  width: 100%;
 }
-@media (max-width: 1880px) {
+.add{
+  margin-left: -4%;
+}
+html, body {
+  margin: 0; /* Bỏ khoảng cách mặc định */
+  padding: 0; /* Bỏ padding mặc định */
+  height: 100%; /* Đặt chiều cao của body và html là 100% */
+}
+.add-product{
+  margin-left: 15%;
+}
+.form-container{
+  margin-left: 2%;
+}
+.history {
+  width: 300px; /* Thay đổi kích thước chiều rộng theo ý bạn */
+  height: 400px; /* Thay đổi kích thước chiều cao theo ý bạn */
+  background-color: #f2f2f2; /* Màu nền */
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto; /* Thêm thanh cuộn nếu nội dung vượt quá kích thước */
+}
+
+@media (max-width: 1880px) and (min-width: 1701px) {
   .table {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 149%;
-      max-width: 2000px;
+      width: 101%;
+      max-width: 20000px;
   }
   .preview, .add, .form-container {
       width: 30%;
       margin-bottom: 20px;
+      
   }
 }
-@media (max-width: 1300px) {
+@media (max-width: 1700px) and (min-width:1401px) {
+  .table {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 10px;
+  }
+
+  .preview, .add, .form-container {
+      width: 90%;
+      max-width: 100%;
+      margin-bottom: 20px; /* Khoảng cách giữa các phần tử */
+  }
+}
+
+@media (max-width: 1400px) and (min-width: 1001px) {
+  #editor {
+      height: 300px !important;
+  }
+  .table {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 101%;
+      max-width: 2000px;
+  }
+}
+
+@media (max-width: 1300px) and (min-width: 1001px) {
   .preview, .add, .form-container {
       width: 90%;
       max-width: 100%;
   }
   .table {
+      display: flex;
       padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
   }
 }
+
+/* Media query chỉ áp dụng cho màn hình dưới 1000px */
 @media (max-width: 1000px) { 
   .preview {
-      width: 250px;
+      width: 100%;
+      margin-left: -1%;
+  }
+  .add {
+    margin-left: 8%;
+  }
+  .table {
+      width: 100%;
+      padding: 10px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
   }
 }
+

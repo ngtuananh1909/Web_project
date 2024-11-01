@@ -146,6 +146,7 @@
   .header-design{
     background-color: #e2e2e2;
     width: 100%;
+    max-width: 20000px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   .nav .nav-link img {
@@ -160,6 +161,14 @@
     display: inline-block;
     padding-bottom: 5px; /* Khoảng cách giữa text và underline */
     padding: 4px 8px; /* Điều chỉnh padding để tiết kiệm không gian */
+}
+.e-shop{
+  font-size: 40px;
+}
+@media (max-width:1700px) {
+  .e-shop{
+    font-size: 20px;
+  }
 }
 .nav-item {
   margin-right: 5px; /* Giảm khoảng cách giữa các phần tử */

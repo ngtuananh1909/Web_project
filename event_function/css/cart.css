@@ -133,6 +133,13 @@ body {
   .dropdown-menu:hover {
     display: block;
   }
+  .card-cart{
+    margin-left: 10%;
+  }
+  .form-control-sm{
+    width: auto;
+    margin-left: 26%;
+  }
   .dark-mode .dropdown-menu{
     background-color: #0c0c0c;
     transition: background-color 0.3s ease, color 0.3s ease;
@@ -162,14 +169,14 @@ body {
   .dark-mode .pay-code {
     position: fixed; /* Giữ cho div luôn cố định trên màn hình */
     bottom: 10px; /* Căn chỉnh vị trí từ đáy màn hình */
-    left: 44.3%;
+    left: 49.3%;
     background-color: #2e2e2e; /* Màu nền của div */
     padding: 10px; /* Khoảng cách bên trong div */
     transform: translateX(-50%); /* Đẩy div sang trái một nửa chiều rộng của nó để nó nằm giữa */
     border: 1px solid #ccc; /* Đường viền của div */
     z-index: 1000; /* Giúp div xuất hiện trên các thành phần khác */
     height: auto;
-    width: 1080px;
+    width: 90%;
   }
   .delete-icon{
     width: 25px;
