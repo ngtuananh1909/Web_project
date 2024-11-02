@@ -207,7 +207,7 @@
             <div class="row row-cols-1 row-cols-md-5 g-4">
               <% products.forEach(product => { %>
                 <% if (product.quantity > 0) { %>
-                  <div class="col-6 col-md-4"> <!-- Use col-6 for 2 items on small screens -->
+                  <div class="col-6 col-md-4 the-product" style="background-color: transparent;"> <!-- Use col-6 for 2 items on small screens -->
                     <div class="card product-card">
                       <a href="/product/<%= product.id %>">
                         <img 

@@ -121,8 +121,8 @@
                     <% } %>            
                     <p class="thong-tin"><strong>Quantity:</strong> <%= product.quantity %></p>
                     <div class="tuan_anh">
-                        <a href="" class="buy-now">Buy Now</a>
-                        <a href="" class="add-to-cart">Add to Cart</a>
+                        <div  class="buy-now"><a href="">Buy Now</a></div>
+                        <div  class="add-to-cart"><a href="">Add to Cart</a></div>
                         <div style="margin-left: 20px;"><a href="/scoreboard">Bestsellers</a></div>
                     </div>
                 </div>
@@ -130,8 +130,8 @@
         </div>
         <main style="width: 100%; gap: 50px;">
                 <div class="row mt-5">
-                    <div class="col" style="margin-left: -200px;">
-                        <h2 class="section-title text-center product_name" style="margin-left: -120px;">Thông tin sản phẩm:</h2>
+                    <div class="col info-product" style="margin-left: -200px;">
+                        <h2 class="section-title text-center product_name">Thông tin sản phẩm:</h2>
                         <div class="square-box description" style="font-size: 20px;">
                             <p class="thong-tin" ><%- product.description %></p>
                         </div>

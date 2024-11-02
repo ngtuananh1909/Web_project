@@ -432,3 +432,10 @@
       font-weight: 500; /* Tăng độ đậm của chữ */
       color: #ffffff; /* Màu chữ cân bằng giữa sáng và tối */
     }
+    
+    @media (max-width: 1400px) {
+      .row-cols-xl-5 .col {
+          max-width: 50%; /* Đảm bảo có ít nhất 2 cột */
+          flex: 0 0 50%;
+      }
+    }
