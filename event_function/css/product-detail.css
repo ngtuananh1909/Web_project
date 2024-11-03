@@ -23,14 +23,14 @@ body {
 }
 
 .container-anh {
-    width: 50%;
+    width: 86%;
     background: #fff;
     padding: 0.2px;
     display: flex;
     gap: 20px;
 }
 .dark-mode .container-anh{
-    width: 50%;
+    width: 86%;
     background: #00000041;
     color: white;
     padding: 0.2px;
@@ -208,11 +208,6 @@ p {
 .nav-link{
     font-size: 15.5px;
 }
-.tuan_anh{
-    margin-top:0px ;
-    height: 100px;
-    width: 470px;
-}
 
 .mt-3{
     width: 220px;
@@ -287,9 +282,7 @@ body.dark-mode .product-card {
 .section-title .text-center .product_name{
     margin-left: -120px;
 }
-.col .info-product{
-    
-}
+
 body.dark-mode .header-container {
     background-color: #2d3748;
     color: #f7fafc;
@@ -430,7 +423,7 @@ body.dark-mode {
     flex-direction: row; /* Mặc định là dạng ngang */
     align-items: center;
 }
-@media (max-width: 1000px) {
+@media (max-width: 500px) {
     .container-anh {
         flex-direction: column; /* Đổi sang dạng dọc */
     }
@@ -445,25 +438,32 @@ body.dark-mode {
     .dark-mode .container-anh {
         width: 92%;
     }
+
     .container-anh {
         width: 92%;
     }
     .tuan_anh {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+        display: flex; /* Sử dụng Flexbox */
+        flex-direction: column; /* Sắp xếp theo chiều dọc */
+        justify-content: center; /* Căn giữa theo chiều dọc */
+        align-items: center; /* Căn giữa theo chiều ngang */
+        width: 100%; /* Chiều rộng ô vuông */
+        height: auto; /* Chiều cao ô vuông */
+        border: 1px solid #ccc; /* Đường viền cho ô vuông */
+        margin: 0 auto; /* Căn giữa ô vuông trong bố cục */
     }
    .add-to-cart{
-        width: 41%;
+        width: 49%;
         height: 60%;
+        margin-top: -3%;
     }
     .buy-now{
-        width: 41%;
+        width: 45%;
         height: 60%;
     }
 
     .tuan_anh{
-        display: flow;
+        display: flow !important;
     }
     body.dark-mode .buy-now {
         background-color: #38a169;
@@ -473,6 +473,67 @@ body.dark-mode {
         background-color: #38a169;
         margin-left: -16%;
     }
+    .dark-mode .square-box {
+        width: 650px;  /* Chiều rộng của ô vuông */
+        height: 650px; /* Chiều cao của ô vuông */
+        background-color: rgb(0, 0, 0); /* Màu nền của ô vuông */
+        border: 2px solid rgb(41, 41, 41); /* Viền của ô vuông */
+        margin-top: 20px; /* Khoảng cách giữa ô vuông và nội dung trên */
+        margin-left: 218px;
+    }
+    .square-box {
+        width: 650px;  /* Chiều rộng của ô vuông */
+        height: 650px; /* Chiều cao của ô vuông */
+        background-color: rgb(0, 0, 0); /* Màu nền của ô vuông */
+        border: 2px solid rgb(41, 41, 41); /* Viền của ô vuông */
+        margin-top: 20px; /* Khoảng cách giữa ô vuông và nội dung trên */
+        margin-left: 218px !important;
+    }
+    .square-box.description {
+        font-size: 20px;
+        overflow: auto;
+        max-height: 601px;
+        width: 93% !important;
+        box-sizing: border-box;
+        color: white;
+    }
+    .dark-mode .rating-section, .reviews {
+        margin-top: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #636363;
+        height: auto;
+        width: 88% !important;
+        margin-left: 54%;
+    }
+    .rating-section, .reviews {
+        margin-top: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #636363;
+        height: auto;
+        width: 88% !important;
+        margin-left: 54% !important;
+    }
+    .stars{
+        display: flex;
+        flex-wrap: nowrap;
+        margin-left: 136px !important;
+        margin-top: -7px !important;
+
+    }
+}
+
+.card-img-top {
+    width: 400px;
+    height: 400px;
+    object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
+}
+.stars input[type="radio"] {
+    display: none; /* Ẩn nút input */
+}
+h2.info_product.alpha {
+    margin-left: 29%;
 }
 
 .dark-mode .header-design {
@@ -719,7 +780,9 @@ input:checked + .slider:before {
 }
 .stars {
     display: flex;
-    direction: row-reverse; /* Đảo ngược chiều hiển thị */
+    flex-wrap: nowrap;
+    margin-left: 76px;
+    margin-top: -1px;
 }
 .star {
     font-size: 45px; /* Kích thước sao */
@@ -989,4 +1052,12 @@ button[type="submit"]:active {
     font-size: 14px; /* Kích thước chữ dễ nhìn hơn */
     font-weight: 500; /* Tăng độ đậm của chữ */
     color: #ffffff; /* Màu chữ cân bằng giữa sáng và tối */
+  }
+  .button-seller{
+    margin-left: 20px;
+  }
+  @media (max-width: 1000px) {
+    h2.info_product.alpha {
+        margin-left: 55%;
+    }
   }
