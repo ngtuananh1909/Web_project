@@ -3,37 +3,22 @@ const { ProductIDGenerator } = require('../event_function/function');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
-const openai = require('openai');
 const sharp = require('sharp');
 const { Mutex } = require('async-mutex');
+const { analyzeAndDescribe } = require('../models/imageCaptioningModel');
 const mutex = new Mutex();
+require('dotenv').config();
 
-openai.apiKey = process.env; 
-async function loadModel() {
-    const yolo = await import('tfjs-yolo-tiny'); 
-    const model = await yolo.downloadModel();
-    return model;
-}
-
-let yoloModel;
-loadModel().then(model => {
-    yoloModel = model;
-    console.log("Model loaded successfully");
-}).catch(err => {
-    console.error("Error loading YOLO model:", err);
-});
-
-async function detectObjectsYOLO(imagePath) {
-    const sharpImage = await sharp(imagePath).resize(416, 416).toBuffer();
-    const boxes = await yoloModel(sharpImage);
-    const keywords = boxes.map(box => box.className);
-    return keywords;
-}
 
 exports.CreateProduct = async (req, res) => {
     const { name, description, price, quantity, creator, sale, saleval } = req.body;
     const userID = req.session.user.id;
     const imageFile = req.files.image;
+
+    if (!name || !description || !price || !quantity || !imageFile) {
+        return res.status(400).send('Thiếu thông tin cần thiết.');
+    }
+
     const productId = ProductIDGenerator(); 
     const uploadPath = path.join(__dirname, '../public/uploads', `${productId}_${Date.now()}_${imageFile.name}`);
     
@@ -47,18 +32,12 @@ exports.CreateProduct = async (req, res) => {
             });
         });
 
-        const keywords = await detectObjectsYOLO(uploadPath);
-        const descriptionAiResponse = await openai.Completion.create({
-            model: "text-davinci-003",
-            prompt: `Viết mô tả sản phẩm dựa trên hình ảnh với từ khóa: ${keywords.join(', ')}.`,
-            max_tokens: 150,
-        });
+        const keywords = await analyzeAndDescribe(uploadPath);
 
         const newProduct = {
             id: productId,
             name,
             description,
-            description_ai: descriptionAiResponse.choices[0].text.trim(),
             price,
             quantity,
             image: imageFile.name,
@@ -68,6 +47,7 @@ exports.CreateProduct = async (req, res) => {
             saleval: parseFloat(saleval),
             sold: 0,
             created_at: new Date(),
+            object_desc: keywords,
         };
 
         const sql = 'INSERT INTO products SET ?';
@@ -80,6 +60,7 @@ exports.CreateProduct = async (req, res) => {
         res.status(500).send('Error creating product');
     }
 };
+
 exports.AddProductDisplay = (req, res) => {
     const message = req.query.message || null;
     res.render('add_product', { user: req.session.user, message });

@@ -1,8 +1,13 @@
 {
   "dependencies": {
+    "@tensorflow-models/coco-ssd": "^2.2.3",
+    "@tensorflow-models/mobilenet": "^2.1.1",
+    "@tensorflow/tfjs-node": "^4.22.0",
     "async-mutex": "^0.5.0",
+    "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
+    "canvas": "^2.11.2",
     "connect-flash": "^0.1.1",
     "connect-redis": "^7.1.1",
     "cors": "^2.8.5",
@@ -21,12 +26,13 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.10.2",
     "nodemon": "^3.1.4",
-    "openai": "^4.69.0",
+    "openai": "^4.70.2",
     "path": "^0.12.7",
     "php-cgi": "^0.2.0",
     "pug": "^3.0.3",
     "python-shell": "^5.0.0",
     "redis": "^4.7.0",
+    "semver": "^7.6.3",
     "sharp": "^0.33.5",
     "socket.io": "^4.8.0",
     "tfjs-yolo-tiny": "^1.0.1",
@@ -35,6 +41,7 @@
   },
   "name": "gay",
   "version": "1.0.0",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -44,6 +51,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "electron-rebuild": "^3.2.9",
     "hardhat": "^0.0.7"
   }
 }

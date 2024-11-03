@@ -1,0 +1,24 @@
+[
+    {
+        "image": "image1.jpg",
+        "objects": [
+            {
+                "label": "dog",
+                "boundingBox": [50, 30, 200, 200]  
+            },
+            {
+                "label": "ball",
+                "boundingBox": [300, 100, 100, 100]
+            }
+        ]
+    },
+    {
+        "image": "image2.jpg",
+        "objects": [
+            {
+                "label": "cat",
+                "boundingBox": [80, 60, 150, 200]
+            }
+        ]
+    }
+]
