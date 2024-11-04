@@ -5,7 +5,6 @@ const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const sharp = require('sharp');
 const { Mutex } = require('async-mutex');
-const { analyzeAndDescribe } = require('../models/imageCaptioningModel');
 const mutex = new Mutex();
 require('dotenv').config();
 
@@ -32,8 +31,6 @@ exports.CreateProduct = async (req, res) => {
             });
         });
 
-        const keywords = await analyzeAndDescribe(uploadPath);
-
         const newProduct = {
             id: productId,
             name,
@@ -47,7 +44,6 @@ exports.CreateProduct = async (req, res) => {
             saleval: parseFloat(saleval),
             sold: 0,
             created_at: new Date(),
-            object_desc: keywords,
         };
 
         const sql = 'INSERT INTO products SET ?';
