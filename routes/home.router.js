@@ -22,6 +22,7 @@ router.post('/auth/register', homeController.register);
 router.post('/auth/login', homeController.login);
 router.post('/auth/add-to-cart', homeController.AddToCart);
 router.post('/add-rating', homeController.addRating);
+router.post('/update-user-field', homeController.UpdateFields);
 router.delete('/cart/remove/:id', homeController.RemoveFromCart);
 
 module.exports = router;
