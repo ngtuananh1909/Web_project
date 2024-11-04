@@ -48,7 +48,7 @@
             </div>
       
             <!-- Thanh Điều Hướng -->
-            <div class="col-md-3 col-6  mx-auto">
+            <div class="col-md-3 col-6 mx-auto">
               <nav class="nav justify-content-end">
                 <ul class="nav d-flex align-items-center" style="flex-wrap: nowrap;" id="navbar">
                   <li class="nav-item me-2">
@@ -94,17 +94,27 @@
                       <li><a class="dropdown-item">Balance: <%= user.balance %> VNĐ</a></li>
                       <li><hr class="dropdown-divider" /></li>
                       <li class="nav-item">
-                        <div class="d-flex align-items-center px-3 py-2">
-                          <label class="change-mode" for="toggle-dark-mode" id="mode-label">Light</label>
-                          <label class="switch" style="margin-left: 50%;">
-                            <input type="checkbox" id="toggle-dark-mode">
-                            <span class="slider round"></span>
-                          </label>
-                        </div>
+                          <div class="d-flex align-items-center px-3 py-2">
+                              <label class="change-mode" for="toggle-dark-mode" id="mode-label">Light</label>
+                              <label class="switch" style="margin-left: 50%;">
+                                  <input type="checkbox" id="toggle-dark-mode">
+                                  <span class="slider round"></span>
+                              </label>
+                          </div>
+                      </li>
+                      <li><hr class="dropdown-divider" /></li>
+                      <!-- Nút Reset về nền mặc định -->
+                      <li>
+                          <button class="dropdown-item alpha" onclick="resetBackground()">Reset về nền mặc định</button>
+                      </li>
+                      <!-- Nút chọn ảnh nền -->
+                      <li>
+                          <input type="file" id="background-input" accept="image/*" style="display:none;" />
+                          <button class="dropdown-item alpha" onclick="document.getElementById('background-input').click()">Thay Đổi Hình Nền</button>
                       </li>
                       <li><hr class="dropdown-divider" /></li>
                       <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
-                    </ul>
+                  </ul>                
                   </li>
                   <% if (user.id == 'rgB6QoFkYk') { %>
                   <li class="nav-item me-2">
@@ -226,5 +236,5 @@
   <script src="delete.js"></script>
   <script src="chat.js"></script>
   <script src="search.js"></script>
-
+  <script src="background.js"></script>
 </html>

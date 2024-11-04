@@ -16,68 +16,73 @@
   </head>
   <body>
     <header class="header-design">
-      <div class="container-fluid py-3 d-flex justify-content-between align-items-center">
-        <div class="row w-100 d-flex justify-content-between align-items-center">
-          <div class="col-md-4 col-6">
+      <div class="container-fluid py-3">
+        <div class="row align-items-center">
+          <!-- Logo -->
+          <div class="col-md-3 col-6">
             <h1 class="h4 mb-0">
-              <a href="/" class="text-decoration-none" style=" font-size: 40px;"><strong>E-Shop</strong></a>
+              <a href="/" class="text-decoration-none" style="font-size: 40px;">
+                <strong>E-Shop</strong>
+              </a>
             </h1>
           </div>
-          <div class="col-md-4 col-12 d-none d-md-flex justify-content-center">
-            <form class="d-flex search w-100" action="/search" method="GET" onsubmit="validateForm(event)">
-              <div class="search-input-wrapper position-relative" id="searchContainer">
-                <input
-                  class="form-control search-input"
-                  type="search"
-                  placeholder="Tìm kiếm sản phẩm..."
-                  aria-label="Search"
-                  name="query"
-                  style="padding-right: 40px;"
-                />
-                <!-- Nút search icon nằm trong input -->
-                <button class="search-button position-absolute" type="submit" style="right: 10px; top: 50%; transform: translateY(-50%); border: none; background-color: transparent;">
-                  <img src="img/search.png" alt="search icon" style="height: 30px; width: 30px;">
-                </button>
-                <!-- Nút cancel để ẩn thanh search -->
-                <i class="fas fa-times cancel-btn position-absolute" id="cancelIcon" style="top: 50%; transform: translateY(-50%); ">
-                  <img src="img/x.png" alt="" style="height: 30px;width: 30px;">
-                </i>
-              </div>
-            </form>
-            
+    
+          <!-- Thanh Tìm Kiếm -->
+          <div class="col-md-6 col-12 d-flex justify-content-center">
+            <div class="search-wrapper">
+              <form class="d-flex w-100" action="/search" method="GET" onsubmit="validateForm(event)">
+                <div class="position-relative w-100" id="searchContainer">
+                  <input
+                    class="form-control search-input"
+                    placeholder="Search product......"
+                    aria-label="Search"
+                    name="query"
+                  />
+                  <button
+                    class="position-absolute"
+                    type="submit"
+                    style="right: 10px; top: 50%; transform: translateY(-50%); border: none; background-color: transparent;">
+                    <img src="img/search.png" alt="search icon" style="height: 30px; width: 30px;">
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-          <div class="col-md-4 col-6">
+    
+          <!-- Thanh Điều Hướng -->
+          <div class="col-md-3 col-6 mx-auto">
             <nav class="nav justify-content-end">
-              <ul class="nav d-flex align-items-center" style="gap: 10px; flex-wrap: nowrap;">
-                <li class="nav-item me-1">
+              <ul class="nav d-flex align-items-center" style="flex-wrap: nowrap;" id="navbar">
+                <li class="nav-item me-2">
                   <a class="nav-link home" href="/">
-                    <img src="/img/home.png" alt="home icon" class="home-icon" style="width: 25px; height: 25px;">
+                    <img src="/img/home.png" alt="home icon" style="width: 25px; height: 25px;">
                   </a>
                 </li>
-                <li class="nav-item me-1">
+                <li class="nav-item me-2">
                   <a class="nav-link bxh" href="/scoreboard">
-                    <img src="/img/bxh.jpg" alt="scoreboard icon" class="bxh-icon" style="width: 25px; height: 25px;">
+                    <img src="/img/bxh.jpg" alt="scoreboard icon" style="width: 25px; height: 25px;">
                   </a>
                 </li>
+                <!-- Kiểm tra trạng thái đăng nhập -->
                 <% if (!user) { %>
-                <li class="nav-item me-1">
+                <li class="nav-item me-2">
                   <a class="nav-link login" href="/login">Đăng nhập</a>
                 </li>
-                <li class="nav-item me-1">
+                <li class="nav-item me-2">
                   <a class="nav-link dangky" href="/register">Đăng ký</a>
                 </li>
                 <% } else { %>
-                <li class="nav-item me-1">
+                <li class="nav-item me-2">
                   <a class="nav-link giohang" href="/cart">
-                    <img src="/img/cart.jpg" alt="cart icon" class="cart-icon" style="width: 25px; height: 25px;">
+                    <img src="/img/cart.jpg" alt="cart icon" style="width: 25px; height: 25px;">
                   </a>
                 </li>
-                <li class="nav-item me-1">
+                <li class="nav-item me-2">
                   <a class="nav-link taosanpham" href="/product/add">
-                    <img src="/img/add.jpg" alt="add product icon" class="add-icon" style="width: 25px; height: 25px;">
+                    <img src="/img/add.jpg" alt="add product icon" style="width: 25px; height: 25px;">
                   </a>
                 </li>
-                <li class="nav-item dropdown" style="width: auto;">
+                <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                     <% if (user.avatar) { %>
                     <img src="/<%= user.avatar %>" class="avatar me-1" alt="user avatar" style="width: 30px; height: 30px;" />
@@ -85,40 +90,48 @@
                     <img src="./img/def.jpg" class="avatar me-1" alt="default avatar" style="width: 30px; height: 30px;" />
                     <% } %>
                   </a>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                    <li>
-                      <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
-                    </li>
+                  <ul class="dropdown-menu dropdown-menu-end" style="margin-left: -240%;" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item" href="/user/<%= user.id %>">Profile</a></li>
                     <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                    <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                    <li><a class="dropdown-item">Balance: <%= user.balance %> VNĐ</a></li>
                     <li><hr class="dropdown-divider" /></li>
                     <li class="nav-item">
-                      <div class="d-flex align-items-center px-3 py-2">
-                        <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
-                        <label class="switch">
-                          <input type="checkbox" id="toggle-dark-mode">
-                          <span class="slider round"></span>
-                        </label>
-                      </div>
+                        <div class="d-flex align-items-center px-3 py-2">
+                            <label class="change-mode" for="toggle-dark-mode" id="mode-label">Light</label>
+                            <label class="switch" style="margin-left: 50%;">
+                                <input type="checkbox" id="toggle-dark-mode">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <!-- Nút Reset về nền mặc định -->
+                    <li>
+                        <button class="dropdown-item alpha" onclick="resetBackground()">Reset về nền mặc định</button>
+                    </li>
+                    <!-- Nút chọn ảnh nền -->
+                    <li>
+                        <input type="file" id="background-input" accept="image/*" style="display:none;" />
+                        <button class="dropdown-item alpha" onclick="document.getElementById('background-input').click()">Thay Đổi Hình Nền</button>
                     </li>
                     <li><hr class="dropdown-divider" /></li>
                     <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
-                  </ul>
+                </ul>                
                 </li>
                 <% if (user.id == 'rgB6QoFkYk') { %>
-                <li class="nav-item me-1">
+                <li class="nav-item me-2">
                   <a class="nav-link taosanpham" href="/api/users">
-                    <img src="/img/add.jpg" alt="admin icon" class="add-icon" style="width: 25px; height: 25px;">
+                    <img src="/img/add.jpg" alt="admin icon" style="width: 25px; height: 25px;">
                   </a>
                 </li>
                 <% } %>
                 <% } %>
-              </ul>
+              </ul>              
             </nav>
           </div>
         </div>
       </div>
-    </header>
+    </header>   
     <section>
       <div class="container py-5" >
         <center>
@@ -191,49 +204,6 @@
     </div>
     
   </div>  
-  <script>
-    const toggleButton = document.getElementById('toggle-dark-mode');
-    const body = document.body;
-  
-    // Kiểm tra nếu chế độ tối đã được kích hoạt trước đó
-    if (localStorage.getItem('darkMode') === 'enabled') {
-      body.classList.add('dark-mode');
-    }
-  
-    toggleButton.addEventListener('click', () => {
-      body.classList.toggle('dark-mode');
-      if (body.classList.contains('dark-mode')) {
-        localStorage.setItem('darkMode', 'enabled');
-
-      } else {
-        localStorage.setItem('darkMode', 'disabled');
-      }
-    });
-    document.getElementById('chat-header').onclick = function() {
-        const chatBody = document.getElementById('chat-body');
-        const chatHeader = document.getElementById('chat-header');
-
-        chatHeader.style.display = 'none'; // Ẩn nút Chat
-        chatBody.style.display = 'block'; // Hiện ô chat
-
-        setTimeout(() => {
-            chatBody.classList.add('active'); // Hiện ô chat với hiệu ứng phóng to
-        }, 10); // Đảm bảo transition diễn ra
-    }
-
-    // Đóng ô chat
-    document.getElementById('close-chat').onclick = function() {
-        const chatBody = document.getElementById('chat-body');
-        const chatHeader = document.getElementById('chat-header');
-
-        chatBody.classList.remove('active'); // Thu nhỏ ô chat
-        setTimeout(() => {
-            chatBody.style.display = 'none'; // Ẩn ô chat
-            chatHeader.style.display = 'block'; // Hiện lại nút Chat
-        }, 300); // Thời gian thu nhỏ
-    }
-
-
-
-  </script>
+  <script src="darkmode.js"></script>
+  <script src="background.js"></script>
 </html>

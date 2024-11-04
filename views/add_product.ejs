@@ -64,25 +64,33 @@
                     <img src="./img/def.jpg" class="avatar me-1" alt="" style="width: 30px; height: 30px;" />
                     <% } %>
                   </a>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                    <li>
-                      <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
-                    </li>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" style="margin-right: 100%;">
+                    <li><a class="dropdown-item" href="/user/<%= user.id %>">Profile</a></li>
                     <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                    <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                    <li><a class="dropdown-item">Balance: <%= user.balance %> VNĐ</a></li>
                     <li><hr class="dropdown-divider" /></li>
-                    <li class="nav-item" style="margin-left: 30px;">
-                      <div class="d-flex align-items-center px-3 py-2">
-                        <label class="change-mode" for="toggle-dark-mode" id="mode-label">Light</label>
-                        <label class="switch">
-                          <input type="checkbox" id="toggle-dark-mode">
-                          <span class="slider round"></span>
-                        </label>
-                      </div>
+                    <li class="nav-item" style="margin-left: 10%;">
+                        <div class="d-flex align-items-center px-3 py-2">
+                            <label class="change-mode" for="toggle-dark-mode" id="mode-label">Light</label>
+                            <label class="switch" style="margin-left: 50%;">
+                                <input type="checkbox" id="toggle-dark-mode">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <!-- Nút Reset về nền mặc định -->
+                    <li>
+                        <button class="dropdown-item alpha" onclick="resetBackground()">Reset về nền mặc định</button>
+                    </li>
+                    <!-- Nút chọn ảnh nền -->
+                    <li>
+                        <input type="file" id="background-input" accept="image/*" style="display:none;" />
+                        <button class="dropdown-item alpha" onclick="document.getElementById('background-input').click()">Thay Đổi Hình Nền</button>
                     </li>
                     <li><hr class="dropdown-divider" /></li>
                     <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
-                  </ul>
+                </ul>
                 </li>
                 <% if (user.id == 'rgB6QoFkYk') { %>
                 <li class="nav-item me-1">
@@ -126,7 +134,7 @@
             <input type="file" id="image" name="image" multiple class="form-control button-input nut-bam" accept="image/*" required>
           </div>
     
-          <div class="form-check alpha">
+          <div class="form-check alpha" style="background-color: transparent;">
             <input type="checkbox" id="sale" class="form-check-input sale-btn" onclick="toggleSaleValue()">
             <label for="sale" class="sale-label" style="color: white;"><span>Sale</span></label>
             <div class="form-group" id="sale-value-container" style="display: none;">
@@ -155,5 +163,6 @@
     <script src="/darkmode.js"></script>
     <script src="/sale.js"></script>
     <script src="/crop-image.js"></script>
+    <script src="/background.js"></script>
   </body>
 </html>

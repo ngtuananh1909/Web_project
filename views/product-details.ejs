@@ -94,6 +94,7 @@
           </div>
         </div>
       </header> 
+      <div>
         <m1 style="font-size: 50px;"><strong><center>Product Details</center></strong></m1>
         <div class="container-anh" >
             <div class="image-container anh">
@@ -128,157 +129,153 @@
                 </div>
             </div>
         </div>
-        <main style="width: 100%; gap: 50px; display: flow;">
-                <div class="row mt-5">
-                    <div class="col info-product" style="margin-left: -200px;">
-                        <h2 class="info_product alpha">Thông tin sản phẩm:</h2>
-                        <div class="square-box description" style="font-size: 20px;">
-                            <p class="thong-tin" ><%- product.description %></p>
-                        </div>
-                        <div class="rating-section" style="display: flow;">
-                            <center><h3 class="alpha" style="margin-bottom: 20px;margin-top: 20px;">Đánh giá sản phẩm</h3></center>
-                            <form id="ratingForm" method="POST" action="/product/submit-review">
-                              <input type="hidden" name="productId" value="<%= product.id %>">
-                            </form>
-                            <div style="margin-left: 20px;">
-                              <label for="rating" class="alpha" style="font-size: 25px;">Chất lượng sản phẩm</label>
-                              <div class="stars">
-                                <input type="radio" id="star1" name="rating" value="1" required>
-                                <label for="star1" class="star" style="margin: 0;">&#9733;</label>
-                            
-                                <input type="radio" id="star2" name="rating" value="2" required>
-                                <label for="star2" class="star" style="margin: 0;">&#9733;</label>
-                            
-                                <input type="radio" id="star3" name="rating" value="3" required>
-                                <label for="star3" class="star" style="margin: 0;">&#9733;</label>
-                            
-                                <input type="radio" id="star4" name="rating" value="4" required>
-                                <label for="star4" class="star" style="margin: 0;">&#9733;</label>
-                            
-                                <input type="radio" id="star5" name="rating" value="5" required> <!-- Đặt mặc định là 5 sao -->
-                                <label for="star5" class="star" style="margin: 0;">&#9733;</label>
-                                
-                                <!-- <div id="comment" class="comment alpha" style="margin-top: 20px;"></div> Thêm phần hiển thị bình luận -->
-                            </div> 
-                        </div> 
-                          
-                              <div style="margin-left: 20px;">
-                                  <label for="comment" style="font-size: 25px;">Bình luận:</label>
-                                  <textarea name="comment" class="comment-write" style="margin-left: -12px;" rows="4"></textarea>
+        <div class="row mt-5">
+          <div class="col info-product" style="margin-left: -168px;">
+              <h2 class="info_product alpha">Thông tin sản phẩm:</h2>
+              <div class="square-box description" style="font-size: 20px;">
+                  <p class="thong-tin" ><%- product.description %></p>
+              </div>
+              <div class="rating-section" style="display: flow;">
+                  <center><h3 class="alpha" style="margin-bottom: 20px;margin-top: 20px;">Đánh giá sản phẩm</h3></center>
+                  <form id="ratingForm" method="POST" action="/product/submit-review">
+                    <input type="hidden" name="productId" value="<%= product.id %>">
+                  </form>
+                  <div style="margin-left: 20px;">
+                    <label for="rating" class="alpha" style="font-size: 25px;">Chất lượng sản phẩm</label>
+                    <div class="stars">
+                      <input type="radio" id="star1" name="rating" value="1" required>
+                      <label for="star1" class="star" style="margin: 0;">&#9733;</label>
+                  
+                      <input type="radio" id="star2" name="rating" value="2" required>
+                      <label for="star2" class="star" style="margin: 0;">&#9733;</label>
+                  
+                      <input type="radio" id="star3" name="rating" value="3" required>
+                      <label for="star3" class="star" style="margin: 0;">&#9733;</label>
+                  
+                      <input type="radio" id="star4" name="rating" value="4" required>
+                      <label for="star4" class="star" style="margin: 0;">&#9733;</label>
+                  
+                      <input type="radio" id="star5" name="rating" value="5" required> <!-- Đặt mặc định là 5 sao -->
+                      <label for="star5" class="star" style="margin: 0;">&#9733;</label>
+                      
+                      <!-- <div id="comment" class="comment alpha" style="margin-top: 20px;"></div> Thêm phần hiển thị bình luận -->
+                  </div> 
+              </div> 
+                
+                    <div style="margin-left: 20px;">
+                        <label for="comment" style="font-size: 25px;">Bình luận:</label>
+                        <textarea name="comment" class="comment-write" style="margin-left: -12px;" rows="4"></textarea>
+                    </div>
+                    <center><button type="submit">Gửi đánh giá</button></center>
+                </form>                       
+              </div>
+              
+              <div class="reviews">
+                  <center><h3>Đánh giá</h3></center>
+                  <% if (ratings.length > 0) { %>
+                      <% ratings.forEach(review => { %>
+                        <div class="review">
+                          <div class="review-header">
+                              <img class="avatar" src="/img/def.jpg" alt="Avatar"> 
+                              <div class="user-info" style="margin-left: 6%; margin-top: -45px; width: auto;">
+                                <div class="my-3 user-name" style="font-size: 20px;">
+                                    <%= user.name %>
+                                </div>
+                                <p class="review-date alpha" style="margin-left: 70%; margin-top: -7%; font-size: 20px;">
+                                  Ngày: <%= new Date(review.created_at).toLocaleString() %> 
+                              </p> 
+                            </div>
+                                                                 
+                              <div class="review-rating">
+                                  <% for (let i = 1; i <= 5; i++) { %>
+                                      <% if (i <= review.rating) { %>
+                                          <span class="star" style="color: yellow;">★</span> 
+                                      <% } else { %>
+                                          <span class="star">☆</span>
+                                      <% } %>
+                                  <% } %>
                               </div>
-                              <center><button type="submit">Gửi đánh giá</button></center>
-                          </form>                       
-                        </div>
-                        
-                        <div class="reviews">
-                            <center><h3>Đánh giá</h3></center>
-                            <% if (ratings.length > 0) { %>
-                                <% ratings.forEach(review => { %>
-                                  <div class="review">
-                                    <div class="review-header">
-                                        <img class="avatar" src="/img/def.jpg" alt="Avatar"> 
-                                        <div class="user-info" style="margin-left: 6%; margin-top: -45px; width: auto;">
-                                          <div class="my-3 user-name" style="font-size: 20px;">
-                                              <%= user.name %>
-                                          </div>
-                                          <p class="review-date alpha" style="margin-left: 70%; margin-top: -7%; font-size: 20px;">
-                                            Ngày: <%= new Date(review.created_at).toLocaleString() %> 
-                                        </p> 
-                                      </div>
-                                                                           
-                                        <div class="review-rating">
-                                            <% for (let i = 1; i <= 5; i++) { %>
-                                                <% if (i <= review.rating) { %>
-                                                    <span class="star" style="color: yellow;">★</span> 
-                                                <% } else { %>
-                                                    <span class="star">☆</span>
-                                                <% } %>
-                                            <% } %>
+                          </div>
+                          <p class="review-comment alpha" style="font-size: 25px;"><%= review.comment || 'Chưa có bình luận' %></p> 
+                      </div>
+                      
+                      <% }) %>
+                  <% } else { %>
+                      <p class="alpha">Chưa có đánh giá nào cho sản phẩm này.</p>
+                  <% } %>
+              </div>
+              
+                                   
+          </div>                    
+          
+          <div class="col">
+              <h2 class="section-title text-center product_name">Sản phẩm gợi ý</h2>
+              <div class="row row-cols-2 row-cols-md-5 g-4" style="margin-left:-000px; gap: 50px; height: auto; width: auto;">
+                <% products.forEach(product => { %>
+                    <div class="col">
+                        <div class="card product-card">
+                            <a href="/product/<%= product.id %>">
+                                <img 
+                                    src="<%= product.image ? ('/uploads/' + product.image) : '/img/cart-def.png' %>" 
+                                    class="card-img-top" 
+                                    alt="" 
+                                    onerror="this.onerror=null; this.src='/img/cart-def.png';"
+                                />
+                            </a>
+                            <div class="card-body">
+                                <h4 class="card-title"><center><%= product.name %></center></h4>
+                                <% if (product.sale) { %>
+                                    <center><span class="badge bg-danger ms-2" style="margin-bottom: 5px;">-<%= product.saleval %>%</span></center>
+                                    <p class="card-text product_name" style="margin-bottom: 4px;">
+                                        Giá: <del> <%= product.price %> </del>
+                                        <%= formatCurrency((product.price - (product.price * product.saleval / 100)).toFixed(0)) %> VNĐ
+                                    </p>
+                                    <div style="padding-left: 1px; padding-bottom: 10px">
+                                        <div class="creator-day" style="margin-top: -0px;">
+                                            <p class="card-text product_name" style="margin-bottom: 3px">Creator: <%= product.creator %></p>
+                                            <p class="card-text product_name" style="margin-top: 0px">Ngày tạo: <%= product.formatted_date %></p>
+                                        </div>
+                                        <div class="d-flex mt-3" style="gap: 10px; margin-top: -100px;">
+                                            <a href="/product/<%= product.id %>" class="btn btn-success rounded center-text">
+                                                <div>Thông tin</div>
+                                                <div>sản phẩm</div>
+                                            </a>
+                                            <a>
+                                                <button type="button" class="btn btn-primary rounded addToCartBtn" data-product-id="<%= product.id %>">
+                                                    Thêm vào giỏ
+                                                </button>
+                                            </a>
                                         </div>
                                     </div>
-                                    <p class="review-comment alpha" style="font-size: 25px;"><%= review.comment || 'Chưa có bình luận' %></p> 
-                                </div>
-                                
-                                <% }) %>
-                            <% } else { %>
-                                <p class="alpha">Chưa có đánh giá nào cho sản phẩm này.</p>
-                            <% } %>
+                                <% } else { %>
+                                    <div style="margin-top: 40px;">
+                                        <p class="card-text product_name">Giá: <%= formatCurrency(product.price) %> VNĐ</p>
+                                    </div>
+                                    <div style="padding-left: -10px; padding-bottom: 10px">
+                                        <div class="creator-day" style="margin-top: 1px;">
+                                            <p class="card-text product_name" style="margin-bottom: -2px">Creator: <%= product.creator %></p>
+                                            <p class="card-text product_name" style="margin-top: 3px">Ngày tạo: <%= product.formatted_date %></p>
+                                        </div>
+                                        <div class="d-flex mt-3" style="gap: 10px; margin-top: 30px;">
+                                            <a href="/product/<%= product.id %>" class="btn btn-success rounded center-text">
+                                                <div>Thông tin</div>
+                                                <div>sản phẩm</div>
+                                            </a>
+                                            <a>
+                                                <button type="button" class="btn btn-primary rounded addToCartBtn" data-product-id="<%= product.id %>">
+                                                    Thêm vào giỏ
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            </div>
                         </div>
-                        
-                                             
-                    </div>                    
-                    
-                    <div class="col">
-                        <h2 class="section-title text-center product_name">Sản phẩm gợi ý</h2>
-                        <div class="row row-cols-2 row-cols-md-5 g-4" style="margin-left:-000px; gap: 50px; height: auto; width: auto;">
-                          <% products.forEach(product => { %>
-                              <div class="col">
-                                  <div class="card product-card">
-                                      <a href="/product/<%= product.id %>">
-                                          <img 
-                                              src="<%= product.image ? ('/uploads/' + product.image) : '/img/cart-def.png' %>" 
-                                              class="card-img-top" 
-                                              alt="" 
-                                              onerror="this.onerror=null; this.src='/img/cart-def.png';"
-                                          />
-                                      </a>
-                                      <div class="card-body">
-                                          <h4 class="card-title"><center><%= product.name %></center></h4>
-                                          <% if (product.sale) { %>
-                                              <center><span class="badge bg-danger ms-2" style="margin-bottom: 5px;">-<%= product.saleval %>%</span></center>
-                                              <p class="card-text product_name" style="margin-bottom: 4px;">
-                                                  Giá: <del> <%= product.price %> </del>
-                                                  <%= formatCurrency((product.price - (product.price * product.saleval / 100)).toFixed(0)) %> VNĐ
-                                              </p>
-                                              <div style="padding-left: 1px; padding-bottom: 10px">
-                                                  <div class="creator-day" style="margin-top: -0px;">
-                                                      <p class="card-text product_name" style="margin-bottom: 3px">Creator: <%= product.creator %></p>
-                                                      <p class="card-text product_name" style="margin-top: 0px">Ngày tạo: <%= product.formatted_date %></p>
-                                                  </div>
-                                                  <div class="d-flex mt-3" style="gap: 10px; margin-top: -100px;">
-                                                      <a href="/product/<%= product.id %>" class="btn btn-success rounded center-text">
-                                                          <div>Thông tin</div>
-                                                          <div>sản phẩm</div>
-                                                      </a>
-                                                      <a>
-                                                          <button type="button" class="btn btn-primary rounded addToCartBtn" data-product-id="<%= product.id %>">
-                                                              Thêm vào giỏ
-                                                          </button>
-                                                      </a>
-                                                  </div>
-                                              </div>
-                                          <% } else { %>
-                                              <div style="margin-top: 40px;">
-                                                  <p class="card-text product_name">Giá: <%= formatCurrency(product.price) %> VNĐ</p>
-                                              </div>
-                                              <div style="padding-left: -10px; padding-bottom: 10px">
-                                                  <div class="creator-day" style="margin-top: 1px;">
-                                                      <p class="card-text product_name" style="margin-bottom: -2px">Creator: <%= product.creator %></p>
-                                                      <p class="card-text product_name" style="margin-top: 3px">Ngày tạo: <%= product.formatted_date %></p>
-                                                  </div>
-                                                  <div class="d-flex mt-3" style="gap: 10px; margin-top: 30px;">
-                                                      <a href="/product/<%= product.id %>" class="btn btn-success rounded center-text">
-                                                          <div>Thông tin</div>
-                                                          <div>sản phẩm</div>
-                                                      </a>
-                                                      <a>
-                                                          <button type="button" class="btn btn-primary rounded addToCartBtn" data-product-id="<%= product.id %>">
-                                                              Thêm vào giỏ
-                                                          </button>
-                                                      </a>
-                                                  </div>
-                                              </div>
-                                          <% } %>
-                                      </div>
-                                  </div>
-                              </div>
-                          <% }); %>
-                      </div>                      
                     </div>
-                </div>
-            </div>
-        </main>
-        
+                <% }); %>
+            </div>                      
+          </div>
+      </div>
         
         
     </body>

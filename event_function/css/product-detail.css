@@ -423,7 +423,7 @@ body.dark-mode {
     flex-direction: row; /* Mặc định là dạng ngang */
     align-items: center;
 }
-@media (max-width: 500px) {
+@media (max-width: 800px) {
     .container-anh {
         flex-direction: column; /* Đổi sang dạng dọc */
     }
@@ -449,8 +449,8 @@ body.dark-mode {
         align-items: center; /* Căn giữa theo chiều ngang */
         width: 100%; /* Chiều rộng ô vuông */
         height: auto; /* Chiều cao ô vuông */
-        border: 1px solid #ccc; /* Đường viền cho ô vuông */
-        margin: 0 auto; /* Căn giữa ô vuông trong bố cục */
+        border: 1px solid TRANSPARENT;
+        margin: 0 8%; /* Căn giữa ô vuông trong bố cục */
     }
    .add-to-cart{
         width: 49%;
@@ -474,14 +474,6 @@ body.dark-mode {
         margin-left: -16%;
     }
     .dark-mode .square-box {
-        width: 650px;  /* Chiều rộng của ô vuông */
-        height: 650px; /* Chiều cao của ô vuông */
-        background-color: rgb(0, 0, 0); /* Màu nền của ô vuông */
-        border: 2px solid rgb(41, 41, 41); /* Viền của ô vuông */
-        margin-top: 20px; /* Khoảng cách giữa ô vuông và nội dung trên */
-        margin-left: 218px;
-    }
-    .square-box {
         width: 650px;  /* Chiều rộng của ô vuông */
         height: 650px; /* Chiều cao của ô vuông */
         background-color: rgb(0, 0, 0); /* Màu nền của ô vuông */
@@ -521,6 +513,23 @@ body.dark-mode {
         margin-left: 136px !important;
         margin-top: -7px !important;
 
+    }
+    .dark-mode .rating-section, .reviews {
+        margin-top: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #636363;
+        height: auto;
+        width: 70%;
+        margin-left: 29% !important;
+    }
+    .square-box.description {
+        font-size: 20px;
+        overflow: auto;
+        max-height: 600px;
+        width: 118% !important;
+        box-sizing: border-box;
+        color: white;
     }
 }
 
@@ -593,7 +602,7 @@ h2.info_product.alpha {
     background-color: rgb(0, 0, 0); /* Màu nền của ô vuông */
     border: 2px solid rgb(41, 41, 41); /* Viền của ô vuông */
     margin-top: 20px; /* Khoảng cách giữa ô vuông và nội dung trên */
-    margin-left: 300px;
+    margin-left: 209px;
 }
 .description {
     word-wrap: break-word; /* Tự động xuống dòng khi hết chiều rộng */
@@ -764,7 +773,7 @@ input:checked + .slider:before {
     background-color: #636363;
     height: auto;
     width: 70%;
-    margin-left: 29%;
+    margin-left: 20%;
 }
 
 .review {

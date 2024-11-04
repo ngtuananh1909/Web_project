@@ -183,6 +183,7 @@ label {
   border: none;
   border-radius: 8px;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 7%;
 }
 .button-submit:hover {
   background-color: #0056b3;
@@ -257,6 +258,13 @@ input:checked + .slider:before {
   background-color: white;
   color: #000;
 }
+#preview-description {
+  white-space: normal; /* Đảm bảo nội dung xuống dòng khi hết chiều rộng */
+  word-wrap: break-word; /* Chia nhỏ từ nếu từ dài hơn chiều rộng */
+  overflow-wrap: break-word; /* Đảm bảo các từ dài không vượt quá chiều rộng */
+}
+
+
 .button-add{
   margin-left: 2%;
   height: 60px !important;
@@ -354,12 +362,12 @@ html, body {
       justify-content: center;
   }
 }
-
 /* Media query chỉ áp dụng cho màn hình dưới 1000px */
 @media (max-width: 1000px) { 
   .preview {
       width: 100%;
       margin-left: -1%;
+      margin-top: 63%;
   }
   .add {
     margin-left: 8%;
@@ -372,4 +380,19 @@ html, body {
       justify-content: center;
   }
 }
-
+body .table {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  transition: background-image 0.5s ease;
+  background-image: url('/img/defaut-background.jpg'); /* URL nền mặc định */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+.alpha{
+  color: #000;
+}
+.dark-mode .alpha{
+  color: #ffffff;
+}
