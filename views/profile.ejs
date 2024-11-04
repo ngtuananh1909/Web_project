@@ -396,7 +396,7 @@
               </a>
             </li>
             <li class="nav-item dropdown" style="width: 200px;">
-              <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
+              <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button" aria-label="User menu">
                 <% if (user.avatar) { %>
                 <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
                 <% } else { %>
@@ -456,28 +456,36 @@
                     </div>
                     <div class="list-connect">
                       <div class="card-body p-0">
-                          <ul class="list-group list-group-flush rounded-3 list-connect">
-                              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                  <i class="fas fa-globe fa-lg text-warning"></i>
-                                  <p class="mb-0">https://mdbootstrap.com</p>
-                              </li>
-                              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                  <i class="fab fa-github fa-lg text-body"></i>
-                                  <p class="mb-0">mdbootstrap</p>
-                              </li>
-                              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                  <i class="fab fa-twitter fa-lg" style="color: #55acee;"></i>
-                                  <p class="mb-0">@mdbootstrap</p>
-                              </li>
-                              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                  <i class="fab fa-instagram fa-lg" style="color: #ac2bac;"></i>
-                                  <p class="mb-0">mdbootstrap</p>
-                              </li>
-                              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                  <i class="fab fa-facebook-f fa-lg" style="color: #3b5998;"></i>
-                                  <p class="mb-0">mdbootstrap</p>
-                              </li>
-                          </ul>
+                        <ul class="list-group list-group-flush rounded-3 list-connect">
+                          <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                              <i class="fab fa-github fa-lg text-body"></i>
+                              <p class="mb-0" data-field="github"><%= user.github %></p>
+                              <button class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-field="github">
+                                  <i class="fas fa-pen"></i>
+                              </button>
+                          </li>
+                          <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                              <i class="fab fa-twitter fa-lg" style="color: #55acee;"></i>
+                              <p class="mb-0" data-field="twitter"><%= user.twitter %></p>
+                              <button class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-field="twitter">
+                                  <i class="fas fa-pen"></i>
+                              </button>
+                          </li>
+                          <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                              <i class="fab fa-instagram fa-lg" style="color: #ac2bac;"></i>
+                              <p class="mb-0" data-field="instagram"><%= user.instagram %></p>
+                              <button class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-field="instagram">
+                                  <i class="fas fa-pen"></i>
+                              </button>
+                          </li>
+                          <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                              <i class="fab fa-facebook-f fa-lg" style="color: #3b5998;"></i>
+                              <p class="mb-0" data-field="facebook"><%= user.facebook %></p>
+                              <button class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-field="facebook">
+                                  <i class="fas fa-pen"></i>
+                              </button>
+                          </li>
+                      </ul>
                       </div>
                   </div>
                 </div>
@@ -537,11 +545,6 @@
                                 <div class="col-sm-8">
                                     <p class="mb-0"><%= user.friends %></p>
                                 </div>
-                                <div class="col-sm-1">
-                                    <button class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-field="friends">
-                                        <i class="fas fa-pen"></i>
-                                    </button>
-                                </div>
                             </div>
                             </hr>
                         </div>
@@ -562,7 +565,7 @@
                                                 <div class="col" style="flex: 0 0 20%; max-width: 20%;">
                                                     <div class="card product-card">
                                                         <a href="/product/<%= product.id %>">
-                                                            <img src="/uploads/<%= product.image %>" class="card-img-top" alt="" />
+                                                            <img src="/uploads/<%= product.image %>" class="card-img-top" alt="" loading="lazy"/>
                                                         </a>
                                                         <div class="card-body">
                                                             <h4 class="card-title text-center"><%= product.name %></h4>
@@ -711,32 +714,60 @@
   
       </script>
     <script>
-        var editModal = document.getElementById('editModal');
         editModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget;
-            var field = button.getAttribute('data-bs-field');
-            var value = button.closest('.row').querySelector('.text-muted').innerText;
-            var modalTitle = editModal.querySelector('.modal-title');
-            var modalInput = editModal.querySelector('#editField');
-            var fieldNameInput = editModal.querySelector('#fieldName');
+          var button = event.relatedTarget;
+          var field = button.getAttribute('data-bs-field');
+          var closestRow = button.closest('.row');
+          var textMutedElement = closestRow ? closestRow.querySelector('.alpha') : null; // Sử dụng class phù hợp
+          var value = textMutedElement ? textMutedElement.innerText : ''; // Gán giá trị rỗng nếu không tìm thấy
 
-            modalTitle.textContent = 'Edit ' + field.charAt(0).toUpperCase() + field.slice(1);
-            modalInput.value = value;
-            fieldNameInput.value = field;
-        });
+          var modalTitle = editModal.querySelector('.modal-title');
+          var modalInput = editModal.querySelector('#editField');
+          var fieldNameInput = editModal.querySelector('#fieldName');
+
+          modalTitle.textContent = 'Edit ' + field.charAt(0).toUpperCase() + field.slice(1);
+          modalInput.value = value;
+          fieldNameInput.value = field;
+      });
 
         function saveChanges() {
-            var field = document.getElementById('fieldName').value;
-            var value = document.getElementById('editField').value;
-
-            // Logic to save the changes to the server
-            console.log('Field:', field, 'Value:', value);
-            // After saving changes, you might want to update the displayed value
-            // Close the modal
-            var modal = bootstrap.Modal.getInstance(editModal);
-            modal.hide();
+        var field = document.getElementById('fieldName').value;
+        var value = document.getElementById('editField').value;
+        console.log('Field:', field); // In ra để kiểm tra
+        console.log('Value:', value); // In ra để kiểm tra
+        if (!field || !value) {
+            alert('Vui lòng nhập đầy đủ thông tin.');
+            return;
         }
 
+        fetch('/update-user-field', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ field: field, value: value })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Cập nhật giá trị hiển thị trên giao diện
+                const displayField = document.querySelector(`[data-field="${field}"]`);
+                if (displayField) {
+                    displayField.innerText = value; // Cập nhật giá trị hiển thị
+                }
+                // Đóng modal
+                var modal = bootstrap.Modal.getInstance(editModal);
+                modal.hide();
+            } else {
+                console.error('Error saving changes:', data.message);
+                alert('Đã xảy ra lỗi khi lưu thay đổi.');
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+            alert('Đã xảy ra lỗi khi gửi yêu cầu.');
+        });
+    }
         function showTab(tabId) {
             document.getElementById('myProduct').classList.add('hidden');
             document.getElementById('boughtProduct').classList.add('hidden');

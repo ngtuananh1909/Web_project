@@ -140,18 +140,24 @@ exports.SettingDisplay = (req, res) => {
 
 exports.register = async (req, res) => {
     const { name, email, password, password_confirm, avatar } = req.body;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return res.render('register', { message: 'Email không hợp lệ' });
+    }
+
     try {
         const results = await query('SELECT email FROM users WHERE email = ?', [email]);
         if (results.length > 0) {
-            return res.render('register', { message: 'This email is already in use' });
+            return res.render('register', { message: 'Email này đã được sử dụng' });
         }
+
         if (password !== password_confirm) {
-            return res.render('register', { message: 'Passwords do not match' });
+            return res.render('register', { message: 'Mật khẩu không khớp' });
         }
 
         const hashpassword = await bcrypt.hash(password, 10);
         const UserId = await IdGenerator();
-
         const avatarData = avatar ? Buffer.from(avatar, 'base64') : null;
 
         await query('INSERT INTO users SET ?', {
@@ -176,23 +182,21 @@ exports.register = async (req, res) => {
 
         res.redirect('/');
     } catch (err) {
-        console.error(err);
-        res.render('register', { message: 'Server error' });
+        console.error('Error during registration:', err);
+        res.render('register', { message: 'Lỗi máy chủ' });
     }
 };
 
 
 exports.login = async (req, res) => {
     const { email, password } = req.body;
+
     try {
         const results = await query('SELECT * FROM users WHERE email = ?', [email]);
-        
         if (results.length === 0) {
             return res.render('login', { message: 'Email hoặc mật khẩu không chính xác' });
         }
-        
-        const user = results[0]; 
-
+        const user = results[0];
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.render('login', { message: 'Email hoặc mật khẩu không chính xác' });
@@ -212,7 +216,7 @@ exports.login = async (req, res) => {
             };
             return res.redirect('/');
         } else {
-            console.log('Session is not initialized.');
+            console.error('Session is not initialized.');
             return res.render('login', { message: 'Lỗi hệ thống. Vui lòng thử lại sau.' });
         }
     } catch (err) {
@@ -220,6 +224,8 @@ exports.login = async (req, res) => {
         return res.render('login', { message: 'Lỗi máy chủ. Vui lòng thử lại sau.' });
     }
 };
+
+
 
 exports.UserUpdate = async (req, res) => {
     if (!req.session.user) {
@@ -245,7 +251,6 @@ exports.UserUpdate = async (req, res) => {
             updateQuery.push('avatar = ?');
             queryParams.push(avatarPath);
 
-            // Di chuyển tệp avatar
             await avatar.mv(path.join(__dirname, '..', avatarPath));
         }
 
@@ -266,11 +271,9 @@ exports.UserUpdate = async (req, res) => {
 
         await db.query(sqlQuery, queryParams);
 
-        // Cập nhật session user
         req.session.user.name = name || req.session.user.name;
         req.session.user.avatar = avatarPath || req.session.user.avatar;
 
-        // Xóa avatar cũ
         if (oldAvatarPath) {
             const fullPath = path.join(__dirname, '..', oldAvatarPath);
             try {
@@ -293,7 +296,6 @@ exports.AddToCart = async (req, res) => {
     try {
         const { productId } = req.body;
 
-        // Kiểm tra xem người dùng đã đăng nhập chưa
         if (!req.session.user) {
             return res.status(401).send('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
         }
@@ -485,3 +487,29 @@ exports.StatsDisplay = (req, res) => {
     if(user.session.id != 'rgB6QoFkYk') res.redirect('/');
     res.render('infor');
 }
+
+exports.UpdateFields = async (req, res) => {
+    const userID = req.session.user.id; 
+    const { field, value } = req.body;
+    console.log(field + ' ' + value);
+    
+    if (!userID) {
+        return res.status(401).json({ success: false, message: 'Người dùng không được xác thực.' });
+    }
+    
+    try {
+        await new Promise((resolve, reject) => {
+            db.query('UPDATE users SET ?? = ? WHERE id = ?', [field, value, userID], (error, results) => {
+                if (error) {
+                    return reject(error); 
+                }
+                resolve(results); 
+            });
+        });
+
+        return res.json({ success: true });
+    } catch (err) {
+        console.error('Error updating user field:', err);
+        return res.status(500).json({ success: false, message: 'Lỗi máy chủ. Vui lòng thử lại.' });
+    }
+};
