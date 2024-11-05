@@ -123,6 +123,9 @@
         <div class="description-box">
           <p id="preview-description" class="card-text alpha">Description</p>
         </div>
+        <div class="info-box description-box">
+          <p id="info-description" class="card-text alpha">More info detail</p>
+        </div>
       </div>
       
     
@@ -146,11 +149,14 @@
               <input type="number" id="saleval" name="saleval" class="form-control button-input nut-bam" min="1" max="99" step="1" placeholder="% Sale">
             </div>
           </div>
-    
+          <div class="form-group" style="margin-bottom: 8%;">
+            <textarea id="description-input" name="description-input" class="form-control button-input nut-bam" placeholder="Enter more info product"></textarea>
+          </div>
           <div class="form-group">
             <div id="editor"></div>
             <input type="hidden" id="description" name="description">
           </div>
+          
     
           <button type="submit" class="btn btn-success button-submit button-add">Add Product</button>
         </form>

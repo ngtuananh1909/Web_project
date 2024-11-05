@@ -196,7 +196,7 @@ label {
   background-color: #004494;
   transform: scale(1.02);
 }
-.dark-mode a, .dark-mode .change-mode, .dark-mode #quantity::placeholder, .dark-mode #name::placeholder, .dark-mode #price::placeholder,.dark-mode #saleval::placeholder {
+.dark-mode a, .dark-mode .change-mode, .dark-mode #quantity::placeholder, .dark-mode #name::placeholder, .dark-mode #price::placeholder,.dark-mode #saleval::placeholder ,.dark-mode #description-input::placeholder  {
   color: white;
 }
 .change-mode {

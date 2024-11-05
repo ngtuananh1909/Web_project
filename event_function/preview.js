@@ -4,14 +4,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const priceInput = document.getElementById("price");
     const quantityInput = document.getElementById("quantity");
     const imageInput = document.getElementById("image");
-    const saleInput = document.getElementById("sale");
-    const saleValueInput = document.getElementById("saleval");
 
     const previewName = document.getElementById("preview-name");
     const previewPrice = document.getElementById("preview-price");
     const previewQuantity = document.getElementById("preview-quantity");
     const previewImage = document.getElementById("preview-image");
-    const previewSale = document.getElementById("preview-sale");
 
     // Cập nhật xem trước tên sản phẩm
     nameInput.addEventListener("input", function () {
@@ -34,10 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("preview-description").innerText = description;
     });
 
-    // Cập nhật xem trước giá trị giảm giá
-    saleValueInput.addEventListener("input", function () {
-      previewSale.textContent = "Sale Value: " + (formatCurrency(saleValueInput.value) ? formatCurrency(saleValueInput.value) + "%" : "0%");
-    });
 
     // Cập nhật ảnh xem trước
     imageInput.addEventListener("change", function () {
@@ -66,3 +59,12 @@ document.addEventListener("DOMContentLoaded", function () {
     var description = quill.root.innerHTML; // Lấy nội dung từ editor
     document.getElementById("preview-description").innerHTML = description; // Cập nhật mô tả xem trước
   });
+  // Lắng nghe sự kiện input trên trường mô tả sản phẩm
+  document.getElementById('description-input').addEventListener('input', function () {
+    // Lấy giá trị từ textarea và cập nhật vào thẻ p trong preview
+    document.getElementById('info-description').textContent = this.value || "More info detail";
+  });
+
+  var quill = new Quill('#editor', {
+    theme: 'snow'
+});

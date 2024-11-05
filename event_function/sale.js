@@ -1,6 +1,4 @@
-var quill = new Quill('#editor', {
-    theme: 'snow'
-  });
+
   var form = document.getElementById('product-form');
   form.onsubmit = function() {
     var descriptionInput = document.getElementById('description');
@@ -23,13 +21,7 @@ var quill = new Quill('#editor', {
     const quantity = document.getElementById('quantity').value;
     const saleCheckbox = document.getElementById('sale');
     const saleValue = document.getElementById('saleval').value;
-    const description = document.getElementById('editor').textContent;
-    
-    // Hiển thị tên, giá, số lượng, và mô tả
-    document.getElementById('preview-name').textContent = name || 'Name';
-    document.getElementById('preview-price').textContent = 'Price: ' + (price || 0) + ' VND';
-    document.getElementById('preview-quantity').textContent = 'Quantity: ' + (quantity || 0);
-    document.getElementById('preview-description').textContent = description || 'Description';
+
     
     // Hiển thị giá trị sale nếu checkbox được chọn
     const salePreview = document.getElementById('preview-sale');
@@ -66,3 +58,13 @@ var quill = new Quill('#editor', {
   document.addEventListener('DOMContentLoaded', function() {
     updatePreview(); // Cập nhật ngay khi trang tải xong
   });
+  // Hàm kiểm tra và giới hạn giá trị của saleval
+document.getElementById('saleval').addEventListener('input', function () {
+  let value = parseInt(this.value);
+  if (value > 99) {
+      this.value = 99;
+  } else if (value < 1) {
+      this.value = 1;
+  }
+  updatePreview(); // Cập nhật phần xem trước nếu cần
+});
