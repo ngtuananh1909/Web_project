@@ -396,3 +396,16 @@ body .table {
 .dark-mode .alpha{
   color: #ffffff;
 }
+.description-box {
+  margin-top: 10px;
+  width: 60%;
+  height: auto;
+  display: flex;
+  margin-left: 22%;
+  padding: 10px;
+  overflow-wrap: break-word; /* Cho phép nội dung dài xuống dòng */
+  white-space: normal; /* Cho phép tự động xuống dòng */
+  word-break: break-word; /* Tự xuống dòng cho từ quá dài */
+}
+
+
