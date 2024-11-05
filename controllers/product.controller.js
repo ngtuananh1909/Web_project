@@ -31,6 +31,16 @@ exports.CreateProduct = async (req, res) => {
             });
         });
 
+        let salevalDefault = 0; 
+        if (sale === "true") { 
+            const salevalParsed = parseFloat(saleval);
+            if (!isNaN(salevalParsed) && salevalParsed >= 1 && salevalParsed <= 99) {
+                salevalDefault = salevalParsed; 
+            } else {
+                return res.status(400).send('Giá trị saleval không hợp lệ.');
+            }
+        }
+
         const newProduct = {
             id: productId,
             name,
@@ -41,14 +51,17 @@ exports.CreateProduct = async (req, res) => {
             creator,
             creator_id: userID,
             sale: sale === "true",
-            saleval: parseFloat(saleval),
+            saleval: salevalDefault, // Sử dụng giá trị đã được xử lý
             sold: 0,
             created_at: new Date(),
         };
 
         const sql = 'INSERT INTO products SET ?';
         db.query(sql, newProduct, err => {
-            if (err) return res.status(500).send('Error creating product');
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Error creating product');
+            }
             res.redirect(req.get("Referrer") || "/");
         });
     } catch (err) {
@@ -56,6 +69,7 @@ exports.CreateProduct = async (req, res) => {
         res.status(500).send('Error creating product');
     }
 };
+
 
 exports.AddProductDisplay = (req, res) => {
     const message = req.query.message || null;
