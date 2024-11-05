@@ -135,7 +135,7 @@
               <div class="square-box description" style="font-size: 20px;">
                   <p class="thong-tin" ><%- product.description %></p>
               </div>
-              <div class="rating-section" style="display: flow;">
+              <div class="rating-section">
                   <center><h3 class="alpha" style="margin-bottom: 20px;margin-top: 20px;">Đánh giá sản phẩm</h3></center>
                   <form id="ratingForm" method="POST" action="/product/submit-review">
                     <input type="hidden" name="productId" value="<%= product.id %>">
@@ -210,7 +210,7 @@
           
           <div class="col">
               <h2 class="section-title text-center product_name">Sản phẩm gợi ý</h2>
-              <div class="row row-cols-2 row-cols-md-5 g-4" style="margin-left:-000px; gap: 50px; height: auto; width: auto;">
+              <div class="row row-cols-2 row-cols-md-5 g-4" style="gap: 20px; height: auto; width: 151%;">
                 <% products.forEach(product => { %>
                     <div class="col">
                         <div class="card product-card">
