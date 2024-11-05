@@ -457,8 +457,8 @@ exports.SearchProducts = async (req, res) => {
     const searchQuery = req.query.query;
 
     try {
-        db.query('SELECT * FROM products WHERE name LIKE ? OR description LIKE ? OR image_description LIKE ?', 
-                 [`%${searchQuery}%`, `%${searchQuery}%`, `%${searchQuery}%`], (err, results) => {
+        db.query('SELECT * FROM products WHERE name LIKE ? OR description LIKE ?', 
+                 [`%${searchQuery}%`, `%${searchQuery}%`], (err, results) => {
             if (err) {
                 console.error('Lỗi khi truy vấn cơ sở dữ liệu:', err);
                 return res.status(500).send('Đã xảy ra lỗi khi truy vấn cơ sở dữ liệu');
