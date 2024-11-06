@@ -130,8 +130,8 @@ p {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    width: 118%;
-    height: 377px;
+    width: 251px;
+    height: 413px;
     transition: transform 0.5s, box-shadow 0.5s;
     margin-bottom: 20px;
 }
@@ -1077,7 +1077,7 @@ button[type="submit"]:active {
     left: 0;
     top: 0;
     padding: 20px;
-    background-color: #f8f9fa;
+    background-color: transparent;
     height: 100vh; /* Chiều cao toàn màn hình */
   }
 

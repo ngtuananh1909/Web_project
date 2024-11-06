@@ -52,7 +52,6 @@
   document.getElementById('price').addEventListener('input', updatePreview);
   document.getElementById('quantity').addEventListener('input', updatePreview);
   document.getElementById('saleval').addEventListener('input', updatePreview);
-  document.getElementById('sale').addEventListener('change', toggleSaleValue);
 
   // Khởi tạo
   document.addEventListener('DOMContentLoaded', function() {
