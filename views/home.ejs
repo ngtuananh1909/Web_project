@@ -222,7 +222,7 @@
                       </a>
                       <div class="card-body">
                         <h4 class="card-title text-center"><%= product.name %></h4> <!-- Use text-center class -->
-                        <% if (product.sale) { %>
+                        <% if (product.saleval) { %>
                           <center><span class="badge bg-danger ms-2" style="margin-bottom: 10px;">-<%= product.saleval %>%</span></center>
                           <p class="card-text" style="margin-bottom: 4px;">
                             Giá: <%= formatCurrency((product.price - (product.price * product.saleval / 100).toFixed(0))) %> VNĐ
