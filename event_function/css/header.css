@@ -257,6 +257,9 @@ height: 30px;
   .search-wrapper button {
       padding: 0; /* Adjust padding for the button */
   }
+  div#searchContainer {
+    margin-left: 0% !important;
+  }
 
 }
 
@@ -309,4 +312,7 @@ height: 30px;
   .responsive-margin {
     margin-left: 25%;
   }
+}
+div#searchContainer {
+  margin-left: -5%;
 }
