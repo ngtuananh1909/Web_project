@@ -154,16 +154,16 @@ body {
     color: white;
   }
   .pay-code {
-      position: fixed; /* Giữ cho div luôn cố định trên màn hình */
-      bottom: 10px; /* Căn chỉnh vị trí từ đáy màn hình */
-      left: 44.3%;
-      transform: translateX(-50%); /* Đẩy div sang trái một nửa chiều rộng của nó để nó nằm giữa */
-      background-color: #f1f1f1; /* Màu nền của div */
-      padding: 10px; /* Khoảng cách bên trong div */
-      border: 1px solid #ccc; /* Đường viền của div */
-      z-index: 1000; /* Giúp div xuất hiện trên các thành phần khác */
-      height: auto;
-      width: 1080px; /* Hoặc có thể thay đổi thành % để nó linh hoạt hơn */
+    position: fixed;
+    bottom: 10px;
+    left: 49.3%;
+    background-color: #ffffff;
+    padding: 10px;
+    transform: translateX(-50%);
+    border: 1px solid #ccc;
+    z-index: 1000;
+    height: auto;
+    width: 90%;
   }
 
   .dark-mode .pay-code {
