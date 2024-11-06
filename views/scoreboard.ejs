@@ -160,7 +160,7 @@
 
               <div class="card-body">
                 <h5 class="card-title"><%= product.name %></h5> <!-- Giảm kích thước chữ -->
-                <% if (product.sale) { %>
+                <% if (product.saleval) { %>
                   <p class="card-text">
                     Giá: <%= formatCurrency((product.price - (product.price * product.saleval / 100)).toFixed(0)) %> VNĐ
                     <del> <%= formatCurrency(product.price) %> VNĐ</del><br>
