@@ -11,20 +11,21 @@ document.getElementById("background-input").addEventListener("change", function 
 
             img.onload = function () {
                 const aspectRatio = img.width / img.height;
+                const tableElement = document.querySelector(".table");
 
                 // Nếu ảnh có tỷ lệ gần 9:16, điều chỉnh lại theo tỷ lệ 16:9
                 if (aspectRatio < 1) { // Tỷ lệ dọc, tức là 9:16
-                    document.body.style.backgroundSize = "auto 100%";
+                    tableElement.style.backgroundSize = "auto 100%";
                 } else { // Tỷ lệ ngang, tức là gần 16:9
-                    document.body.style.backgroundSize = "cover";
+                    tableElement.style.backgroundSize = "cover";
                 }
 
                 // Đặt ảnh nền
-                document.body.style.backgroundImage = `url(${e.target.result})`;
-                document.body.style.backgroundPosition = "center"; // Căn giữa để cắt phần thừa
+                tableElement.style.backgroundImage = `url(${e.target.result})`;
+                tableElement.style.backgroundPosition = "center"; // Căn giữa để cắt phần thừa
 
-                // Phân tích độ sáng của hình nền và điều chỉnh màu chữ
-                adjustTextColor(img, document.body);
+                // Phân tích độ sáng của hình nền để điều chỉnh màu chữ
+                adjustTextColor(img, tableElement);
             };
         };
         reader.readAsDataURL(file);
@@ -36,7 +37,7 @@ function adjustTextColor(img, element) {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
 
-    // Vẽ ảnh lên canvas với kích thước 1x1 pixel để lấy màu trung bình
+    // Tạo một canvas với kích thước nhỏ hơn để tiết kiệm tài nguyên
     canvas.width = 1;
     canvas.height = 1;
 
@@ -46,7 +47,7 @@ function adjustTextColor(img, element) {
     // Lấy dữ liệu pixel (r, g, b) của ảnh
     const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
 
-    // Tính toán độ sáng của ảnh
+    // Tính toán độ sáng của ảnh (theo công thức luminance)
     const brightness = (0.299 * r + 0.587 * g + 0.114 * b);
 
     // Nếu độ sáng cao, dùng màu chữ tối; nếu độ sáng thấp, dùng màu chữ sáng
@@ -57,10 +58,11 @@ function adjustTextColor(img, element) {
     }
 }
 
-// Hàm reset nền về ảnh mặc định
+// Hàm reset nền và màu chữ về mặc định
 function resetBackground() {
-    document.body.style.backgroundImage = `url(${defaultBackgroundUrl})`;
-    document.body.style.backgroundSize = "cover"; // Đặt về mặc định là cover
-    document.body.style.backgroundPosition = "center"; // Đặt lại căn giữa
-    document.body.style.color = "#000000"; // Màu chữ mặc định (có thể thay đổi tùy ý)
+    const tableElement = document.querySelector(".table");
+    tableElement.style.backgroundImage = `url(${defaultBackgroundUrl})`;
+    tableElement.style.backgroundSize = "cover"; // Đặt về mặc định là cover
+    tableElement.style.backgroundPosition = "center"; // Đặt lại căn giữa
+    tableElement.style.color = "#000000"; // Màu chữ mặc định (có thể thay đổi tùy ý)
 }
