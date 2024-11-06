@@ -40,7 +40,7 @@ exports.CreateProduct = async (req, res) => {
             image: imageFile.name,
             creator,
             creator_id: userID,
-            sale: sale === "1",
+            sale: sale === "true",
             saleval: parseFloat(saleval),
             sold: 0,
             created_at: new Date(),

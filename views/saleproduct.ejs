@@ -139,43 +139,45 @@
         </center>
         <div class="row row-cols-1 row-cols-md-5 g-4">
           <% products.forEach(product => { %>
-          <div class="col">
-            <div class="card product-card">
-              <a href="/product/<%= product.id %>">
-                <img
-                  src="/uploads/<%= product.image %>"
-                  class="card-img-top"
-                  alt="<%= product.name %>"
-                />
-              </a>
-              <div class="card-body">
-                <h3 class="card-title"><%= product.name %></h3>
-                <span class="badge bg-danger ms-2">
-                  -<%= product.saleval %>% 
-                </span>
-                <p class="card-text">
-                  Giá: <del><%= product.price %></del>
-                  <%= (product.price - (product.price * product.saleval / 100)).toFixed(2) %> VND
-                </p>
-                <p>Creator: <%= product.creator %></p>
-                <p class="card-text" style="margin-top: 3px">
-                  Ngày tạo: <%= product.formatted_date %>
-                </p>
-                <div class="d-flex justify-content-center mt-3">
-                  <a
-                    href="/product/<%= product.id %>"
-                    class="btn btn-success rounded me-2"
-                  >
-                    Thông tin sản phẩm
+            <% if (product.sale && product.saleval > 0) { %>
+              <div class="col">
+                <div class="card product-card">
+                  <a href="/product/<%= product.id %>">
+                    <img
+                      src="/uploads/<%= product.image %>"
+                      class="card-img-top"
+                      alt="<%= product.name %>"
+                    />
                   </a>
-                  <button type="button" class="btn btn-primary rounded">
-                    Thêm vào giỏ
-                  </button>
+                  <div class="card-body">
+                    <h3 class="card-title"><%= product.name %></h3>
+                    <span class="badge bg-danger ms-2">
+                      -<%= product.saleval %>% 
+                    </span>
+                    <p class="card-text">
+                      Giá: <del><%= product.price %></del>
+                      <%= (product.price - (product.price * product.saleval / 100)).toFixed(2) %> VND
+                    </p>
+                    <p>Creator: <%= product.creator %></p>
+                    <p class="card-text" style="margin-top: 3px">
+                      Ngày tạo: <%= product.formatted_date %>
+                    </p>
+                    <div class="d-flex justify-content-center mt-3">
+                      <a
+                        href="/product/<%= product.id %>"
+                        class="btn btn-success rounded me-2"
+                      >
+                        Thông tin sản phẩm
+                      </a>
+                      <button type="button" class="btn btn-primary rounded">
+                        Thêm vào giỏ
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <% }); %>
+              <% } %>
+            <% }); %>
         </div>
       </div>
     </section>

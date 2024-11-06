@@ -1,70 +1,117 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Lấy các phần tử input và các phần tử xem trước
+    const form = document.getElementById("product-form");
     const nameInput = document.getElementById("name");
     const priceInput = document.getElementById("price");
     const quantityInput = document.getElementById("quantity");
     const imageInput = document.getElementById("image");
+    const saleCheckbox = document.getElementById("sale");
+    const saleHidden = document.getElementById("saleHidden");
+    const saleValueInput = document.getElementById("saleval");
+    const descriptionInput = document.getElementById("description");
 
-    const previewName = document.getElementById("preview-name");
-    const previewPrice = document.getElementById("preview-price");
-    const previewQuantity = document.getElementById("preview-quantity");
-    const previewImage = document.getElementById("preview-image");
+    function updatePreview() {
+        // Cập nhật preview name
+        document.getElementById("preview-name").textContent = nameInput.value || "Product Name";
+        
+        // Cập nhật preview price
+        document.getElementById("preview-price").textContent = 
+            `Price: ${priceInput.value ? formatCurrency(priceInput.value) : "0"} VND`;
+        
+        // Cập nhật preview quantity
+        document.getElementById("preview-quantity").textContent = 
+            `Quantity: ${quantityInput.value || "0"}`;
 
-    // Cập nhật xem trước tên sản phẩm
-    nameInput.addEventListener("input", function () {
-      previewName.textContent = nameInput.value || "Product Name";
-    });
+        // Cập nhật preview sale
+        const previewSale = document.getElementById("preview-sale");
+        if (saleCheckbox.checked && saleValueInput.value) {
+            previewSale.style.display = "block";
+            previewSale.textContent = `Sale Value: ${saleValueInput.value}%`;
+            saleHidden.value = "1";
+        } else {
+            previewSale.style.display = "none";
+            saleHidden.value = "0";
+        }
 
-    // Cập nhật xem trước giá sản phẩm
-    priceInput.addEventListener("input", function () {
-      previewPrice.textContent = "Price: " + (priceInput.value ? priceInput.value + " VND" : "0 VND");
-    });
+        // Cập nhật preview description
+        document.getElementById("preview-description").textContent = 
+            descriptionInput.value || "Description";
+    }
 
-    // Cập nhật xem trước số lượng sản phẩm
-    quantityInput.addEventListener("input", function () {
-      previewQuantity.textContent = "Quantity: " + (quantityInput.value ? quantityInput.value : "0");
-    });
+    // Add event listeners
+    nameInput.addEventListener("input", updatePreview);
+    priceInput.addEventListener("input", updatePreview);
+    quantityInput.addEventListener("input", updatePreview);
+    descriptionInput.addEventListener("input", updatePreview);
+    saleCheckbox.addEventListener("change", updatePreview);
+    saleValueInput.addEventListener("input", updatePreview);
 
-    // Cập nhật xem trước mô tả
-    document.getElementById("description").addEventListener("input", function() {
-      var description = document.getElementById("description").value;
-      document.getElementById("preview-description").innerText = description;
-    });
-
-
-    // Cập nhật ảnh xem trước
+    // Preview image when selected
     imageInput.addEventListener("change", function () {
-      const file = imageInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          previewImage.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
+        const file = imageInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById("preview-image").src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
     });
 
-    // Hiện/ẩn giá trị giảm giá trong xem trước
-    saleInput.addEventListener("change", function () {
-      previewSale.style.display = saleInput.checked ? "block" : "none";
-      if (saleInput.checked) {
-        previewSale.textContent = "Sale Value: " + (saleValueInput.value ? saleValueInput.value + "%" : "0%");
-      } else {
-        previewSale.textContent = ""; // Ẩn giá trị giảm giá nếu không được chọn
-      }
-    });
-  });
-  // Cập nhật xem trước mô tả
-  document.getElementById("editor").addEventListener("input", function () {
-    var description = quill.root.innerHTML; // Lấy nội dung từ editor
-    document.getElementById("preview-description").innerHTML = description; // Cập nhật mô tả xem trước
-  });
-  // Lắng nghe sự kiện input trên trường mô tả sản phẩm
-  document.getElementById('description-input').addEventListener('input', function () {
-    // Lấy giá trị từ textarea và cập nhật vào thẻ p trong preview
-    document.getElementById('info-description').textContent = this.value || "More info detail";
-  });
+    // Form submission validation
+    form.addEventListener("submit", function(event) {
+        event.preventDefault(); // Ngăn form submit mặc định
 
-  var quill = new Quill('#editor', {
-    theme: 'snow'
+        // Set giá trị mặc định cho sale
+        if (saleCheckbox.checked) {
+            if (!saleValueInput.value || saleValueInput.value.trim() === "") {
+                saleValueInput.value = "0";
+            }
+        } else {
+            // Nếu checkbox không được chọn, set giá trị là null hoặc 0
+            saleValueInput.value = "0";
+        }
+
+        // Validate các trường bắt buộc khác
+        if (!nameInput.value || !priceInput.value || !quantityInput.value || !imageInput.files[0] || !descriptionInput.value) {
+            alert("Please fill in all required fields");
+            return;
+        }
+
+        // Nếu mọi thứ ok, submit form
+        form.submit();
+    });
+
+    // Initialize preview
+    updatePreview();
 });
+document.addEventListener('DOMContentLoaded', function() {
+    const descriptionInput = document.getElementById('description-input');
+    const infoDescription = document.getElementById('info-description');
+
+    descriptionInput.addEventListener('input', function() {
+        infoDescription.textContent = this.value;
+    });
+});
+// Helper function to format currency
+function formatCurrency(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+let editor;
+
+ClassicEditor
+    .create(document.querySelector('#editor'))
+    .then(newEditor => {
+        editor = newEditor;
+        
+        // Lắng nghe sự kiện thay đổi trong editor
+        editor.model.document.on('change:data', () => {
+            // Cập nhật nội dung cho input hidden
+            document.querySelector('#description').value = editor.getData();
+            
+            // Cập nhật preview
+            document.querySelector('#preview-description').innerHTML = editor.getData();
+        });
+    })
+    .catch(error => {
+        console.error(error);
+    });
