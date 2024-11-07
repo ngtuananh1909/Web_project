@@ -1,86 +1,71 @@
-const db = require('../connect/database');
+// Đảm bảo đã import query từ module database
+const { query } = require('../connect/database');
 
+// Hàm tính toán sự tương đồng giữa người dùng (User-User Similarity)
 const calculateUserSimilarity = (userRatings, allRatings) => {
-    const userVector = {};
-    userRatings.forEach(rating => {
-        userVector[rating.product_id] = rating.rating;
-    });
+    const users = [...new Set(allRatings.map(rating => rating.user_id))];
+    const ratingsMatrix = [];
 
-    const similarities = {};
-
-    allRatings.forEach(rating => {
-        const otherUserId = rating.user_id;
-        const otherUserVector = similarities[otherUserId] || {};
-        otherUserVector[rating.product_id] = rating.rating;
-
-        similarities[otherUserId] = otherUserVector;
-    });
-
-    const userSimilarities = {};
-    for (const otherUserId in similarities) {
-        const otherUserVector = similarities[otherUserId];
-        const similarity = cosineSimilarity(userVector, otherUserVector);
-        userSimilarities[otherUserId] = similarity;
-    }
-
-    return userSimilarities;
-};
-
-const cosineSimilarity = (vecA, vecB) => {
-    const dotProduct = Object.keys(vecA).reduce((sum, key) => {
-        return sum + (vecA[key] || 0) * (vecB[key] || 0);
-    }, 0);
-
-    const normA = Math.sqrt(Object.values(vecA).reduce((sum, val) => sum + val * val, 0));
-    const normB = Math.sqrt(Object.values(vecB).reduce((sum, val) => sum + val * val, 0));
-
-    return normA && normB ? dotProduct / (normA * normB) : 0; 
-};
-
-const getTopRecommendedProducts = (userId, similarUsers, allRatings) => {
-    const recommendedProducts = new Map();
-
-    for (const otherUserId in similarUsers) {
-        const similarity = similarUsers[otherUserId];
-        if (similarity <= 0) continue;
-
-        allRatings.forEach(rating => {
-            if (rating.user_id === otherUserId) {
-                if (!recommendedProducts.has(rating.product_id) && rating.rating >= 4) {
-                    recommendedProducts.set(rating.product_id, {
-                        productId: rating.product_id,
-                        score: similarity * rating.rating
-                    });
-                }
+    // Tạo ma trận ratings
+    users.forEach(user => {
+        const userRatingsArray = new Array(allRatings.length).fill(0); 
+        allRatings.forEach(row => {
+            if (row.user_id === user) {
+                const productIndex = allRatings.findIndex(r => r.product_id === row.product_id);
+                userRatingsArray[productIndex] = row.rating;
             }
         });
-    }
-
-    return Array.from(recommendedProducts.values())
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 5);
-};
-
-const findSimilarProducts = async (favoriteProducts) => {
-    const attributesMap = {};
-    favoriteProducts.forEach(product => {
-        attributesMap[product.id] = product.attributes; 
+        ratingsMatrix.push(userRatingsArray);
     });
 
-    const similarProducts = [];
+    const similarityMatrix = [];
+    for (let i = 0; i < users.length; i++) {
+        similarityMatrix[i] = [];
+        for (let j = 0; j < users.length; j++) {
+            // Tính cosine similarity giữa người dùng i và j
+            const dotProduct = ratingsMatrix[i].reduce((acc, val, index) => acc + val * ratingsMatrix[j][index], 0);
+            const magnitudeA = Math.sqrt(ratingsMatrix[i].reduce((acc, val) => acc + Math.pow(val, 2), 0));
+            const magnitudeB = Math.sqrt(ratingsMatrix[j].reduce((acc, val) => acc + Math.pow(val, 2), 0));
 
-    for (const productId in attributesMap) {
-        const attributes = attributesMap[productId];
-
-        try {
-            const [products] = await db.query('SELECT * FROM products WHERE JSON_CONTAINS(attributes, ?) AND id != ?', [JSON.stringify(attributes), productId]);
-            similarProducts.push(...products);
-        } catch (err) {
-            console.error('Error fetching similar products:', err);
+            similarityMatrix[i][j] = dotProduct / (magnitudeA * magnitudeB);
         }
     }
 
-    return similarProducts.length > 0 ? similarProducts : [];
+    return similarityMatrix;
+};
+
+// Hàm lấy các sản phẩm gợi ý dựa trên sự tương đồng của người dùng
+const getTopRecommendedProducts = (userId, userSimilarities, allRatings) => {
+    const userIndex = allRatings.findIndex(rating => rating.user_id === userId);
+    const similarUsers = userSimilarities[userIndex];
+
+    const products = [...new Set(allRatings.map(rating => rating.product_id))];
+    const productScores = {};
+
+    // Dự đoán điểm đánh giá cho các sản phẩm chưa được đánh giá
+    products.forEach((productId, index) => {
+        if (!allRatings.some(rating => rating.user_id === userId && rating.product_id === productId)) {
+            let score = 0;
+            similarUsers.forEach((similarity, idx) => {
+                if (similarity > 0) {
+                    const similarUserRatings = allRatings.filter(rating => rating.user_id === allRatings[idx].user_id && rating.product_id === productId);
+                    if (similarUserRatings.length > 0) {
+                        score += similarity * similarUserRatings[0].rating;
+                    }
+                }
+            });
+            productScores[productId] = score;
+        }
+    });
+
+    // Sắp xếp sản phẩm theo điểm gợi ý giảm dần
+    return Object.entries(productScores).sort((a, b) => b[1] - a[1]).map(entry => entry[0]);
+};
+
+// Hàm tìm sản phẩm tương tự dựa trên các sản phẩm người dùng đã đánh giá
+const findSimilarProducts = (productIds) => {
+    // Ví dụ, đây có thể là một hàm tìm kiếm trong cơ sở dữ liệu hoặc các thuật toán dựa trên đặc tính của sản phẩm
+    return productIds; // Tạm thời trả về chính các sản phẩm đã đánh giá
 };
 
 module.exports = { calculateUserSimilarity, getTopRecommendedProducts, findSimilarProducts };

@@ -5,6 +5,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "cloudinary": "^2.5.1",
+    "collaborative-filter": "^1.0.0-beta.3",
     "connect-flash": "^0.1.1",
     "connect-redis": "^7.1.1",
     "cors": "^2.8.5",
