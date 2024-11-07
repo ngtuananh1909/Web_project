@@ -1,85 +1,294 @@
+/* Base styles */
+body {
+  background-color: #F5EFFF;
+  color: #000;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+  background-color: #1b1b1b;
+  color: #f1f1f1;
+}
+
+.dark-mode .navbar,
+.dark-mode .card {
+  background-color: #333333;
+  color: #f1f1f1;
+}
+
+/* Header styles */
+.header-design {
+  position: sticky;
+  background-color: #e2e2e2;
+  top: 0;
+  z-index: 1000;
+}
+
+.dark-mode .header-design {
+  background-color: #666666fd;
+  color: white;
+}
+
+/* Navigation styles */
+.nav-link {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 16%;
+  bottom: 0;
+  width: 70%;
+  height: 2px;
+  background-color: #0056ea;
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease;
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* Icons */
+.home-icon,
+.add-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.bxh-icon {
+  width: 27px;
+  height: 27px;
+}
+
+.cart-icon {
+  width: 23px;
+  height: 23px;
+}
+
+/* Avatar */
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+}
+
+.nav-link.dropdown-toggle:hover + .dropdown-menu,
+.dropdown-menu:hover {
+  display: block;
+}
+
+.dark-mode .dropdown-menu {
+  background-color: #0c0c0c;
+}
+
+/* Form elements */
 .form-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-  }
+  margin-bottom: 1rem;
+}
 
-  .form-group label {
-    width: 150px;
-    margin-right: 10px;
-    color: #555;
-  }
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
 
-  .form-group input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
+/* Buttons */
+.button-select {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
 
-  .form-group button {
-    margin-left: 10px;
-    padding: 10px;
-    background-color: #007bff;
-    border: none;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-  }
+.button-select:hover {
+  background-color: #0056b3;
+}
 
-  .form-group button:hover {
-    background-color: #0056b3;
-  }
+/* Dark mode switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+  margin-left: 15px;
+}
 
-  .password-check {
-    display: none;
-    margin-top: 10px;
-  }
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
 
-  .password-check input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #d6d6d6;
+  transition: 0.4s;
+  border-radius: 34px;
+}
 
-  @media (max-width: 576px) {
-    .form-group {
-      flex-direction: column;
-      align-items: flex-start;
-    }
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
 
-    .form-group label {
-      margin-bottom: 5px;
-    }
+input:checked + .slider {
+  background-color: #4CAF50;
+}
 
-    .form-group input,
-    .form-group button {
-      width: 100%;
-    }
-  }
-    .setting{
-      width: 100%;
-      height: 700px;
-    }
-    .edit-name{
-      background-color: white;
-      color: #000;
-    }
-    .dark-mode .edit-name{
-      background-color: rgb(40, 40, 40);
-      color: #ffffff;
-    }
-    .alpha{
-      background-color: white;
-      color: #000;
-    }
-    .dark-mode .alpha{
-      background-color: rgb(40, 40, 40);
-      color: #ffffff;
-    }
-    .button-select{
-      height: 60px;
-      width: 150px;
-    }
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+/* Chat box */
+#chat-body {
+  width: 500px;
+  height: 460px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(120, 119, 119, 0.2);
+  position: fixed;
+  top: 48%;
+  left: 73%;
+  transform: scale(0);
+  transition: transform 0.3s ease, bottom 0.3s ease;
+  overflow: hidden;
+  z-index: 1001;
+  display: none;
+}
+
+.dark-mode #chat-body {
+  background-color: rgb(50, 50, 50);
+  color: white;
+}
+
+#chat-body.active {
+  display: block;
+  transform: scale(1);
+}
+
+#chat-header {
+  height: 65px;
+  color: #000;
+  font-size: 30px;
+  border-radius: 100px;
+}
+
+#close-chat {
+  font-size: 30px;
+  cursor: pointer;
+  color: red;
+}
+
+/* Utility classes */
+.hidden {
+  display: none;
+}
+
+/* Dropdown menu styling */
+.nav-item.dropdown {
+  position: relative;
+}
+
+/* Dropdown toggle (nút có avatar) */
+.nav-link.dropdown-toggle {
+  display: flex;
+  align-items: center;
+}
+
+/* Dropdown menu container */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+}
+
+/* Hiển thị dropdown menu khi hover */
+.nav-link.dropdown-toggle:hover + .dropdown-menu,
+.dropdown-menu:hover {
+  display: block;
+}
+
+/* Dark mode cho dropdown menu */
+.dark-mode .dropdown-menu {
+  background-color: #0c0c0c;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dropdown items */
+.dropdown-item {
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dropdown menu general */
+.dropdown-menu {
+  color: white;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Dropdown divider */
+.dropdown-divider {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Avatar trong dropdown */
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Positioning cho dropdown menu */
+.dropdown-menu-end {
+  margin-left: -270%;
+}
+.alpha{
+  color: #000;
+}
+.dark-mode .alpha{
+  color:#e2e2e2
+}
