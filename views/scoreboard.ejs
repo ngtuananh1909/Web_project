@@ -81,6 +81,11 @@
                     <img src="/img/add.jpg" alt="add product icon" style="width: 25px; height: 25px;">
                   </a>
                 </li>
+                <li class="nav-item me-2">
+                  <a class="nav-link donhang" href="/product/add">
+                    <img src="/img/donhang.png" alt="donhang icon" style="width: 25px; height: 25px;">
+                  </a>
+                </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                     <% if (user.avatar) { %>
@@ -89,7 +94,7 @@
                     <img src="./img/def.jpg" class="avatar me-1" alt="default avatar" style="width: 30px; height: 30px;" />
                     <% } %>
                   </a>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                  <ul class="dropdown-menu dropdown-menu-end" style="margin-left: -270%;" aria-labelledby="userDropdown">
                     <li><a class="dropdown-item" href="/user/<%= user.id %>">Profile</a></li>
                     <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
                     <li><a class="dropdown-item">Balance: <%= user.balance %> VNĐ</a></li>
@@ -130,7 +135,7 @@
           </div>
         </div>
       </div>
-    </header>  
+    </header>   
     <center><h1 class="text-center top">LIST TOP PRODUCT</h1></center>
     <div class="container mt-4">
       <div class="row g-3"> <!-- Giảm khoảng cách giữa các sản phẩm -->

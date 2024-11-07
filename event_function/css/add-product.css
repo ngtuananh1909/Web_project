@@ -47,6 +47,7 @@
 .preview {
   width: 650px;
   margin-left: -2%;
+  
 }
 .form-check .form-check-input {
   float: left;
@@ -64,13 +65,22 @@
 
 .table {
   display: flex;
-  width: 100%; /* Chiếm toàn bộ chiều rộng của cửa sổ */
-  height: 100%; /* Chiếm toàn bộ chiều cao của cửa sổ */
-  box-sizing: border-box; /* Đảm bảo padding và border được tính trong kích thước */
-  padding: 20px; /* Padding có thể điều chỉnh theo nhu cầu */
-  overflow: auto; /* Thêm cuộn nếu nội dung vượt quá chiều cao */
-  flex-wrap: nowrap; /* Đảm bảo các phần tử không xuống dòng */
-  align-items: flex-start; /* Canh đều các phần tử ở đầu */
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 1200px;
+  width: 100%;
+}
+.preview, .add, .history {
+  width: 100%;
+  max-width: 600px;
 }
 .the{
   width: 20%;
@@ -315,88 +325,57 @@ html, body {
   margin-top: 3%;
 }
 
-@media (max-width: 1880px) and (min-width: 1701px) {
+/* Màn hình lớn */
+@media (min-width: 1281px) {
   .table {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 101%;
-      max-width: 20000px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
   }
-  .preview, .add, .form-container {
-      width: 30%;
-      margin-bottom: 20px;
-      
-  }
-}
-@media (max-width: 1700px) and (min-width:1401px) {
-  .table {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      padding: 10px;
+  
+  .preview, .add {
+    width: 30%;
   }
 
-  .preview, .add, .form-container {
-      width: 90%;
-      max-width: 100%;
-      margin-bottom: 20px; /* Khoảng cách giữa các phần tử */
+  .history {
+    width: 30%;
   }
 }
 
-@media (max-width: 1400px) and (min-width: 1001px) {
-  #editor {
-      height: 300px !important;
-  }
-  .table {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 101%;
-      max-width: 2000px;
-  }
+/* Các style chung */
+.table {
+  min-height: 100vh;
 }
 
-@media (max-width: 1300px) and (min-width: 1001px) {
-  .preview, .add, .form-container {
-      width: 90%;
-      max-width: 100%;
-  }
-  .table {
-      display: flex;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-  }
+.preview, .add, .history {
+  background-color: transparent;
+  border-radius: 8px;
+  padding: 15px;
 }
-/* Media query chỉ áp dụng cho màn hình dưới 1000px */
-@media (max-width: 1000px) { 
-  .preview {
-      width: 100%;
-      margin-left: -1%;
-      margin-top: 153%;
-  }
-  .add {
-    margin-left: 8%;
-  }
-  .table {
-      width: 100%;
-      padding: 10px;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-  }
+
+.product-card {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.button-input {
+  margin-bottom: 10px;
+}
+
+.button-submit {
+  width: 100%;
+  margin-top: 20px;
 }
 body .table {
   margin: 0;
   padding: 0;
-  height: 100vh;
+  height: 100%;
   transition: background-image 0.5s ease;
   background-image: url('/img/defaut-background.jpg'); /* URL nền mặc định */
   background-size: cover;
