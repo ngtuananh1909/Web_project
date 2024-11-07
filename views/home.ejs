@@ -136,29 +136,22 @@
               <a href="/scoreboard"
                 ><img
                   class="d-block w-100"
-                  src="/uploads/clear.png"
+                  src="/img/clear.png"
                   alt="First slide"
               /></a>
             </div>
             <div class="carousel-item">
               <img
                 class="d-block w-100"
-                src="/uploads/1721373600326_def.jpg"
+                src="/img/duolingo.png"
                 alt="Second slide"
               />
             </div>
             <div class="carousel-item">
               <img
                 class="d-block w-100"
-                src="/uploads/1721373497780_Tuan Anh.jpg"
+                src="/img/head-shoulders.png"
                 alt="Third slide"
-              />
-            </div>
-            <div class="carousel-item">
-              <img
-                class="d-block w-100"
-                src="/uploads/1721358772822_TrungKienSleep.jpg"
-                alt="Fourth slide"
               />
             </div>
           </div>
@@ -229,7 +222,7 @@
                       </a>
                       <div class="card-body">
                         <h4 class="card-title text-center"><%= product.name %></h4> <!-- Use text-center class -->
-                        <% if (product.sale) { %>
+                        <% if (product.saleval) { %>
                           <center><span class="badge bg-danger ms-2" style="margin-bottom: 10px;">-<%= product.saleval %>%</span></center>
                           <p class="card-text" style="margin-bottom: 4px;">
                             Giá: <%= formatCurrency((product.price - (product.price * product.saleval / 100).toFixed(0))) %> VNĐ
@@ -363,8 +356,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script src="colorThief.js"></script>
-    <script src="darkmode.js"></script>
-    <script src="chat.js"></script>  
+    <script src="darkmode.js"></script> 
     <script src="add-cart.js"></script>
     <script src="scoreboard.js"></script>
     <script src="search.js"></script>

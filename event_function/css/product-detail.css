@@ -1,12 +1,14 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f3f4f6;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top: 80px;
+    transition: background-image 0.5s ease;
+    background-image: url('/img/defaut-background.jpg'); /* URL nền mặc định */
+    background-attachment: fixed;
 }
 .sticky-header {
     position: sticky;
@@ -30,12 +32,13 @@ body {
     gap: 20px;
 }
 .dark-mode .container-anh{
-    width: 86%;
+    width: 60%;
     background: #00000041;
     color: white;
     padding: 0.2px;
     display: flex;
     gap: 20px;
+    margin-left: 20%;
 }
 
 .image-container {
@@ -57,7 +60,7 @@ h1 {
     font-size: 2.5rem;
     font-weight: bold;
     margin-bottom: 20px;
-    width: 57%;
+    width: 78%;
     margin-top: 112px;
     
 }
@@ -130,8 +133,8 @@ p {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    width: 250px;
-    height: 500px;
+    width: 229px;
+    height: 413px;
     transition: transform 0.5s, box-shadow 0.5s;
     margin-bottom: 20px;
 }
@@ -148,7 +151,7 @@ p {
 
 .product-card img {
     width: 100%;
-    height: 200px; /* Chiều cao cố định cho hình ảnh */
+    height: 126px; /* Chiều cao cố định cho hình ảnh */
     object-fit: cover;
 }
 
@@ -210,7 +213,7 @@ p {
 }
 
 .mt-3{
-    width: 220px;
+    width: 209px;
 }
 
 .addToCartBtn{
@@ -437,10 +440,12 @@ body.dark-mode {
     }
     .dark-mode .container-anh {
         width: 92%;
+        margin-left: 5% !important;
     }
 
     .container-anh {
         width: 92%;
+        margin-left: 5% !important;
     }
     .tuan_anh {
         display: flex; /* Sử dụng Flexbox */
@@ -455,7 +460,8 @@ body.dark-mode {
    .add-to-cart{
         width: 49%;
         height: 60%;
-        margin-top: -3%;
+        margin-top: 2%;
+        margin-left: -15%;
     }
     .buy-now{
         width: 45%;
@@ -521,13 +527,13 @@ body.dark-mode {
         background-color: #636363;
         height: auto;
         width: 70%;
-        margin-left: 29% !important;
+        margin-left: 52% !important;
     }
     .square-box.description {
         font-size: 20px;
         overflow: auto;
         max-height: 600px;
-        width: 118% !important;
+        width: 100% !important;
         box-sizing: border-box;
         color: white;
     }
@@ -593,7 +599,7 @@ h2.info_product.alpha {
     background-color: rgb(255, 255, 255); /* Màu nền của ô vuông */
     border: 2px solid rgb(255, 255, 255); /* Viền của ô vuông */
     margin-top: 20px; /* Khoảng cách giữa ô vuông và nội dung trên */
-    margin-left: 300px;
+    margin-left: 209px;
 }
 
 .dark-mode .square-box {
@@ -1070,3 +1076,73 @@ button[type="submit"]:active {
         margin-left: 55%;
     }
   }
+  .info-product {
+    display: fixed;
+    width: 40%; /* Chiếm khoảng 20% chiều rộng */
+    left: 0;
+    top: 0;
+    padding: 20px;
+    background-color: transparent;
+    height: 100vh; /* Chiều cao toàn màn hình */
+  }
+
+  .product-container {
+    margin-left: 22%; /* Dành khoảng trống cho phần info-product */
+    padding: 20px;
+  }
+
+  .product-container .row {
+    gap: 20px; /* Khoảng cách giữa các sản phẩm */
+  }
+  .row-cols-md-5>* {
+    flex: 0 0 auto;
+    width: 25% !important;
+}
+.buy-now, .add-to-cart, .button-seller {
+    display: inline-block;
+    width: 100%; /* Chiếm toàn bộ chiều rộng */
+    height: 100%; /* Chiếm toàn bộ chiều cao */
+    text-align: center;
+}
+
+.buy-now a, .add-to-cart a, .button-seller a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 1400px) {
+  .row.mt-5 {
+    flex-direction: column;
+  }
+
+  .row.mt-5 > .col {
+    width: 100%;
+    max-width: 100%;
+    flex-basis: auto;
+    margin-left: -42%;
+    margin-bottom: 20px; /* Thêm khoảng cách giữa các cột khi chúng xếp dọc */
+  }
+
+  .row.mt-5 > .col:last-child {
+    margin-bottom: 0; /* Loại bỏ margin bottom cho cột cuối cùng */
+    margin-top: 112%;
+  }
+  .col.suggest-product {
+    margin-left: 5% !important;
+  }
+  .row-cols-md-5>* {
+    flex: 0 0 auto;
+    width: 46% !important;
+  }
+  .mt-3 {
+    width: 191px;
+  }
+  .product-card{
+    width: 213px;
+  }
+  a.btn.btn-success.rounded.center-text {
+    font-size: 13px;
+  }
+}

@@ -9,6 +9,7 @@
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
   <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
   <link rel="shortcut icon" href="#" />
   <link rel="stylesheet" href="/css/add-product.css">
   <link rel="stylesheet" href="/css/header.css">
@@ -61,7 +62,7 @@
                     <% if (user.avatar) { %>
                     <img src="/<%= user.avatar %>" class="avatar me-1" alt="user avatar" style="width: 30px; height: 30px;" />
                     <% } else { %>
-                    <img src="./img/def.jpg" class="avatar me-1" alt="" style="width: 30px; height: 30px;" />
+                    <img src="/img/def.jpg" class="avatar me-1" alt="" style="width: 30px; height: 30px;" />
                     <% } %>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" style="margin-right: 100%;">
@@ -110,18 +111,14 @@
       <div class="preview">
         <h2>Product Preview</h2>
         <div class="card product-card class_preview">
-          <img id="preview-image" class="card-img-top" src="" alt="Product Image">
+          <img id="preview-image" class="card-img-top" src="/img/addproduct.png" alt="Product Image">
           <div class="card-body info">
             <h3 id="preview-name" class="card-title alpha">Name</h3>
             <p id="preview-price" class="card-text alpha">Price: 0 VND</p>
             <p id="preview-quantity" class="card-text alpha">Quantity: 0</p>
             <p id="preview-sale" class="card-text alpha" style="display:none;">Sale Value: 0%</p>
+            <p id="preview-description" class="card-text alpha">Description</p>
           </div>
-        </div>
-        
-        <!-- Ô vuông riêng cho phần mô tả -->
-        <div class="description-box">
-          <p id="preview-description" class="card-text alpha">Description</p>
         </div>
         <div class="info-box description-box">
           <p id="info-description" class="card-text alpha">More info detail</p>
@@ -145,11 +142,11 @@
           <div class="form-check alpha" style="background-color: transparent;">
             <input type="checkbox" id="sale" class="form-check-input sale-btn" onclick="toggleSaleValue()">
             <label for="sale" class="sale-label" style="color: white;"><span>Sale</span></label>
-            <div class="form-group" id="sale-value-container" style="display: none;">
+            <div class="form-group" id="sale-value-container" style="display: none; background-color: transparent;">
               <input type="number" id="saleval" name="saleval" class="form-control button-input nut-bam" min="1" max="99" step="1" placeholder="% Sale">
             </div>
           </div>
-          <div class="form-group" style="margin-bottom: 8%;">
+          <div class="form-group" style="margin-bottom: 8%; background-color: transparent;">
             <textarea id="description-input" name="description-input" class="form-control button-input nut-bam" placeholder="Enter more info product"></textarea>
           </div>
           <div class="form-group">
@@ -160,10 +157,8 @@
     
           <button type="submit" class="btn btn-success button-submit button-add">Add Product</button>
         </form>
-        <!-- Phần mới thêm vào - History -->
       </div>
-      <div class="history the"></div>
-      
+      <div class="history the alpha"> History</div>
     </div>
     
 
@@ -173,7 +168,6 @@
     <script src="/preview.js"></script>
     <script src="/darkmode.js"></script>
     <script src="/sale.js"></script>
-    <script src="/crop-image.js"></script>
-    <script src="/background.js"></script>
+    <script src="/background-table.js"></script>
   </body>
 </html>
