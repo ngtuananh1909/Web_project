@@ -1,66 +1,54 @@
-const defaultBackgroundUrl = '/img/defaut-background.jpg'; // URL nền mặc định
-
-// Hàm thay đổi nền khi người dùng chọn ảnh mới
-document.getElementById("background-input").addEventListener("change", function () {
-    const file = this.files[0];
+document.getElementById('background-input').addEventListener('change', function(event) {
+    const file = event.target.files[0];
     if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const img = new Image();
-            img.src = e.target.result;
+        const formData = new FormData();
+        formData.append('background', file);
 
-            img.onload = function () {
-                const aspectRatio = img.width / img.height;
+        fetch('/upload-background', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Cập nhật background ngay lập tức
+                document.body.style.backgroundImage = `url('${data.backgroundPath}')`;
+                document.body.style.backgroundSize = 'cover';
+                document.body.style.backgroundPosition = 'center';
+                document.body.style.backgroundRepeat = 'no-repeat';
 
-                // Nếu ảnh có tỷ lệ gần 9:16, điều chỉnh lại theo tỷ lệ 16:9
-                if (aspectRatio < 1) { // Tỷ lệ dọc, tức là 9:16
-                    document.body.style.backgroundSize = "auto 100%";
-                } else { // Tỷ lệ ngang, tức là gần 16:9
-                    document.body.style.backgroundSize = "cover";
-                }
-
-                // Đặt ảnh nền
-                document.body.style.backgroundImage = `url(${e.target.result})`;
-                document.body.style.backgroundPosition = "center"; // Căn giữa để cắt phần thừa
-
-                // Phân tích độ sáng của hình nền và điều chỉnh màu chữ
-                adjustTextColor(img, document.body);
-            };
-        };
-        reader.readAsDataURL(file);
+                // Lưu đường dẫn background vào localStorage
+                localStorage.setItem('userBackground', data.backgroundPath);
+            }
+        })
+        .catch(error => {
+            console.error('Error uploading background:', error);
+        });
     }
 });
 
-// Hàm phân tích độ sáng của ảnh và điều chỉnh màu chữ
-function adjustTextColor(img, element) {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-
-    // Vẽ ảnh lên canvas với kích thước 1x1 pixel để lấy màu trung bình
-    canvas.width = 1;
-    canvas.height = 1;
-
-    // Vẽ ảnh lên canvas
-    ctx.drawImage(img, 0, 0, 1, 1);
-
-    // Lấy dữ liệu pixel (r, g, b) của ảnh
-    const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
-
-    // Tính toán độ sáng của ảnh
-    const brightness = (0.299 * r + 0.587 * g + 0.114 * b);
-
-    // Nếu độ sáng cao, dùng màu chữ tối; nếu độ sáng thấp, dùng màu chữ sáng
-    if (brightness > 128) {
-        element.style.color = "#000000"; // Màu chữ tối
-    } else {
-        element.style.color = "#FFFFFF"; // Màu chữ sáng
-    }
-}
-
-// Hàm reset nền về ảnh mặc định
+// Hàm reset background về mặc định
 function resetBackground() {
-    document.body.style.backgroundImage = `url(${defaultBackgroundUrl})`;
-    document.body.style.backgroundSize = "cover"; // Đặt về mặc định là cover
-    document.body.style.backgroundPosition = "center"; // Đặt lại căn giữa
-    document.body.style.color = "#000000"; // Màu chữ mặc định (có thể thay đổi tùy ý)
+    document.body.style.backgroundImage = 'none';
+    localStorage.removeItem('userBackground');
+    
+    // Gọi API để xóa background đã lưu
+    fetch('/reset-background', { method: 'POST' })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Background reset successfully');
+        }
+    });
 }
+
+// Kiểm tra và áp dụng background khi trang load
+document.addEventListener('DOMContentLoaded', () => {
+    const savedBackground = localStorage.getItem('userBackground');
+    if (savedBackground) {
+        document.body.style.backgroundImage = `url('${savedBackground}')`;
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center';
+        document.body.style.backgroundRepeat = 'no-repeat';
+    }
+});

@@ -82,6 +82,19 @@
                   <a class="nav-link donhang" href="/product/add">
                     <img src="/img/donhang.png" alt="donhang icon" style="width: 25px; height: 25px;">
                   </a>
+                  <!-- Thông báo -->
+                  <div class="notifications">
+                    <h3>Thông Báo</h3>
+                    <% if (notifications.length > 0) { %>
+                      <ul>
+                        <% notifications.forEach(notification => { %>
+                          <li><%= notification.message %> <span><%= notification.created_at %></span></li>
+                        <% }) %>
+                      </ul>
+                    <% } else { %>
+                      <p>Không có thông báo nào.</p>
+                    <% } %>
+                  </div>
                 </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">

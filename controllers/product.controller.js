@@ -1,3 +1,4 @@
+const cloudinary = require('../connect/cloudinary');
 const db = require('../connect/database');
 const { ProductIDGenerator } = require('../event_function/function');
 const path = require('path');
@@ -8,52 +9,48 @@ const { Mutex } = require('async-mutex');
 const mutex = new Mutex();
 require('dotenv').config();
 
-
 exports.CreateProduct = async (req, res) => {
     const { name, description, price, quantity, creator, sale, saleval } = req.body;
     const userID = req.session.user.id;
     const imageFile = req.files.image;
-
     if (!name || !description || !price || !quantity || !imageFile) {
         return res.status(400).send('Thiếu thông tin cần thiết.');
     }
 
-    const productId = ProductIDGenerator(); 
-    const uploadPath = path.join(__dirname, '../public/uploads', `${productId}_${Date.now()}_${imageFile.name}`);
-    
-    try {
-        await mutex.runExclusive(async () => {
-            await new Promise((resolve, reject) => {
-                imageFile.mv(uploadPath, err => {
-                    if (err) reject(new Error('Error uploading image'));
-                    resolve();
-                });
-            });
-        });
+    const productId = ProductIDGenerator();
 
+    try {
+        const uploadResult = await cloudinary.uploader.upload(imageFile.tempFilePath, {
+            public_id: productId, 
+            folder: "product_images", 
+        });
+        console.log('Kết quả upload:', uploadResult);
         const newProduct = {
             id: productId,
             name,
             description,
             price,
             quantity,
-            image: imageFile.name,
+            image: uploadResult.secure_url, 
             creator,
             creator_id: userID,
-            sale: sale === "1",
-            saleval: parseFloat(saleval),
+            sale: sale === "true",
+            saleval: saleval || 0,
             sold: 0,
             created_at: new Date(),
         };
 
         const sql = 'INSERT INTO products SET ?';
-        db.query(sql, newProduct, err => {
-            if (err) return res.status(500).send('Error creating product');
+        db.query(sql, newProduct, (err) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Error creating product');
+            }
             res.redirect(req.get("Referrer") || "/");
         });
     } catch (err) {
-        console.error('Error creating product:', err);
-        res.status(500).send('Error creating product');
+        console.error('Lỗi upload ảnh:', err);
+        res.status(500).send('Lỗi tải ảnh lên Cloudinary');
     }
 };
 

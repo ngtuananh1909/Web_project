@@ -4,7 +4,7 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 const { IdGenerator } = require('../event_function/function');
-const {calculateUserSimilarity, getTopRecommendedProducts, findSimilarProducts} = require('../event_function/Filtering')
+const { calculateUserSimilarity, getTopRecommendedProducts, findSimilarProducts } = require('../event_function/Filtering'); 
 const { promisify } = require('util');
 const util = require('util');
 const query = util.promisify(db.query).bind(db);
@@ -26,11 +26,13 @@ exports.home = async (req, res) => {
         const productsQuery = 'SELECT * FROM products';
         const userRatingsQuery = userId ? 'SELECT * FROM ratings WHERE user_id = ?' : null;
         const allRatingsQuery = 'SELECT * FROM ratings';
+        const notificationsQuery = userId ? 'SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC' : null;
 
-        const [products, userRatings, allRatings] = await Promise.all([
+        const [products, userRatings, allRatings, notifications] = await Promise.all([
             query(productsQuery),
             userId ? query(userRatingsQuery, [userId]) : Promise.resolve([]),
-            query(allRatingsQuery)
+            query(allRatingsQuery),
+            userId ? query(notificationsQuery, [userId]) : Promise.resolve([])  
         ]);
 
         const formattedProducts = products.map(product => ({
@@ -54,11 +56,12 @@ exports.home = async (req, res) => {
         res.render('home', {
             user: req.session.user,
             products: formattedProducts,
-            recommendations
+            recommendations,
+            notifications 
         });
     } catch (err) {
         console.error('Error fetching data:', err);
-        res.render('home', { user: req.session.user, products: [], recommendations: []});
+        res.render('home', { user: req.session.user, products: [], recommendations: [], notifications: []});
     }
 };
 
@@ -457,8 +460,8 @@ exports.SearchProducts = async (req, res) => {
     const searchQuery = req.query.query;
 
     try {
-        db.query('SELECT * FROM products WHERE name LIKE ? OR description LIKE ? OR image_description LIKE ?', 
-                 [`%${searchQuery}%`, `%${searchQuery}%`, `%${searchQuery}%`], (err, results) => {
+        db.query('SELECT * FROM products WHERE name LIKE ? OR description LIKE ?', 
+                 [`%${searchQuery}%`, `%${searchQuery}%`], (err, results) => {
             if (err) {
                 console.error('Lỗi khi truy vấn cơ sở dữ liệu:', err);
                 return res.status(500).send('Đã xảy ra lỗi khi truy vấn cơ sở dữ liệu');
@@ -512,4 +515,16 @@ exports.UpdateFields = async (req, res) => {
         console.error('Error updating user field:', err);
         return res.status(500).json({ success: false, message: 'Lỗi máy chủ. Vui lòng thử lại.' });
     }
+};
+
+exports.getNotifications = (req, res) => {
+    const userId = req.session.user.id; 
+
+    db.query('SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC', [userId], (err, notifications) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Có lỗi xảy ra, vui lòng thử lại.' });
+        }
+
+        res.json({ success: true, notifications: notifications });
+    });
 };
