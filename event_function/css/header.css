@@ -192,7 +192,7 @@
 .nav-link.bxh:hover::after,
 .nav-link.giohang:hover::after,
 .nav-link.taosanpham:hover::after,
-.nav-link.nhantin:hover::after,
+.nav-link.donhang:hover::after,
 .nav-link.login:hover::after,
 .nav-link.dangky:hover::after {
   transform: scaleX(1); /* Hiện thanh nhỏ khi hover */
