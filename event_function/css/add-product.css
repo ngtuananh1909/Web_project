@@ -22,7 +22,7 @@
   height: auto;
 }
 .product-card img {
-  height: 267px;
+  height: auto;
   object-fit: cover;
   width: 100%;
 }
@@ -60,9 +60,7 @@
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
-  overflow: hidden;
 }
-
 .table {
   display: flex;
   justify-content: center;
@@ -271,19 +269,9 @@ input:checked + .slider:before {
   color: #000;
 }
 #preview-description {
-  width: 100%;
-  max-width: 100%;
-  word-break: break-all;     /* Thêm property này */
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;       /* Thay đổi thành normal */
-  text-overflow: ellipsis;   /* Thêm dấu ... nếu text bị cắt */
-  margin: 0;
-  line-height: 1.5;
-  font-size: 14px;
-  text-align: left;
-  display: block;           /* Đảm bảo element được hiển thị dạng block */
-  box-sizing: border-box;   /* Bao gồm padding trong width */
+  white-space: normal; /* Đảm bảo nội dung xuống dòng khi hết chiều rộng */
+  word-wrap: break-word; /* Chia nhỏ từ nếu từ dài hơn chiều rộng */
+  overflow-wrap: break-word; /* Đảm bảo các từ dài không vượt quá chiều rộng */
 }
 
 
@@ -293,7 +281,7 @@ input:checked + .slider:before {
   width: 95% !important;
 }
 .class_preview{
-  height: auto;
+  height: 445px;
   width: 60%;
   margin-left: 22%;
 }
@@ -375,12 +363,12 @@ html, body {
 body .table {
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: auto;
   transition: background-image 0.5s ease;
   background-image: url('/img/defaut-background.jpg'); /* URL nền mặc định */
-  background-size: cover;
-  background-position: center;
   background-attachment: fixed;
+  background-size: cover;
+  background-position: center center;
 }
 .alpha{
   color: #000;
@@ -399,118 +387,4 @@ body .table {
   white-space: normal; /* Cho phép tự động xuống dòng */
   word-break: break-word; /* Tự xuống dòng cho từ quá dài */
 }
-/* Light mode (mặc định) */
-.form-group #editor {
-  background-color: #ffffff;
-  color: #000000;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 10px;
-  min-height: 200px;
-}
 
-.form-group .ck.ck-editor__main>.ck-editor__editable {
-  background-color: #ffffff;
-  color: #000000;
-  min-height: 200px;
-}
-
-.form-group .ck.ck-toolbar {
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
-}
-
-.form-group .ck.ck-button {
-  color: #000000;
-  background-color: #ffffff;
-}
-
-.form-group .ck.ck-button:hover {
-  background-color: #e9ecef;
-}
-
-/* Dark mode */
-body.dark-mode .form-group #editor {
-  background-color: #2d2d2d;
-  color: #ffffff;
-  border-color: #444;
-}
-
-body.dark-mode .form-group .ck.ck-editor__main>.ck-editor__editable {
-  background-color: #2d2d2d;
-  color: #ffffff;
-}
-
-body.dark-mode .form-group .ck.ck-toolbar {
-  background-color: #333333;
-  border-color: #444;
-}
-
-body.dark-mode .form-group .ck.ck-button {
-  color: #ffffff;
-  background-color: #333333;
-}
-
-body.dark-mode .form-group .ck.ck-button:hover {
-  background-color: #444444;
-}
-
-/* Styles cho placeholder */
-.form-group .ck.ck-editor__editable.ck-editor__editable_inline.ck-placeholder::before {
-  color: #666666;
-}
-
-body.dark-mode .form-group .ck.ck-editor__editable.ck-editor__editable_inline.ck-placeholder::before {
-  color: #999999;
-}
-
-/* Styles cho dropdown menu trong toolbar */
-.form-group .ck.ck-dropdown__panel {
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-}
-
-body.dark-mode .form-group .ck.ck-dropdown__panel {
-  background-color: #333333;
-  border-color: #444;
-}
-
-/* Styles cho các button được chọn */
-.form-group .ck.ck-button.ck-on {
-  background-color: #e9ecef;
-  color: #000000;
-}
-
-body.dark-mode .form-group .ck.ck-button.ck-on {
-  background-color: #444444;
-  color: #ffffff;
-}
-
-/* Styles cho border khi focus */
-.form-group .ck.ck-editor__editable:focus {
-  border-color: #007bff !important;
-  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
-}
-
-body.dark-mode .form-group .ck.ck-editor__editable:focus {
-  border-color: #0056b3 !important;
-  box-shadow: 0 0 0 0.2rem rgba(0,86,179,.25);
-}
-.info-box.description-box {
-    width: 100%;
-    max-width: 100%;
-    overflow: hidden;
-    margin-top: 15px;
-    padding: 10px;
-    border-radius: 4px;
-}
-
-#info-description {
-    width: 58%;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    white-space: pre-wrap;
-    margin: 0;
-    line-height: 1.5;
-    font-size: 14px;
-}
