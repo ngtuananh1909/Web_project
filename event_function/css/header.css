@@ -149,6 +149,12 @@
     max-width: 20000px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
+  .dark-mode .header-design{
+    background-color: #616161;
+    width: 100%;
+    max-width: 20000px;
+    box-shadow: 0 4px 8px rgba(255, 224, 224, 0.1);
+  }
   .nav .nav-link img {
     width: 24px; /* Điều chỉnh kích thước icon */
     height: 24px;

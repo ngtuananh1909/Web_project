@@ -136,111 +136,98 @@
       </div>
     </header>  
 
-    <div class="body">
-      <h1 style="text-align: center;"><strong>User Settings</strong></h1>
-      <div class="setting" style="margin-left: 220px;">
-            <div class="edit-name" style="margin-left: 400px;">
-              <form
-              id="settingsForm"
-              action="/auth/UserUpdate"
-              method="POST"
-              enctype="multipart/form-data"
-              style="width: 40%;"
-              >
-              <div class="form-group alpha">
-                <label class="alpha" for="name" style="margin-right: -65px;">Name:</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value="<%= user.name %>"
-                  required
-                  readonly
-                >
-                <button class="button-select" type="button" onclick="toggleEditMode('name')">Change Your name</button>
-              </div>
-              <div class="form-group">
-                <label for="avatar">Avatar</label>
+    <div class="settings-form">
+    <h2>Account Settings</h2>
+    <form id="settingsForm" action="/auth/UserUpdate" method="POST" enctype="multipart/form-data">
+        <!-- Name field -->
+        <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+            <label for="name">Name:</label>
+            <input
+                type="text"
+                id="name"
+                name="name"
+                value="<%= user.name %>"
+                class="form-control"
+                required
+                readonly
+                style="flex: 1;"
+            >
+            <button type="button" class="btn btn-secondary" onclick="toggleEditMode('name')">Edit</button>
+        </div>
+
+        <!-- Email field -->
+        <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+            <label for="email">Email:</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                value="<%= user.email %>"
+                class="form-control"
+                required
+                readonly
+                style="flex: 1;"
+            >
+            <button type="button" class="btn btn-secondary" onclick="toggleEditMode('email')">Edit</button>
+        </div>
+
+        <!-- Phone field -->
+        <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+            <label for="phone">Phone:</label>
+            <input
+                type="tel"
+                id="phone"
+                name="phone"
+                value="<%= user.phone %>"
+                class="form-control"
+                required
+                readonly
+                style="flex: 1;"
+            >
+            <button type="button" class="btn btn-secondary" onclick="toggleEditMode('phone')">Edit</button>
+        </div>
+
+        <!-- Password field -->
+        <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+            <label for="password">Password:</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                class="form-control"
+                readonly
+                style="flex: 1;"
+            >
+            <button type="button" class="btn btn-secondary" onclick="togglePasswordCheck()">Edit</button>
+        </div>
+
+        <!-- Avatar field -->
+        <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+            <label for="avatar">Avatar:</label>
+            <div style="flex: 1;">
                 <img
-                  src="<%= user.avatar %>"
-                  alt="User Avatar"
-                  width="100"
-                  height="100"
+                    src="<%= user.avatar ? user.avatar : '/img/def.jpg' %>"
+                    alt="User Avatar"
+                    style="width: 100px; height: 100px; object-fit: cover; margin-right: 10px;"
                 />
-                <input type="file" id="avatar" name="avatar" />
-              </div>
-              </form>
+                <input type="file" id="avatar" name="avatar" class="form-control">
             </div>
-              <div class="edit-name" style="margin-left: 400px;">
-                <div class="form-group" >
-                  <form
-                  id="settingsForm"
-                  action="/auth/UserUpdate"
-                  method="POST"
-                  enctype="multipart/form-data"
-                  style="width: 40%;"
-                  >
-                  <label class="alpha" for="password" style="margin-right: -70px;">Password:</label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value="********"
-                    readonly
-                    style="width: 59%;"
-                  >
-                  </form>
-                  <button class="button-select" style="margin-left: -150px; margin-bottom: 0px;" type="button" onclick="togglePasswordCheck()">Change Password</button>
-                </div>
-              </div>
-              <div class="form-group password-check edit-name" id="passwordCheck" style="margin-left: 488px;">
-                <form
-                  id="settingsForm"
-                  action="/auth/UserUpdate"
-                  method="POST"
-                  enctype="multipart/form-data"
-                  style="width: 40%;"
-                  >
-                <input
-                  type="password"
-                  id="password-confirm"
-                  name="password_confirm"
-                  placeholder="Enter your new password"
-                  style="width: 62%;"
-                />
-                </form>
-                <button type="button"  onclick="confirmPassword()" style="margin-left: -200px;">Confirm</button>
-              </div>
-              <div class="edit-name" style="margin-left: 400px;">
-                <div class="form-group">
-                  <form
-                    id="settingsForm"
-                    action="/auth/UserUpdate"
-                    method="POST"
-                    enctype="multipart/form-data"
-                    style="width: 40%;"
-                    >
-                  <label class="alpha" for="email">Email:</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value="<%= user.email %>"
-                    required
-                    readonly
-                    style="width: 60%;margin-left: -80px;"
-                  />
-                  <button type="button" onclick="toggleEditMode('email')">Change email</button>
-                </div>
-              </div>
-              <div class="form-group" style="margin-left: 390px;">
-                <button type="submit">Update Settings</button>
-              </div>
-              <% if (typeof message !=='undefined' && message) { %>
-              <div class="message"><%= message %></div>
-              <% } %>
-          </div>
-      </div>
+        </div>
+
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+
+    <!-- Password verification dialog -->
+    <div id="passwordCheck" class="password-check" style="display: none;">
+        <div class="password-check-content">
+            <h3>Verify Current Password</h3>
+            <input type="password" id="password-confirm" placeholder="Enter current password">
+            <button onclick="confirmPassword()">Confirm</button>
+            <button onclick="document.getElementById('passwordCheck').style.display='none'">Cancel</button>
+        </div>
+    </div>
+</div>
     <script src="/setting.js"></script>
     <script src="/darkmode.js"></script>
   </body>
