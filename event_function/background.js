@@ -60,7 +60,57 @@ function adjustTextColor(img) {
         }
     });
 }
+// Hàm để lấy màu ngược lại
+function getInvertColor(hexcolor){
+    // Loại bỏ dấu # nếu có
+    hexcolor = hexcolor.replace("#", "");
+    
+    // Chuyển đổi hex sang RGB
+    var r = parseInt(hexcolor.substr(0,2),16);
+    var g = parseInt(hexcolor.substr(2,2),16);
+    var b = parseInt(hexcolor.substr(4,2),16);
+    
+    // Tính toán độ sáng
+    var brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    
+    // Trả về màu đen hoặc trắng tùy thuộc độ sáng
+    return brightness > 128 ? "#000000" : "#FFFFFF";
+}
 
+// Hàm cập nhật màu logo
+function updateLogoColor() {
+    const header = document.querySelector('.header-design');
+    const logoText = document.getElementById('logo-text');
+    
+    // Lấy màu nền của header
+    const headerBgColor = window.getComputedStyle(header).backgroundColor;
+    
+    // Chuyển đổi rgb sang hex
+    const rgbToHex = (rgb) => {
+        // Trích xuất các giá trị R, G, B từ chuỗi rgb
+        const [r, g, b] = rgb.match(/\d+/g).map(Number);
+        
+        // Chuyển đổi sang hex
+        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    };
+
+    const headerHexColor = rgbToHex(headerBgColor);
+    
+    // Lấy màu ngược lại
+    const invertColor = getInvertColor(headerHexColor);
+    
+    // Áp dụng màu cho logo
+    logoText.style.color = invertColor;
+}
+
+// Gọi hàm khi trang tải
+document.addEventListener('DOMContentLoaded', updateLogoColor);
+
+// Gọi hàm khi chuyển đổi chế độ tối/sáng
+const darkModeToggle = document.getElementById('toggle-dark-mode');
+if (darkModeToggle) {
+    darkModeToggle.addEventListener('click', updateLogoColor);
+}
 // Hàm xử lý thay đổi ảnh nền
 function handleBackgroundChange(imageUrl) {
     return new Promise((resolve, reject) => {
