@@ -29,8 +29,6 @@ exports.home = async (req, res) => {
         let recommendations = [];
         let products = [];
         let notifications = [];
-
-        // Use Promise.all with proper error handling
         const results = await Promise.all([
             new Promise((resolve, reject) => {
                 db.query(productsQuery, (err, result) => {
