@@ -42,9 +42,5 @@
   },
   "author": "",
   "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "electron-rebuild": "^3.2.9",
-    "hardhat": "^0.0.7"
-  }
+  "description": ""
 }
