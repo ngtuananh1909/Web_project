@@ -4,7 +4,7 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 const { IdGenerator } = require('../event_function/function');
-const { getRecommendations } = require('../event_function/Filtering'); 
+const { getCollaborativeRecommendations } = require('../event_function/Filtering');
 const { promisify } = require('util');
 const util = require('util');
 const query = util.promisify(db.query).bind(db);
@@ -26,12 +26,32 @@ exports.home = async (req, res) => {
         const productsQuery = 'SELECT * FROM products';
         const notificationsQuery = userId ? 'SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC' : null;
         
-        const [products, notifications, recommendations] = await Promise.all([
+        let recommendations = [];
+
+        const [products, notifications] = await Promise.all([
             query(productsQuery),
             userId ? query(notificationsQuery, [userId]) : Promise.resolve([]),
         ]);
 
+        if (userId) {
+            try {
+                recommendations = await getCollaborativeRecommendations(userId, 6);
+            } catch (recError) {
+                console.error('Recommendation error:', recError);
+                recommendations = [];
+            }
+        }
+
         const formattedProducts = products.map(product => ({
+            ...product,
+            formatted_date: new Date(product.created_at).toLocaleDateString('vi-VN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            })
+        }));
+
+        const formattedRecommendations = recommendations.map(product => ({
             ...product,
             formatted_date: new Date(product.created_at).toLocaleDateString('vi-VN', {
                 year: 'numeric',
@@ -43,11 +63,17 @@ exports.home = async (req, res) => {
         res.render('home', {
             user: req.session.user,
             products: formattedProducts,
+            recommendations: formattedRecommendations,
             notifications 
         });
     } catch (err) {
         console.error('Error fetching data:', err);
-        res.render('home', { user: req.session.user, products: [], notifications: []});
+        res.render('home', { 
+            user: req.session.user, 
+            products: [], 
+            recommendations: [],
+            notifications: []
+        });
     }
 };
 

@@ -242,7 +242,44 @@
             </div>
           </div>
         </div>
-
+        <div class="row mt-5">
+          <div class="col">
+            <h2 class="section-title text-center">Sản phẩm đề xuất</h2>
+            <% if (recommendations && recommendations.length > 0) { %>
+              <div class="row mt-5">
+                <div class="col">
+                  <h2 class="section-title text-center">Sản phẩm gợi ý</h2>
+                  <div class="row row-cols-1 row-cols-md-5 g-4">
+                    <% recommendations.forEach(product => { %>
+                      <div class="col-6 col-md-4 the-product" style="background-color: transparent;">
+                        <div class="card product-card">
+                          <a href="/product/<%= product.id %>">
+                            <img 
+                              src="<%= product.image ? ('/uploads/' + product.image) : '/img/cart-def.png' %>" 
+                              class="card-img-top" 
+                              alt="Product Image" 
+                              onerror="this.src='/img/cart-def.png';"
+                            />
+                          </a>
+                          <div class="card-body">
+                            <h4 class="card-title text-center"><%= product.name %></h4>
+                            <% if (product.saleval) { %>
+                              <center>
+                                <span class="badge bg-danger ms-2" style="margin-bottom: 10px;">
+                                  -<%= product. saleval %>%
+                                </span>
+                              </center>
+                            <% } %>
+                            <p class="card-text text-center">
+                              <strong><%= product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) %></strong>
+                            </p>
+                            <a href="/product/<%= product.id %>" class="btn btn-primary">Xem chi tiết</a>
+                          </div>
+                        </div>
+                      </div>
+                    <% }); %>
+          </div>
+        </div>
         <div class="row mt-5">
           <div class="col">
             <h2 class="section-title text-center">Danh mục sản phẩm</h2>
