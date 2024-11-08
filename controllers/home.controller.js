@@ -4,7 +4,6 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 const { IdGenerator } = require('../event_function/function');
-const { getRecommendations } = require('../event_function/Filtering'); 
 const { promisify } = require('util');
 const util = require('util');
 const query = util.promisify(db.query).bind(db);
@@ -29,7 +28,6 @@ exports.home = async (req, res) => {
             ? await db.query('SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC', [userId])
             : [];
         
-        const recommendations = await getRecommendations();
 
         const formattedProducts = products.map(product => ({
             ...product,
@@ -43,7 +41,6 @@ exports.home = async (req, res) => {
         res.render('home', {
             user: req.session.user,
             products: formattedProducts,
-            recommendations,
             notifications: notifications[0] || []
         });
     } catch (err) {
