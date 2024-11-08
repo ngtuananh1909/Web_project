@@ -84,6 +84,21 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initialize preview
     updatePreview();
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const descriptionInput = document.getElementById('description-input');
+    const infoDescription = document.getElementById('info-description');
+
+    descriptionInput.addEventListener('input', function() {
+        infoDescription.textContent = this.value;
+    });
+});
+// Helper function to format currency
+function formatCurrency(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+let editor;
+
 document.addEventListener('DOMContentLoaded', function() {
     // Khởi tạo Quill
     var quill = new Quill('#editor', {
@@ -101,34 +116,3 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('description').value = quill.root.innerHTML;
     });
 });
-document.addEventListener('DOMContentLoaded', function() {
-    const descriptionInput = document.getElementById('description-input');
-    const infoDescription = document.getElementById('info-description');
-
-    descriptionInput.addEventListener('input', function() {
-        infoDescription.textContent = this.value;
-    });
-});
-// Helper function to format currency
-function formatCurrency(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-let editor;
-
-ClassicEditor
-    .create(document.querySelector('#editor'))
-    .then(newEditor => {
-        editor = newEditor;
-        
-        // Lắng nghe sự kiện thay đổi trong editor
-        editor.model.document.on('change:data', () => {
-            // Cập nhật nội dung cho input hidden
-            document.querySelector('#description').value = editor.getData();
-            
-            // Cập nhật preview
-            document.querySelector('#preview-description').innerHTML = editor.getData();
-        });
-    })
-    .catch(error => {
-        console.error(error);
-    });
