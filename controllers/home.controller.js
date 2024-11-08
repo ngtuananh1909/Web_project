@@ -23,10 +23,12 @@ exports.home = async (req, res) => {
     const userId = req.session.user ? req.session.user.id : null;
     
     try {
-        const [products] = await db.query('SELECT * FROM products');
+        const products = await db.query('SELECT * FROM products');
+        
         const notifications = userId 
             ? await db.query('SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC', [userId])
             : [];
+        
         const recommendations = await getRecommendations();
 
         const formattedProducts = products.map(product => ({
