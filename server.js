@@ -19,21 +19,30 @@ app.use(fileUpload({
     createParentPath: true
 }));
 
-app.use(helmet({
-    contentSecurityPolicy: {
-        directives: {
-            defaultSrc: ["'self'"],
-            imgSrc: [
-                "'self'", 
-                "https://res.cloudinary.com", 
-                "data:", 
-                "*" 
-            ],
-            scriptSrc: ["'self'", "'unsafe-inline'"],
-            styleSrc: ["'self'", "'unsafe-inline'"]
-        }
-    }
-}));
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                imgSrc: [
+                    "'self'",
+                    "http://localhost:3000", 
+                    "data:", 
+                    "https:", 
+                    "https://res.cloudinary.com" 
+                ],
+                scriptSrc: ["'self'", "'unsafe-inline'"],
+                styleSrc: ["'self'", "'unsafe-inline'"],
+            },
+        },
+        frameguard: {
+            action: 'deny',
+        },
+        xssFilter: true,
+        noSniff: true,
+    })
+);
+
 
 const corsOptions = {
     origin: 'http://localhost:3000zz',
