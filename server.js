@@ -23,7 +23,7 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            imgSrc: ["'self'", "http://localhost:3000", "data:"],
+            imgSrc: ["'self'", "https://console.cloudinary.com", "data:"],
             scriptSrc: ["'self'", "'unsafe-inline'"],
             styleSrc: ["'self'", "'unsafe-inline'"]
         }
@@ -36,7 +36,7 @@ app.use(helmet({
 }));
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: 'https://openezforfree.onrender.com/',
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
@@ -70,7 +70,7 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-    res.setHeader('Content-Security-Policy', "img-src 'self' http://localhost:3000 data:;");
+    res.setHeader('Content-Security-Policy', "img-src 'self' https://openezforfree.onrender.com data:;");
     next();
 });
 
