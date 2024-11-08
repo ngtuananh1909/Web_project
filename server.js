@@ -19,9 +19,42 @@ app.use(fileUpload({
     createParentPath: true
 }));
 
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                imgSrc: [
+                    "'self'",
+                    "http://localhost:3000",
+                    "https://openezforfree.onrender.com/",
+                    "https://res.cloudinary.com", 
+                    "data:", 
+                ],
+                scriptSrc: ["'self'", "'unsafe-inline'"],
+                styleSrc: ["'self'", "'unsafe-inline'"],
+            },
+        },
+        frameguard: {
+            action: 'deny',
+        },
+        xssFilter: true,
+        noSniff: true,
+    })
+);
+
+
+const corsOptions = {
+    origin: 'http://localhost:3000zz',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+};
 app.locals.formatCurrency = function(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   };
+  
+app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -42,11 +75,6 @@ app.use(session({
 
 app.use((req, res, next) => {
     res.locals.session = req.session;
-    next();
-});
-
-app.use((req, res, next) => {
-    res.setHeader('Content-Security-Policy', "img-src 'self' http://localhost:3000 data:;");
     next();
 });
 
