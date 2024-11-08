@@ -16,10 +16,10 @@
       <div class="row align-items-center">
         <!-- Logo -->
         <div class="col-md-3 col-6">
-          <h1 class="h4 mb-0">
-            <a href="/" class="text-decoration-none" style="font-size: 40px;">
-              <strong>E-Shop</strong>
-            </a>
+          <h1 class="h4 mb-0 logo">
+              <a href="/" class="text-decoration-none" style="font-size: 40px;" id="logo-text">
+                  <strong>E-Shop</strong>
+              </a>
           </h1>
         </div>
   
@@ -37,8 +37,8 @@
                 <button
                   class="position-absolute"
                   type="submit"
-                  style="right: 10px; top: 50%; transform: translateY(-50%); border: none; background-color: transparent;">
-                  <img src="/img/search.png" alt="search icon" style="height: 30px; width: 30px;margin-top: -63%;">
+                  style="right: 10px; top: 27%; transform: translateY(-50%); border: none; background-color: transparent;">
+                  <img src="/img/search.png" alt="search icon" style="height: 30px; width: 30px;">
                 </button>
               </div>
             </form>
@@ -78,6 +78,11 @@
                   <img src="/img/add.jpg" alt="add product icon" style="width: 25px; height: 25px;">
                 </a>
               </li>
+              <li class="nav-item me-2">
+                <a class="nav-link donhang" href="/product/add">
+                  <img src="/img/donhang.png" alt="donhang icon" style="width: 25px; height: 25px;">
+                </a>
+              </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                   <% if (user.avatar) { %>
@@ -86,7 +91,7 @@
                   <img src="/img/def.jpg" class="avatar me-1" alt="default avatar" style="width: 30px; height: 30px;" />
                   <% } %>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end" style="margin-left: -270%;" aria-labelledby="userDropdown">
+                <ul class="dropdown-menu dropdown-menu-end" style="margin-left: 162px;" aria-labelledby="userDropdown">
                   <li><a class="dropdown-item" href="/user/<%= user.id %>">Profile</a></li>
                   <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
                   <li><a class="dropdown-item">Balance: <%= user.balance %> VNĐ</a></li>

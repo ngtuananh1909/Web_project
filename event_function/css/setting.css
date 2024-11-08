@@ -1,246 +1,189 @@
-/* Reset CSS */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* setting.css */
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --background-light: #f8f9fa;
+    --background-dark: #343a40;
+    --text-color: #333;
 }
 
-/* Body styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     line-height: 1.6;
-    background-color: #f5f5f5;
+    background-color: var(--background-light);
+    transition: all 0.3s ease;
+}
+
+.settings-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.settings-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+}
+
+.setting-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #f4f4f4;
+    border-radius: 8px;
     transition: background-color 0.3s ease;
 }
 
-/* Main container */
-.body {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+.setting-group:hover {
+    background-color: #e9ecef;
 }
 
-/* Setting section */
-.setting {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin-top: 20px;
-    width: 100%;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+.setting-label {
+    flex: 0 0 30%;
+    font-weight: bold;
+    color: var(--text-color);
 }
 
-/* Form groups */
-.form-group {
-    margin-bottom: 20px;
+.setting-input-container {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-/* Labels */
-.form-group label {
-    font-weight: bold;
-    min-width: 120px;
-    color: #333;
-}
-
-/* Input fields */
-.form-group input {
     flex: 1;
-    padding: 8px 12px;
+}
+
+.setting-input {
+    flex: 1;
+    padding: 0.5rem;
     border: 1px solid #ddd;
     border-radius: 4px;
-    font-size: 14px;
-    min-width: 200px;
+    margin-right: 0.5rem;
+    transition: all 0.3s ease;
 }
 
-/* File input specific styles */
-input[type="file"] {
-    border: none;
-    padding: 0;
+.setting-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
-/* Buttons */
-.button-select {
-    background-color: #007bff;
+.setting-edit-btn {
+    background-color: var(--primary-color);
     color: white;
     border: none;
-    padding: 8px 16px;
+    padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-.button-select:hover {
+.setting-edit-btn:hover {
     background-color: #0056b3;
 }
 
-/* Password check section */
-.password-check {
-    display: none;
+.avatar-section {
+    display: flex;
     align-items: center;
-    margin-top: 10px;
 }
 
-/* Avatar preview */
 .avatar-preview {
     width: 100px;
     height: 100px;
     border-radius: 50%;
     object-fit: cover;
-    margin: 10px 0;
+    margin-right: 1rem;
 }
 
-/* Message styles */
-.message {
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 4px;
-    text-align: center;
+.avatar-input {
+    flex: 1;
 }
 
-.message.success {
-    background-color: #d4edda;
-    color: #155724;
-}
-
-.message.error {
-    background-color: #f8d7da;
-    color: #721c24;
-}
-
-/* Dark mode styles */
-.dark-mode {
-    background-color: #333;
-    color: #fff;
-}
-
-.dark-mode .setting {
-    background-color: #444;
-    color: #fff;
-}
-
-.dark-mode input {
-    background-color: #555;
-    color: #fff;
-    border-color: #666;
-}
-
-.dark-mode .button-select {
-    background-color: #0056b3;
-}
-
-.dark-mode .button-select:hover {
-    background-color: #003d82;
-}
-
-/* Responsive design */
+/* Responsive Design */
 @media screen and (max-width: 768px) {
-    .setting {
-        padding: 15px;
-        margin: 10px;
+    .settings-container {
+        width: 95%;
+        padding: 0.5rem;
     }
 
-    .form-group {
+    .setting-group {
         flex-direction: column;
         align-items: flex-start;
     }
 
-    .form-group label {
-        margin-bottom: 5px;
-    }
-
-    .form-group input {
+    .setting-label {
+        margin-bottom: 0.5rem;
         width: 100%;
     }
 
-    .button-select {
+    .setting-input-container {
         width: 100%;
-        margin-top: 10px;
+        flex-direction: column;
+    }
+
+    .setting-input {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    .setting-edit-btn {
+        width: 100%;
     }
 }
 
-@media screen and (max-width: 480px) {
-    .body {
-        padding: 10px;
-    }
-
-    .setting {
-        padding: 10px;
-    }
-
-    h1 {
-        font-size: 24px;
-    }
-
-    .form-group label {
-        font-size: 14px;
-    }
-
-    .form-group input {
-        font-size: 14px;
-        padding: 6px 10px;
-    }
-
-    .button-select {
-        font-size: 14px;
-        padding: 6px 12px;
-    }
+/* Dark Mode */
+body.dark-mode {
+    background-color: var(--background-dark);
+    color: #f4f4f4;
 }
 
-/* Edit section styles */
-.edit-name {
-    margin-bottom: 20px;
-    padding: 15px;
-    border-radius: 8px;
-    background-color: #f8f9fa;
-    transition: all 0.3s ease;
+body.dark-mode .settings-container {
+    background-color: transparent;
 }
 
-.dark-mode .edit-name {
-    background-color: #555;
+body.dark-mode .setting-group {
+    background-color: #3a3a3a;
 }
 
-/* Animation effects */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+body.dark-mode .setting-input {
+    background-color: #4a4a4a;
+    color: #f4f4f4;
+    border-color: #666;
 }
 
-.form-group {
-    animation: fadeIn 0.3s ease-out;
+body.dark-mode .setting-label {
+    color: #f4f4f4;
+}
+.alpha{
+    color: black;
+}
+.dark-mode .alpha{
+    color: rgb(255, 255, 255);
+}
+.password-toggle-icon {
+    position: absolute;
+    right: 73px;  /* Điều chỉnh vị trí icon */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;  /* Điều chỉnh kích thước icon */
+    height: 20px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
 }
 
-/* Accessibility */
-input:focus {
-    outline: 2px solid #007bff;
-    outline-offset: 1px;
+.password-toggle-icon:hover {
+    opacity: 1;
 }
 
-.button-select:focus {
-    outline: 2px solid #fff;
-    outline-offset: 2px;
-}
-
-/* Print styles */
-@media print {
-    .button-select {
-        display: none;
-    }
-
-    .setting {
-        box-shadow: none;
-        border: 1px solid #ddd;
-    }
+.setting-input {
+    padding-right: 40px;  /* Để chừa chỗ cho icon */
 }
