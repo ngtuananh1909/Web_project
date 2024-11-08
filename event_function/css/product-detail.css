@@ -25,14 +25,16 @@ body {
 }
 
 .container-anh {
-    width: 86%;
+    width: 48%;
+    height: 80%;
     background: #fff;
     padding: 0.2px;
     display: flex;
     gap: 20px;
 }
 .dark-mode .container-anh{
-    width: 60%;
+    width: 48%;
+    height: 80%;
     background: #00000041;
     color: white;
     padding: 0.2px;
