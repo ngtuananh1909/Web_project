@@ -4,6 +4,7 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 const { IdGenerator } = require('../event_function/function');
+const { getRecommendations } = require('../event_function/Filtering'); 
 const { promisify } = require('util');
 const util = require('util');
 const query = util.promisify(db.query).bind(db);
@@ -22,12 +23,13 @@ exports.home = async (req, res) => {
     const userId = req.session.user ? req.session.user.id : null;
     
     try {
-        const products = await db.query('SELECT * FROM products');
+        const productsQuery = 'SELECT * FROM products';
+        const notificationsQuery = userId ? 'SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC' : null;
         
-        const notifications = userId 
-            ? await db.query('SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC', [userId])
-            : [];
-        
+        const [products, notifications, recommendations] = await Promise.all([
+            query(productsQuery),
+            userId ? query(notificationsQuery, [userId]) : Promise.resolve([]),
+        ]);
 
         const formattedProducts = products.map(product => ({
             ...product,
@@ -41,16 +43,11 @@ exports.home = async (req, res) => {
         res.render('home', {
             user: req.session.user,
             products: formattedProducts,
-            notifications: notifications[0] || []
+            notifications 
         });
     } catch (err) {
         console.error('Error fetching data:', err);
-        res.render('home', { 
-            user: req.session.user, 
-            products: [], 
-            recommendations: [], 
-            notifications: []
-        });
+        res.render('home', { user: req.session.user, products: [], notifications: []});
     }
 };
 
