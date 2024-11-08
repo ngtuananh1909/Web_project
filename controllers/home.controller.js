@@ -51,7 +51,6 @@ exports.home = async (req, res) => {
         products = results[0];
         notifications = results[1];
 
-        // Get recommendations if user is logged in
         if (userId) {
             try {
                 recommendations = await getCollaborativeRecommendations(userId, 6);

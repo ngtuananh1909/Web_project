@@ -1,7 +1,6 @@
 const db = require('../connect/database');
 
 function getRecommendations(userId, limit = 5, callback) {
-    // Use callback pattern
     const userProductsQuery = `
         SELECT DISTINCT p.category 
         FROM products p
@@ -22,16 +21,34 @@ function getRecommendations(userId, limit = 5, callback) {
                 ORDER BY RAND() 
                 LIMIT ?
             `;
-            return db.query(randomProductsQuery, [limit], callback);
+            return db.query(randomProductsQuery, [limit], (err, results) => {
+                callback(err, results || []);
+            });
         }
 
-        // Continue with rest of the recommendation logic...
-        // Make sure to use callback at the end
+        // If user has previous products, get recommendations based on categories
+        const categoryRecommendationsQuery = `
+            SELECT * FROM products 
+            WHERE category IN (?) 
+            AND id NOT IN (
+                SELECT product_id FROM user_cart WHERE user_id = ?
+            )
+            LIMIT ?
+        `;
+
+        const categories = userProducts.map(p => p.category);
+        
+        db.query(categoryRecommendationsQuery, [categories, userId, limit], (err, results) => {
+            if (err) {
+                console.error('Category Recommendation Error:', err);
+                return callback(null, []);
+            }
+            callback(null, results);
+        });
     });
 }
 
 function getCollaborativeRecommendations(userId, limit = 5, callback) {
-    // Similar modification to use callback
     const similarUsersQuery = `
         SELECT DISTINCT uc2.user_id
         FROM user_cart uc1
@@ -46,12 +63,42 @@ function getCollaborativeRecommendations(userId, limit = 5, callback) {
             return getRecommendations(userId, limit, callback);
         }
 
-        // Continue recommendation logic...
-        // Ensure to use callback
+        // If no similar users found, fall back to basic recommendations
+        if (similarUsers.length === 0) {
+            return getRecommendations(userId, limit, callback);
+        }
+
+        // Get products bought by similar users that the current user hasn't bought
+        const collaborativeRecommendationQuery = `
+            SELECT DISTINCT p.* 
+            FROM products p
+            JOIN user_cart uc ON p.id = uc.product_id
+            WHERE uc.user_id IN (?)
+            AND p.id NOT IN (
+                SELECT product_id FROM user_cart WHERE user_id = ?
+            )
+            LIMIT ?
+        `;
+
+        const similarUserIds = similarUsers.map(u => u.user_id);
+        
+        db.query(collaborativeRecommendationQuery, [similarUserIds, userId, limit], (err, results) => {
+            if (err) {
+                console.error('Collaborative Recommendation Query Error:', err);
+                return getRecommendations(userId, limit, callback);
+            }
+            
+            // If no collaborative recommendations, fall back to basic recommendations
+            if (results.length === 0) {
+                return getRecommendations(userId, limit, callback);
+            }
+            
+            callback(null, results);
+        });
     });
 }
 
-// Modify exports to support both Promise and callback patterns
+// Exports remain the same
 module.exports = {
     getRecommendations: (userId, limit) => {
         return new Promise((resolve, reject) => {
