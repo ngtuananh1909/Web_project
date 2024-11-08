@@ -18,10 +18,10 @@
           <div class="row align-items-center">
             <!-- Logo -->
             <div class="col-md-3 col-6">
-              <h1 class="h4 mb-0">
-                <a href="/" class="text-decoration-none" style="font-size: 40px;">
-                  <strong>E-Shop</strong>
-                </a>
+              <h1 class="h4 mb-0 logo">
+                  <a href="/" class="text-decoration-none" style="font-size: 40px;" id="logo-text">
+                      <strong>E-Shop</strong>
+                  </a>
               </h1>
             </div>
       
@@ -93,7 +93,7 @@
                       <img src="./img/def.jpg" class="avatar me-1" alt="default avatar" style="width: 30px; height: 30px;" />
                       <% } %>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" style="margin-left: -270%;" aria-labelledby="userDropdown">
+                    <ul class="dropdown-menu dropdown-menu-end" style="margin-left: 162px;" aria-labelledby="userDropdown">
                       <li><a class="dropdown-item" href="/user/<%= user.id %>">Profile</a></li>
                       <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
                       <li><a class="dropdown-item">Balance: <%= user.balance %> VNĐ</a></li>
