@@ -58,16 +58,19 @@
   /* Màn hình nhỏ hơn 768px */
   @media (max-width: 900px) {
     .nav.d-flex.align-items-center {
-      margin-right: -10%;
-    }
+      margin-right: -28%;
+      gap: 14px;
+  }
   }
 
   /* Màn hình nhỏ hơn 576px */
   @media (max-width: 576px) {
     .nav.d-flex.align-items-center {
-      margin-right: -10%;
+        margin-right: -46%;
+        margin-top: 14px;
+        gap: 3px;
     }
-  }
+}
 
 
   .search-icon {
@@ -134,7 +137,7 @@
     position: absolute;
     top: 100%; /* Đặt menu xuất hiện ngay dưới avatar */
     left: 0;
-    z-index: 1000;
+    z-index: 10000;
   }
 
   /* Hiển thị menu khi di chuột vào avatar */
