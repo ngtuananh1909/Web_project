@@ -26,9 +26,8 @@ app.use(
                 defaultSrc: ["'self'"],
                 imgSrc: [
                     "'self'",
-                    "http://localhost:3000",
                     "https://openezforfree.onrender.com/",
-                    "https://res.cloudinary.com", 
+                    "https://res.cloudinary.com",
                     "data:", 
                 ],
                 scriptSrc: ["'self'", "'unsafe-inline'"],
@@ -42,6 +41,7 @@ app.use(
         noSniff: true,
     })
 );
+
 
 
 const corsOptions = {
@@ -75,6 +75,11 @@ app.use(session({
 
 app.use((req, res, next) => {
     res.locals.session = req.session;
+    next();
+});
+
+app.use((req, res, next) => {
+    res.setHeader('Content-Security-Policy', "img-src https://res.cloudinary.com data:;");
     next();
 });
 

@@ -255,7 +255,7 @@
                         <div class="card product-card">
                           <a href="/product/<%= product.id %>">
                             <img 
-                              src="<%= product.image ? ('/uploads/' + product.image) : '/img/cart-def.png' %>" 
+                              src="<%= product.image ? product.image : '/img/cart-def.png' %>" 
                               class="card-img-top" 
                               alt="Product Image" 
                               onerror="this.src='/img/cart-def.png';"
