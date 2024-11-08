@@ -23,14 +23,11 @@ exports.home = async (req, res) => {
     const userId = req.session.user ? req.session.user.id : null;
     
     try {
-        const productsQuery = 'SELECT * FROM products';
-        const notificationsQuery = userId ? 'SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC' : null;
-        
-        const [products, notifications, recommendations] = await Promise.all([
-            query(productsQuery),
-            userId ? query(notificationsQuery, [userId]) : Promise.resolve([]),
-            getRecommendations()  
-        ]);
+        const [products] = await db.query('SELECT * FROM products');
+        const notifications = userId 
+            ? await db.query('SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC', [userId])
+            : [];
+        const recommendations = await getRecommendations();
 
         const formattedProducts = products.map(product => ({
             ...product,
@@ -45,11 +42,16 @@ exports.home = async (req, res) => {
             user: req.session.user,
             products: formattedProducts,
             recommendations,
-            notifications 
+            notifications: notifications[0] || []
         });
     } catch (err) {
         console.error('Error fetching data:', err);
-        res.render('home', { user: req.session.user, products: [], recommendations: [], notifications: []});
+        res.render('home', { 
+            user: req.session.user, 
+            products: [], 
+            recommendations: [], 
+            notifications: []
+        });
     }
 };
 
