@@ -27,6 +27,7 @@
     "php-cgi": "^0.2.0",
     "redis": "^4.7.0",
     "semver": "^7.6.3",
+    "sharp": "^0.33.5",
     "socket.io": "^4.8.0",
     "tfjs-yolo-tiny": "^1.0.1",
     "uuid": "^10.0.0",
