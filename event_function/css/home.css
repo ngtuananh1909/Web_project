@@ -100,21 +100,17 @@
   body {
     background-color: #F5EFFF;
     color: #000;
-    transition: background-color 0.3s ease, color 0.3s ease;
   }
   /* Định dạng chung cho trang */
   body {
     margin: 0;
     padding: 0;
     height: 100vh;
-    transition: background-image 0.5s ease;
     background-image: url('/img/defaut-background.jpg'); /* URL nền mặc định */
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
   }
-
-
   /* Chế độ tối */
   body.dark-mode {
     background-color: #1b1b1b;
@@ -321,16 +317,15 @@
     font-weight: 500; /* Tăng độ đậm của chữ */
     color: #ffffff; /* Màu chữ cân bằng giữa sáng và tối */
   }
-  .alpha{
+  .alpha {
     color: #000;
-  }
-  .dark-mode .alpha{
-    color: #ffffff;
-  }
+}
+
+.dark-mode .alpha {
+    color: #ffffff !important;
+}
   .card-img-top {
     border: 2px solid #858585; /* Màu viền đen */
     border-radius: 4px; /* Bo góc cho viền */
 }
 
-  
-  

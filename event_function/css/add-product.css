@@ -388,3 +388,111 @@ body .table {
   word-break: break-word; /* Tự xuống dòng cho từ quá dài */
 }
 
+<<<<<<< HEAD
+=======
+.form-group .ck.ck-editor__main>.ck-editor__editable {
+  background-color: #ffffff;
+  color: #000000;
+  min-height: 200px;
+}
+
+.form-group .ck.ck-toolbar {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+}
+
+.form-group .ck.ck-button {
+  color: #000000;
+  background-color: #ffffff;
+}
+
+.form-group .ck.ck-button:hover {
+  background-color: #e9ecef;
+}
+
+/* Dark mode */
+body.dark-mode .form-group #editor {
+  background-color: #2d2d2d;
+  color: #ffffff;
+  border-color: #444;
+}
+
+body.dark-mode .form-group .ck.ck-editor__main>.ck-editor__editable {
+  background-color: #2d2d2d;
+  color: #ffffff;
+}
+
+body.dark-mode .form-group .ck.ck-toolbar {
+  background-color: #333333;
+  border-color: #444;
+}
+
+body.dark-mode .form-group .ck.ck-button {
+  color: #ffffff;
+  background-color: #333333;
+}
+
+body.dark-mode .form-group .ck.ck-button:hover {
+  background-color: #444444;
+}
+
+/* Styles cho placeholder */
+.form-group .ck.ck-editor__editable.ck-editor__editable_inline.ck-placeholder::before {
+  color: #666666;
+}
+
+body.dark-mode .form-group .ck.ck-editor__editable.ck-editor__editable_inline.ck-placeholder::before {
+  color: #999999;
+}
+
+/* Styles cho dropdown menu trong toolbar */
+.form-group .ck.ck-dropdown__panel {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+}
+
+body.dark-mode .form-group .ck.ck-dropdown__panel {
+  background-color: #333333;
+  border-color: #444;
+}
+
+/* Styles cho các button được chọn */
+.form-group .ck.ck-button.ck-on {
+  background-color: #e9ecef;
+  color: #000000;
+}
+
+body.dark-mode .form-group .ck.ck-button.ck-on {
+  background-color: #444444;
+  color: #ffffff;
+}
+
+/* Styles cho border khi focus */
+.form-group .ck.ck-editor__editable:focus {
+  border-color: #007bff !important;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+body.dark-mode .form-group .ck.ck-editor__editable:focus {
+  border-color: #0056b3 !important;
+  box-shadow: 0 0 0 0.2rem rgba(0,86,179,.25);
+}
+.info-box.description-box {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+#info-description {
+    width: 58%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    margin: 0;
+    line-height: 1.5;
+    font-size: 14px;
+}
+>>>>>>> sync

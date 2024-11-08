@@ -1,46 +1,33 @@
-const defaultBackgroundUrl = '/img/defaut-background.jpg'; // URL nền mặc định
+// URL nền mặc định
+const defaultBackgroundUrl = '/img/defaut-background.jpg';
 
-// Hàm thay đổi nền khi người dùng chọn ảnh mới
-document.getElementById("background-input").addEventListener("change", function () {
-    const file = this.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const img = new Image();
-            img.src = e.target.result;
+// Hàm tạo phần tử background
+function createBackgroundElement(imageUrl, aspectRatio) {
+    const backgroundImage = document.createElement('div');
+    backgroundImage.classList.add('background-image');
+    backgroundImage.style.backgroundImage = `url(${imageUrl})`;
 
-            img.onload = function () {
-                const aspectRatio = img.width / img.height;
-
-                // Nếu ảnh có tỷ lệ gần 9:16, điều chỉnh lại theo tỷ lệ 16:9
-                if (aspectRatio < 1) { // Tỷ lệ dọc, tức là 9:16
-                    document.body.style.backgroundSize = "auto 100%";
-                } else { // Tỷ lệ ngang, tức là gần 16:9
-                    document.body.style.backgroundSize = "cover";
-                }
-
-                // Đặt ảnh nền
-                document.body.style.backgroundImage = `url(${e.target.result})`;
-                document.body.style.backgroundPosition = "center"; // Căn giữa để cắt phần thừa
-
-                // Phân tích độ sáng của hình nền và điều chỉnh màu chữ
-                adjustTextColor(img, document.body);
-            };
-        };
-        reader.readAsDataURL(file);
+    // Điều chỉnh hiển thị dựa trên tỷ lệ ảnh
+    if (aspectRatio >= 16/9) { // Ảnh ngang (16:9 trở lên)
+        backgroundImage.style.backgroundSize = 'cover';
+        backgroundImage.style.backgroundPosition = 'center';
+    } else { // Ảnh dọc (9:16)
+        backgroundImage.style.backgroundSize = 'contain';
+        backgroundImage.style.backgroundRepeat = 'repeat';
+        backgroundImage.style.backgroundPosition = 'center';
     }
-});
+
+    return backgroundImage;
+}
 
 // Hàm phân tích độ sáng của ảnh và điều chỉnh màu chữ
-function adjustTextColor(img, element) {
+function adjustTextColor(img) {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
 
     // Vẽ ảnh lên canvas với kích thước 1x1 pixel để lấy màu trung bình
     canvas.width = 1;
     canvas.height = 1;
-
-    // Vẽ ảnh lên canvas
     ctx.drawImage(img, 0, 0, 1, 1);
 
     // Lấy dữ liệu pixel (r, g, b) của ảnh
@@ -49,18 +36,118 @@ function adjustTextColor(img, element) {
     // Tính toán độ sáng của ảnh
     const brightness = (0.299 * r + 0.587 * g + 0.114 * b);
 
-    // Nếu độ sáng cao, dùng màu chữ tối; nếu độ sáng thấp, dùng màu chữ sáng
+    // Lấy màu header trong chế độ dark mode
+    const darkModeHeaderColor = '#333333'; // Màu header dark mode (từ CSS)
+
+    // Điều chỉnh màu chữ và header
     if (brightness > 128) {
-        element.style.color = "#000000"; // Màu chữ tối
+        // Ảnh sáng
+        document.body.style.color = "#000000"; // Màu chữ tối
+        document.querySelector('header').style.backgroundColor = 'rgba(255,255,255,0.8)';
     } else {
-        element.style.color = "#FFFFFF"; // Màu chữ sáng
+        // Ảnh tối
+        document.body.style.color = "#FFFFFF"; // Màu chữ sáng
+        document.querySelector('header').style.backgroundColor = darkModeHeaderColor;
     }
+
+    // Thêm logic điều chỉnh màu cho các phần tử khác nếu cần
+    const elementsToAdjust = document.querySelectorAll('.dark-mode-adjustable');
+    elementsToAdjust.forEach(element => {
+        if (brightness > 128) {
+            element.classList.remove('dark-mode');
+        } else {
+            element.classList.add('dark-mode');
+        }
+    });
 }
+
+// Hàm xử lý thay đổi ảnh nền
+function handleBackgroundChange(imageUrl) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = function() {
+            // Tính tỷ lệ ảnh
+            const aspectRatio = img.width / img.height;
+
+            // Xóa background cũ nếu có
+            const oldBackground = document.querySelector('.background-image');
+            if (oldBackground) {
+                oldBackground.remove();
+            }
+
+            // Tạo background mới
+            const backgroundElement = createBackgroundElement(imageUrl, aspectRatio);
+            document.body.appendChild(backgroundElement);
+
+            // Điều chỉnh màu chữ
+            adjustTextColor(img);
+
+            // Lưu ảnh vào localStorage
+            localStorage.setItem('backgroundImage', imageUrl);
+            localStorage.setItem('backgroundAspectRatio', aspectRatio);
+
+            resolve();
+        };
+        img.onerror = reject;
+        img.src = imageUrl;
+    });
+}
+
+// Sự kiện thay đổi ảnh nền khi người dùng chọn file
+document.getElementById("background-input").addEventListener("change", function () {
+    const file = this.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            handleBackgroundChange(e.target.result)
+                .catch(error => {
+                    console.error("Lỗi khi tải ảnh:", error);
+                    alert("Không thể tải ảnh. Vui lòng thử lại.");
+                });
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Khôi phục ảnh nền từ localStorage khi tải trang
+document.addEventListener('DOMContentLoaded', function() {
+    const savedBackground = localStorage.getItem('backgroundImage');
+    const savedAspectRatio = localStorage.getItem('backgroundAspectRatio');
+
+    if (savedBackground) {
+        handleBackgroundChange(savedBackground)
+            .catch(error => {
+                console.error("Lỗi khi khôi phục ảnh nền:", error);
+                // Nếu không thể khôi phục, sử dụng ảnh mặc định
+                handleBackgroundChange(defaultBackgroundUrl);
+            });
+    }
+});
 
 // Hàm reset nền về ảnh mặc định
 function resetBackground() {
-    document.body.style.backgroundImage = `url(${defaultBackgroundUrl})`;
-    document.body.style.backgroundSize = "cover"; // Đặt về mặc định là cover
-    document.body.style.backgroundPosition = "center"; // Đặt lại căn giữa
-    document.body.style.color = "#000000"; // Màu chữ mặc định (có thể thay đổi tùy ý)
+    handleBackgroundChange(defaultBackgroundUrl)
+        .then(() => {
+            // Xóa thông tin đã lưu
+            localStorage.removeItem('backgroundImage');
+            localStorage.removeItem('backgroundAspectRatio');
+        })
+        .catch(error => {
+            console.error("Lỗi khi reset ảnh nền:", error);
+        });
 }
+
+// CSS cần thiết (có thể đặt trong file CSS riêng)
+const style = document.createElement('style');
+style.textContent = `
+.background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-position: center;
+}
+`;
+document.head.appendChild(style);
