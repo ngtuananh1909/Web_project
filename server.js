@@ -26,10 +26,9 @@ app.use(
                 defaultSrc: ["'self'"],
                 imgSrc: [
                     "'self'",
-                    "http://localhost:3000", 
+                    "https://openezforfree.onrender.com/",
+                    "https://res.cloudinary.com",
                     "data:", 
-                    "https:", 
-                    "https://res.cloudinary.com" 
                 ],
                 scriptSrc: ["'self'", "'unsafe-inline'"],
                 styleSrc: ["'self'", "'unsafe-inline'"],
@@ -42,6 +41,7 @@ app.use(
         noSniff: true,
     })
 );
+
 
 
 const corsOptions = {
