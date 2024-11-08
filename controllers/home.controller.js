@@ -4,7 +4,7 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 const { IdGenerator } = require('../event_function/function');
-const { calculateUserSimilarity, getTopRecommendedProducts, findSimilarProducts } = require('../event_function/Filtering'); 
+const { getRecommendations } = require('../event_function/Filtering'); 
 const { promisify } = require('util');
 const util = require('util');
 const query = util.promisify(db.query).bind(db);
@@ -24,15 +24,12 @@ exports.home = async (req, res) => {
     
     try {
         const productsQuery = 'SELECT * FROM products';
-        const userRatingsQuery = userId ? 'SELECT * FROM ratings WHERE user_id = ?' : null;
-        const allRatingsQuery = 'SELECT * FROM ratings';
         const notificationsQuery = userId ? 'SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC' : null;
-
-        const [products, userRatings, allRatings, notifications] = await Promise.all([
+        
+        const [products, notifications, recommendations] = await Promise.all([
             query(productsQuery),
-            userId ? query(userRatingsQuery, [userId]) : Promise.resolve([]),
-            query(allRatingsQuery),
-            userId ? query(notificationsQuery, [userId]) : Promise.resolve([])  
+            userId ? query(notificationsQuery, [userId]) : Promise.resolve([]),
+            getRecommendations()  
         ]);
 
         const formattedProducts = products.map(product => ({
@@ -43,15 +40,6 @@ exports.home = async (req, res) => {
                 day: '2-digit'
             })
         }));
-
-        let recommendations = [];
-        if (userId) {
-            const userSimilarities = calculateUserSimilarity(userRatings, allRatings);
-            const collaborativeRecommendations = getTopRecommendedProducts(userId, userSimilarities, allRatings);
-            const contentRecommendations = await findSimilarProducts(userRatings.map(r => r.product_id));
-
-            recommendations = [...new Set([...collaborativeRecommendations, ...contentRecommendations])];
-        }
 
         res.render('home', {
             user: req.session.user,
@@ -65,12 +53,13 @@ exports.home = async (req, res) => {
     }
 };
 
+
 exports.logout = (req, res) => {
     req.session.destroy(err => {
         if (err) {
             console.log(err);
             return res.location(req.get("Referrer") || "/") 
-        }
+        }   
         return res.location(req.get("Referrer") || "/") 
     });
 };

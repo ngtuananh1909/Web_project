@@ -3,6 +3,7 @@ const db = require('../connect/database');
 const { ProductIDGenerator } = require('../event_function/function');
 const path = require('path');
 const bcrypt = require('bcryptjs');
+const sharp = require('sharp');
 const fs = require('fs');
 const { Mutex } = require('async-mutex');
 const mutex = new Mutex();
@@ -12,41 +13,70 @@ exports.CreateProduct = async (req, res) => {
     const { name, description, price, quantity, creator, sale, saleval } = req.body;
     const userID = req.session.user.id;
     const imageFile = req.files.image;
+
     if (!name || !description || !price || !quantity || !imageFile) {
         return res.status(400).send('Thiếu thông tin cần thiết.');
+    }
+
+    const uppath = path.join(__dirname, '../public/uploads', `${imageFile.name}`);
+    
+    await mutex.runExclusive(async () => {
+        await new Promise((resolve, reject) => {
+            imageFile.mv(uppath, err => {
+                if (err) reject(new Error('error upload'));
+                resolve();
+            });
+        });
+    });
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (!allowedTypes.includes(imageFile.mimetype)) {
+        return res.status(400).send('File không hợp lệ. Chỉ chấp nhận file hình ảnh.');
     }
 
     const productId = ProductIDGenerator();
 
     try {
-        const uploadResult = await cloudinary.uploader.upload(imageFile.tempFilePath, {
+        const optimizedImagePath = path.join(__dirname, '../public/uploads', `optimized_${imageFile.name}`);
+        
+        await sharp(uppath)
+            .resize(800)  
+            .toFile(optimizedImagePath);  
+
+        const uploadResult = await cloudinary.uploader.upload(optimizedImagePath, {
             public_id: productId, 
             folder: "product_images", 
+            use_filename: true, 
+            unique_filename: false
         });
         console.log('Kết quả upload:', uploadResult);
+
+        fs.unlinkSync(optimizedImagePath);
+
         const newProduct = {
             id: productId,
             name,
             description,
             price,
             quantity,
-            image: uploadResult.secure_url, 
+            image: uploadResult.secure_url,  
             creator,
             creator_id: userID,
-            sale: sale === "true",
-            saleval: saleval || 0,
-            sold: 0,
-            created_at: new Date(),
+            sale: sale === "true",  
+            saleval: saleval || 0,  
+            sold: 0,  
+            created_at: new Date(),  
         };
 
         const sql = 'INSERT INTO products SET ?';
         db.query(sql, newProduct, (err) => {
             if (err) {
                 console.log(err);
-                return res.status(500).send('Error creating product');
+                return res.status(500).send('Lỗi khi tạo sản phẩm.');
             }
-            res.redirect(req.get("Referrer") || "/");
+            res.redirect(req.get("Referrer") || "/"); 
         });
+
     } catch (err) {
         console.error('Lỗi upload ảnh:', err);
         res.status(500).send('Lỗi tải ảnh lên Cloudinary');
