@@ -388,8 +388,6 @@ body .table {
   word-break: break-word; /* Tự xuống dòng cho từ quá dài */
 }
 
-<<<<<<< HEAD
-=======
 .form-group .ck.ck-editor__main>.ck-editor__editable {
   background-color: #ffffff;
   color: #000000;
@@ -495,4 +493,3 @@ body.dark-mode .form-group .ck.ck-editor__editable:focus {
     line-height: 1.5;
     font-size: 14px;
 }
->>>>>>> sync
