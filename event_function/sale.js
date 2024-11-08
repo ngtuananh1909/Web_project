@@ -106,3 +106,67 @@ document.addEventListener('DOMContentLoaded', function() {
     // Khởi tạo
     toggleSaleValue(); // Để đảm bảo trạng thái ban đầu đúng
 });
+// Hàm cập nhật thông tin xem trước
+function updatePreview() {
+  const name = document.getElementById('name').value;
+  const price = document.getElementById('price').value;
+  const quantity = document.getElementById('quantity').value;
+  const saleCheckbox = document.getElementById('sale');
+  const saleValue = document.getElementById('saleval').value;
+
+  // Cập nhật tên sản phẩm, giá cả, và số lượng trong phần xem trước
+  document.getElementById('preview-name').textContent = name || 'Name';
+  document.getElementById('preview-price').textContent = `Price: ${price || 0} VND`;
+  document.getElementById('preview-quantity').textContent = `Quantity: ${quantity || 0}`;
+  
+  // Hiển thị giá trị sale nếu checkbox được chọn
+  const salePreview = document.getElementById('preview-sale');
+  if (saleCheckbox.checked && saleValue) {
+    salePreview.style.display = 'block';
+    salePreview.textContent = `Sale Value: ${saleValue}%`;
+  } else {
+    salePreview.style.display = 'none';
+  }
+
+  // Cập nhật mô tả trong phần xem trước
+  // Sử dụng CKEditor nếu đã khởi tạo
+  if (window.editor) {
+    const description = window.editor.getData();
+    document.getElementById('preview-description').innerHTML = description || 'Description';
+  } else {
+    // Fallback nếu CKEditor chưa được khởi tạo
+    const description = document.getElementById('description-input').value;
+    document.getElementById('preview-description').textContent = description || 'Description';
+  }
+}
+
+// Khởi tạo CKEditor với event listener
+ClassicEditor
+  .create(document.querySelector('#editor'))
+  .then(editor => {
+    // Lưu editor vào biến toàn cục để truy cập từ các hàm khác
+    window.editor = editor;
+
+    // Lắng nghe sự kiện thay đổi trong editor
+    editor.model.document.on('change:data', () => {
+      // Cập nhật input ẩn
+      const descriptionInput = document.getElementById('description');
+      descriptionInput.value = editor.getData();
+
+      // Cập nhật preview
+      updatePreview();
+    });
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
+// Thêm event listener cho các trường khác
+document.getElementById('name').addEventListener('input', updatePreview);
+document.getElementById('price').addEventListener('input', updatePreview);
+document.getElementById('quantity').addEventListener('input', updatePreview);
+document.getElementById('sale').addEventListener('change', updatePreview);
+document.getElementById('saleval').addEventListener('input', updatePreview);
+
+// Khởi tạo ban đầu
+document.addEventListener('DOMContentLoaded', updatePreview);
