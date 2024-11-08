@@ -18,10 +18,10 @@
         <div class="row align-items-center">
           <!-- Logo -->
           <div class="col-md-3 col-6">
-            <h1 class="h4 mb-0">
-              <a href="/" class="text-decoration-none" style="font-size: 40px;">
-                <strong>E-Shop</strong>
-              </a>
+            <h1 class="h4 mb-0 logo">
+                <a href="/" class="text-decoration-none" style="font-size: 40px;" id="logo-text">
+                    <strong>E-Shop</strong>
+                </a>
             </h1>
           </div>
     
@@ -40,7 +40,7 @@
                     class="position-absolute"
                     type="submit"
                     style="right: 10px; top: 50%; transform: translateY(-50%); border: none; background-color: transparent;">
-                    <img src="img/search.png" alt="search icon" style="height: 30px; width: 30px;">
+                    <img src="/img/search.png" alt="search icon" style="height: 30px; width: 30px;">
                   </button>
                 </div>
               </form>
@@ -90,13 +90,13 @@
                     <% if (user.avatar) { %>
                     <img src="/<%= user.avatar %>" class="avatar me-1" alt="user avatar" style="width: 30px; height: 30px;" />
                     <% } else { %>
-                    <img src="./img/def.jpg" class="avatar me-1" alt="default avatar" style="width: 30px; height: 30px;" />
+                    <img src="/img/def.jpg" class="avatar me-1" alt="default avatar" style="width: 30px; height: 30px;" />
                     <% } %>
                   </a>
-                  <ul class="dropdown-menu dropdown-menu-end" style="margin-left: -270%;" aria-labelledby="userDropdown">
-                    <li><a class="dropdown-item" href="/user/<%= user.id %>">Profile</a></li>
-                    <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                    <li><a class="dropdown-item">Balance: <%= user.balance %> VNĐ</a></li>
+                  <ul class="dropdown-menu dropdown-menu-end alpha" style="margin-left: 162px;" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item alpha" href="/user/<%= user.id %>">Profile</a></li>
+                    <li><a class="dropdown-item alpha" href="/settings">Cài đặt</a></li>
+                    <li><a class="dropdown-item alpha" >Balance: <%= user.balance %> VNĐ</a></li>
                     <li><hr class="dropdown-divider" /></li>
                     <li class="nav-item">
                         <div class="d-flex align-items-center px-3 py-2">
@@ -118,7 +118,7 @@
                         <button class="dropdown-item alpha" onclick="document.getElementById('background-input').click()">Thay Đổi Hình Nền</button>
                     </li>
                     <li><hr class="dropdown-divider" /></li>
-                    <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                    <li><a class="dropdown-item alpha" href="/logout">Đăng xuất</a></li>
                 </ul>                
                 </li>
                 <% if (user.id == 'rgB6QoFkYk') { %>
@@ -136,99 +136,156 @@
       </div>
     </header>  
 
-    <div class="settings-form">
-    <h2>Account Settings</h2>
+    <div class="settings-container">
+    <h2 class="settings-title">Account Settings</h2>
+    
     <form id="settingsForm" action="/auth/UserUpdate" method="POST" enctype="multipart/form-data">
-        <!-- Name field -->
-        <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-            <label for="name">Name:</label>
-            <input
-                type="text"
-                id="name"
-                name="name"
-                value="<%= user.name %>"
-                class="form-control"
-                required
-                readonly
-                style="flex: 1;"
-            >
-            <button type="button" class="btn btn-secondary" onclick="toggleEditMode('name')">Edit</button>
-        </div>
-
-        <!-- Email field -->
-        <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-            <label for="email">Email:</label>
-            <input
-                type="email"
-                id="email"
-                name="email"
-                value="<%= user.email %>"
-                class="form-control"
-                required
-                readonly
-                style="flex: 1;"
-            >
-            <button type="button" class="btn btn-secondary" onclick="toggleEditMode('email')">Edit</button>
-        </div>
-
-        <!-- Phone field -->
-        <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-            <label for="phone">Phone:</label>
-            <input
-                type="tel"
-                id="phone"
-                name="phone"
-                value="<%= user.phone %>"
-                class="form-control"
-                required
-                readonly
-                style="flex: 1;"
-            >
-            <button type="button" class="btn btn-secondary" onclick="toggleEditMode('phone')">Edit</button>
-        </div>
-
-        <!-- Password field -->
-        <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-            <label for="password">Password:</label>
-            <input
-                type="password"
-                id="password"
-                name="password"
-                class="form-control"
-                readonly
-                style="flex: 1;"
-            >
-            <button type="button" class="btn btn-secondary" onclick="togglePasswordCheck()">Edit</button>
-        </div>
-
-        <!-- Avatar field -->
-        <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-            <label for="avatar">Avatar:</label>
-            <div style="flex: 1;">
-                <img
-                    src="<%= user.avatar ? user.avatar : '/img/def.jpg' %>"
-                    alt="User Avatar"
-                    style="width: 100px; height: 100px; object-fit: cover; margin-right: 10px;"
-                />
-                <input type="file" id="avatar" name="avatar" class="form-control">
+        <div class="setting-group">
+            <label class="setting-label" for="name">Name</label>
+            <div class="setting-input-container">
+                <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    value="<%= user.name %>" 
+                    class="form-control setting-input"
+                    required
+                    readonly
+                    style="flex: 1;"
+                >
+                <button type="button" class="setting-edit-btn" onclick="toggleEditMode('name')">Edit</button>
             </div>
         </div>
 
-        <!-- Submit button -->
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-    </form>
-
-    <!-- Password verification dialog -->
-    <div id="passwordCheck" class="password-check" style="display: none;">
-        <div class="password-check-content">
-            <h3>Verify Current Password</h3>
-            <input type="password" id="password-confirm" placeholder="Enter current password">
-            <button onclick="confirmPassword()">Confirm</button>
-            <button onclick="document.getElementById('passwordCheck').style.display='none'">Cancel</button>
+        <!-- Tương tự cho các trường khác -->
+        
+        <div class="setting-group avatar-section">
+            <label class="setting-label">Avatar</label>
+            <div class="setting-input-container">
+                <img 
+                    src="<%= user.avatar ? user.avatar : '/img/def.jpg' %>" 
+                    class="avatar-preview"
+                >
+                <input 
+                    type="file" 
+                    class="avatar-input" 
+                    name="avatar"
+                >
+            </div>
         </div>
+        <!-- Email field -->
+            <div class="setting-group">
+                <div class="setting-label">
+                    <i class="fas fa-envelope"></i> Email
+                </div>
+                <div class="setting-input-container">
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="<%= user.email %>"
+                        class="setting-input"
+                        required
+                        readonly
+                    >
+                    <button 
+                        type="button" 
+                        class="setting-edit-btn" 
+                        onclick="toggleEditMode('email')"
+                    >
+                        Edit
+                    </button>
+                </div>
+            </div>
+
+            <!-- Phone field -->
+            <div class="setting-group">
+                <div class="setting-label">
+                    <i class="fas fa-phone"></i> Phone
+                </div>
+                <div class="setting-input-container">
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value="<%= user.phone %>"
+                        class="setting-input"
+                        required
+                        readonly
+                    >
+                    <button 
+                        type="button" 
+                        class="setting-edit-btn" 
+                        onclick="toggleEditMode('phone')"
+                    >
+                        Edit
+                    </button>
+                </div>
+            </div>
+
+            <div class="setting-group">
+              <div class="setting-label">
+                  <i class="fas fa-lock"></i> Password
+              </div>
+              <div class="setting-input-container position-relative">
+                  <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      class="setting-input pr-5"
+                      readonly
+                      placeholder="********"
+                  >
+                  <img 
+                      src="/img/eye2.png" 
+                      id="passwordToggleIcon" 
+                      class="password-toggle-icon" 
+                      onclick="togglePasswordVisibility()"
+                  >
+                  <button 
+                      type="button" 
+                      class="setting-edit-btn" 
+                      onclick="togglePasswordCheck()"
+                  >
+                      Edit
+                  </button>
+              </div>
+          </div>
+          
+          <!-- Password Check Container -->
+          <div id="passwordCheck" style="display: none; flex-direction: column; align-items: center; margin-top: 15px;">
+              <div class="setting-group" style="width: 100%;">
+                  <div class="setting-label">
+                      <i class="fas fa-key"></i> Confirm New Password
+                  </div>
+                  <div class="setting-input-container position-relative">
+                      <input
+                          type="password"
+                          id="password-confirm"
+                          class="setting-input pr-5"
+                          placeholder="Enter current password"
+                      >
+                      <img 
+                          src="/img/eye2.png" 
+                          id="passwordConfirmToggleIcon" 
+                          class="password-toggle-icon" 
+                          onclick="togglePasswordConfirmVisibility()"
+                      >
+                      <button 
+                          type="button" 
+                          class="setting-edit-btn" 
+                          onclick="confirmPassword()"
+                      >
+                          Confirm
+                      </button>
+                  </div>
+              </div>
+          </div>
+          <button type="submit" class="setting-edit-btn">Save Changes</button>
+        </form>
     </div>
-</div>
     <script src="/setting.js"></script>
     <script src="/darkmode.js"></script>
+    <script src="/background.js"></script>
   </body>
 </html>

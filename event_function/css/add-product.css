@@ -557,3 +557,6 @@ body.dark-mode .form-group #editor .ck-toolbar .ck-button:hover {
     font-size: 14px;
 }
 }
+nav.nav.justify-content-end {
+  margin-left: 152%;
+}
