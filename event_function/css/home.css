@@ -321,12 +321,13 @@
     font-weight: 500; /* Tăng độ đậm của chữ */
     color: #ffffff; /* Màu chữ cân bằng giữa sáng và tối */
   }
-  .alpha{
+  .alpha {
     color: #000;
-  }
-  .dark-mode .alpha{
-    color: #ffffff;
-  }
+}
+
+.dark-mode .alpha {
+    color: #ffffff !important;
+}
   .card-img-top {
     border: 2px solid #858585; /* Màu viền đen */
     border-radius: 4px; /* Bo góc cho viền */

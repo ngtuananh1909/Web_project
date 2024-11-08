@@ -201,7 +201,8 @@
 .nav-link.taosanpham:hover::after,
 .nav-link.donhang:hover::after,
 .nav-link.login:hover::after,
-.nav-link.dangky:hover::after {
+.nav-link.dangky:hover::after,
+.nav-link.thongbao:hover::after {
   transform: scaleX(1); /* Hiện thanh nhỏ khi hover */
   transform-origin: bottom left; /* Vị trí kết thúc hiệu ứng */
 }
@@ -321,5 +322,72 @@ height: 30px;
   }
 }
 div#searchContainer {
-  margin-left: -5%;
+  margin-left: -9%;
+}
+.dropdown-item.custom {
+  color: #000;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.dropdown-item.custom-light {
+  color: #6c757d;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.dark-mode .dropdown-menu {
+  background-color: #333333;
+}
+
+.dark-mode .dropdown-item.custom {
+  color: #ffffff;
+}
+
+.dark-mode .dropdown-item.custom-light {
+  color: #a0a0a0;
+}
+
+.dark-mode .dropdown-divider {
+  border-top-color: #555;
+}
+/* Chế độ sáng mặc định */
+.dropdown-item.custom {
+    color: #000; /* Màu đen cho chế độ sáng */
+    transition: color 0.3s ease;
+}
+
+.dropdown-item.custom small {
+    color: #6c757d; /* Màu xám nhạt cho ngày tháng */
+}
+
+/* Chế độ tối */
+.dark-mode .dropdown-item.custom {
+    color: #ffffff; /* Màu trắng cho chế độ tối */
+}
+
+.dark-mode .dropdown-item.custom small {
+    color: #a0a0a0; /* Màu xám nhạt cho ngày tháng ở chế độ tối */
+}
+/* Chế độ sáng - Hover */
+.dropdown-item.custom:hover {
+    background-color: #f0f0f0; /* Màu nền nhạt khi hover ở chế độ sáng */
+    color: #0056b3; /* Màu chữ khi hover ở chế độ sáng */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-item.custom:hover small {
+    color: #007bff; /* Màu chữ phụ khi hover ở chế độ sáng */
+}
+
+/* Chế độ tối - Hover */
+.dark-mode .dropdown-item.custom:hover {
+    background-color: #444; /* Màu nền tối hơn khi hover ở chế độ tối */
+    color: #ffffff; /* Màu chữ trắng khi hover ở chế độ tối */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark-mode .dropdown-item.custom:hover small {
+    color: #66b0ff; /* Màu chữ phụ khi hover ở chế độ tối */
+}
+
+/* Đảm bảo có cursor pointer */
+.dropdown-item.custom {
+    cursor: pointer;
 }
