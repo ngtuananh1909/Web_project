@@ -79,7 +79,7 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-    res.setHeader('Content-Security-Policy', "img-src https://res.cloudinary.com data:;");
+    res.setHeader('Content-Security-Policy', "img-src http://localhost:3000 data:;");
     next();
 });
 
