@@ -1,4 +1,4 @@
-const { query } = require('../connect/database');
+const { connection } = require('../connect/database');
 
 exports.getRecommendations = async () => {
     const recommendationsQuery = `
@@ -20,7 +20,7 @@ exports.getRecommendations = async () => {
     `;
 
     try {
-        const recommendations = await query(recommendationsQuery);
+        const recommendations = await connection(recommendationsQuery);
         return recommendations;
     } catch (err) {
         console.error('Error fetching recommendations:', err);
