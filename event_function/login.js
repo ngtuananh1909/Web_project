@@ -1,84 +1,117 @@
-// Xử lý chuyển đổi giữa form đăng ký và đăng nhập
-const signUpButton = document.getElementById('register');
-const signInButton = document.getElementById('login');
-const container = document.getElementById('container');
+document.addEventListener('DOMContentLoaded', function() {
+    // Select form elements safely
+    const loginForm = document.querySelector('form[action="/auth/login"]');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const errorMessageElement = document.getElementById('error-message');
 
-// Chuyển đổi giữa các form
-signUpButton.addEventListener('click', () => {
-    container.classList.add('right-panel-active');
-});
-
-signInButton.addEventListener('click', () => {
-    container.classList.remove('right-panel-active');
-});
-
-// Hàm hiển thị thông báo
-function showMessage(message, isError = false) {
-    const errorMessage = document.getElementById('error-message');
-    errorMessage.textContent = message;
-    errorMessage.style.display = isError ? "block" : "none"; // Hiển thị nếu có lỗi
-}
-
-// Xử lý khi nhấn nút "Sign Up"
-document.querySelector('.sign-up form button').addEventListener('click', (e) => {
-    e.preventDefault();
-    const name = document.querySelector('.sign-up input[placeholder="Name"]').value;
-    const email = document.querySelector('.sign-up input[placeholder="Email"]').value;
-    const password = document.querySelector('.sign-up input[placeholder="Password"]').value;
-
-    if (name && email && password) {
-        // Gửi thông tin đến server để đăng ký
-        alert(`Account created successfully!\nName: ${name}\nEmail: ${email}`);
-        // Gọi API hoặc xử lý đăng ký tại đây
-    } else {
-        showMessage('Please fill in all fields to sign up.', true);
-    }
-});
-
-// Xử lý khi nhấn nút "Sign In"
-document.querySelector('.sign-in form button').addEventListener('click', async (e) => {
-    e.preventDefault();
-    const email = document.querySelector('.sign-in input[placeholder="Email"]').value;
-    const password = document.querySelector('.sign-in input[placeholder="Password"]').value;
-
-    if (email && password) {
-        // Gửi thông tin đến server để xác thực
-        const response = await fetch('/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
+    // Check if elements exist before adding event listeners
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(event) {
+            // Basic client-side validation
+            if (!validateForm()) {
+                event.preventDefault();
+            }
         });
+    }
 
-        const result = await response.json();
+    if (emailInput) {
+        emailInput.addEventListener('input', function() {
+            validateEmail(this);
+        });
+    }
 
-        if (result.success) {
-            alert(`Logged in successfully!\nEmail: ${email}`);
-            // Chuyển hướng hoặc xử lý sau khi đăng nhập thành công
-        } else {
-            showMessage(result.message || 'Email hoặc mật khẩu không đúng. Vui lòng thử lại.', true);
+    if (passwordInput) {
+        passwordInput.addEventListener('input', function() {
+            validatePassword(this);
+        });
+    }
+
+    function validateForm() {
+        let isValid = true;
+
+        // Email validation
+        if (emailInput && !validateEmail(emailInput)) {
+            isValid = false;
         }
-    } else {
-        showMessage('Please fill in all fields to sign in.', true);
+
+        // Password validation
+        if (passwordInput && !validatePassword(passwordInput)) {
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function validateEmail(input) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const errorSpan = input.nextElementSibling;
+
+        if (!input.value.trim()) {
+            showError(input, 'Email is required');
+            return false;
+        }
+
+        if (!emailRegex.test(input.value)) {
+            showError(input, 'Invalid email format');
+            return false;
+        }
+
+        clearError(input);
+        return true;
+    }
+
+    function validatePassword(input) {
+        if (!input.value.trim()) {
+            showError(input, 'Password is required');
+            return false;
+        }
+
+        if (input.value.length < 6) {
+            showError(input, 'Password must be at least 6 characters');
+            return false;
+        }
+
+        clearError(input);
+        return true;
+    }
+
+    function showError(input, message) {
+        // Find or create error span
+        let errorSpan = input.parentNode.querySelector('.error-message');
+        if (!errorSpan) {
+            errorSpan = document.createElement('span');
+            errorSpan.className = 'error-message';
+            input.parentNode.appendChild(errorSpan);
+        }
+        
+        errorSpan.textContent = message;
+        errorSpan.style.color = 'red';
+        errorSpan.style.display = 'block';
+        input.classList.add('error-input');
+    }
+
+    function clearError(input) {
+        const errorSpan = input.parentNode.querySelector('.error-message');
+        if (errorSpan) {
+            errorSpan.textContent = '';
+            errorSpan.style.display = 'none';
+        }
+        input.classList.remove('error-input');
+    }
+
+    const closePopupBtn = document.querySelector('.popup-overlay button');
+    if (closePopupBtn) {
+        closePopupBtn.addEventListener('click', function() {
+            const popupOverlay = document.querySelector('.popup-overlay');
+            if (popupOverlay) {
+                popupOverlay.style.display = 'none';
+            }
+        });
     }
 });
 
-// Mã thông báo di chuyển "Welcome to E-shop"
-const marqueeContainer = document.querySelector('.marquee-container div');
-let offset = -700;
-setInterval(() => {
-    offset += 2;
-    if (offset > window.innerWidth) {
-        offset = -700;
-    }
-    marqueeContainer.style.marginLeft = `${offset}px`;
-}, 50);
-
-// Hàm đóng popup khi người dùng nhấn OK
-function closePopup() {
-    const popup = document.querySelector('.popup-overlay');
-    if (popup) {
-        popup.style.display = 'none';
-    }
-}
+window.addEventListener('error', function(event) {
+    console.error('Uncaught error:', event.error);
+    // Optionally send error to server or show user-friendly message
+});

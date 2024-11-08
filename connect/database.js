@@ -1,6 +1,5 @@
 const mysql = require('mysql2');
 
-// Create a connection function instead of a pool
 const createConnection = () => {
     return mysql.createConnection({
         host: process.env.DB_HOST,

@@ -36,7 +36,7 @@ app.use(helmet({
 }));
 
 const corsOptions = {
-    origin: 'https://openezforfree.onrender.com/',
+    origin: 'http://localhost:3000zz',
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
@@ -70,7 +70,7 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-    res.setHeader('Content-Security-Policy', "img-src 'self' https://openezforfree.onrender.com data:;");
+    res.setHeader('Content-Security-Policy', "img-src 'self' http://localhost:3000 data:;");
     next();
 });
 
