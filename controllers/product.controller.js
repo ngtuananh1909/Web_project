@@ -4,7 +4,6 @@ const { ProductIDGenerator } = require('../event_function/function');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
-const sharp = require('sharp');
 const { Mutex } = require('async-mutex');
 const mutex = new Mutex();
 require('dotenv').config();
