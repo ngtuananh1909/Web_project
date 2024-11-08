@@ -23,16 +23,16 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            imgSrc: ["'self'", "http://localhost:3000", "data:"],
+            imgSrc: [
+                "'self'", 
+                "https://res.cloudinary.com", 
+                "data:", 
+                "*" // Cảnh báo: Ít an toàn nhưng có thể giải quyết tạm thời
+            ],
             scriptSrc: ["'self'", "'unsafe-inline'"],
             styleSrc: ["'self'", "'unsafe-inline'"]
         }
-    },
-    frameguard: {
-        action: 'deny'
-    },
-    xssFilter: true,
-    noSniff: true
+    }
 }));
 
 const corsOptions = {
