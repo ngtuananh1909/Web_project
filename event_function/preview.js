@@ -98,21 +98,3 @@ function formatCurrency(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 let editor;
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Khởi tạo Quill
-    var quill = new Quill('#editor', {
-        theme: 'snow',
-        modules: {
-            toolbar: [
-                ['bold', 'italic', 'underline'],
-                ['image', 'code-block']
-            ]
-        }
-    });
-
-    // Cập nhật input ẩn khi nội dung thay đổi
-    quill.on('text-change', function() {
-        document.getElementById('description').value = quill.root.innerHTML;
-    });
-});
