@@ -27,12 +27,31 @@ exports.home = async (req, res) => {
         const notificationsQuery = userId ? 'SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC' : null;
         
         let recommendations = [];
+        let products = [];
+        let notifications = [];
 
-        const [products, notifications] = await Promise.all([
-            query(productsQuery),
-            userId ? query(notificationsQuery, [userId]) : Promise.resolve([]),
+        // Use Promise.all with proper error handling
+        const results = await Promise.all([
+            new Promise((resolve, reject) => {
+                db.query(productsQuery, (err, result) => {
+                    if (err) reject(err);
+                    resolve(result);
+                })
+            }),
+            userId 
+                ? new Promise((resolve, reject) => {
+                    db.query(notificationsQuery, [userId], (err, result) => {
+                        if (err) reject(err);
+                        resolve(result);
+                    })
+                })
+                : Promise.resolve([])
         ]);
 
+        products = results[0];
+        notifications = results[1];
+
+        // Get recommendations if user is logged in
         if (userId) {
             try {
                 recommendations = await getCollaborativeRecommendations(userId, 6);
@@ -44,27 +63,37 @@ exports.home = async (req, res) => {
 
         const formattedProducts = products.map(product => ({
             ...product,
-            formatted_date: new Date(product.created_at).toLocaleDateString('vi-VN', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit'
-            })
+            formatted_date: product.created_at 
+                ? new Date(product.created_at).toLocaleDateString('vi-VN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                })
+                : 'N/A'
         }));
 
         const formattedRecommendations = recommendations.map(product => ({
             ...product,
-            formatted_date: new Date(product.created_at).toLocaleDateString('vi-VN', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit'
-            })
+            formatted_date: product.created_at
+                ? new Date(product.created_at).toLocaleDateString('vi-VN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                })
+                : 'N/A'
         }));
 
         res.render('home', {
             user: req.session.user,
             products: formattedProducts,
             recommendations: formattedRecommendations,
-            notifications 
+            notifications,
+            formatCurrency: (amount) => {
+                return new Intl.NumberFormat('vi-VN', { 
+                    style: 'currency', 
+                    currency: 'VND' 
+                }).format(amount)
+            }
         });
     } catch (err) {
         console.error('Error fetching data:', err);
@@ -72,11 +101,16 @@ exports.home = async (req, res) => {
             user: req.session.user, 
             products: [], 
             recommendations: [],
-            notifications: []
+            notifications: [],
+            formatCurrency: (amount) => {
+                return new Intl.NumberFormat('vi-VN', { 
+                    style: 'currency', 
+                    currency: 'VND' 
+                }).format(amount)
+            }
         });
     }
 };
-
 
 exports.logout = (req, res) => {
     req.session.destroy(err => {
