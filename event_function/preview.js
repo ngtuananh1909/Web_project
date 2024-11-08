@@ -1,134 +1,104 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("product-form");
-    const nameInput = document.getElementById("name");
-    const priceInput = document.getElementById("price");
-    const quantityInput = document.getElementById("quantity");
-    const imageInput = document.getElementById("image");
-    const saleCheckbox = document.getElementById("sale");
-    const saleHidden = document.getElementById("saleHidden");
-    const saleValueInput = document.getElementById("saleval");
-    const descriptionInput = document.getElementById("description");
+// Khởi tạo Quill editor
+var quill = new Quill('#editor', {
+    theme: 'snow',
+    modules: {
+        toolbar: [
+            ['bold', 'italic', 'underline'],
+            ['image', 'code-block']
+        ]
+    }
+});
 
-    function updatePreview() {
-        // Cập nhật preview name
-        document.getElementById("preview-name").textContent = nameInput.value || "Product Name";
-        
-        // Cập nhật preview price
-        document.getElementById("preview-price").textContent = 
-            `Price: ${priceInput.value ? formatCurrency(priceInput.value) : "0"} VND`;
-        
-        // Cập nhật preview quantity
-        document.getElementById("preview-quantity").textContent = 
-            `Quantity: ${quantityInput.value || "0"}`;
+// Hàm cập nhật preview
+function updatePreview() {
+    // Cập nhật tên sản phẩm
+    const name = document.getElementById('name').value;
+    document.getElementById('preview-name').textContent = name || 'Name';
 
-        // Cập nhật preview sale
-        const previewSale = document.getElementById("preview-sale");
-        if (saleCheckbox.checked && saleValueInput.value) {
-            previewSale.style.display = "block";
-            previewSale.textContent = `Sale Value: ${saleValueInput.value}%`;
-            saleHidden.value = "1";
-        } else {
-            previewSale.style.display = "none";
-            saleHidden.value = "0";
-        }
+    // Cập nhật giá
+    const price = document.getElementById('price').value;
+    document.getElementById('preview-price').textContent = `Price: ${price || 0} VND`;
 
-        // Cập nhật preview description
-        document.getElementById("preview-description").textContent = 
-            descriptionInput.value || "Description";
+    // Cập nhật số lượng
+    const quantity = document.getElementById('quantity').value;
+    document.getElementById('preview-quantity').textContent = `Quantity: ${quantity || 0}`;
+
+    // Cập nhật mô tả từ Quill editor
+    const description = quill.root.innerHTML;
+    document.getElementById('description').value = description; // Lưu vào trường ẩn
+    document.getElementById('preview-description').innerHTML = description || 'Description';
+
+    // Cập nhật sale
+    const saleCheckbox = document.getElementById('sale');
+    const saleValue = document.getElementById('saleval').value;
+    const salePreview = document.getElementById('preview-sale');
+
+    if (saleCheckbox.checked && saleValue) {
+        salePreview.style.display = 'block';
+        salePreview.textContent = `Sale Value: ${saleValue}%`;
+    } else {
+        salePreview.style.display = 'none';
     }
 
-    // Add event listeners
-    nameInput.addEventListener("input", updatePreview);
-    priceInput.addEventListener("input", updatePreview);
-    quantityInput.addEventListener("input", updatePreview);
-    descriptionInput.addEventListener("input", updatePreview);
-    saleCheckbox.addEventListener("change", updatePreview);
-    saleValueInput.addEventListener("input", updatePreview);
-
-    // Preview image when selected
-    imageInput.addEventListener("change", function () {
-        const file = imageInput.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                document.getElementById("preview-image").src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+    // Cập nhật hình ảnh preview
+    const imageInput = document.getElementById('image');
+    const previewImage = document.getElementById('preview-image');
+    
+    if (imageInput.files && imageInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImage.src = e.target.result;
         }
-    });
+        reader.readAsDataURL(imageInput.files[0]);
+    }
+}
 
-    // Form submission validation
-    form.addEventListener("submit", function(event) {
-        event.preventDefault(); // Ngăn form submit mặc định
+// Lắng nghe sự kiện thay đổi cho các trường
+document.getElementById('name').addEventListener('input', updatePreview);
+document.getElementById('price').addEventListener('input', updatePreview);
+document.getElementById('quantity').addEventListener('input', updatePreview);
+document.getElementById('saleval').addEventListener('input', updatePreview);
+document.getElementById('sale').addEventListener('change', updatePreview);
+document.getElementById('image').addEventListener('change', updatePreview);
 
-        // Set giá trị mặc định cho sale
-        if (saleCheckbox.checked) {
-            if (!saleValueInput.value || saleValueInput.value.trim() === "") {
-                saleValueInput.value = "0";
-            }
-        } else {
-            // Nếu checkbox không được chọn, set giá trị là null hoặc 0
-            saleValueInput.value = "0";
-        }
+// Sự kiện cho Quill editor
+quill.on('text-change', function() {
+    updatePreview(); // Cập nhật preview mỗi khi nội dung thay đổi
+});
 
-        // Validate các trường bắt buộc khác
-        if (!nameInput.value || !priceInput.value || !quantityInput.value || !imageInput.files[0] || !descriptionInput.value) {
-            alert("Please fill in all required fields");
-            return;
-        }
+// Khởi tạo preview ban đầu
+document.addEventListener('DOMContentLoaded', function() {
+    updatePreview(); // Cập nhật preview khi trang được tải
+});
 
-        // Nếu mọi thứ ok, submit form
-        form.submit();
-    });
+// Xử lý form submit
+document.getElementById('product-form').onsubmit = function() {
+    // Lưu nội dung của Quill vào trường ẩn
+    const description = quill.root.innerHTML;
+    document.getElementById('description').value = description;
+};
 
-    // Initialize preview
+// Hàm toggle sale value
+function toggleSaleValue() {
+    const saleValueContainer = document.getElementById('sale-value-container');
+    const saleCheckbox = document.getElementById('sale');
+    
+    if (saleCheckbox.checked) {
+        saleValueContainer.style.display = 'block';
+    } else {
+        saleValueContainer.style.display = 'none';
+    }
+    
+    updatePreview();
+}
+
+// Giới hạn giá trị sale
+document.getElementById('saleval').addEventListener('input', function () {
+    let value = parseInt(this.value);
+    if (value > 99) {
+        this.value = 99;
+    } else if (value < 1) {
+        this.value = 1;
+    }
     updatePreview();
 });
-document.addEventListener('DOMContentLoaded', function() {
-    // Khởi tạo Quill
-    var quill = new Quill('#editor', {
-        theme: 'snow',
-        modules: {
-            toolbar: [
-                ['bold', 'italic', 'underline'],
-                ['image', 'code-block']
-            ]
-        }
-    });
-
-    // Cập nhật input ẩn khi nội dung thay đổi
-    quill.on('text-change', function() {
-        document.getElementById('description').value = quill.root.innerHTML;
-    });
-});
-document.addEventListener('DOMContentLoaded', function() {
-    const descriptionInput = document.getElementById('description-input');
-    const infoDescription = document.getElementById('info-description');
-
-    descriptionInput.addEventListener('input', function() {
-        infoDescription.textContent = this.value;
-    });
-});
-// Helper function to format currency
-function formatCurrency(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-let editor;
-
-ClassicEditor
-    .create(document.querySelector('#editor'))
-    .then(newEditor => {
-        editor = newEditor;
-        
-        // Lắng nghe sự kiện thay đổi trong editor
-        editor.model.document.on('change:data', () => {
-            // Cập nhật nội dung cho input hidden
-            document.querySelector('#description').value = editor.getData();
-            
-            // Cập nhật preview
-            document.querySelector('#preview-description').innerHTML = editor.getData();
-        });
-    })
-    .catch(error => {
-        console.error(error);
-    });
