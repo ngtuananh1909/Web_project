@@ -20,8 +20,8 @@ exports.getRecommendations = async () => {
     `;
 
     try {
-        const recommendations = await db(recommendationsQuery);
-        return recommendations;d
+        const [recommendations] = await db.query(recommendationsQuery);
+        return recommendations;
     } catch (err) {
         console.error('Error fetching recommendations:', err);
         return [];
