@@ -170,10 +170,10 @@ body.dark-mode .setting-label {
 }
 .password-toggle-icon {
     position: absolute;
-    right: 73px;  /* Điều chỉnh vị trí icon */
+    right: 73px;  
     top: 50%;
     transform: translateY(-50%);
-    width: 20px;  /* Điều chỉnh kích thước icon */
+    width: 20px;
     height: 20px;
     cursor: pointer;
     opacity: 0.7;
@@ -185,5 +185,5 @@ body.dark-mode .setting-label {
 }
 
 .setting-input {
-    padding-right: 40px;  /* Để chừa chỗ cho icon */
+    padding-right: 40px; 
 }

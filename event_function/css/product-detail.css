@@ -782,6 +782,18 @@ input:checked + .slider:before {
     margin-left: 20%;
 }
 
+@media screen and (min-width: 1440px) {
+    .dark-mode .rating-section, .reviews {
+        margin-left: 20% !important;
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    .dark-mode .rating-section, .reviews {
+        margin-left: calc(21% - 8vw);
+    }
+}
+
 .review {
     margin-top: 10px;
     padding: 5px;

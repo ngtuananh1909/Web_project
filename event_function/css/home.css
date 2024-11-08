@@ -42,7 +42,6 @@
   }
   .product-card img {
     height: 200px;
-    /* Hoặc chiều cao cố định bạn muốn cho hình ảnh */
     object-fit: cover;
     width: 100%;
   }
@@ -91,17 +90,15 @@
 
   .center-text {
     display: flex;
-    justify-content: center; /* Căn giữa theo chiều ngang */
-    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: center; 
+    align-items: center; 
   }
 
 
-  /* Chế độ sáng (mặc định) */
   body {
     background-color: #F5EFFF;
     color: #000;
   }
-  /* Định dạng chung cho trang */
   body {
     margin: 0;
     padding: 0;
