@@ -1,54 +1,73 @@
 document.getElementById('background-input').addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (file) {
-        const formData = new FormData();
-        formData.append('background', file);
-
-        fetch('/upload-background', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Cập nhật background ngay lập tức
-                document.body.style.backgroundImage = `url('${data.backgroundPath}')`;
-                document.body.style.backgroundSize = 'cover';
-                document.body.style.backgroundPosition = 'center';
-                document.body.style.backgroundRepeat = 'no-repeat';
-
-                // Lưu đường dẫn background vào localStorage
-                localStorage.setItem('userBackground', data.backgroundPath);
-            }
-        })
-        .catch(error => {
-            console.error('Error uploading background:', error);
-        });
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.body.style.backgroundImage = `url(${e.target.result})`;
+            localStorage.setItem('backgroundImage', e.target.result);
+        };
+        reader.readAsDataURL(file);
     }
 });
 
-// Hàm reset background về mặc định
+// Khôi phục ảnh nền từ localStorage khi tải trang
+document.addEventListener('DOMContentLoaded', function() {
+    const savedBackground = localStorage.getItem('backgroundImage');
+    if (savedBackground) {
+        document.body.style.backgroundImage = `url(${savedBackground})`;
+    }
+});
+
 function resetBackground() {
     document.body.style.backgroundImage = 'none';
-    localStorage.removeItem('userBackground');
-    
-    // Gọi API để xóa background đã lưu
-    fetch('/reset-background', { method: 'POST' })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log('Background reset successfully');
-        }
-    });
+    localStorage.removeItem('backgroundImage');
 }
+window.onload = function () {
+    const imgElement = document.createElement('img');
+    imgElement.src = 'path/to/your/image.jpg'; // Đường dẫn đến ảnh của bạn
 
-// Kiểm tra và áp dụng background khi trang load
-document.addEventListener('DOMContentLoaded', () => {
-    const savedBackground = localStorage.getItem('userBackground');
-    if (savedBackground) {
-        document.body.style.backgroundImage = `url('${savedBackground}')`;
-        document.body.style.backgroundSize = 'cover';
-        document.body.style.backgroundPosition = 'center';
-        document.body.style.backgroundRepeat = 'no-repeat';
-    }
-});
+    imgElement.onload = function () {
+        const width = imgElement.width;
+        const height = imgElement.height;
+
+        const aspectRatio = width / height; // Tính tỷ lệ
+
+        const body = document.body;
+        const backgroundImage = document.createElement('div');
+        backgroundImage.classList.add('background-image');
+
+        // Kiểm tra tỷ lệ ảnh
+        if (aspectRatio > 1.77) { // 16:9 ~ 1.77
+            backgroundImage.style.backgroundImage = `url('${imgElement.src}')`;
+        } else {
+            backgroundImage.style.backgroundImage = `url('${imgElement.src}')`;
+            backgroundImage.classList.add('repeat'); // Thêm lớp để lặp lại
+        }
+
+        body.appendChild(backgroundImage);
+    };
+};window.onload = function () {
+    const imgElement = document.createElement('img');
+    imgElement.src = 'path/to/your/image.jpg'; // Đường dẫn đến ảnh của bạn
+
+    imgElement.onload = function () {
+        const width = imgElement.width;
+        const height = imgElement.height;
+
+        const aspectRatio = width / height; // Tính tỷ lệ
+
+        const body = document.body;
+        const backgroundImage = document.createElement('div');
+        backgroundImage.classList.add('background-image');
+
+        // Kiểm tra tỷ lệ ảnh
+        if (aspectRatio > 1.77) { // 16:9 ~ 1.77
+            backgroundImage.style.backgroundImage = `url('${imgElement.src}')`;
+        } else {
+            backgroundImage.style.backgroundImage = `url('${imgElement.src}')`;
+            backgroundImage.classList.add('repeat'); // Thêm lớp để lặp lại
+        }
+
+        body.appendChild(backgroundImage);
+    };
+};
