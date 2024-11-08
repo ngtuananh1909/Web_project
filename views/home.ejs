@@ -16,11 +16,11 @@
         <div class="row align-items-center">
           <!-- Logo -->
           <div class="col-md-3 col-6">
-            <h1 class="h4 mb-0">
-              <a href="/" class="text-decoration-none" style="font-size: 40px;">
-                <strong>E-Shop</strong>
-              </a>
-            </h1>
+            <h1 class="h4 mb-0 logo">
+    <a href="/" class="text-decoration-none" style="font-size: 40px;" id="logo-text">
+        <strong>E-Shop</strong>
+    </a>
+</h1>
           </div>
     
           <!-- Thanh Tìm Kiếm -->
@@ -86,35 +86,35 @@
                 <li>
                   <!-- Thông báo -->
                   <div class="notifications dropdown">
-                    <a class="nav-link thongbao dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="/img/thongbao.png" alt="donhang icon" style="width: 30px; height: 30px;">
-                        <% if (notifications.length > 0) { %>
-                            <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
-                                <%= notifications.length %>
-                            </span>
-                        <% } %>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                        <% if (notifications.length > 0) { %>
-                            <% notifications.forEach(notification => { %>
-                                <li>
-                                    <a class="dropdown-item custom" href="#">
-                                        <span class="notification-text"><%= notification.message %></span>
-                                        <small class="d-block notification-date"><%= notification.created_at %></small>
-                                    </a>
-                                </li>
-                            <% }); %>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item text-center custom" href="#">Xem tất cả thông báo</a>
-                            </li>
-                        <% } else { %>
-                            <li>
-                                <a class="dropdown-item text-center custom">Không có thông báo</a>
-                            </li>
-                        <% } %>
-                    </ul>
-                </div>
+                      <a class="nav-link thongbao" href="#" id="notificationDropdown" role="button">
+                          <img src="/img/thongbao.png" alt="notification icon" style="width: 30px; height: 30px;">
+                          <% if (notifications.length > 0) { %>
+                              <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                                  <%= notifications.length %>
+                              </span>
+                          <% } %>
+                      </a>
+                      <ul class="dropdown-menu dropdown-menu-end" id="notificationMenu" aria-labelledby="notificationDropdown" style="display: none;">
+                          <% if (notifications.length > 0) { %>
+                              <% notifications.forEach(notification => { %>
+                                  <li>
+                                      <a class="dropdown-item custom" href="#">
+                                          <span class="notification-text"><%= notification.message %></span>
+                                          <small class="d-block notification-date"><%= notification.created_at %></small>
+                                      </a>
+                                  </li>
+                              <% }); %>
+                              <li><hr class="dropdown-divider"></li>
+                              <li>
+                                  <a class="dropdown-item text-center custom" href="#">Xem tất cả thông báo</a>
+                              </li>
+                          <% } else { %>
+                              <li>
+                                  <a class="dropdown-item text-center custom">Không có thông báo</a>
+                              </li>
+                          <% } %>
+                      </ul>
+                  </div>
                 </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
@@ -399,5 +399,9 @@
     <script src="scoreboard.js"></script>
     <script src="search.js"></script>
     <script src="background.js"></script>
+    <script src="thongbao.js"></script>
+    <script>
+    
+</script>
    </body>
 </html>

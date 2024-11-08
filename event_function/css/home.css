@@ -108,9 +108,9 @@
     height: 100vh;
     background-image: url('/img/defaut-background.jpg'); /* URL nền mặc định */
     background-size: cover;
+    background-position: center;
     background-attachment: fixed;
-    z-index: -1; /* Đặt ảnh ở phía sau nội dung */
-}
+  }
   /* Chế độ tối */
   body.dark-mode {
     background-color: #1b1b1b;

@@ -1,7 +1,5 @@
 .sticky-header {
     position: sticky;
-    top: 0;
-    z-index: 1000;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
@@ -149,12 +147,16 @@
     width: 100%;
     max-width: 20000px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    top: 0; /* Dán vào đầu trang */
+    z-index: 1000;
   }
   .dark-mode .header-design{
     background-color: #616161;
     width: 100%;
     max-width: 20000px;
     box-shadow: 0 4px 8px rgba(255, 224, 224, 0.1);
+    top: 0; /* Dán vào đầu trang */
+    z-index: 1000;
   }
   .nav .nav-link img {
     width: 24px; /* Điều chỉnh kích thước icon */
@@ -342,6 +344,26 @@ div#searchContainer {
 
 .dark-mode .dropdown-item.custom-light {
   color: #a0a0a0;
+}
+.header-design {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.9); /* Màu nền sáng */
+  transition: background-color 0.3s ease;
+}
+
+.header-design.dark-mode {
+  background-color: rgba(51, 51, 51, 0.9); /* Màu nền tối */
+}
+
+.header-design .logo {
+  color: #000; /* Màu chữ mặc định (sáng) */
+  transition: color 0.3s ease;
+}
+
+.header-design.dark-mode .logo {
+  color: #fff; /* Màu chữ tối (trong chế độ tối) */
 }
 
 .dark-mode .dropdown-divider {
