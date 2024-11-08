@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
     <title>Pro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link rel="shortcut icon" href="#" />
@@ -124,7 +125,7 @@
                     <img src="./img/def.jpg" class="avatar me-1" alt="default avatar" style="width: 30px; height: 30px;" />
                     <% } %>
                   </a>
-                  <ul class="dropdown-menu dropdown-menu-end" style="margin-left: -270%;" aria-labelledby="userDropdown">
+                  <ul class="dropdown-menu dropdown-menu-end" style="margin-left: 162px;" aria-labelledby="userDropdown">
                     <li><a class="dropdown-item" href="/user/<%= user.id %>">Profile</a></li>
                     <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
                     <li><a class="dropdown-item">Balance: <%= user.balance %> VNĐ</a></li>
@@ -252,10 +253,11 @@
                     <div class="card product-card">
                       <a href="/product/<%= product.id %>">
                         <img 
-                          src="<%= product.image ? ('uploads/' + product.image) : '/img/cart-def.png' %>" 
+                          src="<%= 'https://res.cloudinary.com/dlwmqqoht/image/upload/v1731050855/ydwevw2zizhkzswzgij9.jpg' %>" 
                           class="card-img-top" 
-                          alt="" 
-                          onerror="this.onerror=null; this.src='/img/cart-def.png';"
+                          alt="Product Image" 
+                          onerror="console.error('Image load error:', this.src); this.src='/img/cart-def.png';"
+                          onload="console.log('Image loaded successfully:', this.src)"
                         />
                       </a>
                       <div class="card-body">

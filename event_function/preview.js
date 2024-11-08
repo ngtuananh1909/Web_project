@@ -85,6 +85,23 @@ document.addEventListener("DOMContentLoaded", function () {
     updatePreview();
 });
 document.addEventListener('DOMContentLoaded', function() {
+    // Khởi tạo Quill
+    var quill = new Quill('#editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                ['bold', 'italic', 'underline'],
+                ['image', 'code-block']
+            ]
+        }
+    });
+
+    // Cập nhật input ẩn khi nội dung thay đổi
+    quill.on('text-change', function() {
+        document.getElementById('description').value = quill.root.innerHTML;
+    });
+});
+document.addEventListener('DOMContentLoaded', function() {
     const descriptionInput = document.getElementById('description-input');
     const infoDescription = document.getElementById('info-description');
 

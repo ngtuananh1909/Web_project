@@ -23,16 +23,16 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            imgSrc: ["'self'", "https://console.cloudinary.com", "data:"],
+            imgSrc: [
+                "'self'", 
+                "https://res.cloudinary.com", 
+                "data:", 
+                "*" 
+            ],
             scriptSrc: ["'self'", "'unsafe-inline'"],
             styleSrc: ["'self'", "'unsafe-inline'"]
         }
-    },
-    frameguard: {
-        action: 'deny'
-    },
-    xssFilter: true,
-    noSniff: true
+    }
 }));
 
 const corsOptions = {
