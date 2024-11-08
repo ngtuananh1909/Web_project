@@ -1121,7 +1121,6 @@ button[type="submit"]:active {
     width: 100%;
     max-width: 100%;
     flex-basis: auto;
-    margin-left: -42%;
     margin-bottom: 20px; /* Thêm khoảng cách giữa các cột khi chúng xếp dọc */
   }
 
@@ -1145,4 +1144,7 @@ button[type="submit"]:active {
   a.btn.btn-success.rounded.center-text {
     font-size: 13px;
   }
+  .col.info-product {
+    margin-left: -216px !important;
+}
 }

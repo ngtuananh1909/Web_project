@@ -195,13 +195,18 @@
                   <!-- <div id="comment" class="comment alpha" style="margin-top: 20px;"></div> Thêm phần hiển thị bình luận -->
               </div> 
           </div> 
-            
-                <div style="margin-left: 20px;">
-                    <label for="comment" style="font-size: 25px;">Bình luận:</label>
-                    <textarea name="comment" class="comment-write" style="margin-left: -12px;" rows="4"></textarea>
-                </div>
-                <center><button type="submit">Gửi đánh giá</button></center>
-            </form>                       
+
+            </form>    
+            <form action="/add-rating" method="POST">
+              <input type="hidden" name="product_id" value="<%= product.id %>">
+              <input type="hidden" name="score" value="5"> 
+          
+              <div style="margin-left: 20px;">
+                  <label for="comment" style="font-size: 25px;">Bình luận:</label>
+                  <textarea name="comment" class="comment-write" style="margin-left: -12px;" rows="4"></textarea>
+              </div>
+              <center><button type="submit">Gửi đánh giá</button></center>
+          </form>                   
           </div>
           
           <div class="reviews">
