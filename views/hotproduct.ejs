@@ -45,7 +45,6 @@
             </div>
           </div>
     
-          <!-- Thanh Điều Hướng -->
           <div class="col-md-3 col-6 mx-auto">
             <nav class="nav justify-content-end">
               <ul class="nav d-flex align-items-center" style="flex-wrap: nowrap;" id="navbar">
@@ -59,7 +58,6 @@
                     <img src="/img/bxh.jpg" alt="scoreboard icon" style="width: 25px; height: 25px;">
                   </a>
                 </li>
-                <!-- Kiểm tra trạng thái đăng nhập -->
                 <% if (!user) { %>
                 <li class="nav-item me-2">
                   <a class="nav-link login" href="/login">Đăng nhập</a>
@@ -106,11 +104,9 @@
                         </div>
                     </li>
                     <li><hr class="dropdown-divider" /></li>
-                    <!-- Nút Reset về nền mặc định -->
                     <li>
                         <button class="dropdown-item alpha" onclick="resetBackground()">Reset về nền mặc định</button>
                     </li>
-                    <!-- Nút chọn ảnh nền -->
                     <li>
                         <input type="file" id="background-input" accept="image/*" style="display:none;" />
                         <button class="dropdown-item alpha" onclick="document.getElementById('background-input').click()">Thay Đổi Hình Nền</button>
@@ -143,7 +139,7 @@
                   <div class="card product-card">
                       <a href="/product/<%= product.id %>">
                           <img 
-                              src="<%= product.image ? ('/uploads/' + product.image) : '/img/cart-def.png' %>" 
+                              src="<%= product.image ? product.image : '/img/cart-def.png' %>" 
                               class="card-img-top" 
                               alt="" 
                               onerror="this.onerror=null; this.src='/img/cart-def.png';"

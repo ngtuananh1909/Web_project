@@ -66,13 +66,25 @@ exports.ConfirmPayment = (req, res) => {
 
                     for (const product of products) {
                         const { id: productId, quantity, price } = product;
-
+                        
                         // Kiểm tra số lượng sản phẩm
                         db.query('SELECT quantity, creator_id FROM products WHERE id = ?', [productId], (err, productData) => {
-                            if (err || productData.length === 0 || productData[0].quantity < quantity) {
-                                console.log(err);   
+                            if (err) {
+                                console.error('Database error:', err);
                                 db.rollback();
-                                return res.status(400).json({ success: false, message: `Sản phẩm không tồn tại hoặc số lượng không đủ.` });
+                                return res.status(500).json({ success: false, message: 'Database error occurred.' });
+                            }
+                            
+                            if (!productData || productData.length === 0) {
+                                console.log('No product found with the given ID:', productId);
+                                db.rollback();
+                                return res.status(400).json({ success: false, message: 'Product does not exist.' });
+                            }
+                        
+                            // Now it's safe to access productData[0]
+                            if (productData[0].quantity < quantity) {
+                                db.rollback();
+                                return res.status(400).json({ success: false, message: 'Insufficient product quantity.' });
                             }
 
                             // Trừ số lượng sản phẩm
