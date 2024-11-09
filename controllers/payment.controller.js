@@ -70,6 +70,7 @@ exports.ConfirmPayment = (req, res) => {
                         // Kiểm tra số lượng sản phẩm
                         db.query('SELECT quantity, creator_id FROM products WHERE id = ?', [productId], (err, productData) => {
                             if (err || productData.length === 0 || productData[0].quantity < quantity) {
+                                console.log(err);   
                                 db.rollback();
                                 return res.status(400).json({ success: false, message: `Sản phẩm không tồn tại hoặc số lượng không đủ.` });
                             }
