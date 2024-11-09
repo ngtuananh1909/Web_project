@@ -56,6 +56,7 @@ exports.ConfirmPayment = (req, res) => {
                 // Tạo đơn hàng
                 db.query('INSERT INTO orders (user_id, total_amount, payment_method) VALUES (?, ?, ?)', [userId, totalAmount, paymentMethod], (err, orderResult) => {
                     if (err) {
+                        console.log(err);
                         db.rollback();
                         return res.status(500).json({ success: false, message: 'Không thể tạo đơn hàng.' });
                     }
