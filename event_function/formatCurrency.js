@@ -79,16 +79,30 @@ function validateCheckout(event, userId) {
     event.preventDefault();
     const selectedProducts = JSON.parse(document.getElementById('selectedProducts').value);
 
+    console.log('Selected Products:', selectedProducts); // Log selected products
+
     const hasSelectedProducts = selectedProducts.some(product => product.quantity > 0);
 
     if (hasSelectedProducts) {
-        // Tạo một form tạm thời để gửi dữ liệu
+        // Check if all products have valid IDs
+        const allProductsValid = selectedProducts.every(product => product.id);
+        if (!allProductsValid) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!',
+                text: 'Một hoặc nhiều sản phẩm không có ID hợp lệ.',
+                confirmButtonText: 'OK'
+            });
+            return; // Stop execution if there are invalid products
+        }
+
+        // Create a temporary form to submit data
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = `/payment/option/t/${userId}`;
         form.style.display = 'none';
 
-        // Thêm selectedProducts vào form
+        // Add selectedProducts to form
         const input = document.createElement('input');
         input.type = 'hidden';
         input.name = 'selectedProducts';
@@ -96,7 +110,7 @@ function validateCheckout(event, userId) {
         form.appendChild(input);
 
         document.body.appendChild(form);
-        form.submit(); // Gửi form
+        form.submit(); // Submit the form
     } else {
         Swal.fire({
             icon: 'warning',
