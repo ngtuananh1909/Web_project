@@ -1,15 +1,4 @@
-// Khởi tạo Quill editor
-var quill = new Quill('#editor', {
-    theme: 'snow',
-    modules: {
-        toolbar: [
-            ['bold', 'italic', 'underline'],
-            ['image', 'code-block']
-        ]
-    }
-});
 
-// Hàm cập nhật preview
 function updatePreview() {
     // Cập nhật tên sản phẩm
     const name = document.getElementById('name').value;
