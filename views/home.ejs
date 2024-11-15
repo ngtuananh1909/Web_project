@@ -4,282 +4,36 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pro</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link rel="shortcut icon" href="#" />
-
-    <style>
-      /*susss*/
-      .sticky-header {
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-
-      .product-card {
-          background-color: #ffffff;
-          border-radius: 8px;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          width: 250px;
-          height: 500px;
-          transition: transform 0.5s, box-shadow 0.5s;
-          margin-bottom: 20px;
-      }
-
-      .dark-mode .product-card {
-          background-color: #ffffff;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          border-radius: 8px;
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          width: 250px;
-          height: 500px;
-          transition: transform 0.5s, box-shadow 0.5s;
-          margin-bottom: 20px;
-      }
-
-      .product-card img {
-        height: 200px;
-        /* Hoặc chiều cao cố định bạn muốn cho hình ảnh */
-        object-fit: cover;
-        width: 100%;
-      }
-
-      .product-card:hover {
-        transform: translateY(-5px) scale(1.01);
-        box-shadow: 0px 10px 20px rgba(255, 255, 255, 0.1);
-      }
-
-      .btn-primary,
-      .btn-danger,
-      .btn-success {
-        height: 60px;
-        width: 100%;
-        border-radius: 15px;
-        transition: transform 0.5s ease;
-      }
-
-      .btn-primary:hover,
-      .btn-danger:hover,
-      .btn-success:hover {
-        transform: translateY(-3px);
-      }
-      .btn {
-        margin-right: 20px;
-      }
-
-      .avatar {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        object-fit: cover;
-      }
-
-      .mt-3 {
-        gap: 5px;
-        border-radius: 30px;
-        height: 60%;
-      }
-
-      .carousel-item img {
-        max-width: 100%;
-        max-height: 500px;
-      }
-
-      .user-balance {
-        cursor: copy;
-      }
-
-      .price {
-        margin-top: 50px;
-      }
-
-      .center-text {
-        display: flex;
-        justify-content: center; /* Căn giữa theo chiều ngang */
-        align-items: center; /* Căn giữa theo chiều dọc */
-      }
-
-      .nav-link {
-            position: relative; /* Để sử dụng absolute positioning cho underline */
-            display: inline-block;
-            padding-bottom: 5px; /* Khoảng cách giữa text và underline */
-        }
-
-      .nav-link::after {
-          content: ""; /* Nội dung rỗng để tạo thanh nhỏ */
-          position: absolute;
-          left: 16%;
-          bottom: 0;
-          width: 70%;
-          height: 2px; /* Độ dày của thanh nhỏ */
-          background-color: #2300ea; /* Màu của thanh nhỏ */
-          transform: scaleX(0); /* Ẩn thanh nhỏ ban đầu */
-          transform-origin: bottom right; /* Vị trí bắt đầu hiệu ứng */
-          align-items: center;
-          transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp cho thanh nhỏ */
-      }
-
-      .nav-link.home:hover::after,
-      .nav-link.bxh:hover::after,
-      .nav-link.giohang:hover::after,
-      .nav-link.taosanpham:hover::after,
-      .nav-link.login:hover::after,
-      .nav-link.dangky:hover::after {
-          transform: scaleX(1); /* Hiện thanh nhỏ khi hover */
-          transform-origin: bottom left; /* Vị trí kết thúc hiệu ứng */
-      }
-
-      .home-icon {
-          width: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
-          height: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
-      }
-      .bxh-icon{
-        width: 27px; /* Thay đổi kích thước của hình ảnh nếu cần */
-        height: 27px;
-      }
-      .cart-icon{
-        width: 23px;
-        height: 23px;
-      }
-
-      .add-icon{
-        width: 30px;
-        height: 30px;
-      }
-
-      .the-link {
-          position: relative; /* Để sử dụng absolute positioning cho underline */
-          display: inline-block;
-          padding-bottom: 2px;
-      }
-
-      .the-link::after {
-          content: ""; /* Nội dung rỗng để tạo thanh nhỏ */
-          position: absolute;
-          left: 14%;
-          bottom: 0;
-          width: 80%;
-          height: 2px; /* Độ dày của thanh nhỏ */
-          background-color: #0056ea; /* Màu của thanh nhỏ */
-          transform-origin: bottom right; /* Vị trí bắt đầu hiệu ứng */
-          align-items: center;
-          transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp cho thanh nhỏ */
-      }
-
-      /* Ẩn menu mặc định */
-      .dropdown-menu {
-        display: none;
-        position: absolute;
-        top: 100%; /* Đặt menu xuất hiện ngay dưới avatar */
-        left: 0;
-        z-index: 1000;
-      }
-
-      /* Hiển thị menu khi di chuột vào avatar */
-      .nav-link.dropdown-toggle:hover + .dropdown-menu,
-      .dropdown-menu:hover {
-        display: block;
-      }
-      .header-design{
-        position: sticky;
-        background-color: #e2e2e2;
-        top: 0px; 
-        z-index: 1000;
-      }
-      .main-content {
-        padding-top: 60px; /* Đảm bảo nội dung không bị che bởi header (thay đổi kích thước này nếu cần) */
-      }
-
-
-      /* Chế độ sáng (mặc định) */
-      body {
-        background-color: #F5EFFF;
-        color: #000;
-        transition: background-color 0.3s ease, color 0.3s ease;
-      }
-
-      /* Chế độ tối */
-      body.dark-mode {
-        background-color: #1b1b1b;
-        color: #f1f1f1;
-      }
-
-      .dark-mode .navbar, .dark-mode .card {
-        background-color: #333333;
-        color: #f1f1f1;
-      }
-
-      .dark-mode .btn-primary {
-        background-color: #2897f8;
-        border-color: #666;
-      }
-
-
-      .dark-mode a{
-        color: #ffffff;
-        transition: background-color 0.3s ease, color 0.3s ease;
-      }
-
-      .mode-button{
-        height: 30px;
-        width: 30px;
-      }
-
-      .dark-mode .header-design  {
-        background-color: #666666fd; /* Màu nền tối cho header */
-        color: white;
-        transition: background-color 0.3s ease, color 0.3s ease;
-      }
-      .text-decoration-none{
-        color: black;
-      }
-      .dark-mode .dropdown-menu{
-        background-color: #0c0c0c;
-        transition: background-color 0.3s ease, color 0.3s ease;
-      }
-
-      .dropdown-item{
-        color: rgb(0, 0, 0);
-        text-decoration: none;
-        transition: background-color 0.3s ease, color 0.3s ease;
-      }
-      .dropdown-menu{
-        color: white;
-        transition: background-color 0.5s ease, color 0.5s ease;
-      }
-      #toggle-dark-mode {
-        border: none; /* Loại bỏ khung viền */
-        outline: none; /* Loại bỏ viền khi nhấn vào nút */
-        background: none; /* Loại bỏ màu nền mặc định */
-        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
-      }
-
-
-    </style>
+    <link rel="stylesheet" href="css/home.css">
   </head>
 
   <body>
-    <header class="header-design" >
-      <div class="container-fluid py-3" >
-        <div class="container d-flex justify-content-between align-items-center" style="margin-left: 476px;">
+    <header class="header-design">
+      <div class="container-fluid py-3">
+        <div class="container d-flex justify-content-between align-items-center" style="margin-left: 415px;">
           <h1 class="h4 mb-0">
-            <a href="/" class="text-decoration-none" style="margin-left: -197px;"><strong>E-Shop</strong></a>
+            <a href="/" class="text-decoration-none" style="margin-left: -130px;"><strong>E-Shop</strong></a>
           </h1>
+          <!-- Thanh tìm kiếm -->
+          <form class="d-flex search" action="/search" method="GET" onsubmit="validateForm(event)">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Tìm kiếm sản phẩm..."
+              aria-label="Search"
+              name="query"
+            />
+            <button class="button-search" type="submit">Tìm kiếm</button>
+          </form>
           <nav class="nav">
             <ul class="nav">
               <li class="nav-item">
                 <a class="nav-link home" href="/">
-                    <img src="/img/home.png" alt="" class="home-icon"></img>
+                  <img src="/img/home.png" alt="" class="home-icon"></img>
                 </a>
-            </li>
+              </li>
               <li class="nav-item">
                 <a class="nav-link bxh" href="/scoreboard">
                   <img src="/img/bxh.jpg" alt="" class="bxh-icon">
@@ -292,13 +46,10 @@
               <li class="nav-item">
                 <a class="nav-link dangky" href="/register">Đăng ký</a>
               </li>
-              <button id="toggle-dark-mode" style="margin-left: 150px;">
-                <img src="img/mode.png" alt="" class="mode-button"></img>
-              </button>
               <% } else { %>
               <li class="nav-item">
                 <a class="nav-link giohang" href="/cart">
-                    <img src="/img/cart.jpg" alt="" class="cart-icon">                  
+                  <img src="/img/cart.jpg" alt="" class="cart-icon">                  
                 </a>
               </li>
               <li class="nav-item">
@@ -306,10 +57,10 @@
                   <img src="/img/add.jpg" alt="" class="add-icon">
                 </a>
               </li>
-              <li class="nav-item dropdown">
+              <li class="nav-item dropdown" style="width: 200px;">
                 <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button">
                   <% if (user.avatar) { %>
-                  <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
+                  <img src="/<%= user.avatar %>" class="avatar me-2" alt="" />
                   <% } else { %>
                   <img src="./img/def.jpg" class="avatar me-2" alt="" />
                   <% } %>
@@ -321,12 +72,27 @@
                   <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
                   <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
                   <li><hr class="dropdown-divider" /></li>
+                  
+                  <li class="nav-item">
+                    <div class="d-flex align-items-center px-3 py-2">
+                      <label class="change-mode" for="toggle-dark-mode" id="mode-label">Chế Độ Sáng</label>
+                      <label class="switch" >
+                        <input type="checkbox" id="toggle-dark-mode">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </li>
+                  <li><hr class="dropdown-divider" /></li>
                   <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
                 </ul>
               </li>
-              <button id="toggle-dark-mode" style="margin-left: 150px;">
-                <img src="img/mode.png" alt="" class="mode-button"></img>
-              </button>
+              <% if(user.id == 'rgB6QoFkYk'){ %>   
+                <li class="nav-item">
+                  <a class="nav-link taosanpham" href="/api/users">
+                    <img src="/img/add.jpg" alt="" class="add-icon">
+                  </a>
+                </li>  
+                <% }; %>                  
               <% } %>
             </ul>
           </nav>
@@ -341,7 +107,7 @@
               <a href="/scoreboard"
                 ><img
                   class="d-block w-100"
-                  src="/uploads/aL4RptWAMs.png"
+                  src="/uploads/clear.png"
                   alt="First slide"
               /></a>
             </div>
@@ -421,23 +187,24 @@
             <h2 class="section-title text-center">Danh mục sản phẩm</h2>
             <div class="row row-cols-1 row-cols-md-5 g-4">
               <% products.forEach(product=> { %>
-              <div class="col">
+              <% if(product.quantity > 0){ %>
+                <div class="col">
                 <div class="card product-card">
                   <a href="/product/<%= product.id %>">
-                    <img
-                      src="/uploads/<%= product.image %>"
-                      class="card-img-top"
-                      alt=""
+                    <img 
+                        src="<%= product.image ? ('uploads/' + product.image) : '/img/cart-def.png' %>" 
+                        class="card-img-top" 
+                        alt="" 
+                        onerror="this.onerror=null; this.src='/img/cart-def.png';"
                     />
-                  </a>
+                </a>
                   <div class="card-body">
                     <h4 class="card-title"><center><%= product.name %></center></h4>
                     <% if (product.sale) { %>
                       <center><span class="badge bg-danger ms-2" style="margin-bottom: 10px;" >-<%= product.saleval %>%</span></center>
                       <p class="card-text" style="margin-bottom:4px ;">
-                        Giá:<del> <%= product.price %> </del>
-                        <%= (product.price - (product.price * product.saleval /
-                        100)).toFixed(2)%> VNĐ
+                        Giá: <%= formatCurrency((product.price - (product.price * product.saleval / 100).toFixed(0))) %> VNĐ
+                        <del> <%= formatCurrency(product.price) %> </del>
                       </p>
                       <div style="padding-left: 1px; padding-bottom: 10px">
                         <div class ="creator-day" style ="margin-top: -0px;">
@@ -471,12 +238,12 @@
                       </div>
                     <% } else { %>
                       <div style="margin-top: 40px;">
-                          <p class="card-text">Giá: <%= product.price %> VNĐ</p>
+                          <p class="card-text">Giá: <%= formatCurrency(product.price) %> VNĐ</p>
                       </div>
                       <div style="padding-left: -10px; padding-bottom: 10px">
                         <div class ="creator-day" style ="margin-top:1px;">
                             <p class="card-text" style="margin-bottom: -2px">
-                              Creator: <%= product.creator %>
+                              Creator: <%= product.creator%>
                             </p>
                             <p class="card-text" style="margin-top: 3px">
                               Ngày tạo: <%= product.formatted_date %>
@@ -484,14 +251,17 @@
                         </div>
                         <div class="d-flex mt-3">
                           <a
-                          href="/product/<%= product.id %>"
-                          class="btn btn-success rounded">
-                            <div>
-                              Thông tin
-                            </div>
-                            <div>
-                              sản phẩm
-                            </div>
+                              href="/product/<%= product.id %>"
+                              class="btn btn-success rounded viewProductBtn"
+                              data-product-id="<%= product.id %>"
+                              data-product-score="5"  
+                          >
+                              <div>
+                                  Thông tin
+                              </div>
+                              <div>
+                                  sản phẩm
+                              </div>
                           </a>
                           <a style="margin-left: -20px;">
                             <button
@@ -508,39 +278,35 @@
                   </div>
                 </div>
               </div>
+              <% }; %>
               <% }); %>
             </div>
           </div>
         </div>
-      </div>
-      <footer class="bg-light py-4 mt-5">
-        <div class="container">
-          <div class="text-center text-muted">&copy; 2024 E-Shop</div>
-          <div class="text-center mt-3">
-            <a href="#" class="text-decoration-none text-dark mx-2"
-              >Chính sách bảo mật</a
-            >
-            <a href="#" class="text-decoration-none text-dark mx-2"
-              >Điều khoản sử dụng</a
-            >
+        <footer class="py-4 mt-5">
+          <div class="container">
+            <div class="text-center custom">&copy; 2024 E-Shop</div>
+            <div class="text-center mt-3">
+              <a href="#" class="text-decoration-none mx-2 custom"
+                >Chính sách bảo mật</a>
+              <a href="#" class="text-decoration-none mx-2 custom"
+                >Điều khoản sử dụng</a>
+            </div>
           </div>
-        </div>
-      </footer>
+        </footer>
+      </div>
+
     </main>
-
-    
-
     <div
       class="modal fade"
       id="addToCartModal"
       tabindex="-1"
       aria-labelledby="addToCartModalLabel"
-      aria-hidden="true"
-    >
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="addToCartModalLabel">1`
+            <h5 class="modal-title" id="addToCartModalLabel">
               Xác nhận thêm vào giỏ hàng
             </h5>
             <button
@@ -561,45 +327,38 @@
         </div>
       </div>
     </div>
-
+    <div style="position: fixed; bottom: 0; right: 0; width: 150px; z-index: 1000; background-color: transparent; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
+      <div id="chat-header" style="background-color: #007bff; color: white; padding: 10px; cursor: pointer; width: 70px; margin-left:78px ;">
+          <img src="/img/mesage.png" alt="" style="height: 30px; width: 30px; margin-left: 10px;" >
+      </div>
+      <div id="chat-body" style="display: none; padding: 10px;">
+        <div id="close-chat" style="cursor: pointer; color: red; margin-left: 460px; margin-top: -10px;">&times;</div> <!-- Nút đóng -->
+        <div style="position: absolute; top: 5px; left: 20px;font-size: 30px;">Chat</div>
+        
+        <div style="margin-top: 10px;"></div>
+        
+        <div style="display: flex;">
+          <div class="row" style="width: 220px; height: 440px; overflow-y: scroll;">
+            <% for (let i = 0; i < 5; i++) { %>
+              <div style="margin-left: 8px; width: 190px; height: 80px; background-color: #007bff; border: 1px solid #ccc; margin-top: 15px; display: block;"></div>
+            <% } %>
+            <div style="margin-bottom: 60px;"></div>
+          </div>
+          <div style="width: 270px; height: 400px; background-color: #ffffff; z-index: 1; margin-left: 20px;"></div>
+        
+        </div>
+        
+      </div>
+      
+    </div>  
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
-    <script>
-      window.onload = function () {
-        const img = document.querySelector('body');
-        const colorThief = new ColorThief();
-        const imgElement = new Image();
-        imgElement.src = img.style.backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/i, "$1");
-        
-        imgElement.onload = function() {
-          const dominantColor = colorThief.getColor(imgElement);
-          document.querySelector('header').style.backgroundColor = `rgb(${dominantColor})`;
-        };
-      };
-    </script>
-    <script>
-      const toggleButton = document.getElementById('toggle-dark-mode');
-      const body = document.body;
-    
-      // Kiểm tra nếu chế độ tối đã được kích hoạt trước đó
-      if (localStorage.getItem('darkMode') === 'enabled') {
-        body.classList.add('dark-mode');
-      }
-    
-      toggleButton.addEventListener('click', () => {
-        body.classList.toggle('dark-mode');
-        if (body.classList.contains('dark-mode')) {
-          localStorage.setItem('darkMode', 'enabled');
-
-        } else {
-          localStorage.setItem('darkMode', 'disabled');
-        }
-      });
-    </script>
-        
-
-    
-  </body>
+    <script src="colorThief.js"></script>
+    <script src="darkmode.js"></script>
+    <script src="chat.js"></script>  
+    <script src="add-cart.js"></script>
+    <script src="scoreboard.js"></script>
+    <script src="search.js"></script>
+   </body>
 </html>

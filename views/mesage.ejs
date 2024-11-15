@@ -6,151 +6,295 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>Mesage</title>
-<style>
-    .sticky-header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    
-    .avatar {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
+    <title>Messenger</title>
+    <style>
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-    .container {
-      max-width: 1200px;
-      background: #fff;
-      padding: 0.2px;
-      display: flex;
-      gap: 20px;
-    }
-    .nav-link {
-        position: relative; /* Để sử dụng absolute positioning cho underline */
-        display: inline-block;
-        padding-bottom: 5px; /* Khoảng cách giữa text và underline */
-    }
+        .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
 
-    .nav-link::after {
-        content: ""; /* Nội dung rỗng để tạo thanh nhỏ */
-        position: absolute;
-        left: 16%;
-        bottom: 0;
-        width: 70%;
-        height: 2px; /* Độ dày của thanh nhỏ */
-        background-color: #0056ea; /* Màu của thanh nhỏ */
-        transform: scaleX(0); /* Ẩn thanh nhỏ ban đầu */
-        transform-origin: bottom right; /* Vị trí bắt đầu hiệu ứng */
-        align-items: center;
-        transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp cho thanh nhỏ */
-    }
+        .container {
+            max-width: 1200px;
+            background: #fff;
+            padding: 0.2px;
+            display: flex;
+            gap: 20px;
+        }
 
-    .nav-link.home:hover::after,
-    .nav-link.bxh:hover::after,
-    .nav-link.giohang:hover::after,
-    .nav-link.taosanpham:hover::after,
-    .nav-link.login:hover::after,
-    .nav-link.dangky:hover::after {
-        transform: scaleX(1); /* Hiện thanh nhỏ khi hover */
-        transform-origin: bottom left; /* Vị trí kết thúc hiệu ứng */
-    }
-    .home-icon {
-        width: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
-        height: 30px; /* Thay đổi kích thước của hình ảnh nếu cần */
-    }
-    .bxh-icon{
-    width: 27px; /* Thay đổi kích thước của hình ảnh nếu cần */
-    height: 27px;
-    }
-    .cart-icon{
-    width: 23px;
-    height: 23px;
-    }
+        .nav-link {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
 
-    .add-icon{
-    width: 30px;
-    height: 30px;
-    }
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 16%;
+            bottom: 0;
+            width: 70%;
+            height: 2px;
+            background-color: #0056ea;
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
 
+        .nav-link.home:hover::after,
+        .nav-link.bxh:hover::after,
+        .nav-link.giohang:hover::after,
+        .nav-link.taosanpham:hover::after,
+        .nav-link.login:hover::after,
+        .nav-link.dangky:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
 
-  </style>
-  <body>
+        .home-icon {
+            width: 30px;
+            height: 30px;
+        }
+
+        .bxh-icon {
+            width: 27px;
+            height: 27px;
+        }
+
+        .cart-icon {
+            width: 23px;
+            height: 23px;
+        }
+
+        .add-icon {
+            width: 30px;
+            height: 30px;
+        }
+
+        .chat-container {
+            height: 90vh;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+        }
+
+        .friends-list {
+            width: 25%;
+            border-right: 1px solid #ddd;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .friend {
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .friend:hover {
+            background-color: #f0f0f0;
+        }
+
+        .friend img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .chat-window {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 15px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+        }
+
+        .message.sent {
+            text-align: right;
+        }
+
+        .message .message-text {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 20px;
+            max-width: 70%;
+        }
+
+        .message.sent .message-text {
+            background-color: #0084ff;
+            color: #fff;
+        }
+
+        .message.received .message-text {
+            background-color: #f1f0f0;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group textarea {
+            resize: none;
+        }
+
+        .input-group .btn-send {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Phần header -->
     <header>
-        <div class="container-fluid bg-light py-3">
-          <div class="container d-flex justify-content-between align-items-center" style="margin-left: 388px;">
-            <h1 class="h4 mb-0">
-              <a href="/" class="text-decoration-none text-dark " style="margin-left: -99px;"><strong>E-Shop</strong></a>
-            </h1>
-            <nav class="nav">
-              <ul class="nav">
-                <li class="nav-item">
-                  <a class="nav-link home" href="/">
-                      <img src="/img/home.jpg" alt="" class="home-icon"></img>
-                  </a>
-              </li>
-                <li class="nav-item">
-                  <a class="nav-link bxh" href="/scoreboard">
-                    <img src="/img/bxh.jpg" alt="" class="bxh-icon">
-                  </a>
-                </li>
-                <% if (!user) { %>
-                <li class="nav-item">
-                  <a class="nav-link login" href="/login">Đăng nhập</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link dangky" href="/register">Đăng ký</a>
-                </li>
-                <% } else { %>
-                <li class="nav-item">
-                  <a class="nav-link giohang" href="/cart">
-                      <img src="/img/cart.jpg" alt="" class="cart-icon">                  
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link taosanpham" href="/product/add">
-                    <img src="/img/add.jpg" alt="" class="add-icon">
-                  </a>
-                </li>
-                <li class="nav-item dropdown">
-                  <a
-                    class="nav-link dropdown-toggle d-flex align-items-center"
-                    id="userDropdown"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    <% if (user.avatar) { %>
-                    <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
-                    <% } else { %>
-                    <img src="./img/def.jpg" class="avatar me-2" alt="" />
-                    <% } %>
-                  </a>
-                  <ul
-                    class="dropdown-menu dropdown-menu-end"
-                    aria-labelledby="userDropdown"
-                  >
-                    <li>
-                      <a class="dropdown-item" href="/user/<%= user.id %>">Profile</a>
-                    </li>
-                    <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
-                    <li>
-                      <a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a>
-                    </li>
-                    <li>
-                      <hr class="dropdown-divider" />
-                    </li>
-                    <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
-                  </ul>
-                </li>
-                <% } %>
-              </ul>
-            </nav>
-          </div>
+        <div class="container-fluid bg-light py-3 sticky-header">
+            <div class="container d-flex justify-content-between align-items-center">
+                <h1 class="h4 mb-0">
+                    <a href="/" class="text-decoration-none text-dark"><strong>E-Shop</strong></a>
+                </h1>
+                <nav class="nav">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link home" href="/">
+                                <img src="/img/home.jpg" alt="" class="home-icon">
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link bxh" href="/scoreboard">
+                                <img src="/img/bxh.jpg" alt="" class="bxh-icon">
+                            </a>
+                        </li>
+                        <% if (!user) { %>
+                        <li class="nav-item">
+                            <a class="nav-link login" href="/login">Đăng nhập</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link dangky" href="/register">Đăng ký</a>
+                        </li>
+                        <% } else { %>
+                        <li class="nav-item">
+                            <a class="nav-link giohang" href="/cart">
+                                <img src="/img/cart.jpg" alt="" class="cart-icon">
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link taosanpham" href="/product/add">
+                                <img src="/img/add.jpg" alt="" class="add-icon">
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <% if (user.avatar) { %>
+                                <img src="<%= user.avatar %>" class="avatar me-2" alt="" />
+                                <% } else { %>
+                                <img src="./img/def.jpg" class="avatar me-2" alt="" />
+                                <% } %>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="/user/<%= user.id %>">Profile</a></li>
+                                <li><a class="dropdown-item" href="/settings">Cài đặt</a></li>
+                                <li><a class="dropdown-item">Balanced: <%= user.balance %> VNĐ</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                            </ul>
+                        </li>
+                        <% } %>
+                    </ul>
+                </nav>
+            </div>
         </div>
-      </header>
-    </body>
+    </header>
+
+    <!-- Phần chat -->
+    <div class="container mt-4">
+        <div class="chat-container">
+            <!-- Danh sách bạn bè -->
+            <div class="friends-list">
+                <% user.friends.forEach(friend => { %>
+                <div class="friend" onclick="window.location.href='/message/<%= friend.id %>'">
+                    <img src="<%= friend.avatar %>" alt="Avatar">
+                    <span><%= friend.name %></span>
+                </div>
+                <% }); %>
+            </div>
+
+            <!-- Cửa sổ chat -->
+            <div class="chat-window">
+                <div class="chat-messages">
+                    <!-- Các tin nhắn -->
+                    <% chat.messages.forEach(message => { %>
+                    <div class="message <%= message.senderId === user.id ? 'sent' : 'received' %>">
+                        <span class="message-text"><%= message.text %></span>
+                    </div>
+                    <% }); %>
+                </div>
+
+                <!-- Input gửi tin nhắn -->
+                <div class="input-group">
+                    <textarea class="form-control" rows="2" placeholder="Nhập tin nhắn..."></textarea>
+                    <button class="btn btn-primary btn-send">Gửi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+  document.querySelector('.btn-send').addEventListener('click', function() {
+      const textarea = document.querySelector('textarea');
+      const messageText = textarea.value;
+
+      if (messageText.trim()) {
+          // Gửi yêu cầu đến server để lưu tin nhắn
+          fetch('/send-message', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  text: messageText,
+                  chatId: '<%= chat.id %>' // ID của cuộc trò chuyện
+              })
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  // Thêm tin nhắn mới vào cửa sổ chat
+                  const messageContainer = document.querySelector('.chat-messages');
+                  const newMessage = document.createElement('div');
+                  newMessage.classList.add('message', 'sent');
+                  newMessage.innerHTML = `<span class="message-text">${messageText}</span>`;
+                  messageContainer.appendChild(newMessage);
+                  textarea.value = ''; // Xóa ô nhập
+                  messageContainer.scrollTop = messageContainer.scrollHeight; // Cuộn xuống cuối
+              }
+          })
+          .catch(error => {
+              console.error('Error sending message:', error);
+          });
+      }
+  });
+</script>
 </html>

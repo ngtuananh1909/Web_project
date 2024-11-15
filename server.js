@@ -8,10 +8,12 @@ const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const homeRouter = require('./routes/home.router.js');
 const productRouter = require('./routes/product.router.js');
+const paymentRouter = require('./routes/payment.router.js')
 const fs = require('fs');
-
 dotenv.config();
 const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
 app.use(fileUpload({
     createParentPath: true
@@ -21,7 +23,7 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            imgSrc: ["'self'", "http://localhost:3000"],
+            imgSrc: ["'self'", "http://localhost:3000", "data:"],
             scriptSrc: ["'self'", "'unsafe-inline'"],
             styleSrc: ["'self'", "'unsafe-inline'"]
         }
@@ -39,29 +41,27 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 };
-
+app.locals.formatCurrency = function(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  };
+  
 app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, '/views'));
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static('public')); 
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+app.use(express.static('event_function'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use(session({
-    secret: 'uit2027goo',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        secure: false,
-        sameSite: 'lax' 
-    }
+    secret: 'truepablo',
+    resave: true,
+    saveUninitialized: true
 }));
 
 app.use((req, res, next) => {
@@ -74,8 +74,20 @@ app.use((req, res, next) => {
     next();
 });
 
+io.on('connection', function(socket){
+    socket.on('chatMessage', function(from, msg){
+      io.emit('chatMessage', from, msg);
+    });
+    socket.on('notifyUser', function(user){
+      io.emit('notifyUser', user);
+    });
+  });
+
+
 app.use('/', homeRouter);
 app.use('/product', productRouter);
+app.use('/payment', paymentRouter);
+app.get('/favicon.ico', (req, res) => res.status(204));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

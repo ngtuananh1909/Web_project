@@ -4,7 +4,10 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 const { IdGenerator } = require('../event_function/function');
+const {calculateUserSimilarity, getTopRecommendedProducts, findSimilarProducts} = require('../event_function/Filtering')
 const { promisify } = require('util');
+const util = require('util');
+const query = util.promisify(db.query).bind(db);
 
 const unlinkAsync = promisify(fs.unlink);
 
@@ -16,35 +19,56 @@ exports.registerDisplay = (req, res) => {
     res.render('register');
 };
 
-exports.home = (req, res) => {
-    db.query('SELECT * FROM products', (err, results) => {
-        if (err) {
-            console.error('Error fetching products:', err);
-            return res.render('home', { user: req.session.user, products: [] });
+exports.home = async (req, res) => {
+    const userId = req.session.user ? req.session.user.id : null;
+    
+    try {
+        const productsQuery = 'SELECT * FROM products';
+        const userRatingsQuery = userId ? 'SELECT * FROM ratings WHERE user_id = ?' : null;
+        const allRatingsQuery = 'SELECT * FROM ratings';
+
+        const [products, userRatings, allRatings] = await Promise.all([
+            query(productsQuery),
+            userId ? query(userRatingsQuery, [userId]) : Promise.resolve([]),
+            query(allRatingsQuery)
+        ]);
+
+        const formattedProducts = products.map(product => ({
+            ...product,
+            formatted_date: new Date(product.created_at).toLocaleDateString('vi-VN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            })
+        }));
+
+        let recommendations = [];
+        if (userId) {
+            const userSimilarities = calculateUserSimilarity(userRatings, allRatings);
+            const collaborativeRecommendations = getTopRecommendedProducts(userId, userSimilarities, allRatings);
+            const contentRecommendations = await findSimilarProducts(userRatings.map(r => r.product_id));
+
+            recommendations = [...new Set([...collaborativeRecommendations, ...contentRecommendations])];
         }
 
-        const formattedProducts = results.map(product => {
-            return {
-                ...product,
-                formatted_date: new Date(product.created_at).toLocaleDateString('vi-VN', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit'
-                })
-            };
+        res.render('home', {
+            user: req.session.user,
+            products: formattedProducts,
+            recommendations
         });
-
-        res.render('home', { user: req.session.user, products: formattedProducts }); 
-    });
+    } catch (err) {
+        console.error('Error fetching data:', err);
+        res.render('home', { user: req.session.user, products: [], recommendations: []});
+    }
 };
 
 exports.logout = (req, res) => {
     req.session.destroy(err => {
         if (err) {
             console.log(err);
-            return res.redirect('back');
+            return res.location(req.get("Referrer") || "/") 
         }
-        return res.redirect('back');
+        return res.location(req.get("Referrer") || "/") 
     });
 };
 
@@ -86,31 +110,25 @@ exports.cartDisplay = (req, res) => {
             redirect: true
         });
     }
-    
+
     const userId = req.session.user.id;
+    const selectedProducts = [];
 
-    db.query('SELECT product_id FROM user_cart WHERE user_id = ?', [userId], (err, result) => {
-        if (err) {
-            console.log("error: ", err);
-            return res.status(500).json({ error: 'Server error' });
-        }
+    db.query(`
+        SELECT p.* 
+        FROM user_cart uc 
+        JOIN products p ON uc.product_id = p.id 
+        WHERE uc.user_id = ?`, [userId], (err, result) => {
+            if (err) {
+                console.log("error: ", err);
+                return res.status(500).json({ error: 'Server error' });
+            }
 
-        if (result.length > 0) {
-            const productIds = result.map(item => item.product_id);
-
-            db.query('SELECT * FROM products WHERE id IN (?)', [productIds], (errs, resp) => {
-                if (errs) {
-                    console.log("error: ", errs);
-                    return res.status(500).json({ error: 'Server error' });
-                }
-
-                res.render('cart', {user:req.session.user, products: resp });
-            });
-        } else {
-            res.render('cart', {user:req.session.user, products: [] });
-        }
-    });
+            req.session.selectedProducts = result; 
+            res.render('cart', { user: req.session.user, products: result, selectedProducts, discountCode: null });
+        });
 };
+
 
 exports.SettingDisplay = (req, res) => {
     if (req.session.user) {
@@ -121,92 +139,87 @@ exports.SettingDisplay = (req, res) => {
 };
 
 exports.register = async (req, res) => {
-    const { name, email, password, password_confirm } = req.body;
+    const { name, email, password, password_confirm, avatar } = req.body;
     try {
-        db.query('SELECT email from users WHERE email = ?', [email], async (error, results) => {
-            if (error) {
-                console.log(error);
-                return res.render('register', { message: 'Server error' });
-            }
-            if (results.length > 0) {
-                return res.render('register', { message: 'This Email is already in use' });
-            }
-            if (password !== password_confirm) {
-                return res.render('register', { message: 'Passwords do not match' });
-            }
+        const results = await query('SELECT email FROM users WHERE email = ?', [email]);
+        if (results.length > 0) {
+            return res.render('register', { message: 'This email is already in use' });
+        }
+        if (password !== password_confirm) {
+            return res.render('register', { message: 'Passwords do not match' });
+        }
 
-            const hashpassword = await bcrypt.hash(password, 10);
-            const UserId = await IdGenerator();
+        const hashpassword = await bcrypt.hash(password, 10);
+        const UserId = await IdGenerator();
 
-            db.query('INSERT INTO users SET ?', { id: UserId, name, email, password: hashpassword, balance: 0, reputation: 0 }, (err) => {
-                if (err) {
-                    console.log(error);
-                    return res.render('register', { message: 'Server error' });
-                }
-                if (req.session) {
-                    req.session.user = {
-                        id: UserId,
-                        name,
-                        email,
-                        password: hashpassword,
-                    };
-                    res.redirect('/');
-                } else {
-                    console.log('Session is not initialized.');
-                    res.render('login', { message: 'Session error' });
-                }
-            });
+        const avatarData = avatar ? Buffer.from(avatar, 'base64') : null;
+
+        await query('INSERT INTO users SET ?', {
+            id: UserId,
+            name,
+            email,
+            password: hashpassword,
+            avatar: avatarData,  
+            balance: 1000000,
+            reputation: 0,
+            story: null, 
+            phone: '',   
+            friends: 0   
         });
+
+        req.session.user = {
+            id: UserId,
+            name,
+            email,
+            avatar: avatarData 
+        };
+
+        res.redirect('/');
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.render('register', { message: 'Server error' });
     }
 };
 
+
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
-            if (err) {
-                console.log(err);
-                return res.render('login', { message: 'Server error' });
-            }
-            if (results.length === 0) {
-                return res.render('login', { message: 'Email or password is incorrect' });
-            }
-            try {
-                const isMatch = await bcrypt.compare(password, results[0].password);
-                if (!isMatch) {
-                    return res.render('login', { message: 'Email or password is incorrect' });
-                }
-                if (req.session) {
-                    req.session.user = {
-                        id: results[0].id,
-                        name: results[0].name,
-                        email: results[0].email,
-                        avatar: results[0].avatar,
-                        balance: results[0].balance,
-                        reputation: results[0].reputation,
-                        story: results[0].story,
-                        phone: results[0].phone,
-                        friends: results[0].friends
-                    };
-                    return res.redirect('/');
-                } else {
-                    console.log('Session is not initialized.');
-                    return res.render('login', { message: 'Session error' });
-                }
-            } catch (error) {
-                console.log(error);
-                return res.render('login', { message: 'Server error' });
-            }
-        });
+        const results = await query('SELECT * FROM users WHERE email = ?', [email]);
+        
+        if (results.length === 0) {
+            return res.render('login', { message: 'Email hoặc mật khẩu không chính xác' });
+        }
+        
+        const user = results[0]; 
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.render('login', { message: 'Email hoặc mật khẩu không chính xác' });
+        }
+
+        if (req.session) {
+            req.session.user = {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                avatar: user.avatar,
+                balance: user.balance,
+                reputation: user.reputation,
+                story: user.story,
+                phone: user.phone,
+                friends: user.friends
+            };
+            return res.redirect('/');
+        } else {
+            console.log('Session is not initialized.');
+            return res.render('login', { message: 'Lỗi hệ thống. Vui lòng thử lại sau.' });
+        }
     } catch (err) {
-        console.log(err);
-        return res.render('login', { message: 'Server error' });
+        console.error('Server error:', err);
+        return res.render('login', { message: 'Lỗi máy chủ. Vui lòng thử lại sau.' });
     }
 };
-
 
 exports.UserUpdate = async (req, res) => {
     if (!req.session.user) {
@@ -215,81 +228,59 @@ exports.UserUpdate = async (req, res) => {
 
     try {
         const avatar = req.files ? req.files.avatar : null;
-
         const { name, email } = req.body;
         const userId = req.session.user.id;
         const oldAvatarPath = req.session.user.avatar;
+        const updateQuery = [];
+        const queryParams = [];
+        let avatarPath = '';
 
-        const updateUser = () => {
-            let updateQuery = 'UPDATE users SET';
-            const queryParams = [];
-            let avatarPath = '';
+        if (name && name !== req.session.user.name) {
+            updateQuery.push('name = ?');
+            queryParams.push(name);
+        }
 
-            if (name && name !== req.session.user.name) {
-                updateQuery += ' name = ?,';
-                queryParams.push(name);
-            }
+        if (avatar && avatar.name !== path.basename(oldAvatarPath)) {
+            avatarPath = `uploads/${userId}${path.extname(avatar.name)}`;
+            updateQuery.push('avatar = ?');
+            queryParams.push(avatarPath);
 
-            if (avatar) {
-                avatarPath = `uploads/${userId}${path.extname(avatar.name)}`;
-                updateQuery += ' avatar = ?,';
-                queryParams.push(avatarPath);
-
-                avatar.mv(path.join(__dirname, '..', avatarPath), (err) => {
-                    if (err) {
-                        console.log('Error moving avatar file:', err);
-                        return res.status(500).send('Error saving file');
-                    }
-                });
-            }
-
-            if (queryParams.length === 0) {
-                return res.render('setting', { user: req.session.user, message: 'No changes detected' });
-            }
-
-            updateQuery = updateQuery.slice(0, -1); 
-            updateQuery += ' WHERE id = ?';
-            queryParams.push(userId);
-
-            db.query(updateQuery, queryParams, async (error) => {
-                if (error) {
-                    console.log('Error updating settings:', error);
-                    return res.render('setting', { user: req.session.user, message: 'Error updating settings' });
-                }
-
-                req.session.user.name = name || req.session.user.name;
-                req.session.user.avatar = avatarPath || req.session.user.avatar;
-
-                if (oldAvatarPath) {
-                    console.log('Old Avatar Path:', oldAvatarPath); 
-                    try {
-                        const fullPath = path.join(__dirname, '..', oldAvatarPath.toString());
-                        console.log('Full Path:', fullPath); 
-                        await fs.unlink(fullPath);
-                    } catch (unlinkErr) {
-                        console.log('Error deleting old avatar:', unlinkErr);
-                    }
-                }
-
-                res.render('setting', { user: req.session.user, message: 'Settings updated successfully' });
-            });
-        };
+            // Di chuyển tệp avatar
+            await avatar.mv(path.join(__dirname, '..', avatarPath));
+        }
 
         if (email && email !== req.session.user.email) {
-            db.query('SELECT email FROM users WHERE email = ? AND id != ?', [email, userId], (error, results) => {
-                if (error) {
-                    console.log('Error checking email:', error);
-                    return res.render('setting', { user: req.session.user, message: 'Error checking email' });
-                }
+            const [results] = await db.query('SELECT email FROM users WHERE email = ? AND id != ?', [email, userId]);
 
-                if (results.length > 0) {
-                    return res.render('setting', { user: req.session.user, message: 'Email already exists. Please choose a different one.' });
-                }
-                updateUser();
-            });
-        } else {
-            updateUser();
+            if (results.length > 0) {
+                return res.render('setting', { user: req.session.user, message: 'Email already exists. Please choose a different one.' });
+            }
         }
+
+        if (updateQuery.length === 0) {
+            return res.render('setting', { user: req.session.user, message: 'No changes detected' });
+        }
+
+        const sqlQuery = `UPDATE users SET ${updateQuery.join(', ')} WHERE id = ?`;
+        queryParams.push(userId);
+
+        await db.query(sqlQuery, queryParams);
+
+        // Cập nhật session user
+        req.session.user.name = name || req.session.user.name;
+        req.session.user.avatar = avatarPath || req.session.user.avatar;
+
+        // Xóa avatar cũ
+        if (oldAvatarPath) {
+            const fullPath = path.join(__dirname, '..', oldAvatarPath);
+            try {
+                await fs.unlink(fullPath);
+            } catch (unlinkErr) {
+                console.log('Error deleting old avatar:', unlinkErr);
+            }
+        }
+
+        res.render('setting', { user: req.session.user, message: 'Settings updated successfully' });
     } catch (err) {
         console.log('Server error:', err);
         res.render('setting', { user: req.session.user, message: 'Server error' });
@@ -297,40 +288,65 @@ exports.UserUpdate = async (req, res) => {
 };
 
 
+
 exports.AddToCart = async (req, res) => {
     try {
         const { productId } = req.body;
+
+        // Kiểm tra xem người dùng đã đăng nhập chưa
         if (!req.session.user) {
             return res.status(401).send('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
         }
+
         const userId = req.session.user.id;
 
-        db.query('SELECT * FROM user_cart WHERE user_id = ? AND product_id = ?', [userId, productId], (error, results) => {
-            if (error) {
-                console.log('Error checking cart:', error);
-                return res.status(500).send('Đã xảy ra lỗi server');
-            }
+        // Kiểm tra sản phẩm đã có trong giỏ hàng chưa
+        const results = await query('SELECT * FROM user_cart WHERE user_id = ? AND product_id = ?', [userId, productId]);
 
-            if (results.length > 0) {
-                return res.status(400).send('Sản phẩm đã có trong giỏ hàng của bạn');
-            }
+        if (results.length > 0) {
+            return res.status(400).send('Sản phẩm đã có trong giỏ hàng của bạn');
+        }
 
-            // Thêm sản phẩm vào giỏ hàng
-            db.query('INSERT INTO user_cart SET ?', { user_id: userId, product_id: productId }, (err) => {
-                if (err) {
-                    console.log('Error adding to cart:', err);
-                    return res.status(500).send('Đã xảy ra lỗi khi thêm vào giỏ hàng');
-                }
-
-                return res.status(200).send('Sản phẩm đã được thêm vào giỏ hàng');
-            });
-        });
+        // Thêm sản phẩm vào giỏ hàng
+        await query('INSERT INTO user_cart SET ?', { user_id: userId, product_id: productId });
+        return res.status(200).send('Sản phẩm đã được thêm vào giỏ hàng');
+        
     } catch (err) {
         console.log('Server error:', err);
         return res.status(500).send('Đã xảy ra lỗi server');
     }
 };
 
+exports.RemoveFromCart = (req, res) => {
+    if (!req.session.user) {
+        return res.render('login', {
+            message: 'You have to login/register to view your cart',
+            redirect: true
+        });
+    }
+
+    const productId = req.params.id;
+    const userId = req.session.user.id;
+
+    db.query('SELECT * FROM user_cart WHERE product_id = ? AND user_id = ?', [productId, userId], (err, result) => {
+        if (err) {
+            console.error("Error retrieving product from cart: ", err);
+            return res.status(500).json({ error: 'Server error while checking product in cart' });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Product not found in cart' });
+        }
+
+        db.query('DELETE FROM user_cart WHERE product_id = ? AND user_id = ?', [productId, userId], (err) => {
+            if (err) {
+                console.error("Error removing product from cart: ", err);
+                return res.status(500).json({ error: 'Server error while removing product from cart' });
+            }
+            res.status(200).json({ message: 'Product removed from cart successfully' });
+        });
+    });
+};
 
 exports.ProfileDisplay = (req, res) => {
     if (!req.session || !req.session.user) {
@@ -372,3 +388,88 @@ exports.ScoreboardDisplay = (req, res) => {
         res.render('scoreboard', { user:req.session.user ,products: result });
     });
 };
+
+exports.addRating = (req, res) => {
+    const { product_id, score } = req.body;
+    const userId = req.session.user ? req.session.user.id : null;
+
+    if (!userId) {
+        return res.json({ success: false, message: 'Bạn cần đăng nhập để đánh giá sản phẩm.' });
+    }
+
+    const sql = 'INSERT INTO ratings (user_id, product_id, score, created_at) VALUES (?, ?, ?, NOW())';
+    db.query(sql, [userId, product_id, score], (err) => {
+        if (err) {
+            console.error('Error adding rating:', err);
+            return res.json({ success: false, message: 'Có lỗi xảy ra khi thêm đánh giá.' });
+        }
+
+        res.json({ success: true });
+    });
+};
+
+exports.MessageDisplay = async (req, res) => {
+    const chatId = req.params.id;
+    const user = req.session.user; 
+
+    if (!user) {
+        return res.redirect('/login');
+    }
+
+    try {
+        const chat = await findChatById(chatId);
+        if (!chat) {
+            return res.render('message', { user, chat: null, message: 'Cuộc trò chuyện không tìm thấy' });
+        }
+        res.render('message', { user, chat });
+    } catch (error) {
+        console.error('Error fetching chat:', error);
+        res.render('message', { user, chat: null, message: 'Lỗi khi lấy cuộc trò chuyện' });
+    }
+};
+
+exports.SendMessage = (req, res) => {
+    const { text, chatId } = req.body;
+
+    const sql = 'INSERT INTO messages (chat_id, sender_id, text) VALUES (?, ?, ?)';
+    db.query(sql, [chatId, req.session.user.id, text], (err, result) => {
+        if (err) {
+            return res.json({ success: false, error: err.message });
+        }
+        res.json({ success: true });
+    });
+}
+
+exports.SearchProducts = async (req, res) => {
+    const searchQuery = req.query.query;
+
+    try {
+        db.query('SELECT * FROM products WHERE name LIKE ? OR description LIKE ?', [`%${searchQuery}%`, `%${searchQuery}%`], (err, results) => {
+            if (err) {
+                console.error('Lỗi khi truy vấn cơ sở dữ liệu:', err);
+                return res.status(500).send('Đã xảy ra lỗi khi truy vấn cơ sở dữ liệu');
+            }
+
+            if (results.length === 0) {
+                return res.render('SearchResults', {products: [], query: searchQuery, user: req.session.user})
+            }
+            res.render('SearchResults', {products: results, query: searchQuery, user: req.session.user})
+        });
+    } catch (error) {
+        console.error('Lỗi khi tìm kiếm sản phẩm:', error);
+        res.status(500).send('Đã xảy ra lỗi khi tìm kiếm sản phẩm');
+    }
+};
+
+exports.usersStats = (req, res) => {
+  const query = 'SELECT * FROM users';
+  connection.query(query, (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+}
+
+exports.StatsDisplay = (req, res) => {
+    if(user.session.id != 'rgB6QoFkYk') res.redirect('/');
+    res.render('infor');
+}
